@@ -51,10 +51,41 @@ Page({
     return '未知'
   },
 
+  getAuthorizedProfile() {
+    if (typeof wx === 'undefined' || !wx.getUserProfile) {
+      return Promise.resolve({})
+    }
+
+    return new Promise((resolve, reject) => {
+      wx.getUserProfile({
+        desc: '用于完善会员资料',
+        lang: 'zh_CN',
+        success: (res) => {
+          const userInfo = res.userInfo || {}
+          resolve({
+            nickname: userInfo.nickName || '社区用户',
+            avatar: userInfo.avatarUrl || ''
+          })
+        },
+        fail: () => {
+          reject(new Error('已取消授权'))
+        }
+      })
+    })
+  },
+
   async handleLogin() {
+    let profile = {}
+    try {
+      profile = await this.getAuthorizedProfile()
+    } catch (error) {
+      showError(error.message || '已取消授权')
+      return
+    }
+
     showLoading('登录中')
     try {
-      const data = await loginService.loginOrRegister()
+      const data = await loginService.loginOrRegister({ profile })
       const user = data.user
       setCurrentUser(user)
       getApp().globalData.currentUser = user

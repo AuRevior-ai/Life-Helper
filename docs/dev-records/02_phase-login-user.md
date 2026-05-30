@@ -40,7 +40,8 @@
 - [x] 管理员可禁用用户
 - [x] 前端缓存当前用户
 - [x] 小程序启动时读取本地缓存用户
-- [x] “我的”页面接入登录按钮
+- [x] “我的”页面接入微信授权登录按钮
+- [x] 登录时优先尝试获取微信用户资料授权
 - [x] “我的”页面展示昵称、角色、状态和手机号占位
 - [x] “我的”页面保留师傅入口和管理员入口占位
 - [x] 使用 `npm test` 验证阶段一和阶段二测试
@@ -53,7 +54,8 @@
 |---|---|
 | `docs/superpowers/plans/2026-05-30-phase2-login-user.md` | 阶段二实施计划 |
 | `tests/phase2.login-user.test.js` | 登录、用户角色、资料更新、管理员权限和前端登录状态测试 |
-| `cloudfunctions/login/handler.js` | 登录云函数业务逻辑，处理首次登录和重复登录 |
+| `docs/wechat-login-runbook.md` | 微信开发者工具登录跑通手册 |
+| `cloudfunctions/login/handler.js` | 登录云函数业务逻辑，处理首次登录、重复登录和授权资料写入 |
 | `cloudfunctions/login/user-repository.js` | 登录云函数的 `users` 集合访问封装 |
 | `cloudfunctions/user/handler.js` | 用户云函数业务逻辑，处理用户信息、角色和禁用 |
 | `cloudfunctions/user/user-repository.js` | 用户云函数的 `users` 集合访问封装 |
@@ -69,8 +71,8 @@
 | `cloudfunctions/user/index.js` | 从占位入口改为调用 `handleUser`，接入 openid 和用户仓储 |
 | `miniprogram/app.js` | 小程序启动时读取本地缓存用户 |
 | `miniprogram/utils/auth.js` | 增加登录状态判断、角色文案读取和当前用户缓存能力 |
-| `miniprogram/pages/profile/profile.js` | 接入登录、退出、用户信息展示和角色入口状态 |
-| `miniprogram/pages/profile/profile.wxml` | 增加登录按钮、用户信息区、师傅入口和管理员入口 |
+| `miniprogram/pages/profile/profile.js` | 接入授权登录、退出、用户信息展示和角色入口状态 |
+| `miniprogram/pages/profile/profile.wxml` | 增加授权登录按钮、用户信息区、师傅入口和管理员入口 |
 | `miniprogram/pages/profile/profile.wxss` | 增加“我的”页面样式 |
 | `docs/dev-records/index.md` | 更新阶段二完成状态、P0 完成情况和遗留问题 |
 | `README.md` | 补充阶段二说明和登录验证提示 |
@@ -153,7 +155,9 @@
 ### 登录逻辑
 
 ```text
-用户点击“微信登录”
+用户点击“微信授权登录”
+↓
+前端优先调用 wx.getUserProfile 获取授权资料
 ↓
 前端调用 loginService.loginOrRegister
 ↓
@@ -161,14 +165,14 @@ login 云函数通过 cloud.getWXContext 获取 openid
 ↓
 查询 users 集合是否已有该 openid
 ↓
-如果不存在，创建默认用户：
-  nickname = 社区用户
-  avatar = ''
+如果不存在，创建用户：
+  nickname = 授权昵称或社区用户
+  avatar = 授权头像或空字符串
   phone = ''
   role = user
   status = normal
 ↓
-如果已存在且 status = normal，更新 updated_at 并返回用户
+如果已存在且 status = normal，更新授权资料和 updated_at 并返回用户
 ↓
 如果已存在且 status = disabled，返回 USER_DISABLED
 ↓
@@ -231,18 +235,20 @@ login 云函数通过 cloud.getWXContext 获取 openid
 
 ## 10. 关键技术决策
 
-### 决策 1：头像昵称第一版使用默认值
+### 决策 1：头像昵称第一版支持授权资料并保留默认兜底
 
 原因：
 
-- 用户已确认第一版头像昵称先用默认值
-- 避免阶段二引入微信头像昵称授权流程
+- 当前目标需要先在微信开发者工具里看到授权登录交互
+- 如果微信环境允许返回用户资料，可直接写入昵称和头像
 - 先保证 openid、用户记录和角色体系稳定
 
 影响：
 
-- “我的”页面默认展示 `社区用户`
-- 后续可在用户资料编辑中补头像昵称授权或上传
+- “我的”页面按钮文案为“微信授权登录”
+- 如果授权资料可用，`users.nickname` 和 `users.avatar` 会写入授权值
+- 如果授权资料不可用，仍使用 `社区用户` 和空头像作为兜底
+- 后续可在用户资料编辑中补更完整的头像昵称维护方式
 
 ### 决策 2：手机号阶段二只保留字段
 
@@ -293,7 +299,6 @@ login 云函数通过 cloud.getWXContext 获取 openid
 | 尚未配置真实云开发环境 ID | 部署和调试依赖实际环境 | 继续使用动态当前环境，在开发者工具中选择真实云环境 | P1 |
 | 管理员初始化依赖手动改库 | 不够自动化，但不阻塞 MVP | 阶段 7 再考虑更正式方案 | P1 |
 | `service/address/order/worker/review/admin` 云函数仍是占位 | 后续业务主流程尚不能运行 | 从阶段 3 起按模块逐步实现 | P0 |
-| 当前仓库尚无首次提交 | 不利于版本回溯 | 建议在阶段二完成后做首次提交 | P1 |
 
 ---
 
@@ -302,6 +307,8 @@ login 云函数通过 cloud.getWXContext 获取 openid
 ### 已测试
 
 - [x] 首次登录会创建默认普通用户
+- [x] 首次授权登录可写入授权昵称和头像
+- [x] 重复授权登录可刷新昵称和头像
 - [x] 重复登录不会重复创建用户
 - [x] 重复登录会保留已有角色，例如管理员角色
 - [x] 已禁用用户登录会返回 `USER_DISABLED`
@@ -313,7 +320,8 @@ login 云函数通过 cloud.getWXContext 获取 openid
 - [x] 管理员可以禁用用户
 - [x] 本地用户缓存工具可保存、读取、清除用户
 - [x] 本地用户缓存工具可判断登录状态和角色
-- [x] “我的”页面包含登录按钮
+- [x] “我的”页面包含微信授权登录按钮
+- [x] “我的”页面会尝试调用 `wx.getUserProfile`
 - [x] “我的”页面包含师傅入口和管理员入口占位
 - [x] 阶段一骨架测试仍然通过
 
@@ -339,8 +347,8 @@ npm test
 最近一次测试结果：
 
 ```text
-tests 15
-pass 15
+tests 18
+pass 18
 fail 0
 ```
 
@@ -357,7 +365,7 @@ npm test
 期望结果：
 
 ```text
-pass 15
+pass 18
 fail 0
 ```
 
@@ -371,7 +379,7 @@ fail 0
 6. 上传并部署 `cloudfunctions/user`
 7. 编译小程序
 8. 打开“我的”页面
-9. 点击“微信登录”
+9. 点击“微信授权登录”
 10. 查看 `users` 集合是否生成用户记录
 11. 如需管理员，手动将该记录 `role` 改为 `admin`
 12. 重新进入“我的”页面确认管理员入口显示

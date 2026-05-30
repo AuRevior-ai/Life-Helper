@@ -66,6 +66,70 @@ test('loginOrRegister creates a default normal user on first login', async () =>
   assert.equal(users.records.length, 1)
 })
 
+test('loginOrRegister saves authorized nickname and avatar on first login', async () => {
+  const { handleLogin } = require('../cloudfunctions/login/handler')
+  const users = createMemoryUsers()
+
+  const result = await handleLogin(
+    {
+      action: 'loginOrRegister',
+      profile: {
+        nickname: '授权用户',
+        avatar: 'https://example.com/avatar.png'
+      }
+    },
+    {
+      openid: 'openid_profile',
+      users,
+      now: fixedNow
+    }
+  )
+
+  assert.equal(result.success, true)
+  assert.equal(result.data.user.nickname, '授权用户')
+  assert.equal(result.data.user.avatar, 'https://example.com/avatar.png')
+  assert.equal(result.data.user.phone, '')
+  assert.equal(result.data.user.role, 'user')
+})
+
+test('loginOrRegister refreshes authorized nickname and avatar for existing users', async () => {
+  const { handleLogin } = require('../cloudfunctions/login/handler')
+  const users = createMemoryUsers([
+    {
+      _id: 'user_profile',
+      openid: 'openid_profile',
+      nickname: '旧昵称',
+      avatar: '',
+      phone: '',
+      role: 'user',
+      status: 'normal',
+      created_at: new Date('2026-05-01T00:00:00.000Z'),
+      updated_at: new Date('2026-05-01T00:00:00.000Z')
+    }
+  ])
+
+  const result = await handleLogin(
+    {
+      action: 'loginOrRegister',
+      profile: {
+        nickname: '新昵称',
+        avatar: 'cloud://new-avatar'
+      }
+    },
+    {
+      openid: 'openid_profile',
+      users,
+      now: fixedNow
+    }
+  )
+
+  assert.equal(result.success, true)
+  assert.equal(result.data.isNewUser, false)
+  assert.equal(result.data.user.nickname, '新昵称')
+  assert.equal(result.data.user.avatar, 'cloud://new-avatar')
+  assert.equal(users.records.length, 1)
+})
+
 test('loginOrRegister returns an existing user without creating a duplicate', async () => {
   const { handleLogin } = require('../cloudfunctions/login/handler')
   const users = createMemoryUsers([
@@ -354,6 +418,17 @@ test('profile page exposes login action and role based entry placeholders', () =
   )
 
   assert.match(profileWxml, /bindtap="handleLogin"/)
+  assert.match(profileWxml, /微信授权登录/)
   assert.match(profileWxml, /师傅入口/)
   assert.match(profileWxml, /管理员入口/)
+})
+
+test('profile page requests user profile before cloud login when available', () => {
+  const profileJs = fs.readFileSync(
+    path.resolve(__dirname, '../miniprogram/pages/profile/profile.js'),
+    'utf8'
+  )
+
+  assert.match(profileJs, /wx\.getUserProfile/)
+  assert.match(profileJs, /用于完善会员资料/)
 })

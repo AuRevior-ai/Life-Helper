@@ -13,7 +13,7 @@
     </view>
   </view>
 
-  <button wx:if="{{ !isLoggedIn }}" class="primary-button" bindtap="handleLogin">微信登录</button>
+  <button wx:if="{{ !isLoggedIn }}" class="primary-button" bindtap="handleLogin">微信授权登录</button>
   <button wx:else class="ghost-button" bindtap="handleLogout">退出登录</button>
 
   <view class="menu-panel panel">
