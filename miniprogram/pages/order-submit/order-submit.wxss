@@ -70,3 +70,13 @@
 .order-total text:last-child {
   color: #c66b2d;
 }
+
+.picker-value {
+  min-height: 72rpx;
+  padding: 18rpx 22rpx;
+  border-radius: 8rpx;
+  background: #f6f8f5;
+  color: #1f2d2a;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}

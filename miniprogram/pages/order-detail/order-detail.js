@@ -104,5 +104,14 @@ Page({
     wx.navigateTo({
       url: `/pages/review/review?orderId=${this.data.orderId}`
     })
+  },
+
+  goWorkerDetail() {
+    if (!this.data.order.worker_id) {
+      return
+    }
+    wx.navigateTo({
+      url: `/pages/worker-detail/worker-detail?workerId=${this.data.order.worker_id}`
+    })
   }
 })

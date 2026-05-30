@@ -15,6 +15,21 @@ const PAY_STATUS = Object.freeze({
   PAID: 'paid'
 })
 
+const APPOINTMENT_TIME_SLOTS = Object.freeze([
+  '09:00-11:00',
+  '11:00-13:00',
+  '14:00-16:00',
+  '16:00-18:00',
+  '18:00-20:00'
+])
+
+const MESSAGE_TYPE = Object.freeze({
+  ORDER_CREATED: 'order_created',
+  ORDER_ACCEPTED: 'order_accepted',
+  SERVICE_STARTED: 'service_started',
+  SERVICE_FINISHED: 'service_finished'
+})
+
 function success(data, message = 'success') {
   return {
     success: true,
@@ -67,6 +82,102 @@ function requireText(value, errorCode, message) {
     throw serviceError(errorCode, message)
   }
   return text
+}
+
+function parsePositiveInteger(value, fallback) {
+  const number = Number(value)
+  if (!Number.isInteger(number) || number < 1) {
+    return fallback
+  }
+  return number
+}
+
+function paginateList(records, payload = {}) {
+  const page = parsePositiveInteger(payload.page, 1)
+  const pageSize = Math.min(parsePositiveInteger(payload.pageSize, 20), 50)
+  const total = records.length
+  const start = (page - 1) * pageSize
+  const list = records.slice(start, start + pageSize)
+  return {
+    list,
+    orders: list,
+    total,
+    page,
+    pageSize,
+    hasMore: start + pageSize < total
+  }
+}
+
+function isDateOnly(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(trimText(value))
+}
+
+function toDateOnly(date) {
+  const year = date.getFullYear()
+  const month = `${date.getMonth() + 1}`.padStart(2, '0')
+  const day = `${date.getDate()}`.padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function normalizeAppointment(payload, env) {
+  const appointmentDate = trimText(payload.appointment_date || payload.appointmentDate)
+  const appointmentSlot = trimText(payload.appointment_slot || payload.appointmentSlot)
+  const legacyTime = trimText(payload.appointment_time || payload.appointmentTime)
+
+  if (!appointmentDate && !appointmentSlot && legacyTime) {
+    return {
+      appointment_date: '',
+      appointment_slot: '',
+      appointment_time: legacyTime
+    }
+  }
+
+  if (!appointmentDate || !appointmentSlot) {
+    throw serviceError('APPOINTMENT_TIME_MISSING', '请选择预约日期和时间段')
+  }
+
+  if (!isDateOnly(appointmentDate) || !APPOINTMENT_TIME_SLOTS.includes(appointmentSlot)) {
+    throw serviceError('APPOINTMENT_TIME_INVALID', '预约时间不合法')
+  }
+
+  if (appointmentDate < toDateOnly(getNow(env))) {
+    throw serviceError('APPOINTMENT_TIME_INVALID', '不能选择过去时间')
+  }
+
+  return {
+    appointment_date: appointmentDate,
+    appointment_slot: appointmentSlot,
+    appointment_time: `${appointmentDate} ${appointmentSlot}`
+  }
+}
+
+async function safeCreateMessage(env, data) {
+  if (!env.messages || !env.messages.create) {
+    return null
+  }
+
+  try {
+    return await env.messages.create({
+      role: 'user',
+      related_type: 'order',
+      is_read: false,
+      ...data
+    })
+  } catch (error) {
+    return null
+  }
+}
+
+function normalizeFinishImages(value) {
+  if (!value) return []
+  if (!Array.isArray(value)) {
+    throw serviceError('FINISH_IMAGES_INVALID', '完工图片格式不正确')
+  }
+  const images = value.map((item) => trimText(item)).filter(Boolean)
+  if (images.length > 3) {
+    throw serviceError('FINISH_IMAGES_INVALID', '完工图片最多 3 张')
+  }
+  return images
 }
 
 function buildFullAddress(address = {}) {
@@ -177,11 +288,7 @@ async function createOrder(event, env) {
   const payload = getPayload(event)
   const serviceId = requireText(payload.serviceId, 'SERVICE_ID_MISSING', '缺少服务 ID')
   const addressId = requireText(payload.addressId, 'ADDRESS_ID_MISSING', '缺少地址 ID')
-  const appointmentTime = requireText(
-    payload.appointment_time || payload.appointmentTime,
-    'APPOINTMENT_TIME_MISSING',
-    '请填写预约时间'
-  )
+  const appointment = normalizeAppointment(payload, env)
   const service = await findServiceById(serviceId, env)
   if (!service) {
     throw serviceError('SERVICE_NOT_FOUND', '服务不存在或已下架')
@@ -207,7 +314,9 @@ async function createOrder(event, env) {
     community: address.community,
     detail_address: address.detail_address,
     full_address: buildFullAddress(address),
-    appointment_time: appointmentTime,
+    appointment_date: appointment.appointment_date,
+    appointment_slot: appointment.appointment_slot,
+    appointment_time: appointment.appointment_time,
     remark: trimText(payload.remark),
     status: ORDER_STATUS.PENDING_PAY,
     pay_status: PAY_STATUS.UNPAID,
@@ -234,6 +343,16 @@ async function mockPayOrder(event, env) {
     updated_at: now
   })
 
+  await safeCreateMessage(env, {
+    user_id: order.user_id,
+    title: '订单已提交',
+    content: '订单已提交，等待师傅接单',
+    type: MESSAGE_TYPE.ORDER_CREATED,
+    related_id: order._id,
+    created_at: now,
+    updated_at: now
+  })
+
   return success({ order: updatedOrder })
 }
 
@@ -246,13 +365,19 @@ async function getUserOrderList(event, env) {
     orders = orders.filter((order) => order.status === payload.status)
   }
 
-  return success({ orders })
+  return success(paginateList(orders, payload))
 }
 
 async function getWorkerOrderList(event, env) {
   await requireApprovedWorker(env)
-  const orders = await env.orders.findByWorkerId(requireOpenid(env))
-  return success({ orders })
+  const payload = getPayload(event)
+  let orders = await env.orders.findByWorkerId(requireOpenid(env))
+
+  if (payload.status) {
+    orders = orders.filter((order) => order.status === payload.status)
+  }
+
+  return success(paginateList(orders, payload))
 }
 
 async function acceptOrder(event, env) {
@@ -293,6 +418,16 @@ async function acceptOrder(event, env) {
     throw serviceError('ORDER_ALREADY_ACCEPTED', '该订单已被其他师傅接走')
   }
 
+  await safeCreateMessage(env, {
+    user_id: order.user_id,
+    title: '师傅已接单',
+    content: '师傅已接单，请保持电话畅通',
+    type: MESSAGE_TYPE.ORDER_ACCEPTED,
+    related_id: order._id,
+    created_at: now,
+    updated_at: now
+  })
+
   return success({ order: updatedOrder })
 }
 
@@ -311,6 +446,16 @@ async function startService(event, env) {
     updated_at: now
   })
 
+  await safeCreateMessage(env, {
+    user_id: order.user_id,
+    title: '师傅已开始服务',
+    content: '师傅已开始服务',
+    type: MESSAGE_TYPE.SERVICE_STARTED,
+    related_id: order._id,
+    created_at: now,
+    updated_at: now
+  })
+
   return success({ order: updatedOrder })
 }
 
@@ -322,10 +467,28 @@ async function finishService(event, env) {
     throw serviceError('ORDER_STATUS_INVALID', '当前订单不能完成服务')
   }
 
+  const finishRemark = requireText(
+    payload.finish_remark || payload.finishRemark,
+    'FINISH_REMARK_MISSING',
+    '请填写完工说明'
+  )
+  const finishImages = normalizeFinishImages(payload.finish_images || payload.finishImages)
   const now = getNow(env)
   const updatedOrder = await env.orders.updateById(order._id, {
     status: ORDER_STATUS.PENDING_REVIEW,
+    finish_remark: finishRemark,
+    finish_images: finishImages,
     finished_at: now,
+    updated_at: now
+  })
+
+  await safeCreateMessage(env, {
+    user_id: order.user_id,
+    title: '服务已完成',
+    content: '服务已完成，请确认并评价',
+    type: MESSAGE_TYPE.SERVICE_FINISHED,
+    related_id: order._id,
+    created_at: now,
     updated_at: now
   })
 

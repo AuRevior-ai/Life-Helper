@@ -18,6 +18,10 @@
       <view class="detail-line">服务地址：{{ order.full_address }}</view>
       <view class="detail-line">预约时间：{{ order.appointment_time }}</view>
       <view wx:if="{{ order.worker_id }}" class="detail-line">师傅：{{ order.worker_id }}</view>
+      <view wx:if="{{ order.finish_remark }}" class="detail-line">完工说明：{{ order.finish_remark }}</view>
+      <view wx:if="{{ order.finish_images && order.finish_images.length }}" class="finish-images">
+        <image wx:for="{{ order.finish_images }}" wx:key="*this" class="finish-image" src="{{ item }}" mode="aspectFill"></image>
+      </view>
     </view>
 
     <view class="panel status-panel">

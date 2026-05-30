@@ -137,7 +137,8 @@ test('finishService moves assigned serving order to pending review', async () =>
   const result = await handleOrder(
     {
       action: 'finishService',
-      orderId: 'order_serving'
+      orderId: 'order_serving',
+      finishRemark: '服务已完成'
     },
     {
       openid: 'openid_worker',

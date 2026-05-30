@@ -3,3 +3,22 @@
   flex-direction: column;
   gap: 18rpx;
 }
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-bottom: 18rpx;
+  color: #64716d;
+  font-size: 25rpx;
+}
+
+.picker-value {
+  min-width: 180rpx;
+  padding: 14rpx 18rpx;
+  border-radius: 8rpx;
+  background: #f6f8f5;
+  color: #1f2d2a;
+  text-align: right;
+}

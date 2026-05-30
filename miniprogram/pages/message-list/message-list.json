@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "消息中心",
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view",
+    "empty-state": "/components/empty-state/empty-state"
+  }
+}

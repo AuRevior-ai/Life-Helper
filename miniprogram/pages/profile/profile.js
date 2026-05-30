@@ -123,5 +123,11 @@ Page({
     wx.navigateTo({
       url: '/pages/role-select/role-select'
     })
+  },
+
+  goMessageList() {
+    wx.navigateTo({
+      url: '/pages/message-list/message-list'
+    })
   }
 })

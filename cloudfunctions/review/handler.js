@@ -37,6 +37,23 @@ function trimText(value) {
   return `${value || ''}`.trim()
 }
 
+async function safeCreateMessage(env, data) {
+  if (!env.messages || !env.messages.create) {
+    return null
+  }
+
+  try {
+    return await env.messages.create({
+      role: 'worker',
+      related_type: 'order',
+      is_read: false,
+      ...data
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 function requireOpenid(env) {
   if (!env.openid) {
     throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -112,6 +129,16 @@ async function createReview(event, env) {
     }
     throw serviceError('ORDER_STATUS_INVALID', '订单状态已变化，评价未完成')
   }
+
+  await safeCreateMessage(env, {
+    user_id: order.worker_id,
+    title: '用户已完成评价',
+    content: '用户已完成评价，订单已完成',
+    type: 'order_completed',
+    related_id: order._id,
+    created_at: now,
+    updated_at: now
+  })
 
   return success({
     review,

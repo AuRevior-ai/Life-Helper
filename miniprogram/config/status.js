@@ -48,6 +48,28 @@ const COMMON_STATUS = Object.freeze({
   OFF: 'off'
 })
 
+const MESSAGE_TYPE = Object.freeze({
+  ORDER_CREATED: 'order_created',
+  ORDER_ACCEPTED: 'order_accepted',
+  SERVICE_STARTED: 'service_started',
+  SERVICE_FINISHED: 'service_finished',
+  ORDER_COMPLETED: 'order_completed',
+  WORKER_APPROVED: 'worker_approved',
+  WORKER_REJECTED: 'worker_rejected',
+  SYSTEM: 'system'
+})
+
+const MESSAGE_TYPE_TEXT = Object.freeze({
+  [MESSAGE_TYPE.ORDER_CREATED]: '订单已提交',
+  [MESSAGE_TYPE.ORDER_ACCEPTED]: '师傅已接单',
+  [MESSAGE_TYPE.SERVICE_STARTED]: '服务已开始',
+  [MESSAGE_TYPE.SERVICE_FINISHED]: '服务已完成',
+  [MESSAGE_TYPE.ORDER_COMPLETED]: '订单已完成',
+  [MESSAGE_TYPE.WORKER_APPROVED]: '审核通过',
+  [MESSAGE_TYPE.WORKER_REJECTED]: '审核未通过',
+  [MESSAGE_TYPE.SYSTEM]: '系统消息'
+})
+
 module.exports = {
   ORDER_STATUS,
   ORDER_STATUS_TEXT,
@@ -55,5 +77,7 @@ module.exports = {
   PAY_STATUS_TEXT,
   WORKER_AUDIT_STATUS,
   WORKER_AUDIT_STATUS_TEXT,
-  COMMON_STATUS
+  COMMON_STATUS,
+  MESSAGE_TYPE,
+  MESSAGE_TYPE_TEXT
 }

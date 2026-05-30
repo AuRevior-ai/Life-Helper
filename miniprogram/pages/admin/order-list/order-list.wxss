@@ -3,6 +3,32 @@
   gap: 18rpx;
 }
 
+.filter-panel {
+  display: grid;
+  gap: 16rpx;
+  margin-bottom: 18rpx;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  color: #64716d;
+  font-size: 25rpx;
+}
+
+.picker-value,
+.filter-input {
+  min-width: 240rpx;
+  padding: 14rpx 18rpx;
+  border-radius: 8rpx;
+  background: #f6f8f5;
+  color: #1f2d2a;
+  font-size: 25rpx;
+  text-align: right;
+}
+
 .order-card {
   display: block;
 }

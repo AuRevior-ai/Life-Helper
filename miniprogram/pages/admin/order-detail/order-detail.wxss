@@ -43,3 +43,17 @@
   font-size: 28rpx;
   line-height: 76rpx;
 }
+
+.finish-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.finish-image {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 8rpx;
+  background: #edf2ef;
+}

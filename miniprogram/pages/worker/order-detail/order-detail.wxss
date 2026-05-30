@@ -86,3 +86,44 @@
 .info-row--address text:last-child {
   line-height: 1.5;
 }
+
+.finish-panel {
+  margin-top: 22rpx;
+}
+
+.finish-upload-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin: 18rpx 0;
+  color: #64716d;
+  font-size: 24rpx;
+}
+
+.finish-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.finish-image-wrap {
+  position: relative;
+}
+
+.finish-image {
+  width: 156rpx;
+  height: 156rpx;
+  border-radius: 8rpx;
+  background: #edf2ef;
+}
+
+.remove-image {
+  margin-top: 8rpx;
+  padding: 0;
+  color: #c66b2d;
+  font-size: 22rpx;
+  line-height: 1.4;
+  background: transparent;
+}

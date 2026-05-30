@@ -63,6 +63,30 @@ function trimText(value) {
   return `${value || ''}`.trim()
 }
 
+function parsePositiveInteger(value, fallback) {
+  const number = Number(value)
+  if (!Number.isInteger(number) || number < 1) {
+    return fallback
+  }
+  return number
+}
+
+function paginateList(records, payload = {}) {
+  const page = parsePositiveInteger(payload.page, 1)
+  const pageSize = Math.min(parsePositiveInteger(payload.pageSize, 20), 50)
+  const total = records.length
+  const start = (page - 1) * pageSize
+  const list = records.slice(start, start + pageSize)
+  return {
+    list,
+    orders: list,
+    total,
+    page,
+    pageSize,
+    hasMore: start + pageSize < total
+  }
+}
+
 async function requireAdmin(env) {
   const user = await env.users.findByOpenid(requireOpenid(env))
   if (!user || user.status === USER_STATUS.DISABLED) {
@@ -141,8 +165,26 @@ async function disableUser(event, env) {
 
 async function getAllOrders(event, env) {
   await requireAdmin(env)
-  const orders = await env.orders.findAll()
-  return success({ orders })
+  const payload = getPayload(event)
+  let orders = await env.orders.findAll()
+  const keyword = trimText(payload.keyword)
+
+  if (payload.status) {
+    orders = orders.filter((order) => order.status === payload.status)
+  }
+  if (payload.category_id || payload.categoryId) {
+    const categoryId = payload.category_id || payload.categoryId
+    orders = orders.filter((order) => order.category_id === categoryId)
+  }
+  if (keyword) {
+    orders = orders.filter((order) =>
+      [order.order_no, order.service_name, order.contact_name, order.contact_phone]
+        .map((item) => trimText(item))
+        .some((item) => item.includes(keyword))
+    )
+  }
+
+  return success(paginateList(orders, payload))
 }
 
 async function getOrderDetail(event, env) {

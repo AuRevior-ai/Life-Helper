@@ -1,6 +1,7 @@
 const addressService = require('../../services/address.service')
 const orderService = require('../../services/order.service')
 const serviceService = require('../../services/service.service')
+const { APPOINTMENT_TIME_SLOTS } = require('../../config/constants')
 const { formatPrice, buildFullAddress } = require('../../utils/format')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../utils/toast')
 
@@ -14,6 +15,11 @@ Page({
     selectedAddressId: '',
     selectedAddress: null,
     selectedAddressText: '',
+    appointmentDate: '',
+    appointmentSlot: '',
+    appointmentSlots: APPOINTMENT_TIME_SLOTS,
+    appointmentSlotIndex: 0,
+    minAppointmentDate: '',
     appointment_time: '',
     remark: '',
     loading: true,
@@ -21,8 +27,13 @@ Page({
   },
 
   onLoad(options = {}) {
+    const minAppointmentDate = this.getTodayDate()
     this.setData({
-      serviceId: options.serviceId || ''
+      serviceId: options.serviceId || '',
+      minAppointmentDate,
+      appointmentDate: minAppointmentDate,
+      appointmentSlot: APPOINTMENT_TIME_SLOTS[0],
+      appointment_time: `${minAppointmentDate} ${APPOINTMENT_TIME_SLOTS[0]}`
     })
     this.loadPageData()
   },
@@ -104,10 +115,34 @@ Page({
     })
   },
 
-  handleAppointmentInput(event) {
+  getTodayDate() {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = `${now.getMonth() + 1}`.padStart(2, '0')
+    const day = `${now.getDate()}`.padStart(2, '0')
+    return `${year}-${month}-${day}`
+  },
+
+  refreshAppointmentTime() {
     this.setData({
-      appointment_time: event.detail.value
+      appointment_time: `${this.data.appointmentDate} ${this.data.appointmentSlot}`
     })
+  },
+
+  handleAppointmentDateChange(event) {
+    this.setData({
+      appointmentDate: event.detail.value
+    })
+    this.refreshAppointmentTime()
+  },
+
+  handleAppointmentSlotChange(event) {
+    const appointmentSlotIndex = Number(event.detail.value || 0)
+    this.setData({
+      appointmentSlotIndex,
+      appointmentSlot: this.data.appointmentSlots[appointmentSlotIndex]
+    })
+    this.refreshAppointmentTime()
   },
 
   handleRemarkInput(event) {
@@ -122,8 +157,8 @@ Page({
       return
     }
 
-    if (!this.data.appointment_time.trim()) {
-      showError('请填写预约时间')
+    if (!this.data.appointmentDate || !this.data.appointmentSlot) {
+      showError('请选择预约时间')
       return
     }
 
@@ -133,6 +168,8 @@ Page({
       const data = await orderService.createOrder({
         serviceId: this.data.serviceId,
         addressId: this.data.selectedAddressId,
+        appointmentDate: this.data.appointmentDate,
+        appointmentSlot: this.data.appointmentSlot,
         appointment_time: this.data.appointment_time,
         remark: this.data.remark
       })

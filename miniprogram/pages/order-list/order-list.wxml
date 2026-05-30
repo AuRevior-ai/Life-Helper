@@ -4,7 +4,14 @@
     <view class="page-subtitle">查看已提交的服务订单和处理进度</view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
+  <view class="filter-bar panel">
+    <text>状态</text>
+    <picker mode="selector" range="{{ statusLabels }}" value="{{ selectedStatusIndex }}" bindchange="onStatusChange">
+      <view class="picker-value">{{ statusLabels[selectedStatusIndex] }}</view>
+    </picker>
+  </view>
+
+  <loading-view wx:if="{{ loading && !orders.length }}" text="正在加载订单"></loading-view>
 
   <view wx:elif="{{ orders.length }}" class="order-list">
     <order-card

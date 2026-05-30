@@ -1,0 +1,33 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">未读 {{ unreadCount }} 条</view>
+  </view>
+
+  <button class="ghost-button" bindtap="markAllRead">全部已读</button>
+
+  <loading-view wx:if="{{ loading && !messages.length }}" text="正在加载消息"></loading-view>
+
+  <view wx:elif="{{ messages.length }}" class="message-list">
+    <view
+      wx:for="{{ messages }}"
+      wx:key="_id"
+      class="message-item panel {{ item.is_read ? '' : 'message-item--unread' }}"
+      data-id="{{ item._id }}"
+      bindtap="markRead"
+    >
+      <view class="message-top">
+        <text class="message-title">{{ item.title }}</text>
+        <text class="message-state">{{ item.readText }}</text>
+      </view>
+      <view class="message-type">{{ item.typeText }}</view>
+      <view class="message-content">{{ item.content }}</view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无消息"
+    description="订单和审核进度会在这里提醒"
+  ></empty-state>
+</view>

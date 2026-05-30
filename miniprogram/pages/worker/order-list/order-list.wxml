@@ -6,7 +6,14 @@
 
   <button class="ghost-button" bindtap="goOrderHall">进入接单大厅</button>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载师傅订单"></loading-view>
+  <view class="filter-bar panel">
+    <text>状态</text>
+    <picker mode="selector" range="{{ statusLabels }}" value="{{ selectedStatusIndex }}" bindchange="onStatusChange">
+      <view class="picker-value">{{ statusLabels[selectedStatusIndex] }}</view>
+    </picker>
+  </view>
+
+  <loading-view wx:if="{{ loading && !orders.length }}" text="正在加载师傅订单"></loading-view>
 
   <view wx:elif="{{ orders.length }}" class="order-list">
     <order-card

@@ -86,3 +86,17 @@
 .info-row--address text:last-child {
   line-height: 1.5;
 }
+
+.finish-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  padding-top: 18rpx;
+}
+
+.finish-image {
+  width: 156rpx;
+  height: 156rpx;
+  border-radius: 8rpx;
+  background: #edf2ef;
+}

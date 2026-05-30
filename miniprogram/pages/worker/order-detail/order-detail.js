@@ -12,6 +12,8 @@ Page({
     payStatusText: '',
     canStart: false,
     canFinish: false,
+    finishRemark: '',
+    finishImages: [],
     loading: true,
     submitting: false
   },
@@ -69,11 +71,18 @@ Page({
   },
 
   async finishService() {
+    if (!this.data.finishRemark.trim()) {
+      showError('请填写完工说明')
+      return
+    }
+
     this.setData({ submitting: true })
     showLoading('完成服务')
     try {
       const data = await orderService.finishService({
-        orderId: this.data.orderId
+        orderId: this.data.orderId,
+        finishRemark: this.data.finishRemark,
+        finishImages: this.data.finishImages
       })
       this.applyOrder(data.order)
       showSuccess('已提交验收')
@@ -94,5 +103,45 @@ Page({
       canStart: order.status === 'accepted',
       canFinish: order.status === 'serving'
     })
+  },
+
+  handleFinishRemarkInput(event) {
+    this.setData({
+      finishRemark: event.detail.value
+    })
+  },
+
+  chooseFinishImages() {
+    const remaining = 3 - this.data.finishImages.length
+    if (remaining <= 0) {
+      showError('完工图片最多 3 张')
+      return
+    }
+
+    wx.chooseMedia({
+      count: remaining,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      success: async (res) => {
+        const tempFiles = res.tempFiles || []
+        const uploaded = []
+        for (const file of tempFiles) {
+          const tempFilePath = file.tempFilePath
+          const cloudPath = `finish-images/${this.data.orderId}-${Date.now()}-${uploaded.length}.jpg`
+          const uploadResult = await wx.cloud.uploadFile({ cloudPath, filePath: tempFilePath })
+          uploaded.push(uploadResult.fileID)
+        }
+        this.setData({
+          finishImages: this.data.finishImages.concat(uploaded).slice(0, 3)
+        })
+      },
+      fail: () => {}
+    })
+  },
+
+  removeFinishImage(event) {
+    const index = Number(event.currentTarget.dataset.index)
+    const finishImages = this.data.finishImages.filter((item, itemIndex) => itemIndex !== index)
+    this.setData({ finishImages })
   }
 })

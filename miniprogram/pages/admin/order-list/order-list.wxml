@@ -4,7 +4,25 @@
     <view class="page-subtitle">查看平台订单，并进入详情手动调整状态</view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
+  <view class="filter-panel panel">
+    <view class="filter-row">
+      <text>状态</text>
+      <picker mode="selector" range="{{ statusLabels }}" value="{{ selectedStatusIndex }}" bindchange="onStatusChange">
+        <view class="picker-value">{{ statusLabels[selectedStatusIndex] }}</view>
+      </picker>
+    </view>
+    <view class="filter-row">
+      <text>分类 ID</text>
+      <input class="filter-input" value="{{ categoryId }}" placeholder="可选" bindinput="onCategoryInput" />
+    </view>
+    <view class="filter-row">
+      <text>关键词</text>
+      <input class="filter-input" value="{{ keyword }}" placeholder="订单号/服务/联系人" bindinput="onKeywordInput" />
+    </view>
+    <button class="ghost-button" bindtap="applyFilters">筛选</button>
+  </view>
+
+  <loading-view wx:if="{{ loading && !orders.length }}" text="正在加载订单"></loading-view>
 
   <view wx:elif="{{ orders.length }}" class="order-list">
     <view

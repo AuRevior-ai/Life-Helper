@@ -103,6 +103,23 @@ function orderMatchesWorkerArea(order, worker) {
   return hasTextMatch(workerArea, orderArea)
 }
 
+async function safeCreateMessage(env, data) {
+  if (!env.messages || !env.messages.create) {
+    return null
+  }
+
+  try {
+    return await env.messages.create({
+      role: 'worker',
+      related_type: 'worker',
+      is_read: false,
+      ...data
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 function isPhone(value) {
   return /^1[3-9]\d{9}$/.test(trimText(value))
 }
@@ -265,6 +282,16 @@ async function approveWorker(event, env) {
     })
   }
 
+  await safeCreateMessage(env, {
+    user_id: worker.user_id,
+    title: '入驻审核通过',
+    content: '你的师傅入驻申请已通过',
+    type: 'worker_approved',
+    related_id: worker._id,
+    created_at: now,
+    updated_at: now
+  })
+
   return success({ worker: updatedWorker })
 }
 
@@ -282,6 +309,16 @@ async function rejectWorker(event, env) {
     updated_at: now
   })
 
+  await safeCreateMessage(env, {
+    user_id: worker.user_id,
+    title: '入驻审核未通过',
+    content: updatedWorker.reject_reason,
+    type: 'worker_rejected',
+    related_id: worker._id,
+    created_at: now,
+    updated_at: now
+  })
+
   return success({ worker: updatedWorker })
 }
 
@@ -296,6 +333,37 @@ async function getOrderHallList(event, env) {
   return success({ orders: filteredOrders })
 }
 
+async function getWorkerDetail(event, env) {
+  const payload = getPayload(event)
+  if (!payload.workerId) {
+    throw serviceError('WORKER_ID_MISSING', '缺少师傅 ID')
+  }
+  let worker = await env.workers.findById(payload.workerId)
+  if (!worker && env.workers.findByUserId) {
+    worker = await env.workers.findByUserId(payload.workerId)
+  }
+  if (!worker) {
+    throw serviceError('WORKER_NOT_FOUND', '师傅申请不存在')
+  }
+  const workerUserId = worker.user_id
+  const orders = env.orders && env.orders.findByWorkerId
+    ? await env.orders.findByWorkerId(workerUserId)
+    : []
+  const reviews = env.reviews && env.reviews.findByWorkerId
+    ? await env.reviews.findByWorkerId(workerUserId)
+    : []
+  const completedOrders = orders.filter((order) => order.status === 'completed')
+  const ratingSum = reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0)
+  const averageRating = reviews.length ? Math.round((ratingSum / reviews.length) * 10) / 10 : 0
+
+  return success({
+    worker,
+    completed_count: completedOrders.length,
+    average_rating: averageRating,
+    reviews
+  })
+}
+
 const actions = Object.freeze({
   applyWorker,
   getWorkerInfo,
@@ -303,7 +371,8 @@ const actions = Object.freeze({
   getWorkerApplyList,
   approveWorker,
   rejectWorker,
-  getOrderHallList
+  getOrderHallList,
+  getWorkerDetail
 })
 
 async function handleWorker(event = {}, env) {
@@ -328,6 +397,7 @@ module.exports = {
   approveWorker,
   rejectWorker,
   getOrderHallList,
+  getWorkerDetail,
   WORKER_AUDIT_STATUS,
   WORKER_STATUS
 }

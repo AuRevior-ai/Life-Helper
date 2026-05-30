@@ -8,6 +8,14 @@ function createOrderReadRepository(db) {
         .orderBy('created_at', 'desc')
         .get()
       return result.data || []
+    },
+
+    async findByWorkerId(workerId) {
+      const result = await orders
+        .where({ worker_id: workerId })
+        .orderBy('created_at', 'desc')
+        .get()
+      return result.data || []
     }
   }
 }

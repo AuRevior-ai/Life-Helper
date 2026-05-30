@@ -47,13 +47,17 @@
 
     <view class="form-panel panel">
       <view class="form-item">
-        <text class="form-label">预约时间</text>
-        <input
-          class="form-input"
-          value="{{ appointment_time }}"
-          placeholder="例如：2026-06-01 10:00"
-          bindinput="handleAppointmentInput"
-        />
+        <text class="form-label">预约日期</text>
+        <picker mode="date" value="{{ appointmentDate }}" start="{{ minAppointmentDate }}" bindchange="handleAppointmentDateChange">
+          <view class="picker-value">{{ appointmentDate }}</view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">预约时间段</text>
+        <picker mode="selector" range="{{ appointmentSlots }}" value="{{ appointmentSlotIndex }}" bindchange="handleAppointmentSlotChange">
+          <view class="picker-value">{{ appointmentSlot }}</view>
+        </picker>
       </view>
 
       <view class="form-item">

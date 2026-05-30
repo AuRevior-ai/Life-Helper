@@ -44,6 +44,13 @@
         <text>备注</text>
         <text>{{ order.remark }}</text>
       </view>
+      <view wx:if="{{ order.finish_remark }}" class="info-row info-row--address">
+        <text>完工说明</text>
+        <text>{{ order.finish_remark }}</text>
+      </view>
+      <view wx:if="{{ order.finish_images && order.finish_images.length }}" class="finish-images">
+        <image wx:for="{{ order.finish_images }}" wx:key="*this" class="finish-image" src="{{ item }}" mode="aspectFill"></image>
+      </view>
     </view>
 
     <button
@@ -54,13 +61,33 @@
       bindtap="startService"
     >开始服务</button>
 
-    <button
-      wx:if="{{ canFinish }}"
-      class="primary-button"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-      bindtap="finishService"
-    >完成服务</button>
+    <view wx:if="{{ canFinish }}" class="panel finish-panel">
+      <view class="form-item">
+        <text class="form-label">完工说明</text>
+        <textarea
+          class="form-textarea"
+          value="{{ finishRemark }}"
+          placeholder="请填写本次服务完成情况"
+          bindinput="handleFinishRemarkInput"
+        ></textarea>
+      </view>
+      <view class="finish-upload-row">
+        <button class="ghost-button" bindtap="chooseFinishImages">选择完工图片</button>
+        <text>{{ finishImages.length }}/3</text>
+      </view>
+      <view wx:if="{{ finishImages.length }}" class="finish-images">
+        <view wx:for="{{ finishImages }}" wx:key="*this" class="finish-image-wrap">
+          <image class="finish-image" src="{{ item }}" mode="aspectFill"></image>
+          <button class="remove-image" data-index="{{ index }}" bindtap="removeFinishImage">删除</button>
+        </view>
+      </view>
+      <button
+        class="primary-button"
+        loading="{{ submitting }}"
+        disabled="{{ submitting }}"
+        bindtap="finishService"
+      >完成服务</button>
+    </view>
   </block>
 
   <empty-state

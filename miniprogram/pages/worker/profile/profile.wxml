@@ -2,5 +2,6 @@
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+  <view class="panel muted-text">查看师傅端消息和服务进度</view>
+  <button class="primary-button" bindtap="goMessageList">消息中心</button>
 </view>
