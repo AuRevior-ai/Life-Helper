@@ -56,77 +56,16 @@
   color: #1f7a68;
 }
 
-.role-card {
-  margin-bottom: 24rpx;
-  border-color: #dfe8e3;
-}
-
-.role-card.worker {
-  border-color: #d9c9aa;
-  background: #fffaf0;
-}
-
-.role-card.admin {
-  border-color: #b9d5dd;
-  background: #f0f8fa;
-}
-
-.role-card__label {
-  display: inline-flex;
-  height: 42rpx;
-  padding: 0 14rpx;
-  align-items: center;
-  border-radius: 8rpx;
-  background: #e8f2ee;
-  color: #1f7a68;
-  font-size: 22rpx;
-  font-weight: 700;
-}
-
-.role-card.worker .role-card__label {
-  background: #f4ead5;
-  color: #8b651f;
-}
-
-.role-card.admin .role-card__label {
-  background: #dff0f4;
-  color: #246276;
-}
-
-.role-card__title {
-  margin-top: 18rpx;
-  color: #183832;
-  font-size: 34rpx;
-  font-weight: 800;
-  line-height: 1.25;
-}
-
-.role-card__desc {
-  margin-top: 10rpx;
-  color: #64716d;
-  font-size: 25rpx;
-  line-height: 1.55;
-}
-
-.role-card__actions {
-  display: flex;
-  gap: 16rpx;
-  margin-top: 22rpx;
-}
-
-.role-card__actions .text-button {
-  flex: 1;
-}
-
-.text-button.filled {
-  border-color: #1f7a68;
-  background: #1f7a68;
-  color: #ffffff;
-}
-
 .menu-panel {
   padding: 0;
   overflow: hidden;
+}
+
+.menu-title {
+  padding: 24rpx 28rpx 8rpx;
+  color: #64716d;
+  font-size: 24rpx;
+  font-weight: 700;
 }
 
 .menu-item {
@@ -142,6 +81,11 @@
 
 .menu-item:last-child {
   border-bottom: 0;
+}
+
+.menu-item.emphasized {
+  color: #1f7a68;
+  font-weight: 700;
 }
 
 .menu-item__hint {

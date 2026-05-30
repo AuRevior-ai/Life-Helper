@@ -411,7 +411,7 @@ test('auth helpers persist current user and expose login state', () => {
   delete global.wx
 })
 
-test('profile page exposes login action and role based entry placeholders', () => {
+test('profile page exposes login action and identity selection entry', () => {
   const profileWxml = fs.readFileSync(
     path.resolve(__dirname, '../miniprogram/pages/profile/profile.wxml'),
     'utf8'
@@ -419,8 +419,9 @@ test('profile page exposes login action and role based entry placeholders', () =
 
   assert.match(profileWxml, /bindtap="handleLogin"/)
   assert.match(profileWxml, /微信授权登录/)
-  assert.match(profileWxml, /师傅入口/)
-  assert.match(profileWxml, /管理员入口/)
+  assert.match(profileWxml, /选择登录身份/)
+  assert.doesNotMatch(profileWxml, /师傅入口/)
+  assert.doesNotMatch(profileWxml, /管理员入口/)
 })
 
 test('profile page requests user profile before cloud login when available', () => {

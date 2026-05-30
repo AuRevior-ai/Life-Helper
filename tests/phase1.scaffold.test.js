@@ -16,6 +16,7 @@ const expectedPages = [
   'pages/address-list/address-list',
   'pages/address-edit/address-edit',
   'pages/profile/profile',
+  'pages/role-select/role-select',
   'pages/profile-edit/profile-edit',
   'pages/worker/apply/apply',
   'pages/worker/audit-status/audit-status',
