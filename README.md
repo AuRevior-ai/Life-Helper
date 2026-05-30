@@ -13,6 +13,9 @@
 - 阶段五：师傅入驻、审核与接单
 - 阶段六：用户评价、订单闭环与师傅收入统计
 - 阶段七：管理员管理能力
+- 阶段八：优化、验证准备与文档收口
+
+第一版 MVP 已完成，下一步是在微信开发者工具和真机环境中验证完整业务链路。
 
 已建立：
 
@@ -46,6 +49,8 @@
 管理员初始化暂时采用手动方式：用户登录后，在云数据库 `users` 集合中将目标用户的 `role` 字段改为 `admin`。
 
 微信开发者工具登录跑通步骤见：[docs/wechat-login-runbook.md](docs/wechat-login-runbook.md)。
+
+八阶段完整验证清单见：[docs/wechat-mvp-verification.md](docs/wechat-mvp-verification.md)。
 
 ## 本地检查
 

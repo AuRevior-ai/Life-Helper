@@ -1,6 +1,14 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">MVP 阶段暂不开放服务编辑，当前先支持服务同步和上下架</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <view class="panel deferred-panel">
+    <view class="deferred-title">服务编辑将在后续版本开放</view>
+    <view class="deferred-text">
+      初版服务数据来自种子目录同步，管理员可以在服务管理页完成同步，并对服务进行上架或下架操作。
+    </view>
+    <button class="primary-button" bindtap="goServiceList">进入服务管理</button>
+  </view>
 </view>

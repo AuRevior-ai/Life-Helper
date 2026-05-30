@@ -1,1 +1,13 @@
-/* Page scoped styles inherit the global shell layout. */
+.deferred-title {
+  color: #183832;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.deferred-text {
+  margin-top: 16rpx;
+  color: #64716d;
+  font-size: 26rpx;
+  line-height: 1.6;
+}

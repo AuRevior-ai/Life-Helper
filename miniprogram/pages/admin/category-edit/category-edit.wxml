@@ -1,6 +1,14 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">MVP 阶段暂不开放分类编辑，当前先通过种子服务同步生成分类</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <view class="panel deferred-panel">
+    <view class="deferred-title">分类编辑将在后续版本开放</view>
+    <view class="deferred-text">
+      初版重点是跑通服务浏览、下单、接单、评价和管理闭环。当前可在分类管理页查看分类，并通过服务管理同步种子服务。
+    </view>
+    <button class="primary-button" bindtap="goBack">返回分类管理</button>
+  </view>
 </view>
