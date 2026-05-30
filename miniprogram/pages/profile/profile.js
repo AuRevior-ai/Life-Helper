@@ -35,7 +35,7 @@ Page({
       avatarText: isLoggedIn ? (user.nickname || '社区用户').slice(0, 1) : '未',
       displayName: isLoggedIn ? user.nickname || '社区用户' : '未登录',
       displayPhone: isLoggedIn ? user.phone || '手机号待填写' : '登录后完善手机号',
-      roleText: isLoggedIn ? getCurrentUserRoleText(user.role) : '未登录',
+      roleText: isLoggedIn ? getCurrentUserRoleText() : '未登录',
       statusText: isLoggedIn ? this.getStatusText(user.status) : '未登录'
     })
   },

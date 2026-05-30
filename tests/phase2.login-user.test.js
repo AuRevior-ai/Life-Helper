@@ -384,9 +384,11 @@ test('auth helpers persist current user and expose login state', () => {
   delete require.cache[authPath]
   const {
     clearCurrentUser,
+    getCurrentIdentityRole,
     getCurrentUser,
     getCurrentUserRoleText,
     hasRole,
+    setCurrentIdentityRole,
     isLoggedIn,
     setCurrentUser
   } = require('../miniprogram/utils/auth')
@@ -405,6 +407,14 @@ test('auth helpers persist current user and expose login state', () => {
   assert.equal(hasRole('admin'), true)
   assert.equal(hasRole('worker'), false)
   assert.equal(getCurrentUserRoleText(), '管理员')
+
+  setCurrentIdentityRole('user')
+  assert.equal(getCurrentIdentityRole(), 'user')
+  assert.equal(getCurrentUser().role, 'admin')
+  assert.equal(getCurrentUser().active_role, 'user')
+  assert.equal(hasRole('admin'), false)
+  assert.equal(hasRole('user'), true)
+  assert.equal(getCurrentUserRoleText(), '普通用户')
 
   clearCurrentUser()
   assert.equal(getCurrentUser(), null)

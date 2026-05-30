@@ -17,9 +17,25 @@ function clearCurrentUser() {
   wx.removeStorageSync(STORAGE_KEY)
 }
 
-function hasRole(role) {
+function getCurrentIdentityRole() {
   const user = getCurrentUser()
-  return Boolean(user && user.role === role)
+  return user ? user.active_role || user.role : ''
+}
+
+function setCurrentIdentityRole(role) {
+  const user = getCurrentUser()
+  if (!user || !role) return null
+
+  const nextUser = {
+    ...user,
+    active_role: role
+  }
+  setCurrentUser(nextUser)
+  return nextUser
+}
+
+function hasRole(role) {
+  return getCurrentIdentityRole() === role
 }
 
 function isLoggedIn() {
@@ -27,7 +43,7 @@ function isLoggedIn() {
 }
 
 function getCurrentUserRoleText(role) {
-  const targetRole = role || (getCurrentUser() || {}).role
+  const targetRole = role || getCurrentIdentityRole()
   return USER_ROLE_TEXT[targetRole] || '未登录'
 }
 
@@ -35,6 +51,8 @@ module.exports = {
   getCurrentUser,
   setCurrentUser,
   clearCurrentUser,
+  getCurrentIdentityRole,
+  setCurrentIdentityRole,
   hasRole,
   isLoggedIn,
   getCurrentUserRoleText

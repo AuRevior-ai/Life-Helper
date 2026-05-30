@@ -1,6 +1,11 @@
 const userService = require('../../services/user.service')
 const { USER_ROLE } = require('../../config/roles')
-const { getCurrentUser, getCurrentUserRoleText, setCurrentUser } = require('../../utils/auth')
+const {
+  getCurrentUser,
+  getCurrentUserRoleText,
+  setCurrentIdentityRole,
+  setCurrentUser
+} = require('../../utils/auth')
 const { hideLoading, showError, showLoading, showSuccess, showToast } = require('../../utils/toast')
 
 Page({
@@ -20,7 +25,7 @@ Page({
     this.setData({
       currentUser: user,
       displayName: user ? user.nickname || '社区用户' : '未登录',
-      roleText: user ? getCurrentUserRoleText(user.role) : '未登录'
+      roleText: user ? getCurrentUserRoleText() : '未登录'
     })
   },
 
@@ -37,6 +42,14 @@ Page({
   enterUserRole() {
     if (!this.requireLogin()) return
 
+    const user = setCurrentIdentityRole(USER_ROLE.USER)
+    if (user) {
+      getApp().globalData.currentUser = user
+      this.setData({
+        currentUser: user,
+        roleText: getCurrentUserRoleText()
+      })
+    }
     wx.switchTab({
       url: '/pages/index/index'
     })
@@ -45,6 +58,14 @@ Page({
   enterWorkerRole() {
     if (!this.requireLogin()) return
 
+    const user = setCurrentIdentityRole(USER_ROLE.WORKER)
+    if (user) {
+      getApp().globalData.currentUser = user
+      this.setData({
+        currentUser: user,
+        roleText: getCurrentUserRoleText()
+      })
+    }
     wx.navigateTo({
       url:
         this.data.currentUser.role === USER_ROLE.WORKER
@@ -57,6 +78,14 @@ Page({
     if (!this.requireLogin()) return
 
     if (this.data.currentUser.role === USER_ROLE.ADMIN) {
+      const user = setCurrentIdentityRole(USER_ROLE.ADMIN)
+      if (user) {
+        getApp().globalData.currentUser = user
+        this.setData({
+          currentUser: user,
+          roleText: getCurrentUserRoleText()
+        })
+      }
       wx.navigateTo({
         url: '/pages/admin/dashboard/dashboard'
       })
@@ -80,12 +109,16 @@ Page({
     showLoading('初始化中')
     try {
       const data = await userService.claimInitialAdmin()
-      setCurrentUser(data.user)
-      getApp().globalData.currentUser = data.user
+      const user = {
+        ...data.user,
+        active_role: USER_ROLE.ADMIN
+      }
+      setCurrentUser(user)
+      getApp().globalData.currentUser = user
       this.setData({
-        currentUser: data.user,
-        displayName: data.user.nickname || '社区用户',
-        roleText: getCurrentUserRoleText(data.user.role)
+        currentUser: user,
+        displayName: user.nickname || '社区用户',
+        roleText: getCurrentUserRoleText(user.active_role)
       })
       showSuccess('已成为管理员')
       wx.navigateTo({
