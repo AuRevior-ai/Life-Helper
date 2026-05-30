@@ -39,6 +39,27 @@ function createOrderRepository(db) {
       await orders.doc(id).update({ data })
       const result = await orders.doc(id).get()
       return result.data || null
+    },
+
+    async acceptPendingOrder(id, workerId, data) {
+      const result = await orders
+        .where({
+          _id: id,
+          status: 'pending_accept',
+          worker_id: ''
+        })
+        .update({
+          data: {
+            ...data,
+            worker_id: workerId
+          }
+        })
+
+      if (!result.stats || result.stats.updated !== 1) {
+        return null
+      }
+
+      return this.findById(id)
     }
   }
 }

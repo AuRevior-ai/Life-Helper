@@ -286,7 +286,9 @@ test('approved worker sees only pending accept orders in order hall', async () =
       _id: 'worker_approved',
       user_id: 'openid_worker',
       audit_status: 'approved',
-      status: 'enabled'
+      status: 'enabled',
+      service_category: '家政保洁',
+      service_area: '未来小区'
     }
   ])
   const orders = createMemoryOrders([
@@ -295,7 +297,9 @@ test('approved worker sees only pending accept orders in order hall', async () =
       service_name: '日常保洁',
       status: 'pending_accept',
       pay_status: 'paid',
-      worker_id: ''
+      worker_id: '',
+      category_name: '家政保洁',
+      community: '未来小区'
     },
     {
       _id: 'order_accepted',

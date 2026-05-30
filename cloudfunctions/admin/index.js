@@ -5,7 +5,8 @@ const {
   createOrderRepository,
   createWorkerRepository,
   createCategoryRepository,
-  createServiceRepository
+  createServiceRepository,
+  createAdminOperationLogRepository
 } = require('./repositories')
 
 cloud.init({
@@ -22,6 +23,7 @@ exports.main = async (event = {}) => {
     orders: createOrderRepository(db),
     workers: createWorkerRepository(db),
     categories: createCategoryRepository(db),
-    services: createServiceRepository(db)
+    services: createServiceRepository(db),
+    adminOperationLogs: createAdminOperationLogRepository(db)
   })
 }

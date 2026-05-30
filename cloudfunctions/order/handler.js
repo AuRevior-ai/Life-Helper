@@ -267,17 +267,31 @@ async function acceptOrder(event, env) {
     throw serviceError('ORDER_NOT_FOUND', '订单不存在')
   }
 
-  if (order.status !== ORDER_STATUS.PENDING_ACCEPT || order.worker_id) {
+  if (order.worker_id) {
+    throw serviceError('ORDER_ALREADY_ACCEPTED', '该订单已被其他师傅接走')
+  }
+
+  if (order.status !== ORDER_STATUS.PENDING_ACCEPT) {
     throw serviceError('ORDER_STATUS_INVALID', '当前订单不能接单')
   }
 
   const now = getNow(env)
-  const updatedOrder = await env.orders.updateById(order._id, {
+  const updateData = {
     status: ORDER_STATUS.ACCEPTED,
-    worker_id: requireOpenid(env),
     accepted_at: now,
     updated_at: now
-  })
+  }
+  const workerId = requireOpenid(env)
+  const updatedOrder = env.orders.acceptPendingOrder
+    ? await env.orders.acceptPendingOrder(order._id, workerId, updateData)
+    : await env.orders.updateById(order._id, {
+      ...updateData,
+      worker_id: workerId
+    })
+
+  if (!updatedOrder) {
+    throw serviceError('ORDER_ALREADY_ACCEPTED', '该订单已被其他师傅接走')
+  }
 
   return success({ order: updatedOrder })
 }

@@ -62,6 +62,47 @@ function trimText(value) {
   return `${value || ''}`.trim()
 }
 
+function splitKeywords(value) {
+  return trimText(value)
+    .split(/[,，、\s]+/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+function hasTextMatch(left, right) {
+  const leftItems = splitKeywords(left)
+  const rightItems = splitKeywords(right)
+  if (leftItems.length === 0 || rightItems.length === 0) {
+    return false
+  }
+
+  return leftItems.some((leftItem) =>
+    rightItems.some((rightItem) => leftItem === rightItem || leftItem.includes(rightItem) || rightItem.includes(leftItem))
+  )
+}
+
+function orderMatchesWorkerCategory(order, worker) {
+  const workerCategory = worker.service_category || worker.serviceCategory
+  return hasTextMatch(workerCategory, order.category_name || order.category_id || order.service_category)
+}
+
+function getOrderAreaText(order) {
+  return [order.service_area, order.community, order.city, order.full_address]
+    .map((item) => trimText(item))
+    .filter(Boolean)
+    .join(' ')
+}
+
+function orderMatchesWorkerArea(order, worker) {
+  const orderArea = getOrderAreaText(order)
+  const workerArea = worker.service_area || worker.serviceArea
+  if (!trimText(orderArea) || !trimText(workerArea)) {
+    return true
+  }
+
+  return hasTextMatch(workerArea, orderArea)
+}
+
 function isPhone(value) {
   return /^1[3-9]\d{9}$/.test(trimText(value))
 }
@@ -245,9 +286,14 @@ async function rejectWorker(event, env) {
 }
 
 async function getOrderHallList(event, env) {
-  await requireApprovedWorker(env)
+  const worker = await requireApprovedWorker(env)
   const orders = await env.orders.findByStatus('pending_accept')
-  return success({ orders })
+  const filteredOrders = orders.filter((order) =>
+    !order.worker_id &&
+    orderMatchesWorkerCategory(order, worker) &&
+    orderMatchesWorkerArea(order, worker)
+  )
+  return success({ orders: filteredOrders })
 }
 
 const actions = Object.freeze({

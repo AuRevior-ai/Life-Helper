@@ -59,6 +59,10 @@ function requireOpenid(env) {
   return env.openid
 }
 
+function trimText(value) {
+  return `${value || ''}`.trim()
+}
+
 async function requireAdmin(env) {
   const user = await env.users.findByOpenid(requireOpenid(env))
   if (!user || user.status === USER_STATUS.DISABLED) {
@@ -74,6 +78,20 @@ async function requireAdmin(env) {
 
 function isValidOrderStatus(status) {
   return Object.values(ORDER_STATUS).includes(status)
+}
+
+const ORDER_STATUS_TRANSITIONS = Object.freeze({
+  [ORDER_STATUS.PENDING_PAY]: [ORDER_STATUS.PENDING_ACCEPT, ORDER_STATUS.CANCELED],
+  [ORDER_STATUS.PENDING_ACCEPT]: [ORDER_STATUS.ACCEPTED, ORDER_STATUS.CANCELED],
+  [ORDER_STATUS.ACCEPTED]: [ORDER_STATUS.SERVING, ORDER_STATUS.CANCELED],
+  [ORDER_STATUS.SERVING]: [ORDER_STATUS.PENDING_REVIEW, ORDER_STATUS.CANCELED],
+  [ORDER_STATUS.PENDING_REVIEW]: [ORDER_STATUS.COMPLETED],
+  [ORDER_STATUS.COMPLETED]: [],
+  [ORDER_STATUS.CANCELED]: []
+})
+
+function canTransitOrderStatus(fromStatus, toStatus) {
+  return (ORDER_STATUS_TRANSITIONS[fromStatus] || []).includes(toStatus)
 }
 
 async function getDashboard(event, env) {
@@ -143,7 +161,7 @@ async function getOrderDetail(event, env) {
 }
 
 async function adminUpdateOrderStatus(event, env) {
-  await requireAdmin(env)
+  const admin = await requireAdmin(env)
   const payload = getPayload(event)
   if (!payload.orderId) {
     throw serviceError('ORDER_ID_MISSING', '缺少订单 ID')
@@ -151,14 +169,38 @@ async function adminUpdateOrderStatus(event, env) {
   if (!isValidOrderStatus(payload.status)) {
     throw serviceError('ORDER_STATUS_INVALID', '订单状态不合法')
   }
+  if (!env.adminOperationLogs || !env.adminOperationLogs.create) {
+    throw serviceError('ADMIN_LOG_REPOSITORY_MISSING', '缺少管理员操作日志集合')
+  }
 
+  const existingOrder = await env.orders.findById(payload.orderId)
+  if (!existingOrder) {
+    throw serviceError('ORDER_NOT_FOUND', '订单不存在')
+  }
+
+  const force = payload.force === true
+  if (existingOrder.status !== payload.status && !force && !canTransitOrderStatus(existingOrder.status, payload.status)) {
+    throw serviceError('ORDER_STATUS_TRANSITION_INVALID', '订单状态流转不合法')
+  }
+
+  const now = getNow(env)
   const order = await env.orders.updateById(payload.orderId, {
     status: payload.status,
-    updated_at: getNow(env)
+    updated_at: now
   })
   if (!order) {
     throw serviceError('ORDER_NOT_FOUND', '订单不存在')
   }
+
+  await env.adminOperationLogs.create({
+    admin_id: admin.openid || requireOpenid(env),
+    order_id: payload.orderId,
+    from_status: existingOrder.status,
+    to_status: payload.status,
+    reason: trimText(payload.reason) || (force ? '调试强制调整' : '管理员状态调整'),
+    force,
+    created_at: now
+  })
 
   return success({ order })
 }

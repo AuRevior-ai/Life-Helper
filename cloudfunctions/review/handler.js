@@ -93,12 +93,25 @@ async function createReview(event, env) {
     created_at: now,
     updated_at: now
   })
+  if (!review) {
+    throw serviceError('REVIEW_ALREADY_EXISTS', '该订单已评价')
+  }
 
-  const updatedOrder = await env.orders.updateById(order._id, {
+  const completeData = {
     status: 'completed',
     reviewed_at: now,
     updated_at: now
-  })
+  }
+  const updatedOrder = env.orders.completePendingReviewOrder
+    ? await env.orders.completePendingReviewOrder(order._id, completeData)
+    : await env.orders.updateById(order._id, completeData)
+
+  if (!updatedOrder) {
+    if (env.reviews.deleteById && review._id) {
+      await env.reviews.deleteById(review._id)
+    }
+    throw serviceError('ORDER_STATUS_INVALID', '订单状态已变化，评价未完成')
+  }
 
   return success({
     review,

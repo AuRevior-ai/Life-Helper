@@ -130,6 +130,23 @@ function createMemoryCollection(initialRecords = []) {
   }
 }
 
+function createMemoryLogs() {
+  const records = []
+
+  return {
+    records,
+
+    async create(data) {
+      const record = {
+        ...data,
+        _id: `log_${records.length + 1}`
+      }
+      records.push(record)
+      return { ...record }
+    }
+  }
+}
+
 function createAdminEnv() {
   return {
     openid: 'openid_admin',
@@ -152,6 +169,7 @@ function createAdminEnv() {
     services: createMemoryCollection([
       { _id: 'svc_custom', name: '自定义服务', status: 'on', price: 1000 }
     ]),
+    adminOperationLogs: createMemoryLogs(),
     now: fixedNow
   }
 }
