@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "管理首页"
+  "navigationBarTitleText": "管理首页",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

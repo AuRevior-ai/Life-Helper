@@ -1,1 +1,53 @@
-/* Page scoped styles inherit the global shell layout. */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18rpx;
+}
+
+.stat-card {
+  min-height: 138rpx;
+  box-sizing: border-box;
+}
+
+.stat-card.wide {
+  grid-column: span 2;
+}
+
+.stat-label {
+  color: #64716d;
+  font-size: 24rpx;
+}
+
+.stat-value {
+  margin-top: 14rpx;
+  color: #183832;
+  font-size: 44rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.stat-value.amount {
+  color: #b65230;
+}
+
+.entry-list {
+  padding: 8rpx 0;
+}
+
+.entry-item {
+  display: flex;
+  height: 88rpx;
+  margin: 0;
+  padding: 0 28rpx;
+  align-items: center;
+  border-radius: 0;
+  background: #ffffff;
+  color: #1f2d2a;
+  font-size: 28rpx;
+  line-height: 88rpx;
+  text-align: left;
+}
+
+.entry-item::after {
+  border: 0;
+}

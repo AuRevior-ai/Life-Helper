@@ -1,6 +1,38 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">集中查看运营概况，并进入订单、用户、师傅与服务管理</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载看板"></loading-view>
+
+  <block wx:else>
+    <view class="stats-grid">
+      <view class="stat-card panel">
+        <view class="stat-label">用户数</view>
+        <view class="stat-value">{{ stats.user_count }}</view>
+      </view>
+      <view class="stat-card panel">
+        <view class="stat-label">订单数</view>
+        <view class="stat-value">{{ stats.order_count }}</view>
+      </view>
+      <view class="stat-card panel">
+        <view class="stat-label">待审核师傅</view>
+        <view class="stat-value">{{ stats.pending_worker_count }}</view>
+      </view>
+      <view class="stat-card panel wide">
+        <view class="stat-label">完成订单金额</view>
+        <view class="stat-value amount">{{ completedOrderAmountText }}</view>
+      </view>
+    </view>
+
+    <view class="section-head">管理入口</view>
+    <view class="entry-list panel">
+      <button class="entry-item" bindtap="goOrders">订单管理</button>
+      <button class="entry-item" bindtap="goUsers">用户管理</button>
+      <button class="entry-item" bindtap="goWorkers">师傅审核</button>
+      <button class="entry-item" bindtap="goServices">服务管理</button>
+      <button class="entry-item" bindtap="goCategories">分类管理</button>
+    </view>
+  </block>
 </view>

@@ -1,1 +1,38 @@
-/* Page scoped styles inherit the global shell layout. */
+.order-list {
+  display: grid;
+  gap: 18rpx;
+}
+
+.order-card {
+  display: block;
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.service-name {
+  color: #183832;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.status-tag {
+  flex: 0 0 auto;
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  background: #e8f2ee;
+  color: #1f7a68;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.order-line {
+  margin-top: 12rpx;
+  color: #64716d;
+  font-size: 24rpx;
+  line-height: 1.45;
+}

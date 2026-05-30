@@ -1,3 +1,8 @@
 {
-  "navigationBarTitleText": "用户管理"
+  "navigationBarTitleText": "用户管理",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

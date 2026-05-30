@@ -1,6 +1,42 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">同步种子服务到云数据库，并管理服务上下架</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <button
+    class="primary-button compact"
+    loading="{{ seeding }}"
+    disabled="{{ seeding }}"
+    bindtap="seedServiceData"
+  >同步种子服务</button>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
+
+  <view wx:elif="{{ services.length }}" class="service-list">
+    <view wx:for="{{ services }}" wx:key="_id" class="service-card panel">
+      <view class="card-top">
+        <view>
+          <view class="service-name">{{ item.name }}</view>
+          <view class="service-meta">{{ item.category_name }} · {{ item.priceText }}</view>
+        </view>
+        <view class="status-tag {{ item.status === 'off' ? 'off' : '' }}">{{ item.statusText }}</view>
+      </view>
+      <view wx:if="{{ item.description }}" class="service-desc">{{ item.description }}</view>
+      <button
+        class="text-button"
+        data-id="{{ item._id }}"
+        data-status="{{ item.nextStatus }}"
+        loading="{{ submittingId === item._id }}"
+        disabled="{{ submittingId === item._id }}"
+        bindtap="updateServiceStatus"
+      >{{ item.nextStatusText }}</button>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无服务"
+    description="点击同步种子服务后生成初版目录"
+  ></empty-state>
 </view>

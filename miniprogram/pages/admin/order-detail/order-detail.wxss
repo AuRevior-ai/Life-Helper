@@ -1,1 +1,45 @@
-/* Page scoped styles inherit the global shell layout. */
+.detail-panel,
+.status-panel {
+  margin-bottom: 20rpx;
+}
+
+.detail-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+  margin-bottom: 12rpx;
+}
+
+.service-name {
+  color: #183832;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.status-tag {
+  flex: 0 0 auto;
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  background: #e8f2ee;
+  color: #1f7a68;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.detail-line {
+  margin-top: 14rpx;
+  color: #64716d;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.picker-value {
+  height: 76rpx;
+  padding: 0 20rpx;
+  border-radius: 10rpx;
+  background: #f6f8f5;
+  color: #1f2d2a;
+  font-size: 28rpx;
+  line-height: 76rpx;
+}

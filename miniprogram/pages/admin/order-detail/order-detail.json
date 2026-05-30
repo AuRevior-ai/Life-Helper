@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "管理订单详情"
+  "navigationBarTitleText": "管理订单详情",
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

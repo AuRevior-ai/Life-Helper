@@ -1,1 +1,44 @@
-/* Page scoped styles inherit the global shell layout. */
+.compact {
+  margin-top: 0;
+}
+
+.category-list {
+  display: grid;
+  gap: 18rpx;
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.category-name {
+  color: #183832;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.category-meta,
+.category-desc {
+  margin-top: 10rpx;
+  color: #64716d;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.status-tag {
+  flex: 0 0 auto;
+  padding: 8rpx 14rpx;
+  border-radius: 8rpx;
+  background: #e8f2ee;
+  color: #1f7a68;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.status-tag.disabled {
+  background: #f7e9e3;
+  color: #b65230;
+}

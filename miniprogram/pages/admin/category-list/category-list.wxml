@@ -1,6 +1,34 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看服务分类，初版分类数据可从种子目录同步</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <button
+    class="ghost-button compact"
+    loading="{{ seeding }}"
+    disabled="{{ seeding }}"
+    bindtap="seedServiceData"
+  >同步种子服务</button>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载分类"></loading-view>
+
+  <view wx:elif="{{ categories.length }}" class="category-list">
+    <view wx:for="{{ categories }}" wx:key="_id" class="category-card panel">
+      <view class="card-top">
+        <view>
+          <view class="category-name">{{ item.name }}</view>
+          <view class="category-meta">排序：{{ item.sort }}</view>
+        </view>
+        <view class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}">{{ item.statusText }}</view>
+      </view>
+      <view wx:if="{{ item.description }}" class="category-desc">{{ item.description }}</view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无分类"
+    description="点击同步种子服务后生成初版分类"
+  ></empty-state>
 </view>

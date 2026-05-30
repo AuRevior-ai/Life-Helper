@@ -1,6 +1,32 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看平台订单，并进入详情手动调整状态</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
+
+  <view wx:elif="{{ orders.length }}" class="order-list">
+    <view
+      wx:for="{{ orders }}"
+      wx:key="_id"
+      class="order-card panel"
+      data-id="{{ item._id }}"
+      bindtap="goDetail"
+    >
+      <view class="card-top">
+        <view class="service-name">{{ item.service_name || item.serviceName }}</view>
+        <view class="status-tag">{{ item.statusText }}</view>
+      </view>
+      <view class="order-line">订单号：{{ item.order_no || item._id }}</view>
+      <view class="order-line">用户：{{ item.contact_name || item.user_id }}</view>
+      <view class="order-line">金额：{{ item.priceText }}</view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无订单"
+    description="用户下单后会显示在这里"
+  ></empty-state>
 </view>

@@ -1,6 +1,35 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看平台注册用户，并对异常账号进行禁用</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载用户"></loading-view>
+
+  <view wx:elif="{{ users.length }}" class="user-list">
+    <view wx:for="{{ users }}" wx:key="_id" class="user-card panel">
+      <view class="card-top">
+        <view>
+          <view class="user-name">{{ item.displayName }}</view>
+          <view class="openid">{{ item.openid }}</view>
+        </view>
+        <view class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}">{{ item.statusText }}</view>
+      </view>
+      <view class="user-meta">角色：{{ item.roleText }}</view>
+      <button
+        wx:if="{{ item.status !== 'disabled' }}"
+        class="text-button danger"
+        data-id="{{ item._id }}"
+        loading="{{ submittingId === item._id }}"
+        disabled="{{ submittingId === item._id }}"
+        bindtap="disableUser"
+      >禁用</button>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无用户"
+    description="用户授权登录后会显示在这里"
+  ></empty-state>
 </view>
