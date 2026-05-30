@@ -1,13 +1,10 @@
 const cloud = require('wx-server-sdk')
+const { handleService } = require('./handler')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 
 exports.main = async (event = {}) => {
-  return {
-    success: false,
-    errorCode: 'ACTION_NOT_IMPLEMENTED',
-    message: `service.${event.action || 'unknown'} 尚未实现`
-  }
+  return handleService(event)
 }

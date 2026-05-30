@@ -1,1 +1,109 @@
-/* Page scoped styles inherit the global shell layout. */
+.detail-cover {
+  position: relative;
+  height: 300rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #d8ebe4, #f4d58d);
+}
+
+.detail-cover__tag {
+  position: absolute;
+  left: 24rpx;
+  bottom: 24rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 8rpx;
+  background: rgba(31, 77, 69, 0.9);
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin: 30rpx 0;
+}
+
+.detail-price {
+  flex: 0 0 auto;
+  color: #c66b2d;
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+}
+
+.meta-label,
+.meta-value {
+  display: block;
+}
+
+.meta-label {
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.meta-value {
+  margin-top: 8rpx;
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.section-title {
+  margin: 36rpx 0 18rpx;
+  color: #1f2d2a;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.flow-panel {
+  padding: 8rpx 28rpx;
+}
+
+.flow-item {
+  display: flex;
+  gap: 18rpx;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+}
+
+.flow-item:last-child {
+  border-bottom: 0;
+}
+
+.flow-index {
+  display: flex;
+  width: 42rpx;
+  height: 42rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e8f2ee;
+  color: #1f7a68;
+  font-size: 22rpx;
+  font-weight: 800;
+}
+
+.flow-text {
+  flex: 1;
+  color: #33433f;
+  font-size: 27rpx;
+  line-height: 1.5;
+}
+
+.primary-button {
+  height: 92rpx;
+  margin-top: 34rpx;
+  border-radius: 12rpx;
+  background: #1f7a68;
+  color: #ffffff;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 92rpx;
+}

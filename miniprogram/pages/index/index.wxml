@@ -1,6 +1,52 @@
 <view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
+  <view class="home-hero">
+    <view class="home-hero__label">同城社区便民服务</view>
+    <view class="home-hero__title">家门口的靠谱帮手</view>
+    <view class="home-hero__desc">保洁、维修、宠物照看，先把基础预约流程跑通。</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
+
+  <block wx:else>
+    <view class="section-head">
+      <text class="section-title">服务分类</text>
+      <text class="section-note">先开放 3 类</text>
+    </view>
+
+    <view class="category-grid">
+      <view
+        wx:for="{{ categories }}"
+        wx:key="_id"
+        class="category-item"
+        data-id="{{ item._id }}"
+        bindtap="goServiceList"
+      >
+        <view class="category-icon">{{ item.icon }}</view>
+        <view class="category-name">{{ item.name }}</view>
+        <view class="category-desc">{{ item.description }}</view>
+      </view>
+    </view>
+
+    <view class="section-head">
+      <text class="section-title">推荐服务</text>
+      <text class="section-note">适合 MVP 试单</text>
+    </view>
+
+    <view class="service-list">
+      <view
+        wx:for="{{ recommendedServices }}"
+        wx:key="_id"
+        data-id="{{ item._id }}"
+        bindtap="goServiceDetail"
+      >
+        <service-card service="{{ item }}"></service-card>
+      </view>
+    </view>
+
+    <empty-state
+      wx:if="{{ !categories.length && !recommendedServices.length }}"
+      title="暂无服务"
+      description="请稍后再试"
+    ></empty-state>
+  </block>
 </view>

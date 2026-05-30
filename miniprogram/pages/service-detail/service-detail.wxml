@@ -1,6 +1,44 @@
 <view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-  </view>
-  <view class="panel muted-text">暂无数据</view>
+  <loading-view wx:if="{{ loading }}" text="正在加载详情"></loading-view>
+
+  <block wx:elif="{{ service }}">
+    <view class="detail-cover">
+      <view class="detail-cover__tag">{{ service.category_name }}</view>
+    </view>
+
+    <view class="detail-header">
+      <view>
+        <view class="page-title">{{ service.name }}</view>
+        <view class="page-subtitle">{{ service.description }}</view>
+      </view>
+      <view class="detail-price">{{ priceText }}</view>
+    </view>
+
+    <view class="detail-meta panel">
+      <view>
+        <text class="meta-label">服务时长</text>
+        <text class="meta-value">{{ service.duration }}</text>
+      </view>
+      <view>
+        <text class="meta-label">服务分类</text>
+        <text class="meta-value">{{ service.category_name }}</text>
+      </view>
+    </view>
+
+    <view class="section-title">服务流程</view>
+    <view class="flow-panel panel">
+      <view wx:for="{{ service.flow_steps }}" wx:key="*this" class="flow-item">
+        <view class="flow-index">{{ index + 1 }}</view>
+        <view class="flow-text">{{ item }}</view>
+      </view>
+    </view>
+
+    <button class="primary-button" bindtap="goSubmitOrder">立即预约</button>
+  </block>
+
+  <empty-state
+    wx:else
+    title="服务不存在"
+    description="该服务可能已下架"
+  ></empty-state>
 </view>

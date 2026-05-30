@@ -1,6 +1,37 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">{{ currentCategory ? currentCategory.description : '浏览当前已开放的社区服务' }}</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <scroll-view scroll-x class="category-tabs">
+    <view
+      wx:for="{{ categories }}"
+      wx:key="_id"
+      class="category-tab {{ item._id === categoryId ? 'category-tab--active' : '' }}"
+      data-id="{{ item._id }}"
+      bindtap="switchCategory"
+    >
+      {{ item.name }}
+    </view>
+  </scroll-view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
+
+  <view wx:else class="service-list">
+    <view
+      wx:for="{{ services }}"
+      wx:key="_id"
+      data-id="{{ item._id }}"
+      bindtap="goServiceDetail"
+    >
+      <service-card service="{{ item }}"></service-card>
+    </view>
+
+    <empty-state
+      wx:if="{{ !services.length }}"
+      title="暂无服务"
+      description="该分类暂时没有上架服务"
+    ></empty-state>
+  </view>
 </view>

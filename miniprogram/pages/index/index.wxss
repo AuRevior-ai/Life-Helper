@@ -1,1 +1,93 @@
-/* Page scoped styles inherit the global shell layout. */
+.home-hero {
+  padding: 36rpx 32rpx;
+  border-radius: 16rpx;
+  background: #1f4d45;
+  color: #ffffff;
+}
+
+.home-hero__label {
+  color: #d4ece4;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.home-hero__title {
+  margin-top: 14rpx;
+  font-size: 48rpx;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.home-hero__desc {
+  margin-top: 14rpx;
+  max-width: 560rpx;
+  color: #dceee9;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 36rpx 0 18rpx;
+}
+
+.section-title {
+  color: #1f2d2a;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.section-note {
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18rpx;
+}
+
+.category-item {
+  min-height: 188rpx;
+  padding: 22rpx;
+  border: 1rpx solid #dfe8e3;
+  border-radius: 12rpx;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.category-icon {
+  display: flex;
+  width: 54rpx;
+  height: 54rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  background: #e8f2ee;
+  color: #1f7a68;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.category-name {
+  margin-top: 16rpx;
+  color: #1f2d2a;
+  font-size: 27rpx;
+  font-weight: 700;
+}
+
+.category-desc {
+  margin-top: 8rpx;
+  color: #72807b;
+  font-size: 22rpx;
+  line-height: 1.35;
+}
+
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
