@@ -1,1 +1,53 @@
-/* Page scoped styles inherit the global shell layout. */
+.status-panel {
+  text-align: center;
+}
+
+.status-label {
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.status-text {
+  margin-top: 12rpx;
+  color: #1f7a68;
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.status-reason {
+  margin-top: 18rpx;
+  color: #b65230;
+  font-size: 25rpx;
+}
+
+.worker-info {
+  margin-top: 22rpx;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+  color: #33433f;
+  font-size: 26rpx;
+}
+
+.info-row:first-child {
+  padding-top: 0;
+}
+
+.info-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.info-row text:first-child {
+  color: #72807b;
+}
+
+.info-row text:last-child {
+  font-weight: 700;
+}

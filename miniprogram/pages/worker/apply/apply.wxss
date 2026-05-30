@@ -1,1 +1,3 @@
-/* Page scoped styles inherit the global shell layout. */
+.form-panel {
+  margin-top: 0;
+}

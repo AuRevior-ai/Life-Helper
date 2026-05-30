@@ -1,6 +1,7 @@
 const cloud = require('wx-server-sdk')
 const { handleOrder } = require('./handler')
 const { createAddressReadRepository, createOrderRepository } = require('./order-repository')
+const { createWorkerReadRepository } = require('./worker-read-repository')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -13,6 +14,7 @@ exports.main = async (event = {}) => {
   return handleOrder(event, {
     openid: wxContext.OPENID,
     addresses: createAddressReadRepository(db),
-    orders: createOrderRepository(db)
+    orders: createOrderRepository(db),
+    workers: createWorkerReadRepository(db)
   })
 }

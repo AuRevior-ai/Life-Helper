@@ -1,6 +1,37 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">只展示已支付且等待师傅接单的订单</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <button class="ghost-button" bindtap="goWorkerOrders">我的师傅订单</button>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载可接订单"></loading-view>
+
+  <block wx:elif="{{ orders.length }}">
+    <view wx:for="{{ orders }}" wx:key="_id" class="hall-card panel">
+      <view class="hall-card__top">
+        <view>
+          <view class="order-name">{{ item.service_name }}</view>
+          <view class="order-time">{{ item.appointment_time }}</view>
+        </view>
+        <view class="order-price">{{ item.priceText }}</view>
+      </view>
+      <view class="order-address">{{ item.full_address }}</view>
+      <view class="order-contact">{{ item.contact_name }} {{ item.contact_phone }}</view>
+      <button
+        class="primary-button"
+        data-id="{{ item._id }}"
+        loading="{{ submittingId === item._id }}"
+        disabled="{{ submittingId === item._id }}"
+        bindtap="acceptOrder"
+      >接单</button>
+    </view>
+  </block>
+
+  <empty-state
+    wx:else
+    title="暂无可接订单"
+    description="用户模拟支付后的订单会进入接单大厅"
+  ></empty-state>
 </view>

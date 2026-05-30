@@ -1,13 +1,21 @@
 const cloud = require('wx-server-sdk')
+const { handleWorker } = require('./handler')
+const { createOrderReadRepository } = require('./order-read-repository')
+const { createUserRepository } = require('./user-repository')
+const { createWorkerRepository } = require('./worker-repository')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 
 exports.main = async (event = {}) => {
-  return {
-    success: false,
-    errorCode: 'ACTION_NOT_IMPLEMENTED',
-    message: `worker.${event.action || 'unknown'} 尚未实现`
-  }
+  const wxContext = cloud.getWXContext()
+  const db = cloud.database()
+
+  return handleWorker(event, {
+    openid: wxContext.OPENID,
+    workers: createWorkerRepository(db),
+    users: createUserRepository(db),
+    orders: createOrderReadRepository(db)
+  })
 }

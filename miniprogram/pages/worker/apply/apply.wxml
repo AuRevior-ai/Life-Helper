@@ -1,6 +1,74 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">提交基础服务信息，管理员审核通过后即可接单</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <view class="form-panel panel">
+    <view class="form-item">
+      <text class="form-label">姓名</text>
+      <input
+        class="form-input"
+        value="{{ form.name }}"
+        data-field="name"
+        placeholder="请输入真实姓名"
+        bindinput="handleInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">手机号</text>
+      <input
+        class="form-input"
+        value="{{ form.phone }}"
+        data-field="phone"
+        type="number"
+        maxlength="11"
+        placeholder="请输入手机号"
+        bindinput="handleInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">服务分类</text>
+      <input
+        class="form-input"
+        value="{{ form.service_category }}"
+        data-field="service_category"
+        placeholder="例如：维修服务"
+        bindinput="handleInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">服务区域</text>
+      <input
+        class="form-input"
+        value="{{ form.service_area }}"
+        data-field="service_area"
+        placeholder="例如：未来小区、城西片区"
+        bindinput="handleInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">个人简介</text>
+      <textarea
+        class="form-textarea"
+        value="{{ form.intro }}"
+        data-field="intro"
+        placeholder="可填写经验年限、擅长项目"
+        bindinput="handleInput"
+      ></textarea>
+    </view>
+  </view>
+
+  <button
+    class="primary-button"
+    loading="{{ submitting }}"
+    disabled="{{ submitting }}"
+    bindtap="handleSubmit"
+  >提交审核</button>
+
+  <button class="ghost-button" bindtap="goAuditStatus">查看审核状态</button>
 </view>

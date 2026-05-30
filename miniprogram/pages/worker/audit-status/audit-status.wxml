@@ -1,6 +1,37 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">审核通过后即可进入接单大厅</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载审核状态"></loading-view>
+
+  <block wx:else>
+    <view class="status-panel panel">
+      <view class="status-label">当前状态</view>
+      <view class="status-text">{{ auditStatusText }}</view>
+      <view wx:if="{{ worker && worker.reject_reason }}" class="status-reason">
+        {{ worker.reject_reason }}
+      </view>
+    </view>
+
+    <view wx:if="{{ worker }}" class="worker-info panel">
+      <view class="info-row">
+        <text>姓名</text>
+        <text>{{ worker.name }}</text>
+      </view>
+      <view class="info-row">
+        <text>服务分类</text>
+        <text>{{ worker.service_category }}</text>
+      </view>
+      <view class="info-row">
+        <text>服务区域</text>
+        <text>{{ worker.service_area }}</text>
+      </view>
+    </view>
+
+    <button wx:if="{{ isApproved }}" class="primary-button" bindtap="goOrderHall">进入接单大厅</button>
+    <button wx:if="{{ isApproved }}" class="ghost-button" bindtap="goWorkerOrders">我的师傅订单</button>
+    <button wx:if="{{ isRejected || isNotApplied }}" class="primary-button" bindtap="goApply">重新提交申请</button>
+  </block>
 </view>

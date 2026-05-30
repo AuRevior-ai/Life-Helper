@@ -1,1 +1,32 @@
-/* Page scoped styles inherit the global shell layout. */
+.hall-card {
+  margin-top: 20rpx;
+}
+
+.hall-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22rpx;
+}
+
+.order-name {
+  color: #1f2d2a;
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.order-time,
+.order-address,
+.order-contact {
+  margin-top: 12rpx;
+  color: #64716d;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.order-price {
+  flex: 0 0 auto;
+  color: #c66b2d;
+  font-size: 34rpx;
+  font-weight: 800;
+}

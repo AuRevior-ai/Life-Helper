@@ -1,6 +1,25 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看已经由你接下的服务订单</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <button class="ghost-button" bindtap="goOrderHall">进入接单大厅</button>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载师傅订单"></loading-view>
+
+  <view wx:elif="{{ orders.length }}" class="order-list">
+    <order-card
+      wx:for="{{ orders }}"
+      wx:key="_id"
+      order="{{ item }}"
+      bind:select="goOrderDetail"
+    ></order-card>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无师傅订单"
+    description="接单成功后订单会显示在这里"
+  ></empty-state>
 </view>

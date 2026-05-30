@@ -119,7 +119,7 @@ Page({
 
   goWorkerEntry() {
     wx.navigateTo({
-      url: this.data.isWorker ? '/pages/worker/order-hall/order-hall' : '/pages/worker/apply/apply'
+      url: this.data.isWorker ? '/pages/worker/order-hall/order-hall' : '/pages/worker/audit-status/audit-status'
     })
   },
 

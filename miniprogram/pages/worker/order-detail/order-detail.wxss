@@ -1,1 +1,88 @@
-/* Page scoped styles inherit the global shell layout. */
+.detail-card__top,
+.status-grid,
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+}
+
+.order-name {
+  color: #1f2d2a;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.order-no {
+  margin-top: 10rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}
+
+.order-price {
+  flex: 0 0 auto;
+  color: #c66b2d;
+  font-size: 38rpx;
+  font-weight: 800;
+}
+
+.status-grid {
+  margin-top: 28rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid #edf2ef;
+}
+
+.meta-label,
+.meta-value {
+  display: block;
+}
+
+.meta-label {
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.meta-value {
+  margin-top: 8rpx;
+  color: #1f7a68;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.info-panel {
+  margin-top: 22rpx;
+}
+
+.info-row {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+  color: #33433f;
+  font-size: 26rpx;
+}
+
+.info-row:first-child {
+  padding-top: 0;
+}
+
+.info-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.info-row text:first-child {
+  flex: 0 0 150rpx;
+  color: #72807b;
+}
+
+.info-row text:last-child {
+  flex: 1;
+  text-align: right;
+}
+
+.info-row--address {
+  align-items: flex-start;
+}
+
+.info-row--address text:last-child {
+  line-height: 1.5;
+}

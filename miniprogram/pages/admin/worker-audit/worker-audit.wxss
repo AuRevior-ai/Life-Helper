@@ -1,1 +1,42 @@
-/* Page scoped styles inherit the global shell layout. */
+.worker-card {
+  margin-top: 20rpx;
+}
+
+.worker-card__top,
+.worker-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.worker-name {
+  color: #1f2d2a;
+  font-size: 31rpx;
+  font-weight: 800;
+}
+
+.worker-phone,
+.worker-line,
+.worker-intro {
+  margin-top: 12rpx;
+  color: #64716d;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.audit-tag {
+  height: 42rpx;
+  padding: 0 14rpx;
+  border-radius: 8rpx;
+  background: #fff2dc;
+  color: #a9621f;
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 42rpx;
+}
+
+.worker-actions {
+  justify-content: flex-end;
+  margin-top: 24rpx;
+}

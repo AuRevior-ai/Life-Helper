@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "审核状态"
+  "navigationBarTitleText": "审核状态",
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

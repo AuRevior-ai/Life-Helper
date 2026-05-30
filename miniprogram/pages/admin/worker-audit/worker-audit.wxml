@@ -1,6 +1,45 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">审核待入驻师傅，通过后用户角色会更新为师傅</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载申请"></loading-view>
+
+  <block wx:elif="{{ workers.length }}">
+    <view wx:for="{{ workers }}" wx:key="_id" class="worker-card panel">
+      <view class="worker-card__top">
+        <view>
+          <view class="worker-name">{{ item.name }}</view>
+          <view class="worker-phone">{{ item.phone }}</view>
+        </view>
+        <view class="audit-tag">待审核</view>
+      </view>
+      <view class="worker-line">服务分类：{{ item.service_category }}</view>
+      <view class="worker-line">服务区域：{{ item.service_area }}</view>
+      <view wx:if="{{ item.intro }}" class="worker-intro">{{ item.intro }}</view>
+      <view class="worker-actions">
+        <button
+          class="text-button"
+          data-id="{{ item._id }}"
+          loading="{{ submittingId === item._id }}"
+          disabled="{{ submittingId === item._id }}"
+          bindtap="approveWorker"
+        >通过</button>
+        <button
+          class="text-button danger"
+          data-id="{{ item._id }}"
+          loading="{{ submittingId === item._id }}"
+          disabled="{{ submittingId === item._id }}"
+          bindtap="rejectWorker"
+        >拒绝</button>
+      </view>
+    </view>
+  </block>
+
+  <empty-state
+    wx:else
+    title="暂无待审核师傅"
+    description="新的入驻申请会显示在这里"
+  ></empty-state>
 </view>

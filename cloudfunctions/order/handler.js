@@ -3,6 +3,7 @@ const { findServiceSnapshotById } = require('./service-data')
 const ORDER_STATUS = Object.freeze({
   PENDING_PAY: 'pending_pay',
   PENDING_ACCEPT: 'pending_accept',
+  ACCEPTED: 'accepted',
   CANCELED: 'canceled'
 })
 
@@ -117,6 +118,38 @@ async function requireOwnedOrder(orderId, env) {
   return order
 }
 
+async function requireRelatedOrder(orderId, env) {
+  if (!orderId) {
+    throw serviceError('ORDER_ID_MISSING', '缺少订单 ID')
+  }
+
+  const order = await env.orders.findById(orderId)
+  if (!order) {
+    throw serviceError('ORDER_NOT_FOUND', '订单不存在')
+  }
+
+  const openid = requireOpenid(env)
+  if (order.user_id !== openid && order.worker_id !== openid) {
+    throw serviceError('PERMISSION_DENIED', '无权查看该订单')
+  }
+
+  return order
+}
+
+async function requireApprovedWorker(env) {
+  const openid = requireOpenid(env)
+  if (!env.workers || !env.workers.findByUserId) {
+    throw serviceError('WORKER_REPOSITORY_MISSING', '缺少师傅信息')
+  }
+
+  const worker = await env.workers.findByUserId(openid)
+  if (!worker || worker.audit_status !== 'approved') {
+    throw serviceError('WORKER_NOT_APPROVED', '当前师傅尚未通过审核')
+  }
+
+  return worker
+}
+
 async function createOrder(event, env) {
   const userId = requireOpenid(env)
   const payload = getPayload(event)
@@ -194,9 +227,42 @@ async function getUserOrderList(event, env) {
   return success({ orders })
 }
 
+async function getWorkerOrderList(event, env) {
+  await requireApprovedWorker(env)
+  const orders = await env.orders.findByWorkerId(requireOpenid(env))
+  return success({ orders })
+}
+
+async function acceptOrder(event, env) {
+  await requireApprovedWorker(env)
+  const payload = getPayload(event)
+  if (!payload.orderId) {
+    throw serviceError('ORDER_ID_MISSING', '缺少订单 ID')
+  }
+
+  const order = await env.orders.findById(payload.orderId)
+  if (!order) {
+    throw serviceError('ORDER_NOT_FOUND', '订单不存在')
+  }
+
+  if (order.status !== ORDER_STATUS.PENDING_ACCEPT || order.worker_id) {
+    throw serviceError('ORDER_STATUS_INVALID', '当前订单不能接单')
+  }
+
+  const now = getNow(env)
+  const updatedOrder = await env.orders.updateById(order._id, {
+    status: ORDER_STATUS.ACCEPTED,
+    worker_id: requireOpenid(env),
+    accepted_at: now,
+    updated_at: now
+  })
+
+  return success({ order: updatedOrder })
+}
+
 async function getOrderDetail(event, env) {
   const payload = getPayload(event)
-  const order = await requireOwnedOrder(payload.orderId, env)
+  const order = await requireRelatedOrder(payload.orderId, env)
   return success({ order })
 }
 
@@ -222,8 +288,10 @@ const actions = Object.freeze({
   createOrder,
   mockPayOrder,
   getUserOrderList,
+  getWorkerOrderList,
   getOrderDetail,
-  cancelOrder
+  cancelOrder,
+  acceptOrder
 })
 
 async function handleOrder(event = {}, env) {
@@ -244,8 +312,10 @@ module.exports = {
   createOrder,
   mockPayOrder,
   getUserOrderList,
+  getWorkerOrderList,
   getOrderDetail,
   cancelOrder,
+  acceptOrder,
   ORDER_STATUS,
   PAY_STATUS
 }
