@@ -22,6 +22,11 @@
         <button
           class="text-button"
           data-id="{{ item._id }}"
+          bindtap="goWorkerDetail"
+        >查看详情</button>
+        <button
+          class="text-button"
+          data-id="{{ item._id }}"
           loading="{{ submittingId === item._id }}"
           disabled="{{ submittingId === item._id }}"
           bindtap="approveWorker"

@@ -49,6 +49,14 @@ Page({
     }
   },
 
+  goWorkerDetail(event) {
+    const workerId = event.currentTarget.dataset.id
+    if (!workerId) return
+    wx.navigateTo({
+      url: `/pages/worker-detail/worker-detail?workerId=${workerId}&mode=admin`
+    })
+  },
+
   rejectWorker(event) {
     const workerId = event.currentTarget.dataset.id
     wx.showModal({

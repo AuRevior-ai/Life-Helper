@@ -24,6 +24,11 @@ function createCollectionRepository(db, collectionName) {
       }
     },
 
+    async findByCategoryId(categoryId) {
+      const result = await collection.where({ category_id: categoryId }).get()
+      return result.data || []
+    },
+
     async create(data) {
       const result = await collection.add({ data })
       return {
@@ -71,8 +76,20 @@ function createUserReadRepository(db) {
   }
 }
 
+function createOrderReadRepository(db) {
+  const orders = db.collection('orders')
+
+  return {
+    async findByServiceId(serviceId) {
+      const result = await orders.where({ service_id: serviceId }).limit(1).get()
+      return result.data || []
+    }
+  }
+}
+
 module.exports = {
   createCategoryRepository: (db) => createCollectionRepository(db, 'service_categories'),
   createServiceRepository: (db) => createCollectionRepository(db, 'services'),
-  createUserReadRepository
+  createUserReadRepository,
+  createOrderReadRepository
 }

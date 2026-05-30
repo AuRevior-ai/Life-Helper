@@ -364,6 +364,11 @@ async function getWorkerDetail(event, env) {
   })
 }
 
+async function adminGetWorkerDetail(event, env) {
+  await requireAdmin(env)
+  return getWorkerDetail(event, env)
+}
+
 const actions = Object.freeze({
   applyWorker,
   getWorkerInfo,
@@ -372,7 +377,8 @@ const actions = Object.freeze({
   approveWorker,
   rejectWorker,
   getOrderHallList,
-  getWorkerDetail
+  getWorkerDetail,
+  adminGetWorkerDetail
 })
 
 async function handleWorker(event = {}, env) {
@@ -398,6 +404,7 @@ module.exports = {
   rejectWorker,
   getOrderHallList,
   getWorkerDetail,
+  adminGetWorkerDetail,
   WORKER_AUDIT_STATUS,
   WORKER_STATUS
 }

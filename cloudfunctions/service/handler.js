@@ -101,6 +101,36 @@ async function getAllServices(env = {}) {
   return services.slice().sort(bySort)
 }
 
+async function getServicesByCategoryId(categoryId, env = {}) {
+  if (env.services && env.services.findByCategoryId) {
+    return env.services.findByCategoryId(categoryId)
+  }
+
+  if (env.services && env.services.findAll) {
+    const services = await env.services.findAll()
+    return services.filter((service) => service.category_id === categoryId)
+  }
+
+  return []
+}
+
+async function getOrdersByServiceId(serviceId, env = {}) {
+  if (!env.orders) {
+    return []
+  }
+
+  if (env.orders.findByServiceId) {
+    return env.orders.findByServiceId(serviceId)
+  }
+
+  if (env.orders.findAll) {
+    const orders = await env.orders.findAll()
+    return orders.filter((order) => order.service_id === serviceId)
+  }
+
+  return []
+}
+
 async function requireAdmin(env = {}) {
   if (!env.openid) {
     throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -230,6 +260,11 @@ async function deleteCategory(event = {}, env = {}) {
     throw serviceError('CATEGORY_ID_MISSING', '缺少分类 ID')
   }
 
+  const relatedServices = await getServicesByCategoryId(payload.categoryId, env)
+  if (relatedServices.length > 0) {
+    throw serviceError('CATEGORY_HAS_SERVICES', '该分类下仍有服务，请先下架或处理服务')
+  }
+
   const deleted = await env.categories.deleteById(payload.categoryId)
   if (!deleted) {
     throw serviceError('CATEGORY_NOT_FOUND', '分类不存在')
@@ -327,6 +362,11 @@ async function deleteService(event = {}, env = {}) {
   const payload = getPayload(event)
   if (!payload.serviceId) {
     throw serviceError('SERVICE_ID_MISSING', '缺少服务 ID')
+  }
+
+  const relatedOrders = await getOrdersByServiceId(payload.serviceId, env)
+  if (relatedOrders.length > 0) {
+    throw serviceError('SERVICE_HAS_ORDERS', '该服务已有订单记录，建议下架而不是删除')
   }
 
   const deleted = await env.services.deleteById(payload.serviceId)

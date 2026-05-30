@@ -14,7 +14,8 @@
       wx:key="_id"
       class="message-item panel {{ item.is_read ? '' : 'message-item--unread' }}"
       data-id="{{ item._id }}"
-      bindtap="markRead"
+      data-index="{{ index }}"
+      bindtap="handleMessageTap"
     >
       <view class="message-top">
         <text class="message-title">{{ item.title }}</text>

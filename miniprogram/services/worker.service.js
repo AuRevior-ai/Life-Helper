@@ -11,5 +11,6 @@ module.exports = createActionService(CLOUD_FUNCTIONS.WORKER, [
   'disableWorker',
   'enableWorker',
   'getOrderHallList',
-  'getWorkerDetail'
+  'getWorkerDetail',
+  'adminGetWorkerDetail'
 ])

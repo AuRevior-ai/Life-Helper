@@ -57,14 +57,44 @@ Page({
     }
   },
 
-  async markRead(event) {
+  async markMessageRead(messageId) {
+    if (!messageId) return
+    await messageService.markMessageRead({ messageId })
+  },
+
+  getOrderDetailUrl(message) {
+    const orderId = message.related_id || message.order_id
+    if (!orderId || message.related_type !== 'order') {
+      return ''
+    }
+
+    const isWorkerMessage = message.role === 'worker'
+    const page = isWorkerMessage
+      ? '/pages/worker/order-detail/order-detail'
+      : '/pages/order-detail/order-detail'
+    return `${page}?orderId=${orderId}`
+  },
+
+  async handleMessageTap(event) {
     const messageId = event.currentTarget.dataset.id
+    const index = event.currentTarget.dataset.index
+    const message = this.data.messages[index] || {}
     try {
-      await messageService.markMessageRead({ messageId })
+      await this.markMessageRead(messageId)
+      const url = this.getOrderDetailUrl(message)
+      if (url) {
+        wx.navigateTo({ url })
+        return
+      }
+
       this.loadMessages(true)
     } catch (error) {
       showError(error.message || '标记失败')
     }
+  },
+
+  async markRead(event) {
+    return this.handleMessageTap(event)
   },
 
   async markAllRead() {

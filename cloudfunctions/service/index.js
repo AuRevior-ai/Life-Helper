@@ -3,6 +3,7 @@ const { handleService } = require('./handler')
 const {
   createCategoryRepository,
   createServiceRepository,
+  createOrderReadRepository,
   createUserReadRepository
 } = require('./repositories')
 
@@ -18,6 +19,7 @@ exports.main = async (event = {}) => {
     openid: wxContext.OPENID,
     users: createUserReadRepository(db),
     categories: createCategoryRepository(db),
-    services: createServiceRepository(db)
+    services: createServiceRepository(db),
+    orders: createOrderReadRepository(db)
   })
 }
