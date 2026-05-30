@@ -1,1 +1,35 @@
-/* Page scoped styles inherit the global shell layout. */
+.address-card {
+  margin-top: 20rpx;
+}
+
+.address-card__top,
+.address-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.address-card__name {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.address-card__phone {
+  margin-left: 18rpx;
+  color: #64716d;
+  font-size: 25rpx;
+}
+
+.address-card__address {
+  margin-top: 16rpx;
+  color: #33433f;
+  font-size: 27rpx;
+  line-height: 1.5;
+}
+
+.address-card__actions {
+  justify-content: flex-end;
+  margin-top: 24rpx;
+}

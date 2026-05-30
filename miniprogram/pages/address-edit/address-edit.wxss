@@ -1,1 +1,19 @@
-/* Page scoped styles inherit the global shell layout. */
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding-top: 24rpx;
+}
+
+.switch-title {
+  color: #1f2d2a;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.switch-hint {
+  margin-top: 8rpx;
+  color: #72807b;
+  font-size: 24rpx;
+}

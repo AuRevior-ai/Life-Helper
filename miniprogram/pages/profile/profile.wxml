@@ -17,19 +17,19 @@
   <button wx:else class="ghost-button" bindtap="handleLogout">退出登录</button>
 
   <view class="menu-panel panel">
-    <view class="menu-item">
+    <view class="menu-item" bindtap="goOrderList">
       <text>我的订单</text>
       <text class="menu-item__hint">查看服务进度</text>
     </view>
-    <view class="menu-item">
+    <view class="menu-item" bindtap="goAddressList">
       <text>地址管理</text>
       <text class="menu-item__hint">维护服务地址</text>
     </view>
-    <view class="menu-item">
+    <view class="menu-item" bindtap="goWorkerEntry">
       <text>师傅入口</text>
       <text class="menu-item__hint">{{ isWorker ? '进入师傅端' : '申请入驻' }}</text>
     </view>
-    <view wx:if="{{ isAdmin }}" class="menu-item">
+    <view wx:if="{{ isAdmin }}" class="menu-item" bindtap="goAdminEntry">
       <text>管理员入口</text>
       <text class="menu-item__hint">进入管理端</text>
     </view>

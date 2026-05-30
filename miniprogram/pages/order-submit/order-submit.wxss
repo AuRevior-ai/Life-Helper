@@ -1,1 +1,72 @@
-/* Page scoped styles inherit the global shell layout. */
+.service-summary,
+.order-total,
+.address-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+}
+
+.summary-name {
+  color: #1f2d2a;
+  font-size: 32rpx;
+  font-weight: 800;
+}
+
+.summary-meta {
+  margin-top: 10rpx;
+  color: #64716d;
+  font-size: 25rpx;
+}
+
+.summary-price {
+  flex: 0 0 auto;
+  color: #c66b2d;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.address-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.select-address {
+  border-color: #dfe8e3;
+}
+
+.select-address--active {
+  border-color: #1f7a68;
+  box-shadow: 0 8rpx 24rpx rgba(31, 122, 104, 0.12);
+}
+
+.address-name {
+  color: #1f2d2a;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.address-phone {
+  margin-left: 16rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}
+
+.address-text {
+  margin-top: 14rpx;
+  color: #33433f;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.order-total {
+  margin-top: 22rpx;
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.order-total text:last-child {
+  color: #c66b2d;
+}

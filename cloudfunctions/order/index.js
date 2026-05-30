@@ -1,13 +1,18 @@
 const cloud = require('wx-server-sdk')
+const { handleOrder } = require('./handler')
+const { createAddressReadRepository, createOrderRepository } = require('./order-repository')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 
 exports.main = async (event = {}) => {
-  return {
-    success: false,
-    errorCode: 'ACTION_NOT_IMPLEMENTED',
-    message: `order.${event.action || 'unknown'} 尚未实现`
-  }
+  const wxContext = cloud.getWXContext()
+  const db = cloud.database()
+
+  return handleOrder(event, {
+    openid: wxContext.OPENID,
+    addresses: createAddressReadRepository(db),
+    orders: createOrderRepository(db)
+  })
 }

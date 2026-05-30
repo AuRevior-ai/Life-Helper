@@ -1,6 +1,6 @@
 const serviceService = require('../../services/service.service')
 const { formatPrice } = require('../../utils/format')
-const { showError, showToast } = require('../../utils/toast')
+const { showError } = require('../../utils/toast')
 
 Page({
   data: {
@@ -47,6 +47,13 @@ Page({
   },
 
   goSubmitOrder() {
-    showToast('下单功能将在阶段四开放')
+    if (!this.data.serviceId) {
+      showError('缺少服务 ID')
+      return
+    }
+
+    wx.navigateTo({
+      url: `/pages/order-submit/order-submit?serviceId=${this.data.serviceId}`
+    })
   }
 })

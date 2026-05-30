@@ -1,6 +1,88 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">确认服务、地址和预约时间后创建订单</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载下单信息"></loading-view>
+
+  <block wx:elif="{{ service }}">
+    <view class="service-summary panel">
+      <view>
+        <view class="summary-name">{{ service.name }}</view>
+        <view class="summary-meta">{{ service.category_name }} · {{ service.duration }}</view>
+      </view>
+      <view class="summary-price">{{ priceText }}</view>
+    </view>
+
+    <view class="section-head">
+      <text>服务地址</text>
+      <button class="text-button" bindtap="goAddAddress">新增地址</button>
+    </view>
+
+    <view wx:if="{{ addresses.length }}" class="address-picker">
+      <view
+        wx:for="{{ addresses }}"
+        wx:key="_id"
+        class="select-address panel {{ selectedAddressId === item._id ? 'select-address--active' : '' }}"
+        data-id="{{ item._id }}"
+        bindtap="selectAddress"
+      >
+        <view class="address-row">
+          <view>
+            <text class="address-name">{{ item.contact_name }}</text>
+            <text class="address-phone">{{ item.phone }}</text>
+          </view>
+          <text wx:if="{{ item.is_default }}" class="default-tag">默认</text>
+        </view>
+        <view class="address-text">{{ item.city }} {{ item.community }} {{ item.detail_address }}</view>
+      </view>
+    </view>
+
+    <empty-state
+      wx:else
+      title="暂无地址"
+      description="请先添加服务地址"
+    ></empty-state>
+
+    <view class="form-panel panel">
+      <view class="form-item">
+        <text class="form-label">预约时间</text>
+        <input
+          class="form-input"
+          value="{{ appointment_time }}"
+          placeholder="例如：2026-06-01 10:00"
+          bindinput="handleAppointmentInput"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">备注</text>
+        <textarea
+          class="form-textarea"
+          value="{{ remark }}"
+          placeholder="可填写门禁、服务要求等"
+          bindinput="handleRemarkInput"
+        ></textarea>
+      </view>
+    </view>
+
+    <view class="order-total panel">
+      <text>订单金额</text>
+      <text>{{ priceText }}</text>
+    </view>
+
+    <button
+      class="primary-button"
+      loading="{{ submitting }}"
+      disabled="{{ submitting }}"
+      bindtap="handleSubmit"
+    >提交订单</button>
+  </block>
+
+  <empty-state
+    wx:else
+    title="服务不存在"
+    description="请返回服务列表重新选择"
+  ></empty-state>
 </view>

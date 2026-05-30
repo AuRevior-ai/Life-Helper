@@ -1,6 +1,25 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看已提交的服务订单和处理进度</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
+
+  <view wx:elif="{{ orders.length }}" class="order-list">
+    <order-card
+      wx:for="{{ orders }}"
+      wx:key="_id"
+      order="{{ item }}"
+      bind:select="goOrderDetail"
+    ></order-card>
+  </view>
+
+  <view wx:else>
+    <empty-state
+      title="暂无订单"
+      description="从首页选择服务后即可下单"
+    ></empty-state>
+    <button class="primary-button" bindtap="goHome">去首页</button>
+  </view>
 </view>

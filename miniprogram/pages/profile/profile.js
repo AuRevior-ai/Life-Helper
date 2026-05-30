@@ -103,5 +103,29 @@ Page({
     getApp().globalData.currentUser = null
     this.applyCurrentUser(null)
     showSuccess('已退出')
+  },
+
+  goOrderList() {
+    wx.switchTab({
+      url: '/pages/order-list/order-list'
+    })
+  },
+
+  goAddressList() {
+    wx.navigateTo({
+      url: '/pages/address-list/address-list'
+    })
+  },
+
+  goWorkerEntry() {
+    wx.navigateTo({
+      url: this.data.isWorker ? '/pages/worker/order-hall/order-hall' : '/pages/worker/apply/apply'
+    })
+  },
+
+  goAdminEntry() {
+    wx.navigateTo({
+      url: '/pages/admin/dashboard/dashboard'
+    })
   }
 })
