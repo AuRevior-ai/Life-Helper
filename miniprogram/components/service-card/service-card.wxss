@@ -1,0 +1,48 @@
+.service-card {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx;
+  border: 1rpx solid #dfe8e3;
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.service-card__cover {
+  width: 132rpx;
+  height: 132rpx;
+  flex: 0 0 132rpx;
+  border-radius: 10rpx;
+  background: linear-gradient(135deg, #d8ebe4, #f4d58d);
+}
+
+.service-card__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.service-card__name {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.service-card__desc {
+  margin-top: 8rpx;
+  color: #64716d;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.service-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16rpx;
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.service-card__price {
+  color: #c66b2d;
+  font-weight: 700;
+}

@@ -1,0 +1,25 @@
+.empty-state {
+  padding: 72rpx 32rpx;
+  text-align: center;
+}
+
+.empty-state__mark {
+  width: 72rpx;
+  height: 72rpx;
+  margin: 0 auto 24rpx;
+  border: 6rpx solid #bfd8d0;
+  border-radius: 50%;
+  background: #eef7f3;
+}
+
+.empty-state__title {
+  color: #33433f;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.empty-state__desc {
+  margin-top: 10rpx;
+  color: #72807b;
+  font-size: 26rpx;
+}

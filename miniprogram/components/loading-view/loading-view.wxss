@@ -1,0 +1,16 @@
+.loading-view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14rpx;
+  padding: 48rpx 0;
+  color: #64716d;
+  font-size: 26rpx;
+}
+
+.loading-view__dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: #1f7a68;
+}

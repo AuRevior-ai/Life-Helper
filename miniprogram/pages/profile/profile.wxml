@@ -1,0 +1,37 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">登录后可查看订单、地址、师傅入驻和管理入口</view>
+  </view>
+
+  <view class="profile-card panel">
+    <view class="profile-avatar">{{ avatarText }}</view>
+    <view class="profile-main">
+      <view class="profile-name">{{ displayName }}</view>
+      <view class="profile-meta">{{ roleText }} · {{ statusText }}</view>
+      <view class="profile-phone">{{ displayPhone }}</view>
+    </view>
+  </view>
+
+  <button wx:if="{{ !isLoggedIn }}" class="primary-button" bindtap="handleLogin">微信登录</button>
+  <button wx:else class="ghost-button" bindtap="handleLogout">退出登录</button>
+
+  <view class="menu-panel panel">
+    <view class="menu-item">
+      <text>我的订单</text>
+      <text class="menu-item__hint">查看服务进度</text>
+    </view>
+    <view class="menu-item">
+      <text>地址管理</text>
+      <text class="menu-item__hint">维护服务地址</text>
+    </view>
+    <view class="menu-item">
+      <text>师傅入口</text>
+      <text class="menu-item__hint">{{ isWorker ? '进入师傅端' : '申请入驻' }}</text>
+    </view>
+    <view wx:if="{{ isAdmin }}" class="menu-item">
+      <text>管理员入口</text>
+      <text class="menu-item__hint">进入管理端</text>
+    </view>
+  </view>
+</view>

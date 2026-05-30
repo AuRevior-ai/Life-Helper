@@ -1,0 +1,7 @@
+<view class="worker-card" bindtap="onTap">
+  <view class="worker-card__avatar"></view>
+  <view class="worker-card__body">
+    <view class="worker-card__name">{{ worker.real_name }}</view>
+    <view class="worker-card__intro">{{ worker.intro }}</view>
+  </view>
+</view>

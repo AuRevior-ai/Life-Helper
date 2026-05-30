@@ -1,0 +1,59 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/service-list/service-list",
+    "pages/service-detail/service-detail",
+    "pages/order-submit/order-submit",
+    "pages/order-list/order-list",
+    "pages/order-detail/order-detail",
+    "pages/review/review",
+    "pages/address-list/address-list",
+    "pages/address-edit/address-edit",
+    "pages/profile/profile",
+    "pages/worker/apply/apply",
+    "pages/worker/audit-status/audit-status",
+    "pages/worker/order-hall/order-hall",
+    "pages/worker/order-list/order-list",
+    "pages/worker/order-detail/order-detail",
+    "pages/worker/income/income",
+    "pages/worker/profile/profile",
+    "pages/admin/dashboard/dashboard",
+    "pages/admin/category-list/category-list",
+    "pages/admin/category-edit/category-edit",
+    "pages/admin/service-list/service-list",
+    "pages/admin/service-edit/service-edit",
+    "pages/admin/worker-audit/worker-audit",
+    "pages/admin/order-list/order-list",
+    "pages/admin/order-detail/order-detail",
+    "pages/admin/user-list/user-list"
+  ],
+  "window": {
+    "navigationBarTitleText": "同城便民",
+    "navigationBarBackgroundColor": "#1f4d45",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f6f8f5",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#64716d",
+    "selectedColor": "#1f7a68",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/order-list/order-list",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

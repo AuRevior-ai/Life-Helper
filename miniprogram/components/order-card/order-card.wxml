@@ -1,0 +1,11 @@
+<view class="order-card" bindtap="onTap">
+  <view class="order-card__top">
+    <text class="order-card__name">{{ order.service_name }}</text>
+    <text class="order-card__status">{{ statusText }}</text>
+  </view>
+  <view class="order-card__line">{{ order.appointment_time }}</view>
+  <view class="order-card__bottom">
+    <text>{{ order.community }}</text>
+    <text class="order-card__price">{{ priceText }}</text>
+  </view>
+</view>

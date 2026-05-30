@@ -1,0 +1,34 @@
+.worker-card {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 24rpx;
+  border: 1rpx solid #dfe8e3;
+  border-radius: 12rpx;
+  background: #ffffff;
+}
+
+.worker-card__avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #d8ebe4;
+}
+
+.worker-card__body {
+  min-width: 0;
+  flex: 1;
+}
+
+.worker-card__name {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.worker-card__intro {
+  margin-top: 8rpx;
+  color: #64716d;
+  font-size: 24rpx;
+  line-height: 1.4;
+}

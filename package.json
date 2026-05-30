@@ -1,0 +1,9 @@
+{
+  "name": "local-community-service-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "同城社区便民综合服务平台微信小程序 MVP",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

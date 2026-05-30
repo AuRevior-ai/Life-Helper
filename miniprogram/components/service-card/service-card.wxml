@@ -1,0 +1,11 @@
+<view class="service-card" bindtap="onTap">
+  <view class="service-card__cover"></view>
+  <view class="service-card__body">
+    <view class="service-card__name">{{ service.name }}</view>
+    <view class="service-card__desc">{{ service.description }}</view>
+    <view class="service-card__meta">
+      <text>{{ service.duration }}</text>
+      <text class="service-card__price">{{ priceText }}</text>
+    </view>
+  </view>
+</view>
