@@ -1,7 +1,7 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">阶段五先展示已接订单，开始服务与完成服务在下一阶段接入</view>
+    <view class="page-subtitle">按服务进度更新订单，完成后等待用户评价</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
@@ -45,6 +45,22 @@
         <text>{{ order.remark }}</text>
       </view>
     </view>
+
+    <button
+      wx:if="{{ canStart }}"
+      class="primary-button"
+      loading="{{ submitting }}"
+      disabled="{{ submitting }}"
+      bindtap="startService"
+    >开始服务</button>
+
+    <button
+      wx:if="{{ canFinish }}"
+      class="primary-button"
+      loading="{{ submitting }}"
+      disabled="{{ submitting }}"
+      bindtap="finishService"
+    >完成服务</button>
   </block>
 
   <empty-state

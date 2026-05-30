@@ -16,6 +16,7 @@ Page({
     payStatusText: '',
     canPay: false,
     canCancel: false,
+    canReview: false,
     loading: true,
     submitting: false
   },
@@ -54,7 +55,8 @@ Page({
       statusText: formatOrderStatus(order.status),
       payStatusText: formatPayStatus(order.pay_status),
       canPay: order.status === 'pending_pay' && order.pay_status === 'unpaid',
-      canCancel: ['pending_pay', 'pending_accept'].includes(order.status)
+      canCancel: ['pending_pay', 'pending_accept'].includes(order.status),
+      canReview: order.status === 'pending_review'
     })
   },
 
@@ -95,6 +97,12 @@ Page({
           this.setData({ submitting: false })
         }
       }
+    })
+  },
+
+  goReview() {
+    wx.navigateTo({
+      url: `/pages/review/review?orderId=${this.data.orderId}`
     })
   }
 })

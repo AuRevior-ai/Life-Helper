@@ -1,6 +1,37 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">当前为模拟统计，仅汇总已完成订单金额</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载收入"></loading-view>
+
+  <block wx:else>
+    <view class="income-summary panel">
+      <view>
+        <view class="summary-label">累计收入</view>
+        <view class="summary-value">{{ totalAmountText }}</view>
+      </view>
+      <view>
+        <view class="summary-label">完成订单</view>
+        <view class="summary-count">{{ completedCount }}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{ orders.length }}" class="income-list">
+      <view wx:for="{{ orders }}" wx:key="_id" class="income-row panel">
+        <view>
+          <view class="income-name">{{ item.service_name }}</view>
+          <view class="income-time">{{ item.appointment_time }}</view>
+        </view>
+        <view class="income-price">{{ item.priceText }}</view>
+      </view>
+    </view>
+
+    <empty-state
+      wx:else
+      title="暂无收入"
+      description="订单完成并评价后会计入收入"
+    ></empty-state>
+  </block>
 </view>

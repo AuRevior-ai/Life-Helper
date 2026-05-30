@@ -1,6 +1,38 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">给本次服务打分，帮助后续服务更稳定</view>
   </view>
-  <view class="panel muted-text">暂无数据</view>
+
+  <view class="review-panel panel">
+    <view class="form-label">评分</view>
+    <view class="rating-row">
+      <view
+        wx:for="{{ ratingOptions }}"
+        wx:key="*this"
+        class="rating-item {{ item <= rating ? 'rating-item--active' : '' }}"
+        data-rating="{{ item }}"
+        bindtap="selectRating"
+      >
+        {{ item }}
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">评价内容</text>
+      <textarea
+        class="form-textarea"
+        value="{{ content }}"
+        placeholder="可填写服务态度、准时情况、完成效果"
+        bindinput="handleContentInput"
+      ></textarea>
+    </view>
+  </view>
+
+  <button
+    class="primary-button"
+    loading="{{ submitting }}"
+    disabled="{{ submitting }}"
+    bindtap="handleSubmit"
+  >提交评价</button>
 </view>

@@ -1,1 +1,29 @@
-/* Page scoped styles inherit the global shell layout. */
+.review-panel {
+  margin-top: 0;
+}
+
+.rating-row {
+  display: flex;
+  gap: 14rpx;
+  margin: 16rpx 0 22rpx;
+}
+
+.rating-item {
+  display: flex;
+  width: 72rpx;
+  height: 72rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #dfe8e3;
+  border-radius: 10rpx;
+  background: #f6f8f5;
+  color: #64716d;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.rating-item--active {
+  border-color: #1f7a68;
+  background: #1f7a68;
+  color: #ffffff;
+}

@@ -1,1 +1,59 @@
-/* Page scoped styles inherit the global shell layout. */
+.income-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28rpx;
+}
+
+.summary-label {
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.summary-value {
+  margin-top: 10rpx;
+  color: #c66b2d;
+  font-size: 46rpx;
+  font-weight: 900;
+}
+
+.summary-count {
+  margin-top: 10rpx;
+  color: #1f7a68;
+  font-size: 42rpx;
+  font-weight: 900;
+  text-align: right;
+}
+
+.income-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 22rpx;
+}
+
+.income-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+}
+
+.income-name {
+  color: #1f2d2a;
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.income-time {
+  margin-top: 8rpx;
+  color: #72807b;
+  font-size: 24rpx;
+}
+
+.income-price {
+  flex: 0 0 auto;
+  color: #c66b2d;
+  font-size: 30rpx;
+  font-weight: 800;
+}

@@ -11,6 +11,7 @@ module.exports = createActionService(CLOUD_FUNCTIONS.ORDER, [
   'acceptOrder',
   'startService',
   'finishService',
+  'getWorkerIncomeStats',
   'adminGetAllOrders',
   'adminUpdateOrderStatus'
 ])

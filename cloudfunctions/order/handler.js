@@ -4,6 +4,9 @@ const ORDER_STATUS = Object.freeze({
   PENDING_PAY: 'pending_pay',
   PENDING_ACCEPT: 'pending_accept',
   ACCEPTED: 'accepted',
+  SERVING: 'serving',
+  PENDING_REVIEW: 'pending_review',
+  COMPLETED: 'completed',
   CANCELED: 'canceled'
 })
 
@@ -150,6 +153,25 @@ async function requireApprovedWorker(env) {
   return worker
 }
 
+async function requireAssignedWorkerOrder(orderId, env) {
+  await requireApprovedWorker(env)
+
+  if (!orderId) {
+    throw serviceError('ORDER_ID_MISSING', '缺少订单 ID')
+  }
+
+  const order = await env.orders.findById(orderId)
+  if (!order) {
+    throw serviceError('ORDER_NOT_FOUND', '订单不存在')
+  }
+
+  if (order.worker_id !== requireOpenid(env)) {
+    throw serviceError('PERMISSION_DENIED', '无权操作该订单')
+  }
+
+  return order
+}
+
 async function createOrder(event, env) {
   const userId = requireOpenid(env)
   const payload = getPayload(event)
@@ -260,6 +282,55 @@ async function acceptOrder(event, env) {
   return success({ order: updatedOrder })
 }
 
+async function startService(event, env) {
+  const payload = getPayload(event)
+  const order = await requireAssignedWorkerOrder(payload.orderId, env)
+
+  if (order.status !== ORDER_STATUS.ACCEPTED) {
+    throw serviceError('ORDER_STATUS_INVALID', '当前订单不能开始服务')
+  }
+
+  const now = getNow(env)
+  const updatedOrder = await env.orders.updateById(order._id, {
+    status: ORDER_STATUS.SERVING,
+    started_at: now,
+    updated_at: now
+  })
+
+  return success({ order: updatedOrder })
+}
+
+async function finishService(event, env) {
+  const payload = getPayload(event)
+  const order = await requireAssignedWorkerOrder(payload.orderId, env)
+
+  if (order.status !== ORDER_STATUS.SERVING) {
+    throw serviceError('ORDER_STATUS_INVALID', '当前订单不能完成服务')
+  }
+
+  const now = getNow(env)
+  const updatedOrder = await env.orders.updateById(order._id, {
+    status: ORDER_STATUS.PENDING_REVIEW,
+    finished_at: now,
+    updated_at: now
+  })
+
+  return success({ order: updatedOrder })
+}
+
+async function getWorkerIncomeStats(event, env) {
+  await requireApprovedWorker(env)
+  const orders = await env.orders.findByWorkerId(requireOpenid(env))
+  const completedOrders = orders.filter((order) => order.status === ORDER_STATUS.COMPLETED)
+  const totalAmount = completedOrders.reduce((sum, order) => sum + Number(order.price || 0), 0)
+
+  return success({
+    completed_count: completedOrders.length,
+    total_amount: totalAmount,
+    orders: completedOrders
+  })
+}
+
 async function getOrderDetail(event, env) {
   const payload = getPayload(event)
   const order = await requireRelatedOrder(payload.orderId, env)
@@ -291,7 +362,10 @@ const actions = Object.freeze({
   getWorkerOrderList,
   getOrderDetail,
   cancelOrder,
-  acceptOrder
+  acceptOrder,
+  startService,
+  finishService,
+  getWorkerIncomeStats
 })
 
 async function handleOrder(event = {}, env) {
@@ -316,6 +390,9 @@ module.exports = {
   getOrderDetail,
   cancelOrder,
   acceptOrder,
+  startService,
+  finishService,
+  getWorkerIncomeStats,
   ORDER_STATUS,
   PAY_STATUS
 }
