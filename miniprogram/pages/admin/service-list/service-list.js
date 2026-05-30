@@ -76,5 +76,18 @@ Page({
     } finally {
       this.setData({ submittingId: '' })
     }
+  },
+
+  goCreateService() {
+    wx.navigateTo({
+      url: '/pages/admin/service-edit/service-edit'
+    })
+  },
+
+  goEditService(event) {
+    const serviceId = event.currentTarget.dataset.id
+    wx.navigateTo({
+      url: `/pages/admin/service-edit/service-edit?serviceId=${serviceId}`
+    })
   }
 })

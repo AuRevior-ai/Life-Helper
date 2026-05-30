@@ -1,14 +1,38 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">MVP 阶段暂不开放分类编辑，当前先通过种子服务同步生成分类</view>
+    <view class="page-subtitle">维护服务分类名称、状态和排序，用于首页与服务列表展示</view>
   </view>
 
-  <view class="panel deferred-panel">
-    <view class="deferred-title">分类编辑将在后续版本开放</view>
-    <view class="deferred-text">
-      初版重点是跑通服务浏览、下单、接单、评价和管理闭环。当前可在分类管理页查看分类，并通过服务管理同步种子服务。
+  <view class="panel form-panel">
+    <view class="form-item">
+      <text class="form-label">分类名称</text>
+      <input class="form-input" value="{{ name }}" data-field="name" placeholder="例如：家政保洁" bindinput="onInput" />
     </view>
-    <button class="primary-button" bindtap="goBack">返回分类管理</button>
+    <view class="form-item">
+      <text class="form-label">图标文字</text>
+      <input class="form-input" value="{{ icon }}" data-field="icon" placeholder="例如：洁" bindinput="onInput" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">分类描述</text>
+      <textarea class="form-textarea" value="{{ description }}" data-field="description" placeholder="填写分类说明" bindinput="onInput"></textarea>
+    </view>
+    <view class="form-item">
+      <text class="form-label">状态</text>
+      <picker mode="selector" range="{{ statusOptions }}" value="{{ statusIndex }}" bindchange="onStatusChange">
+        <view class="picker-value">{{ statusOptions[statusIndex] }}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="form-label">排序</text>
+      <input class="form-input" type="number" value="{{ sort }}" data-field="sort" placeholder="数字越小越靠前" bindinput="onInput" />
+    </view>
   </view>
+
+  <button
+    class="primary-button"
+    loading="{{ submitting }}"
+    disabled="{{ submitting }}"
+    bindtap="saveCategory"
+  >保存分类</button>
 </view>

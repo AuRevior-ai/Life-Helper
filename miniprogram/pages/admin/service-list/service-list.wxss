@@ -2,6 +2,12 @@
   margin-top: 0;
 }
 
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+}
+
 .service-list {
   display: grid;
   gap: 18rpx;

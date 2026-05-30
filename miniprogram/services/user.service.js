@@ -5,5 +5,6 @@ module.exports = createActionService(CLOUD_FUNCTIONS.USER, [
   'getCurrentUser',
   'updateUserInfo',
   'updateUserRole',
-  'disableUser'
+  'disableUser',
+  'claimInitialAdmin'
 ])

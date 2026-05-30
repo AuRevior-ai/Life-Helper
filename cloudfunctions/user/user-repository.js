@@ -12,6 +12,11 @@ function createUserRepository(db) {
       return result.data || null
     },
 
+    async findByRole(role) {
+      const result = await users.where({ role }).limit(1).get()
+      return result.data[0] || null
+    },
+
     async create(data) {
       const result = await users.add({ data })
       return {

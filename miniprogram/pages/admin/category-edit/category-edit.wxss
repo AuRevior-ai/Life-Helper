@@ -1,13 +1,9 @@
-.deferred-title {
-  color: #183832;
-  font-size: 32rpx;
-  font-weight: 800;
-  line-height: 1.35;
-}
-
-.deferred-text {
-  margin-top: 16rpx;
-  color: #64716d;
-  font-size: 26rpx;
-  line-height: 1.6;
+.picker-value {
+  height: 76rpx;
+  padding: 0 20rpx;
+  border-radius: 10rpx;
+  background: #f6f8f5;
+  color: #1f2d2a;
+  font-size: 28rpx;
+  line-height: 76rpx;
 }

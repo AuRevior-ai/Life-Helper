@@ -1,4 +1,5 @@
 const loginService = require('../../services/login.service')
+const userService = require('../../services/user.service')
 const { USER_ROLE } = require('../../config/roles')
 const {
   clearCurrentUser,
@@ -18,6 +19,11 @@ Page({
     displayPhone: '手机号待填写',
     roleText: '未登录',
     statusText: '未登录',
+    roleTone: 'guest',
+    roleHomeTitle: '居民中心',
+    roleHomeDesc: '登录后可预约服务、管理地址并查看订单进度',
+    primaryActionText: '查看订单',
+    secondaryActionText: '完善资料',
     isWorker: false,
     isAdmin: false
   },
@@ -32,6 +38,7 @@ Page({
 
   applyCurrentUser(user) {
     const isLoggedIn = Boolean(user)
+    const roleProfile = this.getRoleProfile(user)
     this.setData({
       currentUser: user,
       isLoggedIn,
@@ -40,9 +47,40 @@ Page({
       displayPhone: isLoggedIn ? user.phone || '手机号待填写' : '登录后完善手机号',
       roleText: isLoggedIn ? getCurrentUserRoleText(user.role) : '未登录',
       statusText: isLoggedIn ? this.getStatusText(user.status) : '未登录',
+      ...roleProfile,
       isWorker: Boolean(user && user.role === USER_ROLE.WORKER),
       isAdmin: Boolean(user && user.role === USER_ROLE.ADMIN)
     })
+  },
+
+  getRoleProfile(user) {
+    if (user && user.role === USER_ROLE.ADMIN) {
+      return {
+        roleTone: 'admin',
+        roleHomeTitle: '管理工作台',
+        roleHomeDesc: '处理师傅审核、订单状态、用户状态和服务上下架',
+        primaryActionText: '进入管理端',
+        secondaryActionText: '完善资料'
+      }
+    }
+
+    if (user && user.role === USER_ROLE.WORKER) {
+      return {
+        roleTone: 'worker',
+        roleHomeTitle: '师傅工作台',
+        roleHomeDesc: '查看待接订单、处理服务进度并统计已完成收入',
+        primaryActionText: '进入接单大厅',
+        secondaryActionText: '查看师傅订单'
+      }
+    }
+
+    return {
+      roleTone: 'user',
+      roleHomeTitle: '居民中心',
+      roleHomeDesc: '预约保洁、维修、宠物照看等服务，并跟踪订单进度',
+      primaryActionText: '查看订单',
+      secondaryActionText: '完善资料'
+    }
   },
 
   getStatusText(status) {
@@ -117,6 +155,39 @@ Page({
     })
   },
 
+  goProfileEdit() {
+    wx.navigateTo({
+      url: '/pages/profile-edit/profile-edit'
+    })
+  },
+
+  goRolePrimaryAction() {
+    if (this.data.isAdmin) {
+      this.goAdminEntry()
+      return
+    }
+
+    if (this.data.isWorker) {
+      wx.navigateTo({
+        url: '/pages/worker/order-hall/order-hall'
+      })
+      return
+    }
+
+    this.goOrderList()
+  },
+
+  goRoleSecondaryAction() {
+    if (this.data.isWorker) {
+      wx.navigateTo({
+        url: '/pages/worker/order-list/order-list'
+      })
+      return
+    }
+
+    this.goProfileEdit()
+  },
+
   goWorkerEntry() {
     wx.navigateTo({
       url: this.data.isWorker ? '/pages/worker/order-hall/order-hall' : '/pages/worker/audit-status/audit-status'
@@ -127,5 +198,20 @@ Page({
     wx.navigateTo({
       url: '/pages/admin/dashboard/dashboard'
     })
+  },
+
+  async claimInitialAdmin() {
+    showLoading('初始化中')
+    try {
+      const data = await userService.claimInitialAdmin()
+      setCurrentUser(data.user)
+      getApp().globalData.currentUser = data.user
+      this.applyCurrentUser(data.user)
+      showSuccess('已成为管理员')
+    } catch (error) {
+      showError(error.message || '初始化失败')
+    } finally {
+      hideLoading()
+    }
   }
 })

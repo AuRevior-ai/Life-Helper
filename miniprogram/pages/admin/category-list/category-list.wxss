@@ -2,6 +2,12 @@
   margin-top: 0;
 }
 
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+}
+
 .category-list {
   display: grid;
   gap: 18rpx;
@@ -41,4 +47,8 @@
 .status-tag.disabled {
   background: #f7e9e3;
   color: #b65230;
+}
+
+.text-button {
+  margin-top: 18rpx;
 }

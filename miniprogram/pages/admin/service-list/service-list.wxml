@@ -4,12 +4,15 @@
     <view class="page-subtitle">同步种子服务到云数据库，并管理服务上下架</view>
   </view>
 
-  <button
-    class="primary-button compact"
-    loading="{{ seeding }}"
-    disabled="{{ seeding }}"
-    bindtap="seedServiceData"
-  >同步种子服务</button>
+  <view class="toolbar">
+    <button
+      class="primary-button compact"
+      loading="{{ seeding }}"
+      disabled="{{ seeding }}"
+      bindtap="seedServiceData"
+    >同步种子服务</button>
+    <button class="ghost-button compact" bindtap="goCreateService">新增服务</button>
+  </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
 
@@ -31,6 +34,11 @@
         disabled="{{ submittingId === item._id }}"
         bindtap="updateServiceStatus"
       >{{ item.nextStatusText }}</button>
+      <button
+        class="text-button"
+        data-id="{{ item._id }}"
+        bindtap="goEditService"
+      >编辑服务</button>
     </view>
   </view>
 

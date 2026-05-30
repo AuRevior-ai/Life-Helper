@@ -4,12 +4,15 @@
     <view class="page-subtitle">查看服务分类，初版分类数据可从种子目录同步</view>
   </view>
 
-  <button
-    class="ghost-button compact"
-    loading="{{ seeding }}"
-    disabled="{{ seeding }}"
-    bindtap="seedServiceData"
-  >同步种子服务</button>
+  <view class="toolbar">
+    <button
+      class="ghost-button compact"
+      loading="{{ seeding }}"
+      disabled="{{ seeding }}"
+      bindtap="seedServiceData"
+    >同步种子服务</button>
+    <button class="primary-button compact" bindtap="goCreateCategory">新增分类</button>
+  </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载分类"></loading-view>
 
@@ -23,6 +26,16 @@
         <view class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}">{{ item.statusText }}</view>
       </view>
       <view wx:if="{{ item.description }}" class="category-desc">{{ item.description }}</view>
+      <button
+        class="text-button"
+        data-id="{{ item._id }}"
+        data-name="{{ item.name }}"
+        data-icon="{{ item.icon }}"
+        data-description="{{ item.description }}"
+        data-status="{{ item.status }}"
+        data-sort="{{ item.sort }}"
+        bindtap="goEditCategory"
+      >编辑分类</button>
     </view>
   </view>
 

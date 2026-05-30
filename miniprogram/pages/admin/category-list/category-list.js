@@ -53,5 +53,26 @@ Page({
     } finally {
       this.setData({ seeding: false })
     }
+  },
+
+  goCreateCategory() {
+    wx.navigateTo({
+      url: '/pages/admin/category-edit/category-edit'
+    })
+  },
+
+  goEditCategory(event) {
+    const category = event.currentTarget.dataset || {}
+    const params = [
+      `categoryId=${encodeURIComponent(category.id || '')}`,
+      `name=${encodeURIComponent(category.name || '')}`,
+      `icon=${encodeURIComponent(category.icon || '')}`,
+      `description=${encodeURIComponent(category.description || '')}`,
+      `status=${encodeURIComponent(category.status || 'enabled')}`,
+      `sort=${encodeURIComponent(category.sort || 0)}`
+    ].join('&')
+    wx.navigateTo({
+      url: `/pages/admin/category-edit/category-edit?${params}`
+    })
   }
 })

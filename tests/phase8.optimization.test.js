@@ -52,7 +52,7 @@ test('README links final verification runbook and marks all eight phases complet
   assert.match(readme, /第一版 MVP 已完成/)
 })
 
-test('admin deferred edit pages explain MVP scope instead of showing empty placeholders', () => {
+test('admin edit pages no longer show empty placeholders', () => {
   const categoryEditWxml = read('miniprogram/pages/admin/category-edit/category-edit.wxml')
   const serviceEditWxml = read('miniprogram/pages/admin/service-edit/service-edit.wxml')
   const categoryEditJs = read('miniprogram/pages/admin/category-edit/category-edit.js')
@@ -60,8 +60,8 @@ test('admin deferred edit pages explain MVP scope instead of showing empty place
 
   assert.doesNotMatch(categoryEditWxml, /暂无数据/)
   assert.doesNotMatch(serviceEditWxml, /暂无数据/)
-  assert.match(categoryEditWxml, /MVP 阶段暂不开放分类编辑/)
-  assert.match(serviceEditWxml, /MVP 阶段暂不开放服务编辑/)
-  assert.match(categoryEditJs, /goBack/)
-  assert.match(serviceEditJs, /goServiceList/)
+  assert.match(categoryEditWxml, /保存分类/)
+  assert.match(serviceEditWxml, /保存服务/)
+  assert.match(categoryEditJs, /saveCategory/)
+  assert.match(serviceEditJs, /saveService/)
 })

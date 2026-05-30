@@ -16,7 +16,21 @@
   <button wx:if="{{ !isLoggedIn }}" class="primary-button" bindtap="handleLogin">微信授权登录</button>
   <button wx:else class="ghost-button" bindtap="handleLogout">退出登录</button>
 
+  <view wx:if="{{ isLoggedIn }}" class="role-card {{ roleTone }} panel">
+    <view class="role-card__label">{{ roleText }}</view>
+    <view class="role-card__title">{{ roleHomeTitle }}</view>
+    <view class="role-card__desc">{{ roleHomeDesc }}</view>
+    <view class="role-card__actions">
+      <button class="text-button filled" bindtap="goRolePrimaryAction">{{ primaryActionText }}</button>
+      <button class="text-button" bindtap="goRoleSecondaryAction">{{ secondaryActionText }}</button>
+    </view>
+  </view>
+
   <view class="menu-panel panel">
+    <view class="menu-item" bindtap="goProfileEdit">
+      <text>完善资料</text>
+      <text class="menu-item__hint">昵称和手机号</text>
+    </view>
     <view class="menu-item" bindtap="goOrderList">
       <text>我的订单</text>
       <text class="menu-item__hint">查看服务进度</text>
@@ -32,6 +46,10 @@
     <view wx:if="{{ isAdmin }}" class="menu-item" bindtap="goAdminEntry">
       <text>管理员入口</text>
       <text class="menu-item__hint">进入管理端</text>
+    </view>
+    <view wx:if="{{ isLoggedIn && !isAdmin }}" class="menu-item" bindtap="claimInitialAdmin">
+      <text>初始化管理员</text>
+      <text class="menu-item__hint">仅首个管理员可用</text>
     </view>
   </view>
 </view>

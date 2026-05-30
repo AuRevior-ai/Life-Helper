@@ -154,11 +154,33 @@ async function disableUser(event, env) {
   })
 }
 
+async function claimInitialAdmin(event, env) {
+  const currentUser = await requireCurrentUser(env)
+  const existingAdmin = await env.users.findByRole(USER_ROLE.ADMIN)
+
+  if (existingAdmin) {
+    throw serviceError('ADMIN_ALREADY_EXISTS', '管理员已存在，请联系现有管理员分配权限')
+  }
+
+  const updatedUser = await env.users.updateById(currentUser._id, {
+    role: USER_ROLE.ADMIN,
+    updated_at: getNow(env)
+  })
+
+  return success({
+    user: updatedUser || {
+      ...currentUser,
+      role: USER_ROLE.ADMIN
+    }
+  })
+}
+
 const actions = Object.freeze({
   getCurrentUser,
   updateUserInfo,
   updateUserRole,
-  disableUser
+  disableUser,
+  claimInitialAdmin
 })
 
 async function handleUser(event = {}, env) {
@@ -180,6 +202,7 @@ module.exports = {
   updateUserInfo,
   updateUserRole,
   disableUser,
+  claimInitialAdmin,
   USER_ROLE,
   USER_STATUS
 }
