@@ -12,6 +12,11 @@ exports.main = async (event = {}) => {
 
   return handleUser(event, {
     openid: wxContext.OPENID,
-    users: createUserRepository(db)
+    users: createUserRepository(db),
+    config: {
+      adminBootstrapEnabled: process.env.ADMIN_BOOTSTRAP_ENABLED === 'true',
+      adminBootstrapAllowedOpenids: process.env.ADMIN_BOOTSTRAP_ALLOWED_OPENIDS || '',
+      adminBootstrapCode: process.env.ADMIN_BOOTSTRAP_CODE || ''
+    }
   })
 }

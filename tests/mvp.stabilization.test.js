@@ -166,6 +166,10 @@ test('first normal user can claim initial admin when no admin exists', async () 
     {
       openid: 'openid_user',
       users,
+      config: {
+        adminBootstrapEnabled: true,
+        adminBootstrapAllowedOpenids: ['openid_user']
+      },
       now: fixedNow
     }
   )
@@ -173,6 +177,49 @@ test('first normal user can claim initial admin when no admin exists', async () 
   assert.equal(result.success, true)
   assert.equal(result.data.user.role, 'admin')
   assert.equal(users.records[0].role, 'admin')
+})
+
+test('claimInitialAdmin requires bootstrap switch and optional openid allowlist', async () => {
+  const { handleUser } = require('../cloudfunctions/user/handler')
+  const users = createMemoryUsers([
+    {
+      _id: 'user_1',
+      openid: 'openid_user',
+      nickname: '普通用户',
+      role: 'user',
+      status: 'normal'
+    }
+  ])
+
+  const disabledResult = await handleUser(
+    { action: 'claimInitialAdmin' },
+    {
+      openid: 'openid_user',
+      users,
+      config: {
+        adminBootstrapEnabled: false
+      },
+      now: fixedNow
+    }
+  )
+  assert.equal(disabledResult.success, false)
+  assert.equal(disabledResult.errorCode, 'ADMIN_BOOTSTRAP_DISABLED')
+
+  const notAllowedResult = await handleUser(
+    { action: 'claimInitialAdmin' },
+    {
+      openid: 'openid_user',
+      users,
+      config: {
+        adminBootstrapEnabled: true,
+        adminBootstrapAllowedOpenids: ['openid_admin_seed']
+      },
+      now: fixedNow
+    }
+  )
+  assert.equal(notAllowedResult.success, false)
+  assert.equal(notAllowedResult.errorCode, 'ADMIN_BOOTSTRAP_OPENID_DENIED')
+  assert.equal(users.records[0].role, 'user')
 })
 
 test('claimInitialAdmin is rejected after an admin already exists', async () => {

@@ -316,9 +316,13 @@ async function handlePayNotify(event = {}, env = {}) {
 
 async function queryPaymentStatus(event = {}, env = {}) {
   const payload = getPayload(event)
+  const openid = requireOpenid(env)
   const order = await env.orders.findById(payload.orderId)
   if (!order) {
     throw serviceError('ORDER_NOT_FOUND', '订单不存在')
+  }
+  if (order.user_id !== openid) {
+    throw serviceError('PERMISSION_DENIED', '无权查询该订单支付状态')
   }
 
   await writePaymentLog(env, {

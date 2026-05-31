@@ -46,6 +46,36 @@ function getPayload(event = {}) {
   return payload
 }
 
+function normalizeList(value) {
+  if (Array.isArray(value)) {
+    return value.map((item) => `${item}`.trim()).filter(Boolean)
+  }
+  return `${value || ''}`
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+function isAdminBootstrapEnabled(env = {}) {
+  return Boolean(env.config && env.config.adminBootstrapEnabled === true)
+}
+
+function validateAdminBootstrapGuard(payload = {}, env = {}) {
+  if (!isAdminBootstrapEnabled(env)) {
+    throw serviceError('ADMIN_BOOTSTRAP_DISABLED', '首个管理员初始化未开启')
+  }
+
+  const allowedOpenids = normalizeList(env.config && env.config.adminBootstrapAllowedOpenids)
+  if (allowedOpenids.length > 0 && !allowedOpenids.includes(env.openid)) {
+    throw serviceError('ADMIN_BOOTSTRAP_OPENID_DENIED', '当前账号不在管理员初始化白名单')
+  }
+
+  const expectedCode = `${(env.config && env.config.adminBootstrapCode) || ''}`.trim()
+  if (expectedCode && `${payload.initCode || payload.adminBootstrapCode || ''}`.trim() !== expectedCode) {
+    throw serviceError('ADMIN_BOOTSTRAP_CODE_INVALID', '管理员初始化码不正确')
+  }
+}
+
 function pickProfileFields(payload) {
   return ALLOWED_PROFILE_FIELDS.reduce((profile, field) => {
     if (Object.prototype.hasOwnProperty.call(payload, field)) {
@@ -161,6 +191,8 @@ async function claimInitialAdmin(event, env) {
   if (existingAdmin) {
     throw serviceError('ADMIN_ALREADY_EXISTS', '管理员已存在，请联系现有管理员分配权限')
   }
+
+  validateAdminBootstrapGuard(getPayload(event), env)
 
   const updatedUser = await env.users.updateById(currentUser._id, {
     role: USER_ROLE.ADMIN,

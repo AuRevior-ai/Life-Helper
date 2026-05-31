@@ -253,6 +253,68 @@ test('payment notify marks order paid once and creates one user message', async 
   assert.equal(paymentLogs.records.some((log) => log.type === 'duplicate_notify'), true)
 })
 
+test('payment status query is limited to current user order ownership', async () => {
+  const { handlePayment } = require('../cloudfunctions/payment/handler')
+  const orders = createMemoryOrders([
+    {
+      _id: 'order_own',
+      order_no: 'OD301',
+      user_id: 'openid_user',
+      status: 'pending_accept',
+      pay_status: 'paid',
+      pay_amount: 6600,
+      price: 6600
+    },
+    {
+      _id: 'order_other',
+      order_no: 'OD302',
+      user_id: 'openid_other',
+      status: 'pending_accept',
+      pay_status: 'paid',
+      pay_amount: 8800,
+      price: 8800
+    }
+  ])
+  const paymentLogs = createMemoryLogs()
+
+  const ownResult = await handlePayment({
+    action: 'queryPaymentStatus',
+    orderId: 'order_own'
+  }, {
+    openid: 'openid_user',
+    now: fixedNow,
+    orders,
+    paymentLogs
+  })
+  assert.equal(ownResult.success, true)
+  assert.equal(ownResult.data.order._id, 'order_own')
+  assert.equal(paymentLogs.records.some((log) => log.type === 'query_payment'), true)
+
+  const otherResult = await handlePayment({
+    action: 'queryPaymentStatus',
+    orderId: 'order_other'
+  }, {
+    openid: 'openid_user',
+    now: fixedNow,
+    orders,
+    paymentLogs
+  })
+  assert.equal(otherResult.success, false)
+  assert.equal(otherResult.errorCode, 'PERMISSION_DENIED')
+
+  const missingResult = await handlePayment({
+    action: 'queryPaymentStatus',
+    orderId: 'order_missing'
+  }, {
+    openid: 'openid_user',
+    now: fixedNow,
+    orders,
+    paymentLogs
+  })
+  assert.equal(missingResult.success, false)
+  assert.equal(missingResult.errorCode, 'ORDER_NOT_FOUND')
+})
+
 test('payment pages and services are wired while mock payment remains available', () => {
   const appJson = read('miniprogram/app.json')
   const orderDetailJs = read('miniprogram/pages/order-detail/order-detail.js')
