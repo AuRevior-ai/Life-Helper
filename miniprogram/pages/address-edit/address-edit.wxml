@@ -32,25 +32,15 @@
     </view>
 
     <view class="form-item">
-      <text class="form-label">城市</text>
-      <input
-        class="form-input"
-        value="{{ form.city }}"
-        data-field="city"
-        placeholder="例如：杭州"
-        bindinput="handleInput"
-      />
+      <text class="form-label">小区</text>
+      <picker mode="selector" range="{{ areaNames }}" bindchange="onAreaChange">
+        <view class="form-input">{{ form.community || '请选择服务小区' }}</view>
+      </picker>
     </view>
 
     <view class="form-item">
-      <text class="form-label">小区</text>
-      <input
-        class="form-input"
-        value="{{ form.community }}"
-        data-field="community"
-        placeholder="请输入小区名称"
-        bindinput="handleInput"
-      />
+      <text class="form-label">城市 / 区县 / 街道</text>
+      <view class="form-input">{{ form.city }} {{ form.district }} {{ form.street }}</view>
     </view>
 
     <view class="form-item">

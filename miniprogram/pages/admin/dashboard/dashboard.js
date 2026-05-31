@@ -57,6 +57,14 @@ Page({
     wx.navigateTo({ url: '/pages/admin/after-sale-list/after-sale-list' })
   },
 
+  goAreas() {
+    wx.navigateTo({ url: '/pages/admin/area-list/area-list' })
+  },
+
+  goDispatchLogs() {
+    wx.navigateTo({ url: '/pages/admin/dispatch-logs/dispatch-logs' })
+  },
+
   goServices() {
     wx.navigateTo({ url: '/pages/admin/service-list/service-list' })
   },

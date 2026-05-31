@@ -1,0 +1,21 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">维护可服务小区，禁用后不再用于新地址和师傅区域</view>
+  </view>
+
+  <button class="primary-button" bindtap="goCreate">新增服务小区</button>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载区域"></loading-view>
+  <block wx:elif="{{ areas.length }}">
+    <view wx:for="{{ areas }}" wx:key="_id" class="panel">
+      <view class="section-title">{{ item.full_name }}</view>
+      <view class="muted-text">状态：{{ item.status }}</view>
+      <button class="ghost-button" data-id="{{ item._id }}" bindtap="goEdit">编辑</button>
+      <button class="ghost-button" data-id="{{ item._id }}" data-status="{{ item.status }}" bindtap="toggleStatus">
+        {{ item.status === 'enabled' ? '禁用' : '启用' }}
+      </button>
+    </view>
+  </block>
+  <empty-state wx:else title="暂无服务区域" description="新增小区后，地址和师傅服务范围可按小区匹配"></empty-state>
+</view>

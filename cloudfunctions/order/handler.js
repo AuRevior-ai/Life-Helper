@@ -184,7 +184,7 @@ function normalizeFinishImages(value) {
 }
 
 function buildFullAddress(address = {}) {
-  return [address.city, address.community, address.detail_address]
+  return [address.city, address.district, address.street, address.community, address.detail_address]
     .map((item) => trimText(item))
     .filter(Boolean)
     .join(' ')
@@ -263,6 +263,12 @@ async function requireApprovedWorker(env) {
   if (!worker || worker.audit_status !== 'approved') {
     throw serviceError('WORKER_NOT_APPROVED', '当前师傅尚未通过审核')
   }
+  if (worker.status && worker.status !== 'enabled') {
+    throw serviceError('WORKER_DISABLED', '当前师傅账号不可接单')
+  }
+  if (worker.online_status && worker.online_status !== 'available') {
+    throw serviceError('WORKER_PAUSED', '当前师傅已暂停接单')
+  }
 
   return worker
 }
@@ -311,9 +317,12 @@ async function createOrder(event, env) {
     category_name: service.category_name,
     price: service.price,
     address_id: address._id,
+    service_area_id: address.service_area_id || '',
     contact_name: address.contact_name,
     contact_phone: address.phone,
     city: address.city,
+    district: address.district || '',
+    street: address.street || '',
     community: address.community,
     detail_address: address.detail_address,
     full_address: buildFullAddress(address),
@@ -444,6 +453,22 @@ async function acceptOrder(event, env) {
     created_at: now,
     updated_at: now
   })
+
+  if (env.dispatchLogs && env.dispatchLogs.create) {
+    await env.dispatchLogs.create({
+      order_id: order._id,
+      order_no: order.order_no || '',
+      action: 'worker_accept',
+      operator_id: workerId,
+      operator_role: 'worker',
+      from_worker_id: '',
+      to_worker_id: workerId,
+      from_status: ORDER_STATUS.PENDING_ACCEPT,
+      to_status: ORDER_STATUS.ACCEPTED,
+      reason: '师傅主动接单',
+      created_at: now
+    })
+  }
 
   return success({ order: updatedOrder })
 }

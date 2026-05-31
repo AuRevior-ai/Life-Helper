@@ -25,6 +25,13 @@
     </view>
 
     <view class="panel status-panel">
+      <view class="form-label">派单操作</view>
+      <button wx:if="{{ order.status === 'pending_accept' }}" class="primary-button" bindtap="goAssignWorker">指派师傅</button>
+      <button wx:if="{{ order.status === 'accepted' }}" class="ghost-button" loading="{{ submitting }}" disabled="{{ submitting }}" bindtap="unassignOrder">取消指派 / 回流</button>
+      <button class="ghost-button" bindtap="goDispatchLogs">查看派单日志</button>
+    </view>
+
+    <view class="panel status-panel">
       <view class="form-label">手动调整状态</view>
       <picker
         mode="selector"

@@ -83,6 +83,42 @@ const REFUND_CHANNEL = Object.freeze({
   WECHAT: 'wechat'
 })
 
+const SERVICE_AREA_STATUS = Object.freeze({
+  ENABLED: 'enabled',
+  DISABLED: 'disabled'
+})
+
+const SERVICE_AREA_STATUS_TEXT = Object.freeze({
+  [SERVICE_AREA_STATUS.ENABLED]: '启用',
+  [SERVICE_AREA_STATUS.DISABLED]: '禁用'
+})
+
+const WORKER_ONLINE_STATUS = Object.freeze({
+  AVAILABLE: 'available',
+  PAUSED: 'paused',
+  BUSY: 'busy'
+})
+
+const WORKER_ONLINE_STATUS_TEXT = Object.freeze({
+  [WORKER_ONLINE_STATUS.AVAILABLE]: '可接单',
+  [WORKER_ONLINE_STATUS.PAUSED]: '暂停接单',
+  [WORKER_ONLINE_STATUS.BUSY]: '忙碌中'
+})
+
+const DISPATCH_ACTION = Object.freeze({
+  WORKER_ACCEPT: 'worker_accept',
+  ADMIN_ASSIGN: 'admin_assign',
+  ADMIN_UNASSIGN: 'admin_unassign',
+  ORDER_REFLOW: 'order_reflow'
+})
+
+const DISPATCH_ACTION_TEXT = Object.freeze({
+  [DISPATCH_ACTION.WORKER_ACCEPT]: '师傅接单',
+  [DISPATCH_ACTION.ADMIN_ASSIGN]: '管理员指派',
+  [DISPATCH_ACTION.ADMIN_UNASSIGN]: '取消指派',
+  [DISPATCH_ACTION.ORDER_REFLOW]: '订单回流'
+})
+
 const WORKER_AUDIT_STATUS = Object.freeze({
   PENDING: 'pending',
   APPROVED: 'approved',
@@ -147,6 +183,12 @@ module.exports = {
   REFUND_STATUS,
   REFUND_STATUS_TEXT,
   REFUND_CHANNEL,
+  SERVICE_AREA_STATUS,
+  SERVICE_AREA_STATUS_TEXT,
+  WORKER_ONLINE_STATUS,
+  WORKER_ONLINE_STATUS_TEXT,
+  DISPATCH_ACTION,
+  DISPATCH_ACTION_TEXT,
   WORKER_AUDIT_STATUS,
   WORKER_AUDIT_STATUS_TEXT,
   COMMON_STATUS,

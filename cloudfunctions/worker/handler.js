@@ -10,6 +10,12 @@ const WORKER_STATUS = Object.freeze({
   DISABLED: 'disabled'
 })
 
+const WORKER_ONLINE_STATUS = Object.freeze({
+  AVAILABLE: 'available',
+  PAUSED: 'paused',
+  BUSY: 'busy'
+})
+
 const USER_ROLE = Object.freeze({
   USER: 'user',
   WORKER: 'worker',
@@ -94,12 +100,19 @@ function getOrderAreaText(order) {
 }
 
 function orderMatchesWorkerArea(order, worker) {
+  const orderCommunity = trimText(order.community)
+  const workerCommunities = Array.isArray(worker.service_communities)
+    ? worker.service_communities.map((item) => trimText(item)).filter(Boolean)
+    : []
+  if (workerCommunities.length > 0) {
+    return Boolean(orderCommunity) && workerCommunities.includes(orderCommunity)
+  }
+
   const orderArea = getOrderAreaText(order)
   const workerArea = worker.service_area || worker.serviceArea
   if (!trimText(orderArea) || !trimText(workerArea)) {
-    return true
+    return false
   }
-
   return hasTextMatch(workerArea, orderArea)
 }
 
@@ -132,15 +145,64 @@ function requireOpenid(env) {
 }
 
 function normalizeWorkerPayload(payload = {}) {
+  const serviceAreaIds = Array.isArray(payload.service_area_ids || payload.serviceAreaIds)
+    ? (payload.service_area_ids || payload.serviceAreaIds).map((item) => trimText(item)).filter(Boolean)
+    : []
+  const serviceCommunities = Array.isArray(payload.service_communities || payload.serviceCommunities)
+    ? (payload.service_communities || payload.serviceCommunities).map((item) => trimText(item)).filter(Boolean)
+    : splitKeywords(payload.service_area || payload.serviceArea)
   return {
     name: trimText(payload.name),
     phone: trimText(payload.phone),
     service_category: trimText(payload.service_category || payload.serviceCategory),
     service_area: trimText(payload.service_area || payload.serviceArea),
+    service_area_ids: serviceAreaIds,
+    service_communities: serviceCommunities,
+    service_city: trimText(payload.service_city || payload.serviceCity),
+    service_districts: Array.isArray(payload.service_districts || payload.serviceDistricts)
+      ? (payload.service_districts || payload.serviceDistricts).map((item) => trimText(item)).filter(Boolean)
+      : [],
     intro: trimText(payload.intro),
     qualification_images: Array.isArray(payload.qualification_images)
       ? payload.qualification_images
       : []
+  }
+}
+
+async function loadEnabledAreas(areaIds, env) {
+  if (!areaIds.length) {
+    return []
+  }
+  if (!env.areas || !env.areas.findById) {
+    throw serviceError('SERVICE_AREA_REPOSITORY_MISSING', '缺少服务区域集合')
+  }
+  const areas = []
+  for (const areaId of areaIds) {
+    const area = await env.areas.findById(areaId)
+    if (!area) {
+      throw serviceError('SERVICE_AREA_NOT_FOUND', '服务区域不存在')
+    }
+    if (area.status === 'disabled') {
+      throw serviceError('SERVICE_AREA_DISABLED', '服务区域已禁用')
+    }
+    areas.push(area)
+  }
+  return areas
+}
+
+async function enrichWorkerAreas(payload, env) {
+  const areas = await loadEnabledAreas(payload.service_area_ids, env)
+  if (!areas.length) {
+    return payload
+  }
+  const communities = areas.map((area) => trimText(area.community)).filter(Boolean)
+  const districts = Array.from(new Set(areas.map((area) => trimText(area.district)).filter(Boolean)))
+  return {
+    ...payload,
+    service_communities: communities,
+    service_area: communities.join('、'),
+    service_city: trimText(areas[0].city) || payload.service_city,
+    service_districts: districts
   }
 }
 
@@ -201,7 +263,7 @@ async function requireWorkerById(workerId, env) {
 
 async function applyWorker(event, env) {
   const userId = requireOpenid(env)
-  const payload = normalizeWorkerPayload(getPayload(event))
+  const payload = await enrichWorkerAreas(normalizeWorkerPayload(getPayload(event)), env)
   validateWorkerPayload(payload)
 
   const now = getNow(env)
@@ -215,6 +277,7 @@ async function applyWorker(event, env) {
       ...payload,
       audit_status: WORKER_AUDIT_STATUS.PENDING,
       status: WORKER_STATUS.DISABLED,
+      online_status: existingWorker.online_status || WORKER_ONLINE_STATUS.AVAILABLE,
       reject_reason: '',
       updated_at: now
     })
@@ -226,6 +289,7 @@ async function applyWorker(event, env) {
     user_id: userId,
     audit_status: WORKER_AUDIT_STATUS.PENDING,
     status: WORKER_STATUS.DISABLED,
+    online_status: WORKER_ONLINE_STATUS.AVAILABLE,
     created_at: now,
     updated_at: now
   })
@@ -324,6 +388,12 @@ async function rejectWorker(event, env) {
 
 async function getOrderHallList(event, env) {
   const worker = await requireApprovedWorker(env)
+  if (worker.status && worker.status !== WORKER_STATUS.ENABLED) {
+    return success({ orders: [] })
+  }
+  if ((worker.online_status || WORKER_ONLINE_STATUS.AVAILABLE) !== WORKER_ONLINE_STATUS.AVAILABLE) {
+    return success({ orders: [] })
+  }
   const orders = await env.orders.findByStatus('pending_accept')
   const filteredOrders = orders.filter((order) =>
     !order.worker_id &&
@@ -331,6 +401,43 @@ async function getOrderHallList(event, env) {
     orderMatchesWorkerArea(order, worker)
   )
   return success({ orders: filteredOrders })
+}
+
+async function updateWorkerOnlineStatus(event, env) {
+  const worker = await requireApprovedWorker(env)
+  const payload = getPayload(event)
+  const onlineStatus = trimText(payload.online_status || payload.onlineStatus)
+  if (!Object.values(WORKER_ONLINE_STATUS).includes(onlineStatus)) {
+    throw serviceError('WORKER_ONLINE_STATUS_INVALID', '接单状态不合法')
+  }
+  const updatedWorker = await env.workers.updateById(worker._id, {
+    online_status: onlineStatus,
+    updated_at: getNow(env)
+  })
+  return success({ worker: updatedWorker })
+}
+
+async function updateWorkerServiceAreas(event, env) {
+  const worker = await requireApprovedWorker(env)
+  const payload = getPayload(event)
+  const serviceAreaIds = Array.isArray(payload.service_area_ids || payload.serviceAreaIds)
+    ? (payload.service_area_ids || payload.serviceAreaIds).map((item) => trimText(item)).filter(Boolean)
+    : []
+  if (!serviceAreaIds.length) {
+    throw serviceError('WORKER_SERVICE_AREA_REQUIRED', '请至少选择一个服务小区')
+  }
+  const nextAreaPayload = await enrichWorkerAreas({
+    service_area_ids: serviceAreaIds,
+    service_communities: [],
+    service_area: '',
+    service_city: '',
+    service_districts: []
+  }, env)
+  const updatedWorker = await env.workers.updateById(worker._id, {
+    ...nextAreaPayload,
+    updated_at: getNow(env)
+  })
+  return success({ worker: updatedWorker })
 }
 
 async function getWorkerDetail(event, env) {
@@ -378,7 +485,9 @@ const actions = Object.freeze({
   rejectWorker,
   getOrderHallList,
   getWorkerDetail,
-  adminGetWorkerDetail
+  adminGetWorkerDetail,
+  updateWorkerOnlineStatus,
+  updateWorkerServiceAreas
 })
 
 async function handleWorker(event = {}, env) {
@@ -405,6 +514,9 @@ module.exports = {
   getOrderHallList,
   getWorkerDetail,
   adminGetWorkerDetail,
+  updateWorkerOnlineStatus,
+  updateWorkerServiceAreas,
   WORKER_AUDIT_STATUS,
-  WORKER_STATUS
+  WORKER_STATUS,
+  WORKER_ONLINE_STATUS
 }

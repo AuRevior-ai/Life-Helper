@@ -12,6 +12,7 @@
       <view class="worker-info">
         <view class="worker-name">{{ worker.name }}</view>
         <view class="worker-meta">{{ worker.service_category }} · {{ worker.service_area }}</view>
+        <view class="worker-meta">接单状态：{{ worker.online_status || 'available' }}</view>
         <view class="worker-meta">审核状态：{{ worker.audit_status }}</view>
       </view>
     </view>

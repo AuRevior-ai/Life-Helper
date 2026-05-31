@@ -1,6 +1,7 @@
 const cloud = require('wx-server-sdk')
 const { handleOrder } = require('./handler')
 const { createAddressReadRepository, createOrderRepository } = require('./order-repository')
+const { createDispatchLogRepository } = require('./dispatch-repository')
 const { createMessageRepository } = require('./message-repository')
 const { createWorkerReadRepository } = require('./worker-read-repository')
 
@@ -17,6 +18,7 @@ exports.main = async (event = {}) => {
     addresses: createAddressReadRepository(db),
     orders: createOrderRepository(db),
     workers: createWorkerReadRepository(db),
-    messages: createMessageRepository(db)
+    messages: createMessageRepository(db),
+    dispatchLogs: createDispatchLogRepository(db)
   })
 }

@@ -1,11 +1,15 @@
 const addressService = require('../../services/address.service')
+const areaService = require('../../services/area.service')
 const { validateAddressForm } = require('../../utils/validator')
 const { showError, showSuccess } = require('../../utils/toast')
 
 const EMPTY_FORM = Object.freeze({
   contact_name: '',
   phone: '',
+  service_area_id: '',
   city: '',
+  district: '',
+  street: '',
   community: '',
   detail_address: '',
   is_default: false
@@ -18,6 +22,9 @@ Page({
     form: {
       ...EMPTY_FORM
     },
+    areas: [],
+    areaNames: [],
+    selectedAreaIndex: -1,
     loading: false,
     saving: false
   },
@@ -31,6 +38,20 @@ Page({
 
     if (addressId) {
       this.loadAddress(addressId)
+    }
+    this.loadAreas()
+  },
+
+  async loadAreas() {
+    try {
+      const data = await areaService.getServiceAreaList()
+      const areas = data.areas || []
+      this.setData({
+        areas,
+        areaNames: areas.map((area) => area.full_name || `${area.city || ''} ${area.community || ''}`.trim())
+      })
+    } catch (error) {
+      showError(error.message || '服务区域加载失败')
     }
   },
 
@@ -48,7 +69,10 @@ Page({
         form: {
           contact_name: address.contact_name || '',
           phone: address.phone || '',
+          service_area_id: address.service_area_id || '',
           city: address.city || '',
+          district: address.district || '',
+          street: address.street || '',
           community: address.community || '',
           detail_address: address.detail_address || '',
           is_default: Boolean(address.is_default)
@@ -71,6 +95,20 @@ Page({
   handleDefaultChange(event) {
     this.setData({
       'form.is_default': event.detail.value
+    })
+  },
+
+  onAreaChange(event) {
+    const selectedAreaIndex = Number(event.detail.value || 0)
+    const area = this.data.areas[selectedAreaIndex]
+    if (!area) return
+    this.setData({
+      selectedAreaIndex,
+      'form.service_area_id': area._id,
+      'form.city': area.city || '',
+      'form.district': area.district || '',
+      'form.street': area.street || '',
+      'form.community': area.community || ''
     })
   },
 

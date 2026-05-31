@@ -1,4 +1,5 @@
 const adminService = require('../../../services/admin.service')
+const dispatchService = require('../../../services/dispatch.service')
 const { ORDER_STATUS, ORDER_STATUS_TEXT } = require('../../../config/status')
 const { formatOrderStatus, formatPrice } = require('../../../utils/format')
 const { showError, showSuccess } = require('../../../utils/toast')
@@ -84,6 +85,34 @@ Page({
       showSuccess('订单状态已更新')
     } catch (error) {
       showError(error.message || '状态更新失败')
+    } finally {
+      this.setData({ submitting: false })
+    }
+  },
+
+  goAssignWorker() {
+    wx.navigateTo({
+      url: `/pages/admin/assign-worker/assign-worker?orderId=${this.data.orderId}`
+    })
+  },
+
+  goDispatchLogs() {
+    wx.navigateTo({
+      url: `/pages/admin/dispatch-logs/dispatch-logs?orderId=${this.data.orderId}`
+    })
+  },
+
+  async unassignOrder() {
+    this.setData({ submitting: true })
+    try {
+      const data = await dispatchService.adminUnassignOrder({
+        orderId: this.data.orderId,
+        reason: '管理员取消指派并回流接单大厅'
+      })
+      this.setData({ order: mapOrder(data.order || {}) })
+      showSuccess('订单已回流接单大厅')
+    } catch (error) {
+      showError(error.message || '回流失败')
     } finally {
       this.setData({ submitting: false })
     }

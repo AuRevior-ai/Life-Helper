@@ -5,6 +5,7 @@
   </view>
 
   <button class="ghost-button" bindtap="goWorkerOrders">我的师傅订单</button>
+  <view class="panel muted-text">当前接单状态：{{ onlineStatusText }}</view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载可接订单"></loading-view>
 

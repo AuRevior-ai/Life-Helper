@@ -32,6 +32,10 @@
     "pages/admin/worker-audit/worker-audit",
     "pages/admin/after-sale-list/after-sale-list",
     "pages/admin/after-sale-detail/after-sale-detail",
+    "pages/admin/area-list/area-list",
+    "pages/admin/area-edit/area-edit",
+    "pages/admin/assign-worker/assign-worker",
+    "pages/admin/dispatch-logs/dispatch-logs",
     "pages/admin/order-list/order-list",
     "pages/admin/order-detail/order-detail",
     "pages/admin/user-list/user-list"

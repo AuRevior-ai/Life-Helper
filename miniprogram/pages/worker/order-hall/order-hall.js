@@ -1,5 +1,6 @@
 const orderService = require('../../../services/order.service')
 const workerService = require('../../../services/worker.service')
+const { WORKER_ONLINE_STATUS_TEXT } = require('../../../config/status')
 const { formatPrice } = require('../../../utils/format')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../../utils/toast')
 
@@ -7,6 +8,8 @@ Page({
   data: {
     title: '接单大厅',
     orders: [],
+    online_status: 'available',
+    onlineStatusText: '可接单',
     loading: true,
     submittingId: ''
   },
@@ -24,8 +27,14 @@ Page({
   async loadOrderHall() {
     this.setData({ loading: true })
     try {
-      const data = await workerService.getOrderHallList()
+      const [workerData, data] = await Promise.all([
+        workerService.getWorkerInfo(),
+        workerService.getOrderHallList()
+      ])
+      const onlineStatus = (workerData.worker && workerData.worker.online_status) || 'available'
       this.setData({
+        online_status: onlineStatus,
+        onlineStatusText: WORKER_ONLINE_STATUS_TEXT[onlineStatus] || onlineStatus,
         orders: (data.orders || []).map((order) => ({
           ...order,
           priceText: formatPrice(order.price)

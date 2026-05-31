@@ -1,4 +1,5 @@
 const workerService = require('../../../services/worker.service')
+const areaService = require('../../../services/area.service')
 const { isPhone } = require('../../../utils/validator')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../../utils/toast')
 
@@ -7,6 +8,8 @@ const EMPTY_FORM = Object.freeze({
   phone: '',
   service_category: '',
   service_area: '',
+  service_area_ids: [],
+  service_communities: [],
   intro: ''
 })
 
@@ -16,13 +19,45 @@ Page({
     form: {
       ...EMPTY_FORM
     },
+    areas: [],
+    areaNames: [],
+    selectedAreaIndex: -1,
     submitting: false
+  },
+
+  onLoad() {
+    this.loadAreas()
+  },
+
+  async loadAreas() {
+    try {
+      const data = await areaService.getServiceAreaList()
+      const areas = data.areas || []
+      this.setData({
+        areas,
+        areaNames: areas.map((area) => area.full_name || `${area.city || ''} ${area.community || ''}`.trim())
+      })
+    } catch (error) {
+      showError(error.message || '服务区域加载失败')
+    }
   },
 
   handleInput(event) {
     const field = event.currentTarget.dataset.field
     this.setData({
       [`form.${field}`]: event.detail.value
+    })
+  },
+
+  onAreaChange(event) {
+    const selectedAreaIndex = Number(event.detail.value || 0)
+    const area = this.data.areas[selectedAreaIndex]
+    if (!area) return
+    this.setData({
+      selectedAreaIndex,
+      'form.service_area': area.community || area.full_name || '',
+      'form.service_area_ids': [area._id],
+      'form.service_communities': [area.community || '']
     })
   },
 

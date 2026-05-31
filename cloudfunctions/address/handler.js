@@ -39,6 +39,13 @@ function trimText(value) {
   return `${value || ''}`.trim()
 }
 
+function buildFullAddress(address = {}) {
+  return [address.city, address.district, address.street, address.community, address.detail_address]
+    .map((item) => trimText(item))
+    .filter(Boolean)
+    .join(' ')
+}
+
 function isPhone(value) {
   return /^1[3-9]\d{9}$/.test(trimText(value))
 }
@@ -51,13 +58,20 @@ function requireOpenid(env) {
 }
 
 function normalizeAddressPayload(payload = {}) {
-  return {
+  const address = {
     contact_name: trimText(payload.contact_name),
     phone: trimText(payload.phone),
+    service_area_id: trimText(payload.service_area_id || payload.serviceAreaId),
     city: trimText(payload.city),
+    district: trimText(payload.district),
+    street: trimText(payload.street),
     community: trimText(payload.community),
     detail_address: trimText(payload.detail_address),
     is_default: Boolean(payload.is_default)
+  }
+  return {
+    ...address,
+    full_address: trimText(payload.full_address) || buildFullAddress(address)
   }
 }
 
@@ -69,6 +83,39 @@ function validateAddressPayload(payload) {
 
   if (!isPhone(payload.phone)) {
     throw serviceError('ADDRESS_PHONE_INVALID', '手机号格式不正确')
+  }
+}
+
+async function enrichAddressArea(payload, env) {
+  if (!payload.service_area_id) {
+    return {
+      ...payload,
+      full_address: buildFullAddress(payload)
+    }
+  }
+
+  if (!env.areas || !env.areas.findById) {
+    throw serviceError('SERVICE_AREA_REPOSITORY_MISSING', '缺少服务区域集合')
+  }
+
+  const area = await env.areas.findById(payload.service_area_id)
+  if (!area) {
+    throw serviceError('SERVICE_AREA_NOT_FOUND', '服务区域不存在')
+  }
+  if (area.status === 'disabled') {
+    throw serviceError('SERVICE_AREA_DISABLED', '服务区域已禁用')
+  }
+
+  const nextPayload = {
+    ...payload,
+    city: area.city || payload.city,
+    district: area.district || payload.district,
+    street: area.street || payload.street,
+    community: area.community || payload.community
+  }
+  return {
+    ...nextPayload,
+    full_address: buildFullAddress(nextPayload)
   }
 }
 
@@ -98,7 +145,7 @@ async function getAddressList(event, env) {
 async function createAddress(event, env) {
   const userId = requireOpenid(env)
   const now = getNow(env)
-  const payload = normalizeAddressPayload(getPayload(event))
+  const payload = await enrichAddressArea(normalizeAddressPayload(getPayload(event)), env)
   validateAddressPayload(payload)
 
   if (payload.is_default) {
@@ -119,10 +166,10 @@ async function updateAddress(event, env) {
   const payload = getPayload(event)
   const currentAddress = await requireOwnedAddress(payload.addressId, env)
   const now = getNow(env)
-  const nextAddress = normalizeAddressPayload({
+  const nextAddress = await enrichAddressArea(normalizeAddressPayload({
     ...currentAddress,
     ...payload
-  })
+  }), env)
   validateAddressPayload(nextAddress)
 
   if (nextAddress.is_default) {

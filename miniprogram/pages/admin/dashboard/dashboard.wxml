@@ -32,6 +32,8 @@
       <button class="entry-item" bindtap="goUsers">用户管理</button>
       <button class="entry-item" bindtap="goWorkers">师傅审核</button>
       <button class="entry-item" bindtap="goAfterSales">售后管理</button>
+      <button class="entry-item" bindtap="goAreas">区域管理</button>
+      <button class="entry-item" bindtap="goDispatchLogs">派单日志</button>
       <button class="entry-item" bindtap="goServices">服务管理</button>
       <button class="entry-item" bindtap="goCategories">分类管理</button>
     </view>

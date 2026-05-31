@@ -1,0 +1,26 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">只展示分类、区域和接单状态符合条件的师傅</view>
+  </view>
+
+  <view class="panel">
+    <textarea class="form-textarea" value="{{ reason }}" placeholder="指派备注" bindinput="handleReasonInput"></textarea>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载师傅"></loading-view>
+  <block wx:elif="{{ workers.length }}">
+    <view wx:for="{{ workers }}" wx:key="_id" class="panel">
+      <view class="section-title">{{ item.name }}</view>
+      <view class="muted-text">{{ item.service_category }} · {{ item.service_area }}</view>
+      <button
+        class="primary-button"
+        data-id="{{ item._id }}"
+        loading="{{ submittingId === item._id }}"
+        disabled="{{ submittingId === item._id }}"
+        bindtap="assignWorker"
+      >指派</button>
+    </view>
+  </block>
+  <empty-state wx:else title="暂无可指派师傅" description="请检查师傅服务分类、小区和接单状态"></empty-state>
+</view>
