@@ -20,12 +20,18 @@ const ORDER_STATUS_TEXT = Object.freeze({
 
 const PAY_STATUS = Object.freeze({
   UNPAID: 'unpaid',
-  PAID: 'paid'
+  PAYING: 'paying',
+  PAID: 'paid',
+  FAILED: 'failed',
+  REFUNDED: 'refunded'
 })
 
 const PAY_STATUS_TEXT = Object.freeze({
   [PAY_STATUS.UNPAID]: '未支付',
-  [PAY_STATUS.PAID]: '已支付'
+  [PAY_STATUS.PAYING]: '支付中',
+  [PAY_STATUS.PAID]: '已支付',
+  [PAY_STATUS.FAILED]: '支付失败',
+  [PAY_STATUS.REFUNDED]: '已退款'
 })
 
 const WORKER_AUDIT_STATUS = Object.freeze({

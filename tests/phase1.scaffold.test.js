@@ -12,6 +12,7 @@ const expectedPages = [
     'pages/order-submit/order-submit',
     'pages/order-list/order-list',
     'pages/order-detail/order-detail',
+    'pages/pay-result/pay-result',
     'pages/message-list/message-list',
     'pages/worker-detail/worker-detail',
     'pages/review/review',

@@ -1,4 +1,6 @@
 const orderService = require('../../services/order.service')
+const paymentService = require('../../services/payment.service')
+const { isWechatPayMode } = require('../../config/payment')
 const {
   formatOrderStatus,
   formatPayStatus,
@@ -60,6 +62,15 @@ Page({
     })
   },
 
+  async handlePay() {
+    if (isWechatPayMode()) {
+      await this.handleWechatPay()
+      return
+    }
+
+    await this.handleMockPay()
+  },
+
   async handleMockPay() {
     this.setData({ submitting: true })
     showLoading('支付中')
@@ -69,6 +80,35 @@ Page({
       })
       this.applyOrder(data.order)
       showSuccess('支付成功')
+    } catch (error) {
+      showError(error.message || '支付失败')
+    } finally {
+      hideLoading()
+      this.setData({ submitting: false })
+    }
+  },
+
+  requestPayment(payParams) {
+    return new Promise((resolve, reject) => {
+      wx.requestPayment({
+        ...payParams,
+        success: resolve,
+        fail: reject
+      })
+    })
+  },
+
+  async handleWechatPay() {
+    this.setData({ submitting: true })
+    showLoading('支付中')
+    try {
+      const data = await paymentService.createPayment({
+        orderId: this.data.orderId
+      })
+      await this.requestPayment(data.payParams)
+      wx.redirectTo({
+        url: `/pages/pay-result/pay-result?orderId=${this.data.orderId}`
+      })
     } catch (error) {
       showError(error.message || '支付失败')
     } finally {

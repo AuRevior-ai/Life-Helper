@@ -1,0 +1,55 @@
+.result-panel {
+  text-align: center;
+}
+
+.result-mark {
+  width: 104rpx;
+  height: 104rpx;
+  margin: 8rpx auto 24rpx;
+  border-radius: 52rpx;
+  background: #edf2ef;
+  color: #1f7a68;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 104rpx;
+}
+
+.result-panel.failed .result-mark {
+  background: #fff1e8;
+  color: #c66b2d;
+}
+
+.result-panel.processing .result-mark {
+  color: #64716d;
+}
+
+.result-title {
+  color: #1f2d2a;
+  font-size: 36rpx;
+  font-weight: 800;
+}
+
+.result-desc {
+  margin-top: 16rpx;
+  color: #64716d;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.result-meta {
+  margin-top: 30rpx;
+  padding-top: 22rpx;
+  border-top: 1rpx solid #edf2ef;
+}
+
+.result-meta view {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  color: #33433f;
+  font-size: 26rpx;
+}
+
+.result-meta text:first-child {
+  color: #72807b;
+}

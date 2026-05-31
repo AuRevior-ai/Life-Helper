@@ -12,7 +12,10 @@ const ORDER_STATUS = Object.freeze({
 
 const PAY_STATUS = Object.freeze({
   UNPAID: 'unpaid',
-  PAID: 'paid'
+  PAYING: 'paying',
+  PAID: 'paid',
+  FAILED: 'failed',
+  REFUNDED: 'refunded'
 })
 
 const APPOINTMENT_TIME_SLOTS = Object.freeze([
@@ -318,8 +321,16 @@ async function createOrder(event, env) {
     appointment_slot: appointment.appointment_slot,
     appointment_time: appointment.appointment_time,
     remark: trimText(payload.remark),
+    out_trade_no: '',
+    transaction_id: '',
+    prepay_id: '',
+    pay_amount: Number(service.price || 0),
     status: ORDER_STATUS.PENDING_PAY,
     pay_status: PAY_STATUS.UNPAID,
+    paid_at: null,
+    pay_error: '',
+    notify_received_at: null,
+    last_pay_attempt_at: null,
     created_at: now,
     updated_at: now
   })

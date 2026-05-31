@@ -67,7 +67,7 @@
       class="primary-button"
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
-      bindtap="handleMockPay"
+      bindtap="handlePay"
     >模拟支付</button>
 
     <button

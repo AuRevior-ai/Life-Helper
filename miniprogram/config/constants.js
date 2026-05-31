@@ -18,7 +18,8 @@ const CLOUD_FUNCTIONS = Object.freeze({
   WORKER: 'worker',
   REVIEW: 'review',
   ADMIN: 'admin',
-  MESSAGE: 'message'
+  MESSAGE: 'message',
+  PAYMENT: 'payment'
 })
 
 const COLLECTIONS = Object.freeze({
@@ -29,7 +30,8 @@ const COLLECTIONS = Object.freeze({
   WORKERS: 'workers',
   ORDERS: 'orders',
   REVIEWS: 'reviews',
-  MESSAGES: 'messages'
+  MESSAGES: 'messages',
+  PAYMENT_LOGS: 'payment_logs'
 })
 
 module.exports = {
