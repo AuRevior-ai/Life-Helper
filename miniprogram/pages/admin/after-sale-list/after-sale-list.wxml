@@ -1,0 +1,28 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">审核用户售后申请并处理模拟退款</view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载售后"></loading-view>
+
+  <block wx:elif="{{ afterSales.length }}">
+    <view
+      wx:for="{{ afterSales }}"
+      wx:key="_id"
+      class="after-sale-card panel"
+      data-id="{{ item._id }}"
+      bindtap="goDetail"
+    >
+      <view class="card-top">
+        <view class="card-title">{{ item.after_sale_no }}</view>
+        <view class="card-status">{{ item.statusText }}</view>
+      </view>
+      <view class="card-line">订单：{{ item.order_no }}</view>
+      <view class="card-line">金额：{{ item.amountText }}</view>
+      <view class="card-line">原因：{{ item.reason }}</view>
+    </view>
+  </block>
+
+  <empty-state wx:else title="暂无售后申请" description="用户提交后会显示在这里"></empty-state>
+</view>

@@ -34,6 +34,55 @@ const PAY_STATUS_TEXT = Object.freeze({
   [PAY_STATUS.REFUNDED]: '已退款'
 })
 
+const AFTER_SALE_STATUS = Object.freeze({
+  NONE: 'none',
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  CANCELED: 'canceled',
+  REFUNDED: 'refunded'
+})
+
+const AFTER_SALE_STATUS_TEXT = Object.freeze({
+  [AFTER_SALE_STATUS.NONE]: '无售后',
+  [AFTER_SALE_STATUS.PENDING]: '售后待审核',
+  [AFTER_SALE_STATUS.APPROVED]: '售后已通过',
+  [AFTER_SALE_STATUS.REJECTED]: '售后未通过',
+  [AFTER_SALE_STATUS.CANCELED]: '售后已取消',
+  [AFTER_SALE_STATUS.REFUNDED]: '已退款'
+})
+
+const AFTER_SALE_TYPE = Object.freeze({
+  REFUND_ONLY: 'refund_only',
+  CANCEL_AND_REFUND: 'cancel_and_refund'
+})
+
+const AFTER_SALE_TYPE_TEXT = Object.freeze({
+  [AFTER_SALE_TYPE.REFUND_ONLY]: '仅退款',
+  [AFTER_SALE_TYPE.CANCEL_AND_REFUND]: '取消并退款'
+})
+
+const REFUND_STATUS = Object.freeze({
+  NONE: 'none',
+  PENDING: 'pending',
+  SUCCESS: 'success',
+  FAILED: 'failed',
+  MOCK_SUCCESS: 'mock_success'
+})
+
+const REFUND_STATUS_TEXT = Object.freeze({
+  [REFUND_STATUS.NONE]: '未退款',
+  [REFUND_STATUS.PENDING]: '退款处理中',
+  [REFUND_STATUS.SUCCESS]: '退款成功',
+  [REFUND_STATUS.FAILED]: '退款失败',
+  [REFUND_STATUS.MOCK_SUCCESS]: '模拟退款成功'
+})
+
+const REFUND_CHANNEL = Object.freeze({
+  MOCK: 'mock',
+  WECHAT: 'wechat'
+})
+
 const WORKER_AUDIT_STATUS = Object.freeze({
   PENDING: 'pending',
   APPROVED: 'approved',
@@ -60,6 +109,11 @@ const MESSAGE_TYPE = Object.freeze({
   SERVICE_STARTED: 'service_started',
   SERVICE_FINISHED: 'service_finished',
   ORDER_COMPLETED: 'order_completed',
+  AFTER_SALE_CREATED: 'after_sale_created',
+  AFTER_SALE_APPROVED: 'after_sale_approved',
+  AFTER_SALE_REJECTED: 'after_sale_rejected',
+  REFUND_SUCCESS: 'refund_success',
+  REFUND_FAILED: 'refund_failed',
   WORKER_APPROVED: 'worker_approved',
   WORKER_REJECTED: 'worker_rejected',
   SYSTEM: 'system'
@@ -71,6 +125,11 @@ const MESSAGE_TYPE_TEXT = Object.freeze({
   [MESSAGE_TYPE.SERVICE_STARTED]: '服务已开始',
   [MESSAGE_TYPE.SERVICE_FINISHED]: '服务已完成',
   [MESSAGE_TYPE.ORDER_COMPLETED]: '订单已完成',
+  [MESSAGE_TYPE.AFTER_SALE_CREATED]: '售后已提交',
+  [MESSAGE_TYPE.AFTER_SALE_APPROVED]: '售后已通过',
+  [MESSAGE_TYPE.AFTER_SALE_REJECTED]: '售后未通过',
+  [MESSAGE_TYPE.REFUND_SUCCESS]: '退款成功',
+  [MESSAGE_TYPE.REFUND_FAILED]: '退款失败',
   [MESSAGE_TYPE.WORKER_APPROVED]: '审核通过',
   [MESSAGE_TYPE.WORKER_REJECTED]: '审核未通过',
   [MESSAGE_TYPE.SYSTEM]: '系统消息'
@@ -81,6 +140,13 @@ module.exports = {
   ORDER_STATUS_TEXT,
   PAY_STATUS,
   PAY_STATUS_TEXT,
+  AFTER_SALE_STATUS,
+  AFTER_SALE_STATUS_TEXT,
+  AFTER_SALE_TYPE,
+  AFTER_SALE_TYPE_TEXT,
+  REFUND_STATUS,
+  REFUND_STATUS_TEXT,
+  REFUND_CHANNEL,
   WORKER_AUDIT_STATUS,
   WORKER_AUDIT_STATUS_TEXT,
   COMMON_STATUS,

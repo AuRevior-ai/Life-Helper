@@ -1,0 +1,27 @@
+.after-sale-card {
+  margin-bottom: 20rpx;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.card-title {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.card-status {
+  color: #1f7a68;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.card-line {
+  margin-top: 12rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}

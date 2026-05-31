@@ -1,0 +1,39 @@
+.detail-panel,
+.remark-panel {
+  margin-bottom: 22rpx;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+  color: #33433f;
+  font-size: 26rpx;
+}
+
+.detail-row:last-child {
+  border-bottom: 0;
+}
+
+.detail-row text:first-child {
+  flex: 0 0 150rpx;
+  color: #72807b;
+}
+
+.detail-row text:last-child {
+  flex: 1;
+  text-align: right;
+}
+
+.form-label {
+  margin-bottom: 14rpx;
+  color: #33433f;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+textarea {
+  min-height: 150rpx;
+}

@@ -331,6 +331,12 @@ async function createOrder(event, env) {
     pay_error: '',
     notify_received_at: null,
     last_pay_attempt_at: null,
+    after_sale_status: 'none',
+    refund_status: 'none',
+    refund_amount: 0,
+    refunded_at: null,
+    after_sale_id: '',
+    refund_no: '',
     created_at: now,
     updated_at: now
   })

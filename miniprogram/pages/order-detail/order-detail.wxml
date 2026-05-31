@@ -25,6 +25,14 @@
           <text class="meta-label">支付状态</text>
           <text class="meta-value">{{ payStatusText }}</text>
         </view>
+        <view>
+          <text class="meta-label">售后状态</text>
+          <text class="meta-value">{{ afterSaleStatusText }}</text>
+        </view>
+        <view>
+          <text class="meta-label">退款状态</text>
+          <text class="meta-value">{{ refundStatusText }}</text>
+        </view>
       </view>
     </view>
 
@@ -83,6 +91,18 @@
       class="primary-button"
       bindtap="goReview"
     >去评价</button>
+
+    <button
+      wx:if="{{ canApplyAfterSale }}"
+      class="ghost-button"
+      bindtap="goAfterSaleApply"
+    >申请售后 / 申请退款</button>
+
+    <button
+      wx:if="{{ canViewAfterSale }}"
+      class="ghost-button"
+      bindtap="goAfterSaleDetail"
+    >查看售后</button>
   </block>
 
   <empty-state

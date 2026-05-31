@@ -53,6 +53,10 @@ Page({
     wx.navigateTo({ url: '/pages/admin/worker-audit/worker-audit' })
   },
 
+  goAfterSales() {
+    wx.navigateTo({ url: '/pages/admin/after-sale-list/after-sale-list' })
+  },
+
   goServices() {
     wx.navigateTo({ url: '/pages/admin/service-list/service-list' })
   },

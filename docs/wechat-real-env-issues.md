@@ -28,8 +28,9 @@
 
 - AppID 已替换为真实小程序 AppID，云环境选择正确。
 - 云函数已上传并部署，且依赖已安装。
-- `users`、`orders`、`workers`、`reviews`、`messages`、`service_categories`、`services`、`admin_operation_logs` 集合可读写。
+- `users`、`orders`、`workers`、`reviews`、`messages`、`service_categories`、`services`、`admin_operation_logs`、`payment_logs`、`after_sales`、`refund_logs` 集合可读写。
 - 管理员初始化入口可用，初始化后不暴露调试能力给普通用户。
 - 用户、师傅、管理员三类账号 openid 区分清楚，测试数据不混用。
 - 消息点击可进入对应订单详情，并将消息标记为已读。
 - 服务分类和服务删除保护符合预期，已有业务记录时优先下架而不是删除。
+- 售后申请、管理员审核、模拟退款和退款日志符合预期；真实退款未配置前不得误判为真实资金退款。

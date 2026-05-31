@@ -1,0 +1,38 @@
+.form-panel {
+  margin-bottom: 24rpx;
+}
+
+.form-item {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+}
+
+.form-item:last-child {
+  border-bottom: 0;
+}
+
+.form-label {
+  margin-bottom: 12rpx;
+  color: #33433f;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 8rpx 0;
+  color: #33433f;
+  font-size: 26rpx;
+}
+
+textarea {
+  min-height: 160rpx;
+}
+
+.image-count {
+  margin-top: 12rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}

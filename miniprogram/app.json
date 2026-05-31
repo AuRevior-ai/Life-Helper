@@ -8,6 +8,8 @@
     "pages/order-detail/order-detail",
     "pages/pay-result/pay-result",
     "pages/message-list/message-list",
+    "pages/after-sale/apply/apply",
+    "pages/after-sale/detail/detail",
     "pages/worker-detail/worker-detail",
     "pages/review/review",
     "pages/address-list/address-list",
@@ -28,6 +30,8 @@
     "pages/admin/service-list/service-list",
     "pages/admin/service-edit/service-edit",
     "pages/admin/worker-audit/worker-audit",
+    "pages/admin/after-sale-list/after-sale-list",
+    "pages/admin/after-sale-detail/after-sale-detail",
     "pages/admin/order-list/order-list",
     "pages/admin/order-detail/order-detail",
     "pages/admin/user-list/user-list"

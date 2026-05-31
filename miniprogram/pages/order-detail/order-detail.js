@@ -2,6 +2,10 @@ const orderService = require('../../services/order.service')
 const paymentService = require('../../services/payment.service')
 const { isWechatPayMode } = require('../../config/payment')
 const {
+  AFTER_SALE_STATUS_TEXT,
+  REFUND_STATUS_TEXT
+} = require('../../config/status')
+const {
   formatOrderStatus,
   formatPayStatus,
   formatPrice
@@ -16,9 +20,13 @@ Page({
     priceText: '¥0.00',
     statusText: '',
     payStatusText: '',
+    afterSaleStatusText: '',
+    refundStatusText: '',
     canPay: false,
     canCancel: false,
     canReview: false,
+    canApplyAfterSale: false,
+    canViewAfterSale: false,
     loading: true,
     submitting: false
   },
@@ -56,9 +64,16 @@ Page({
       priceText: formatPrice(order.price),
       statusText: formatOrderStatus(order.status),
       payStatusText: formatPayStatus(order.pay_status),
+      afterSaleStatusText: AFTER_SALE_STATUS_TEXT[order.after_sale_status || 'none'] || '无售后',
+      refundStatusText: REFUND_STATUS_TEXT[order.refund_status || 'none'] || '未退款',
       canPay: order.status === 'pending_pay' && order.pay_status === 'unpaid',
       canCancel: ['pending_pay', 'pending_accept'].includes(order.status),
-      canReview: order.status === 'pending_review'
+      canReview: order.status === 'pending_review',
+      canApplyAfterSale:
+        ['pending_accept', 'accepted', 'serving', 'pending_review', 'completed'].includes(order.status) &&
+        order.pay_status === 'paid' &&
+        (!order.after_sale_status || order.after_sale_status === 'none'),
+      canViewAfterSale: Boolean(order.after_sale_id)
     })
   },
 
@@ -143,6 +158,18 @@ Page({
   goReview() {
     wx.navigateTo({
       url: `/pages/review/review?orderId=${this.data.orderId}`
+    })
+  },
+
+  goAfterSaleApply() {
+    wx.navigateTo({
+      url: `/pages/after-sale/apply/apply?orderId=${this.data.orderId}`
+    })
+  },
+
+  goAfterSaleDetail() {
+    wx.navigateTo({
+      url: `/pages/after-sale/detail/detail?afterSaleId=${this.data.order.after_sale_id}`
     })
   },
 
