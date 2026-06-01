@@ -282,7 +282,7 @@ test('order and review status changes create in-app messages without breaking fl
   assert.deepEqual(messages.records.map((message) => message.type), [
     'order_created',
     'order_accepted',
-    'order_completed'
+    'review_created'
   ])
   assert.equal(messages.records[0].user_id, 'openid_user')
   assert.equal(messages.records[2].user_id, 'openid_worker')

@@ -254,6 +254,76 @@ const PROMOTION_SOURCE = Object.freeze({
   MEMBER_AND_COUPON: 'member_and_coupon'
 })
 
+const REVIEW_STATUS = Object.freeze({
+  VISIBLE: 'visible',
+  HIDDEN: 'hidden',
+  DELETED: 'deleted'
+})
+
+const REVIEW_STATUS_TEXT = Object.freeze({
+  [REVIEW_STATUS.VISIBLE]: '正常展示',
+  [REVIEW_STATUS.HIDDEN]: '已隐藏',
+  [REVIEW_STATUS.DELETED]: '已删除'
+})
+
+const REVIEW_RATING_LEVEL = Object.freeze({
+  GOOD: 'good',
+  NEUTRAL: 'neutral',
+  BAD: 'bad'
+})
+
+const REVIEW_RATING_LEVEL_TEXT = Object.freeze({
+  [REVIEW_RATING_LEVEL.GOOD]: '好评',
+  [REVIEW_RATING_LEVEL.NEUTRAL]: '中评',
+  [REVIEW_RATING_LEVEL.BAD]: '差评'
+})
+
+const REVIEW_APPEAL_STATUS = Object.freeze({
+  NONE: 'none',
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  CANCELED: 'canceled'
+})
+
+const REVIEW_APPEAL_STATUS_TEXT = Object.freeze({
+  [REVIEW_APPEAL_STATUS.NONE]: '无申诉',
+  [REVIEW_APPEAL_STATUS.PENDING]: '申诉待审核',
+  [REVIEW_APPEAL_STATUS.APPROVED]: '申诉已通过',
+  [REVIEW_APPEAL_STATUS.REJECTED]: '申诉未通过',
+  [REVIEW_APPEAL_STATUS.CANCELED]: '申诉已取消'
+})
+
+const TIP_STATUS = Object.freeze({
+  MOCK_SUCCESS: 'mock_success',
+  SUCCESS: 'success',
+  FAILED: 'failed',
+  REVERSED: 'reversed'
+})
+
+const TIP_STATUS_TEXT = Object.freeze({
+  [TIP_STATUS.MOCK_SUCCESS]: '模拟打赏成功',
+  [TIP_STATUS.SUCCESS]: '打赏成功',
+  [TIP_STATUS.FAILED]: '打赏失败',
+  [TIP_STATUS.REVERSED]: '已冲回'
+})
+
+const TIP_CHANNEL = Object.freeze({
+  MOCK: 'mock',
+  WECHAT: 'wechat'
+})
+
+const REVIEW_ACTION_TYPE = Object.freeze({
+  CREATE_REVIEW: 'create_review',
+  ADD_FOLLOWUP: 'add_followup',
+  WORKER_REPLY: 'worker_reply',
+  HIDE_REVIEW: 'hide_review',
+  RESTORE_REVIEW: 'restore_review',
+  APPEAL_CREATE: 'appeal_create',
+  APPEAL_APPROVE: 'appeal_approve',
+  APPEAL_REJECT: 'appeal_reject'
+})
+
 const WORKER_AUDIT_STATUS = Object.freeze({
   PENDING: 'pending',
   APPROVED: 'approved',
@@ -285,6 +355,13 @@ const MESSAGE_TYPE = Object.freeze({
   AFTER_SALE_REJECTED: 'after_sale_rejected',
   REFUND_SUCCESS: 'refund_success',
   REFUND_FAILED: 'refund_failed',
+  REVIEW_CREATED: 'review_created',
+  REVIEW_FOLLOWUP_ADDED: 'review_followup_added',
+  WORKER_REVIEW_REPLY: 'worker_review_reply',
+  REVIEW_APPEAL_CREATED: 'review_appeal_created',
+  REVIEW_APPEAL_APPROVED: 'review_appeal_approved',
+  REVIEW_APPEAL_REJECTED: 'review_appeal_rejected',
+  TIP_CREATED: 'tip_created',
   WORKER_APPROVED: 'worker_approved',
   WORKER_REJECTED: 'worker_rejected',
   SYSTEM: 'system'
@@ -301,6 +378,13 @@ const MESSAGE_TYPE_TEXT = Object.freeze({
   [MESSAGE_TYPE.AFTER_SALE_REJECTED]: '售后未通过',
   [MESSAGE_TYPE.REFUND_SUCCESS]: '退款成功',
   [MESSAGE_TYPE.REFUND_FAILED]: '退款失败',
+  [MESSAGE_TYPE.REVIEW_CREATED]: '评价已提交',
+  [MESSAGE_TYPE.REVIEW_FOLLOWUP_ADDED]: '用户已追评',
+  [MESSAGE_TYPE.WORKER_REVIEW_REPLY]: '师傅已回复',
+  [MESSAGE_TYPE.REVIEW_APPEAL_CREATED]: '申诉已提交',
+  [MESSAGE_TYPE.REVIEW_APPEAL_APPROVED]: '申诉已通过',
+  [MESSAGE_TYPE.REVIEW_APPEAL_REJECTED]: '申诉未通过',
+  [MESSAGE_TYPE.TIP_CREATED]: '收到打赏',
   [MESSAGE_TYPE.WORKER_APPROVED]: '审核通过',
   [MESSAGE_TYPE.WORKER_REJECTED]: '审核未通过',
   [MESSAGE_TYPE.SYSTEM]: '系统消息'
@@ -343,6 +427,16 @@ module.exports = {
   USER_COUPON_STATUS,
   USER_COUPON_STATUS_TEXT,
   PROMOTION_SOURCE,
+  REVIEW_STATUS,
+  REVIEW_STATUS_TEXT,
+  REVIEW_RATING_LEVEL,
+  REVIEW_RATING_LEVEL_TEXT,
+  REVIEW_APPEAL_STATUS,
+  REVIEW_APPEAL_STATUS_TEXT,
+  TIP_STATUS,
+  TIP_STATUS_TEXT,
+  TIP_CHANNEL,
+  REVIEW_ACTION_TYPE,
   WORKER_AUDIT_STATUS,
   WORKER_AUDIT_STATUS_TEXT,
   COMMON_STATUS,

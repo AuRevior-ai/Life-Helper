@@ -1,0 +1,2 @@
+.list-card { padding: 24rpx; margin-bottom: 16rpx; }
+.muted { color: #64716d; margin-top: 8rpx; }

@@ -29,6 +29,7 @@ Page({
     canPay: false,
     canCancel: false,
     canReview: false,
+    canTip: false,
     canApplyAfterSale: false,
     canViewAfterSale: false,
     loading: true,
@@ -77,6 +78,12 @@ Page({
       canPay: order.status === 'pending_pay' && order.pay_status === 'unpaid',
       canCancel: ['pending_pay', 'pending_accept'].includes(order.status),
       canReview: order.status === 'pending_review',
+      canTip:
+        order.status === 'completed' &&
+        order.pay_status === 'paid' &&
+        order.worker_id &&
+        (!order.refund_status || order.refund_status === 'none') &&
+        (!order.after_sale_status || order.after_sale_status === 'none'),
       canApplyAfterSale:
         ['pending_accept', 'accepted', 'serving', 'pending_review', 'completed'].includes(order.status) &&
         order.pay_status === 'paid' &&
@@ -166,6 +173,12 @@ Page({
   goReview() {
     wx.navigateTo({
       url: `/pages/review/review?orderId=${this.data.orderId}`
+    })
+  },
+
+  goTip() {
+    wx.navigateTo({
+      url: `/pages/tip/create/create?orderId=${this.data.orderId}`
     })
   },
 

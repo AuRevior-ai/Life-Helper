@@ -1,0 +1,7 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+  </view>
+  <textarea class="form-textarea" value="{{ content }}" placeholder="填写追加评价" bindinput="onInput"></textarea>
+  <button class="primary-button" loading="{{ submitting }}" disabled="{{ submitting }}" bindtap="submit">提交追评</button>
+</view>

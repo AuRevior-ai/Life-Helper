@@ -1,0 +1,11 @@
+<view class="page-shell">
+  <view class="page-header"><view class="page-title">{{ title }}</view></view>
+  <loading-view wx:if="{{ loading }}" text="正在加载打赏"></loading-view>
+  <view wx:elif="{{ tips.length }}">
+    <view wx:for="{{ tips }}" wx:key="_id" class="panel list-card">
+      <view>打赏金额：{{ item.amountText }}</view>
+      <view class="muted">师傅收益：{{ item.incomeText }}</view>
+    </view>
+  </view>
+  <empty-state wx:else title="暂无打赏" description="收到用户打赏后会展示在这里"></empty-state>
+</view>

@@ -81,6 +81,18 @@ Page({
     wx.navigateTo({ url: '/pages/admin/coupon-template-list/coupon-template-list' })
   },
 
+  goReviews() {
+    wx.navigateTo({ url: '/pages/admin/review-list/review-list' })
+  },
+
+  goReviewAppeals() {
+    wx.navigateTo({ url: '/pages/admin/review-appeal-list/review-appeal-list' })
+  },
+
+  goTipLogs() {
+    wx.navigateTo({ url: '/pages/admin/tip-log-list/tip-log-list' })
+  },
+
   goServices() {
     wx.navigateTo({ url: '/pages/admin/service-list/service-list' })
   },

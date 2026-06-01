@@ -32,6 +32,9 @@ const expectedPages = [
   'pages/worker/order-list/order-list',
   'pages/worker/order-detail/order-detail',
   'pages/worker/income/income',
+  'pages/worker/review-list/review-list',
+  'pages/worker/review-detail/review-detail',
+  'pages/worker/tip-list/tip-list',
   'pages/worker/profile/profile',
   'pages/admin/dashboard/dashboard',
   'pages/admin/category-list/category-list',
@@ -51,9 +54,17 @@ const expectedPages = [
   'pages/admin/member-plan-list/member-plan-list',
   'pages/admin/coupon-template-list/coupon-template-list',
   'pages/admin/coupon-template-edit/coupon-template-edit',
+  'pages/admin/review-list/review-list',
+  'pages/admin/review-detail/review-detail',
+  'pages/admin/review-appeal-list/review-appeal-list',
+  'pages/admin/review-appeal-detail/review-appeal-detail',
+  'pages/admin/tip-log-list/tip-log-list',
   'pages/admin/order-list/order-list',
   'pages/admin/order-detail/order-detail',
-  'pages/admin/user-list/user-list'
+  'pages/admin/user-list/user-list',
+  'pages/review/detail/detail',
+  'pages/review/followup/followup',
+  'pages/tip/create/create'
 ]
 
 function absolute(relativePath) {

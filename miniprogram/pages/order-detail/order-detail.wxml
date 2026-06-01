@@ -113,6 +113,12 @@
     >去评价</button>
 
     <button
+      wx:if="{{ canTip }}"
+      class="primary-button"
+      bindtap="goTip"
+    >打赏师傅</button>
+
+    <button
       wx:if="{{ canApplyAfterSale }}"
       class="ghost-button"
       bindtap="goAfterSaleApply"

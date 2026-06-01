@@ -1,0 +1,11 @@
+<view class="page-shell">
+  <view class="page-header"><view class="page-title">{{ title }}</view></view>
+  <loading-view wx:if="{{ loading }}" text="正在加载申诉"></loading-view>
+  <view wx:elif="{{ appeals.length }}">
+    <view wx:for="{{ appeals }}" wx:key="_id" class="panel list-card" data-id="{{ item._id }}" bindtap="goDetail">
+      <view>{{ item.reason }} · {{ item.status }}</view>
+      <view class="muted">{{ item.order_no }}</view>
+    </view>
+  </view>
+  <empty-state wx:else title="暂无申诉" description="师傅提交差评申诉后会展示在这里"></empty-state>
+</view>

@@ -1,0 +1,16 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">评价隐藏会保留历史记录</view>
+  </view>
+  <loading-view wx:if="{{ loading }}" text="正在加载评价"></loading-view>
+  <view wx:elif="{{ review }}" class="panel">
+    <view class="info-row"><text>评分</text><text>{{ review.rating }} 分</text></view>
+    <view class="info-row"><text>评价</text><text>{{ review.content }}</text></view>
+    <view class="info-row"><text>标签</text><text>{{ review.tags }}</text></view>
+    <view class="info-row"><text>追评</text><text>{{ review.followup_content || '暂无' }}</text></view>
+    <view class="info-row"><text>师傅回复</text><text>{{ review.worker_reply_content || '暂无' }}</text></view>
+    <button wx:if="{{ !review.followup_content }}" class="primary-button" bindtap="goFollowup">追加评价</button>
+  </view>
+  <empty-state wx:else title="评价不存在" description="请返回订单详情重新查看"></empty-state>
+</view>

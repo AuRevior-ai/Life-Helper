@@ -7,12 +7,32 @@ function createReviewRepository(db) {
       return result.data[0] || null
     },
 
+    async findById(id) {
+      try {
+        const result = await reviews.doc(id).get()
+        return result.data || null
+      } catch (error) {
+        return null
+      }
+    },
+
     async findByWorkerId(workerId) {
       const result = await reviews
         .where({ worker_id: workerId })
         .orderBy('created_at', 'desc')
         .get()
       return result.data || []
+    },
+
+    async findAll() {
+      const result = await reviews.orderBy('created_at', 'desc').get()
+      return result.data || []
+    },
+
+    async updateById(id, data) {
+      await reviews.doc(id).update({ data })
+      const result = await reviews.doc(id).get()
+      return result.data || null
     },
 
     async create(data) {

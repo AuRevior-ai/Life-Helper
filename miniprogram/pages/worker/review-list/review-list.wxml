@@ -1,0 +1,11 @@
+<view class="page-shell">
+  <view class="page-header"><view class="page-title">{{ title }}</view></view>
+  <loading-view wx:if="{{ loading }}" text="正在加载评价"></loading-view>
+  <view wx:elif="{{ reviews.length }}">
+    <view wx:for="{{ reviews }}" wx:key="_id" class="panel list-card" data-id="{{ item._id }}" bindtap="goDetail">
+      <view>{{ item.service_name }} · {{ item.rating }} 分</view>
+      <view class="muted">{{ item.content }}</view>
+    </view>
+  </view>
+  <empty-state wx:else title="暂无评价" description="完成订单后会展示用户评价"></empty-state>
+</view>
