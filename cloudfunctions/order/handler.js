@@ -59,6 +59,23 @@ function getNow(env) {
   return env.now ? env.now() : new Date()
 }
 
+async function bestEffort(promiseFactory, env) {
+  const timeoutMs = Number(env.sideEffectTimeoutMs || 800)
+  let timeoutId
+  try {
+    return await Promise.race([
+      promiseFactory(),
+      new Promise((resolve) => {
+        timeoutId = setTimeout(() => resolve(null), timeoutMs)
+      })
+    ])
+  } catch (error) {
+    return null
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId)
+  }
+}
+
 function getPayload(event = {}) {
   if (event.payload && typeof event.payload === 'object') {
     return event.payload
@@ -159,16 +176,12 @@ async function safeCreateMessage(env, data) {
     return null
   }
 
-  try {
-    return await env.messages.create({
+  return bestEffort(() => env.messages.create({
       role: 'user',
       related_type: 'order',
       is_read: false,
       ...data
-    })
-  } catch (error) {
-    return null
-  }
+    }), env)
 }
 
 async function callPromotion(env, action, payload) {
@@ -651,7 +664,7 @@ async function acceptOrder(event, env) {
   })
 
   if (env.dispatchLogs && env.dispatchLogs.create) {
-    await env.dispatchLogs.create({
+    await bestEffort(() => env.dispatchLogs.create({
       order_id: order._id,
       order_no: order.order_no || '',
       action: 'worker_accept',
@@ -663,7 +676,7 @@ async function acceptOrder(event, env) {
       to_status: ORDER_STATUS.ACCEPTED,
       reason: '师傅主动接单',
       created_at: now
-    })
+    }), env)
   }
 
   return success({ order: updatedOrder })
