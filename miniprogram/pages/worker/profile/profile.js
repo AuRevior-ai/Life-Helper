@@ -61,5 +61,11 @@ Page({
     wx.navigateTo({
       url: '/pages/message-list/message-list'
     })
+  },
+
+  goReviewList() {
+    wx.navigateTo({
+      url: '/pages/worker/review-list/review-list'
+    })
   }
 })

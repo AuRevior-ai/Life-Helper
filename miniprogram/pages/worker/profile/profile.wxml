@@ -12,5 +12,6 @@
   <view class="panel muted-text">
     服务小区：{{ worker.service_area || '未配置' }}
   </view>
+  <button class="primary-button" bindtap="goReviewList">用户评价</button>
   <button class="primary-button" bindtap="goMessageList">消息中心</button>
 </view>

@@ -14,9 +14,16 @@
 
     <view class="identity-card worker panel" bindtap="enterWorkerRole">
       <view class="identity-card__label">接单服务</view>
-      <view class="identity-card__title">师傅/商家端</view>
-      <view class="identity-card__desc">申请入驻、查看审核状态，审核通过后进入接单大厅。</view>
+      <view class="identity-card__title">个人师傅端</view>
+      <view class="identity-card__desc">申请师傅入驻、查看审核状态，审核通过后进入接单大厅。</view>
       <view class="identity-card__action">进入工作台</view>
+    </view>
+
+    <view class="identity-card worker panel" bindtap="enterMerchantRole">
+      <view class="identity-card__label">店铺服务</view>
+      <view class="identity-card__title">商家端</view>
+      <view class="identity-card__desc">申请商家入驻、配置店铺服务，审核通过后处理商家订单。</view>
+      <view class="identity-card__action">进入商家端</view>
     </view>
 
     <view class="identity-card admin panel" bindtap="enterAdminRole">

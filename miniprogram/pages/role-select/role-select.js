@@ -74,6 +74,22 @@ Page({
     })
   },
 
+  enterMerchantRole() {
+    if (!this.requireLogin()) return
+
+    const user = setCurrentIdentityRole(USER_ROLE.WORKER)
+    if (user) {
+      getApp().globalData.currentUser = user
+      this.setData({
+        currentUser: user,
+        roleText: getCurrentUserRoleText()
+      })
+    }
+    wx.navigateTo({
+      url: '/pages/merchant/audit-status/audit-status'
+    })
+  },
+
   enterAdminRole() {
     if (!this.requireLogin()) return
 

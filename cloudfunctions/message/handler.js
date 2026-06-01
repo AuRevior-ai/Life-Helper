@@ -68,6 +68,9 @@ async function getMessageList(event, env) {
   const payload = getPayload(event)
   const userId = requireOpenid(env)
   let messages = await env.messages.findByUserId(userId)
+  if (payload.role) {
+    messages = messages.filter((message) => !message.role || message.role === payload.role)
+  }
 
   if (payload.is_read !== undefined || payload.isRead !== undefined) {
     const isRead = payload.is_read !== undefined ? payload.is_read : payload.isRead
@@ -104,6 +107,20 @@ async function markMessageRead(event, env) {
 
 async function markAllMessagesRead(event, env) {
   const userId = requireOpenid(env)
+  const payload = getPayload(event)
+  if (payload.role) {
+    const messages = await env.messages.findByUserId(userId)
+    const targetMessages = messages.filter((message) => !message.role || message.role === payload.role)
+    for (const message of targetMessages) {
+      if (!message.is_read) {
+        await env.messages.updateById(message._id, {
+          is_read: true,
+          updated_at: getNow(env)
+        })
+      }
+    }
+    return success({ updated: true })
+  }
   await env.messages.markAllRead(userId, {
     is_read: true,
     updated_at: getNow(env)

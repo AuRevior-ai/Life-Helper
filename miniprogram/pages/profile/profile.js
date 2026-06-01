@@ -1,10 +1,12 @@
 const loginService = require('../../services/login.service')
 const {
   clearCurrentUser,
+  getCurrentIdentityRole,
   getCurrentUser,
   getCurrentUserRoleText,
   setCurrentUser
 } = require('../../utils/auth')
+const { USER_ROLE } = require('../../config/roles')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../utils/toast')
 
 Page({
@@ -16,7 +18,10 @@ Page({
     displayName: '未登录',
     displayPhone: '手机号待填写',
     roleText: '未登录',
-    statusText: '未登录'
+    statusText: '未登录',
+    isUserIdentity: false,
+    isWorkerIdentity: false,
+    isAdminIdentity: false
   },
 
   onShow() {
@@ -29,6 +34,7 @@ Page({
 
   applyCurrentUser(user) {
     const isLoggedIn = Boolean(user)
+    const activeRole = isLoggedIn ? getCurrentIdentityRole() : ''
     this.setData({
       currentUser: user,
       isLoggedIn,
@@ -36,7 +42,10 @@ Page({
       displayName: isLoggedIn ? user.nickname || '社区用户' : '未登录',
       displayPhone: isLoggedIn ? user.phone || '手机号待填写' : '登录后完善手机号',
       roleText: isLoggedIn ? getCurrentUserRoleText() : '未登录',
-      statusText: isLoggedIn ? this.getStatusText(user.status) : '未登录'
+      statusText: isLoggedIn ? this.getStatusText(user.status) : '未登录',
+      isUserIdentity: !isLoggedIn || activeRole === USER_ROLE.USER,
+      isWorkerIdentity: activeRole === USER_ROLE.WORKER,
+      isAdminIdentity: activeRole === USER_ROLE.ADMIN
     })
   },
 
@@ -104,6 +113,30 @@ Page({
   goOrderList() {
     wx.switchTab({
       url: '/pages/order-list/order-list'
+    })
+  },
+
+  goWorkerCenter() {
+    wx.navigateTo({
+      url: '/pages/worker/profile/profile'
+    })
+  },
+
+  goWorkerOrders() {
+    wx.navigateTo({
+      url: '/pages/worker/order-list/order-list'
+    })
+  },
+
+  goWorkerHall() {
+    wx.navigateTo({
+      url: '/pages/worker/order-hall/order-hall'
+    })
+  },
+
+  goMerchantApply() {
+    wx.navigateTo({
+      url: '/pages/merchant/audit-status/audit-status'
     })
   },
 

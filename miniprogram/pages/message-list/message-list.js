@@ -1,5 +1,6 @@
 const messageService = require('../../services/message.service')
 const { MESSAGE_TYPE_TEXT } = require('../../config/status')
+const { getCurrentIdentityRole } = require('../../utils/auth')
 const { showError, showSuccess } = require('../../utils/toast')
 
 function mapMessage(message = {}) {
@@ -41,7 +42,8 @@ Page({
     try {
       const data = await messageService.getMessageList({
         page,
-        pageSize: this.data.pageSize
+        pageSize: this.data.pageSize,
+        role: getCurrentIdentityRole()
       })
       const list = (data.list || data.messages || []).map(mapMessage)
       this.setData({
@@ -99,7 +101,7 @@ Page({
 
   async markAllRead() {
     try {
-      await messageService.markAllMessagesRead()
+      await messageService.markAllMessagesRead({ role: getCurrentIdentityRole() })
       showSuccess('已全部标记为已读')
       this.loadMessages(true)
     } catch (error) {
