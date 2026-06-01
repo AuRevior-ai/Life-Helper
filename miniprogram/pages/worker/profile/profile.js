@@ -30,7 +30,7 @@ Page({
       const selectedStatusIndex = Math.max(STATUS_OPTIONS.indexOf(onlineStatus), 0)
       this.setData({
         worker,
-        online_status,
+        online_status: onlineStatus,
         onlineStatusText: WORKER_ONLINE_STATUS_TEXT[onlineStatus],
         selectedStatusIndex
       })

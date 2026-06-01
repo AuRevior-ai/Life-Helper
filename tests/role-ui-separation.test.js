@@ -66,5 +66,6 @@ test('worker profile has direct review operation entry', () => {
   const workerProfileWxml = read('miniprogram/pages/worker/profile/profile.wxml')
 
   assert.match(workerProfileJs, /goReviewList/)
+  assert.match(workerProfileJs, /online_status:\s*onlineStatus/)
   assert.match(workerProfileWxml, /用户评价/)
 })
