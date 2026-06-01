@@ -2,7 +2,8 @@ function showToast(title, icon = 'none') {
   if (typeof wx === 'undefined') return
   wx.showToast({
     title,
-    icon
+    icon,
+    duration: 2000
   })
 }
 

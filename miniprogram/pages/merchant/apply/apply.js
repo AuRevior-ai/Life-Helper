@@ -1,4 +1,5 @@
 const merchantService = require('../../../services/merchant.service')
+const { showError, showSuccess } = require('../../../utils/toast')
 
 Page({
   data: {
@@ -15,8 +16,12 @@ Page({
   },
 
   async submit() {
-    const result = await merchantService.applyMerchant(this.data.form)
-    wx.showToast({ title: result.success ? '已提交' : result.message, icon: result.success ? 'success' : 'none' })
-    if (result.success) wx.navigateTo({ url: '/pages/merchant/audit-status/audit-status' })
+    try {
+      await merchantService.applyMerchant(this.data.form)
+      showSuccess('商家入驻申请已提交')
+      wx.navigateTo({ url: '/pages/merchant/audit-status/audit-status' })
+    } catch (error) {
+      showError(error.message || '提交失败')
+    }
   }
 })
