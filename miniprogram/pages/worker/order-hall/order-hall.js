@@ -53,9 +53,10 @@ Page({
     showLoading('接单中')
     try {
       const data = await orderService.acceptOrder({ orderId })
+      const acceptedOrderId = data && data.order && data.order._id ? data.order._id : orderId
       showSuccess('接单成功')
-      wx.navigateTo({
-        url: `/pages/worker/order-detail/order-detail?orderId=${data.order._id}`
+      wx.redirectTo({
+        url: `/pages/worker/order-detail/order-detail?orderId=${acceptedOrderId}`
       })
     } catch (error) {
       showError(error.message || '接单失败')
