@@ -72,8 +72,26 @@
     </view>
 
     <view class="order-total panel">
-      <text>订单金额</text>
-      <text>{{ priceText }}</text>
+      <text>服务原价</text>
+      <text>{{ originalAmountText }}</text>
+    </view>
+
+    <view class="promotion-panel panel">
+      <picker mode="selector" range="{{ couponLabels }}" value="{{ selectedCouponIndex }}" bindchange="handleCouponChange">
+        <view class="picker-value">优惠券：{{ couponLabels[selectedCouponIndex] }}</view>
+      </picker>
+      <view class="amount-row">
+        <text>会员优惠</text>
+        <text>{{ memberDiscountText }}</text>
+      </view>
+      <view class="amount-row">
+        <text>优惠券优惠</text>
+        <text>{{ couponDiscountText }}</text>
+      </view>
+      <view class="amount-row amount-row--payable">
+        <text>应付金额</text>
+        <text>{{ payableAmountText }}</text>
+      </view>
     </view>
 
     <button

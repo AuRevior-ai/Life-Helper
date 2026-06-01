@@ -25,6 +25,25 @@
   text-align: right;
 }
 
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  margin-top: 18rpx;
+}
+
+.status-item {
+  min-height: 108rpx;
+  box-sizing: border-box;
+}
+
+.status-amount {
+  margin-top: 10rpx;
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
 .income-list {
   display: flex;
   flex-direction: column;

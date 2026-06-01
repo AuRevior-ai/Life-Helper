@@ -1,0 +1,17 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">当前会员方案为基础配置，开通仍使用 mock 模式</view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载会员方案"></loading-view>
+
+  <block wx:else>
+    <view wx:for="{{ plans }}" wx:key="level" class="panel plan-card">
+      <view class="card-title">{{ item.levelText }}</view>
+      <view class="card-line">{{ item.priceText }} · {{ item.duration_days }} 天 · {{ item.discount_rate }} 折扣率</view>
+      <view class="card-line">状态：{{ item.status }}</view>
+    </view>
+  </block>
+</view>
+

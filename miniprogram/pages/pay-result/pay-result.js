@@ -50,7 +50,7 @@ Page({
     const failed = order.pay_status === 'failed'
     this.setData({
       order,
-      priceText: formatPrice(order.price),
+      priceText: formatPrice(order.pay_amount || order.payable_amount || order.price),
       state: paid ? 'success' : failed ? 'failed' : 'processing',
       stateText: paid ? '支付成功' : failed ? '支付失败' : '支付处理中',
       description: paid

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "师傅收益",
+  "usingComponents": {
+    "loading-view": "../../../components/loading-view/loading-view",
+    "empty-state": "../../../components/empty-state/empty-state"
+  }
+}
+

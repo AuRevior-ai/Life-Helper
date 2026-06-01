@@ -22,7 +22,9 @@ const CLOUD_FUNCTIONS = Object.freeze({
   PAYMENT: 'payment',
   REFUND: 'refund',
   AREA: 'area',
-  DISPATCH: 'dispatch'
+  DISPATCH: 'dispatch',
+  FINANCE: 'finance',
+  PROMOTION: 'promotion'
 })
 
 const COLLECTIONS = Object.freeze({
@@ -38,7 +40,13 @@ const COLLECTIONS = Object.freeze({
   AFTER_SALES: 'after_sales',
   REFUND_LOGS: 'refund_logs',
   SERVICE_AREAS: 'service_areas',
-  DISPATCH_LOGS: 'dispatch_logs'
+  DISPATCH_LOGS: 'dispatch_logs',
+  FINANCE_LOGS: 'finance_logs',
+  WORKER_EARNINGS: 'worker_earnings',
+  MEMBER_PLANS: 'member_plans',
+  USER_MEMBERSHIPS: 'user_memberships',
+  COUPON_TEMPLATES: 'coupon_templates',
+  USER_COUPONS: 'user_coupons'
 })
 
 module.exports = {

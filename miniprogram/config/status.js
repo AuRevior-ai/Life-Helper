@@ -119,6 +119,141 @@ const DISPATCH_ACTION_TEXT = Object.freeze({
   [DISPATCH_ACTION.ORDER_REFLOW]: '订单回流'
 })
 
+const FINANCE_LOG_TYPE = Object.freeze({
+  ORDER_INCOME: 'order_income',
+  PLATFORM_COMMISSION: 'platform_commission',
+  WORKER_EARNING: 'worker_earning',
+  REFUND_REVERSE: 'refund_reverse',
+  EARNING_REVERSE: 'earning_reverse',
+  MANUAL_ADJUST: 'manual_adjust'
+})
+
+const FINANCE_LOG_TYPE_TEXT = Object.freeze({
+  [FINANCE_LOG_TYPE.ORDER_INCOME]: '订单收入',
+  [FINANCE_LOG_TYPE.PLATFORM_COMMISSION]: '平台服务费',
+  [FINANCE_LOG_TYPE.WORKER_EARNING]: '师傅收益',
+  [FINANCE_LOG_TYPE.REFUND_REVERSE]: '退款回冲',
+  [FINANCE_LOG_TYPE.EARNING_REVERSE]: '收益冲回',
+  [FINANCE_LOG_TYPE.MANUAL_ADJUST]: '人工处理'
+})
+
+const FINANCE_LOG_DIRECTION = Object.freeze({
+  IN: 'in',
+  OUT: 'out',
+  REVERSE: 'reverse'
+})
+
+const FINANCE_LOG_DIRECTION_TEXT = Object.freeze({
+  [FINANCE_LOG_DIRECTION.IN]: '入账',
+  [FINANCE_LOG_DIRECTION.OUT]: '出账',
+  [FINANCE_LOG_DIRECTION.REVERSE]: '回冲'
+})
+
+const WORKER_EARNING_STATUS = Object.freeze({
+  FROZEN: 'frozen',
+  SETTLEABLE: 'settleable',
+  SETTLED: 'settled',
+  REVERSED: 'reversed',
+  PENDING_MANUAL: 'pending_manual'
+})
+
+const WORKER_EARNING_STATUS_TEXT = Object.freeze({
+  [WORKER_EARNING_STATUS.FROZEN]: '冻结中',
+  [WORKER_EARNING_STATUS.SETTLEABLE]: '可结算',
+  [WORKER_EARNING_STATUS.SETTLED]: '已结算',
+  [WORKER_EARNING_STATUS.REVERSED]: '已冲回',
+  [WORKER_EARNING_STATUS.PENDING_MANUAL]: '需人工处理'
+})
+
+const SETTLEMENT_STATUS = Object.freeze({
+  NOT_SETTLED: 'not_settled',
+  SETTLEABLE: 'settleable',
+  SETTLED: 'settled',
+  REVERSED: 'reversed'
+})
+
+const SETTLEMENT_STATUS_TEXT = Object.freeze({
+  [SETTLEMENT_STATUS.NOT_SETTLED]: '未结算',
+  [SETTLEMENT_STATUS.SETTLEABLE]: '可结算',
+  [SETTLEMENT_STATUS.SETTLED]: '已结算',
+  [SETTLEMENT_STATUS.REVERSED]: '已冲回'
+})
+
+const MEMBER_LEVEL = Object.freeze({
+  NONE: 'none',
+  MONTHLY: 'monthly',
+  SEASONLY: 'seasonly',
+  YEARLY: 'yearly'
+})
+
+const MEMBER_LEVEL_TEXT = Object.freeze({
+  [MEMBER_LEVEL.NONE]: '非会员',
+  [MEMBER_LEVEL.MONTHLY]: '月卡',
+  [MEMBER_LEVEL.SEASONLY]: '季卡',
+  [MEMBER_LEVEL.YEARLY]: '年卡'
+})
+
+const MEMBER_STATUS = Object.freeze({
+  INACTIVE: 'inactive',
+  ACTIVE: 'active',
+  EXPIRED: 'expired',
+  DISABLED: 'disabled'
+})
+
+const MEMBER_STATUS_TEXT = Object.freeze({
+  [MEMBER_STATUS.INACTIVE]: '未开通',
+  [MEMBER_STATUS.ACTIVE]: '生效中',
+  [MEMBER_STATUS.EXPIRED]: '已过期',
+  [MEMBER_STATUS.DISABLED]: '已停用'
+})
+
+const COUPON_TYPE = Object.freeze({
+  AMOUNT_OFF: 'amount_off',
+  DISCOUNT: 'discount',
+  FULL_REDUCTION: 'full_reduction'
+})
+
+const COUPON_TYPE_TEXT = Object.freeze({
+  [COUPON_TYPE.AMOUNT_OFF]: '立减券',
+  [COUPON_TYPE.DISCOUNT]: '折扣券',
+  [COUPON_TYPE.FULL_REDUCTION]: '满减券'
+})
+
+const COUPON_STATUS = Object.freeze({
+  DRAFT: 'draft',
+  ACTIVE: 'active',
+  DISABLED: 'disabled',
+  EXPIRED: 'expired'
+})
+
+const COUPON_STATUS_TEXT = Object.freeze({
+  [COUPON_STATUS.DRAFT]: '草稿',
+  [COUPON_STATUS.ACTIVE]: '启用',
+  [COUPON_STATUS.DISABLED]: '停用',
+  [COUPON_STATUS.EXPIRED]: '已过期'
+})
+
+const USER_COUPON_STATUS = Object.freeze({
+  UNUSED: 'unused',
+  USED: 'used',
+  EXPIRED: 'expired',
+  LOCKED: 'locked'
+})
+
+const USER_COUPON_STATUS_TEXT = Object.freeze({
+  [USER_COUPON_STATUS.UNUSED]: '未使用',
+  [USER_COUPON_STATUS.USED]: '已使用',
+  [USER_COUPON_STATUS.EXPIRED]: '已过期',
+  [USER_COUPON_STATUS.LOCKED]: '已锁定'
+})
+
+const PROMOTION_SOURCE = Object.freeze({
+  NONE: 'none',
+  MEMBER: 'member',
+  COUPON: 'coupon',
+  MEMBER_AND_COUPON: 'member_and_coupon'
+})
+
 const WORKER_AUDIT_STATUS = Object.freeze({
   PENDING: 'pending',
   APPROVED: 'approved',
@@ -189,6 +324,25 @@ module.exports = {
   WORKER_ONLINE_STATUS_TEXT,
   DISPATCH_ACTION,
   DISPATCH_ACTION_TEXT,
+  FINANCE_LOG_TYPE,
+  FINANCE_LOG_TYPE_TEXT,
+  FINANCE_LOG_DIRECTION,
+  FINANCE_LOG_DIRECTION_TEXT,
+  WORKER_EARNING_STATUS,
+  WORKER_EARNING_STATUS_TEXT,
+  SETTLEMENT_STATUS,
+  SETTLEMENT_STATUS_TEXT,
+  MEMBER_LEVEL,
+  MEMBER_LEVEL_TEXT,
+  MEMBER_STATUS,
+  MEMBER_STATUS_TEXT,
+  COUPON_TYPE,
+  COUPON_TYPE_TEXT,
+  COUPON_STATUS,
+  COUPON_STATUS_TEXT,
+  USER_COUPON_STATUS,
+  USER_COUPON_STATUS_TEXT,
+  PROMOTION_SOURCE,
   WORKER_AUDIT_STATUS,
   WORKER_AUDIT_STATUS_TEXT,
   COMMON_STATUS,

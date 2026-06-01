@@ -1,0 +1,29 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看系统内部模拟财务流水，不代表微信支付真实清算</view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载流水"></loading-view>
+
+  <block wx:elif="{{ logs.length }}">
+    <view
+      wx:for="{{ logs }}"
+      wx:key="_id"
+      class="finance-card panel"
+      data-order-id="{{ item.order_id }}"
+      bindtap="goOrderFinance"
+    >
+      <view class="card-top">
+        <view class="card-title">{{ item.typeText }}</view>
+        <view class="card-amount">{{ item.amountText }}</view>
+      </view>
+      <view class="card-line">方向：{{ item.directionText }}　状态：{{ item.status }}</view>
+      <view class="card-line">订单：{{ item.order_no || item.order_id }}</view>
+      <view class="card-line">师傅：{{ item.worker_id }}</view>
+    </view>
+  </block>
+
+  <empty-state wx:else title="暂无财务流水" description="订单完成并生成财务后会显示在这里"></empty-state>
+</view>
+

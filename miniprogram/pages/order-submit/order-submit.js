@@ -1,5 +1,6 @@
 const addressService = require('../../services/address.service')
 const orderService = require('../../services/order.service')
+const promotionService = require('../../services/promotion.service')
 const serviceService = require('../../services/service.service')
 const { APPOINTMENT_TIME_SLOTS } = require('../../config/constants')
 const { formatPrice, buildFullAddress } = require('../../utils/format')
@@ -11,6 +12,14 @@ Page({
     serviceId: '',
     service: null,
     priceText: '¥0.00',
+    originalAmountText: '¥0.00',
+    memberDiscountText: '-¥0.00',
+    couponDiscountText: '-¥0.00',
+    payableAmountText: '¥0.00',
+    availableCoupons: [],
+    couponLabels: ['不使用优惠券'],
+    selectedCouponIndex: 0,
+    selectedCouponId: '',
     addresses: [],
     selectedAddressId: '',
     selectedAddress: null,
@@ -78,8 +87,11 @@ Page({
   applyService(service) {
     this.setData({
       service,
-      priceText: formatPrice(service.price)
+      priceText: formatPrice(service.price),
+      originalAmountText: formatPrice(service.price),
+      payableAmountText: formatPrice(service.price)
     })
+    this.loadPromotionPreview()
   },
 
   applyAddresses(addresses) {
@@ -151,6 +163,53 @@ Page({
     })
   },
 
+  async loadPromotionPreview() {
+    if (!this.data.service) return
+    try {
+      const couponData = await promotionService.getAvailableCouponsForOrder({
+        service: this.data.service
+      })
+      const availableCoupons = couponData.coupons || []
+      const couponLabels = ['不使用优惠券'].concat(availableCoupons.map((coupon) => coupon.coupon_name || coupon.name))
+      this.setData({ availableCoupons, couponLabels })
+      await this.refreshPromotionAmount()
+    } catch (error) {
+      this.setData({ availableCoupons: [], couponLabels: ['不使用优惠券'] })
+    }
+  },
+
+  async refreshPromotionAmount() {
+    if (!this.data.service) return
+    try {
+      const data = await promotionService.calculateOrderPromotion({
+        service: this.data.service,
+        userCouponId: this.data.selectedCouponId
+      })
+      this.setData({
+        originalAmountText: formatPrice(data.original_amount || this.data.service.price),
+        memberDiscountText: `-${formatPrice(data.member_discount_amount || 0)}`,
+        couponDiscountText: `-${formatPrice(data.coupon_discount_amount || 0)}`,
+        payableAmountText: formatPrice(data.payable_amount || this.data.service.price)
+      })
+    } catch (error) {
+      this.setData({
+        payableAmountText: formatPrice(this.data.service.price)
+      })
+    }
+  },
+
+  handleCouponChange(event) {
+    const selectedCouponIndex = Number(event.detail.value || 0)
+    const selectedCoupon = selectedCouponIndex > 0
+      ? this.data.availableCoupons[selectedCouponIndex - 1]
+      : null
+    this.setData({
+      selectedCouponIndex,
+      selectedCouponId: selectedCoupon ? selectedCoupon._id : ''
+    })
+    this.refreshPromotionAmount()
+  },
+
   async handleSubmit() {
     if (!this.data.selectedAddressId) {
       showError('请先添加服务地址')
@@ -171,6 +230,7 @@ Page({
         appointmentDate: this.data.appointmentDate,
         appointmentSlot: this.data.appointmentSlot,
         appointment_time: this.data.appointment_time,
+        userCouponId: this.data.selectedCouponId,
         remark: this.data.remark
       })
       showSuccess('订单已创建')

@@ -65,6 +65,22 @@ Page({
     wx.navigateTo({ url: '/pages/admin/dispatch-logs/dispatch-logs' })
   },
 
+  goFinanceLogs() {
+    wx.navigateTo({ url: '/pages/admin/finance-log-list/finance-log-list' })
+  },
+
+  goWorkerEarnings() {
+    wx.navigateTo({ url: '/pages/admin/worker-earning-list/worker-earning-list' })
+  },
+
+  goMemberPlans() {
+    wx.navigateTo({ url: '/pages/admin/member-plan-list/member-plan-list' })
+  },
+
+  goCouponTemplates() {
+    wx.navigateTo({ url: '/pages/admin/coupon-template-list/coupon-template-list' })
+  },
+
   goServices() {
     wx.navigateTo({ url: '/pages/admin/service-list/service-list' })
   },

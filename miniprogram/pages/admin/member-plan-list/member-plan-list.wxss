@@ -1,0 +1,16 @@
+.plan-card {
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.card-line {
+  margin-top: 10rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}
+

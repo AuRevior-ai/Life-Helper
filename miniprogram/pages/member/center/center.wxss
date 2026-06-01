@@ -1,0 +1,35 @@
+.member-card,
+.plan-card {
+  margin-bottom: 20rpx;
+}
+
+.plan-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.card-title {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.card-line {
+  margin-top: 10rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}
+
+.mini-button {
+  width: 180rpx;
+  height: 68rpx;
+  margin: 0;
+  border-radius: 8rpx;
+  background: #1f7a68;
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 68rpx;
+}
+

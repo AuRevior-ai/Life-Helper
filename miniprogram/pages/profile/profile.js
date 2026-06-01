@@ -129,5 +129,17 @@ Page({
     wx.navigateTo({
       url: '/pages/message-list/message-list'
     })
+  },
+
+  goMemberCenter() {
+    wx.navigateTo({
+      url: '/pages/member/center/center'
+    })
+  },
+
+  goCouponList() {
+    wx.navigateTo({
+      url: '/pages/coupon/list/list'
+    })
   }
 })

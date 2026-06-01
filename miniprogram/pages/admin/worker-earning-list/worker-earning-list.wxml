@@ -1,0 +1,29 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">查看师傅订单收益，当前不支持真实提现</view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载收益"></loading-view>
+
+  <block wx:elif="{{ earnings.length }}">
+    <view
+      wx:for="{{ earnings }}"
+      wx:key="_id"
+      class="earning-card panel"
+      data-order-id="{{ item.order_id }}"
+      bindtap="goOrderFinance"
+    >
+      <view class="card-top">
+        <view class="card-title">{{ item.service_name || item.order_no }}</view>
+        <view class="card-amount">{{ item.earningText }}</view>
+      </view>
+      <view class="card-line">状态：{{ item.statusText }}　平台服务费：{{ item.commissionText }}</view>
+      <view class="card-line">订单：{{ item.order_no || item.order_id }}</view>
+      <view class="card-line">师傅：{{ item.worker_id }}</view>
+    </view>
+  </block>
+
+  <empty-state wx:else title="暂无师傅收益" description="订单完成并生成财务后会显示在这里"></empty-state>
+</view>
+

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "会员方案",
+  "usingComponents": {
+    "loading-view": "../../../components/loading-view/loading-view"
+  }
+}
+

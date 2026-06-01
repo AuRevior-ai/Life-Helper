@@ -16,6 +16,18 @@ exports.main = async (event = {}) => {
     openid: wxContext.OPENID,
     orders: createOrderRepository(db),
     reviews: createReviewRepository(db),
-    messages: createMessageRepository(db)
+    messages: createMessageRepository(db),
+    finance: {
+      async generateOrderFinance(payload) {
+        const result = await cloud.callFunction({
+          name: 'finance',
+          data: {
+            action: 'generateOrderFinance',
+            ...payload
+          }
+        })
+        return result.result || result
+      }
+    }
   })
 }

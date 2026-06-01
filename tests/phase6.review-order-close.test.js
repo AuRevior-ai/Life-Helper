@@ -339,6 +339,7 @@ test('review and closing pages are wired to phase six services', () => {
   assert.match(reviewWxml, /提交评价/)
   assert.match(userOrderDetailJs, /goReview/)
   assert.match(userOrderDetailWxml, /去评价/)
-  assert.match(incomeJs, /getWorkerIncomeStats/)
+  assert.match(incomeJs, /getWorkerIncomeSummary|getWorkerIncomeStats/)
+  assert.match(incomeJs, /getWorkerEarningList/)
   assert.match(incomeWxml, /累计收入/)
 })

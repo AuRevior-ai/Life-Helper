@@ -1,0 +1,26 @@
+.detail-panel {
+  margin-bottom: 22rpx;
+}
+
+.detail-line {
+  margin-top: 12rpx;
+  color: #64716d;
+  font-size: 25rpx;
+}
+
+.finance-row {
+  margin-bottom: 18rpx;
+}
+
+.row-main {
+  color: #1f2d2a;
+  font-size: 29rpx;
+  font-weight: 800;
+}
+
+.row-sub {
+  margin-top: 10rpx;
+  color: #64716d;
+  font-size: 24rpx;
+}
+

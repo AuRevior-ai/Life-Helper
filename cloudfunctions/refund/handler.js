@@ -166,6 +166,18 @@ async function safeCreateMessage(env, data) {
   }
 }
 
+async function safeReverseOrderFinance(env, payload) {
+  if (!env.finance || !env.finance.reverseOrderFinance) {
+    return null
+  }
+
+  try {
+    return await env.finance.reverseOrderFinance(payload)
+  } catch (error) {
+    return null
+  }
+}
+
 async function createRefundLog(env, data) {
   if (!env.refundLogs || !env.refundLogs.create) {
     throw serviceError('REFUND_LOG_REPOSITORY_MISSING', '缺少退款日志集合')
@@ -359,6 +371,12 @@ async function performMockRefund(afterSale, env = {}) {
     related_id: afterSale._id,
     created_at: now,
     updated_at: now
+  })
+
+  await safeReverseOrderFinance(env, {
+    orderId: order._id,
+    refundId: refundLog._id || refundNo,
+    refundAmount: afterSale.amount
   })
 
   return {

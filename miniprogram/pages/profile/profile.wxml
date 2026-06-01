@@ -34,6 +34,14 @@
       <text>消息中心</text>
       <text class="menu-item__hint">订单和审核提醒</text>
     </view>
+    <view class="menu-item" bindtap="goMemberCenter">
+      <text>会员中心</text>
+      <text class="menu-item__hint">会员权益</text>
+    </view>
+    <view class="menu-item" bindtap="goCouponList">
+      <text>我的优惠券</text>
+      <text class="menu-item__hint">领取与使用</text>
+    </view>
     <view class="menu-item" bindtap="goAddressList">
       <text>地址管理</text>
       <text class="menu-item__hint">维护服务地址</text>

@@ -18,6 +18,10 @@ Page({
     orderId: '',
     order: null,
     priceText: '¥0.00',
+    originalAmountText: '¥0.00',
+    memberDiscountText: '-¥0.00',
+    couponDiscountText: '-¥0.00',
+    payableAmountText: '¥0.00',
     statusText: '',
     payStatusText: '',
     afterSaleStatusText: '',
@@ -61,7 +65,11 @@ Page({
   applyOrder(order) {
     this.setData({
       order,
-      priceText: formatPrice(order.price),
+      priceText: formatPrice(order.pay_amount || order.price),
+      originalAmountText: formatPrice(order.original_amount || order.price),
+      memberDiscountText: `-${formatPrice(order.member_discount_amount || 0)}`,
+      couponDiscountText: `-${formatPrice(order.coupon_discount_amount || 0)}`,
+      payableAmountText: formatPrice(order.payable_amount || order.pay_amount || order.price),
       statusText: formatOrderStatus(order.status),
       payStatusText: formatPayStatus(order.pay_status),
       afterSaleStatusText: AFTER_SALE_STATUS_TEXT[order.after_sale_status || 'none'] || '无售后',

@@ -322,6 +322,7 @@ test('payment pages and services are wired while mock payment remains available'
   const paymentService = read('miniprogram/services/payment.service.js')
   const orderService = read('miniprogram/services/order.service.js')
   const paymentConfig = read('miniprogram/config/payment.js')
+  const payResultJs = read('miniprogram/pages/pay-result/pay-result.js')
 
   assert.match(appJson, /pages\/pay-result\/pay-result/)
   assert.equal(exists('miniprogram/pages/pay-result/pay-result.js'), true)
@@ -335,6 +336,7 @@ test('payment pages and services are wired while mock payment remains available'
   assert.match(orderDetailJs, /requestPayment/)
   assert.match(orderDetailJs, /mockPayOrder/)
   assert.match(orderDetailWxml, /bindtap="handlePay"/)
+  assert.match(payResultJs, /order\.pay_amount\s*\|\|\s*order\.payable_amount\s*\|\|\s*order\.price/)
 })
 
 test('payment secrets are not present in miniprogram frontend files', () => {

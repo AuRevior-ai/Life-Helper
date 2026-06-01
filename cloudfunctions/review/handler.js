@@ -54,6 +54,21 @@ async function safeCreateMessage(env, data) {
   }
 }
 
+async function safeGenerateOrderFinance(env, orderId) {
+  if (!env.finance || !env.finance.generateOrderFinance) {
+    return null
+  }
+
+  try {
+    return await env.finance.generateOrderFinance({
+      orderId,
+      source: 'mock_payment'
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 function requireOpenid(env) {
   if (!env.openid) {
     throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -139,6 +154,8 @@ async function createReview(event, env) {
     created_at: now,
     updated_at: now
   })
+
+  await safeGenerateOrderFinance(env, order._id)
 
   return success({
     review,

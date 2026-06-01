@@ -1,7 +1,7 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">当前为模拟统计，仅汇总已完成订单金额</view>
+    <view class="page-subtitle">基于模拟支付与订单完成生成，提现暂未开放</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载收入"></loading-view>
@@ -13,18 +13,38 @@
         <view class="summary-value">{{ totalAmountText }}</view>
       </view>
       <view>
-        <view class="summary-label">完成订单</view>
-        <view class="summary-count">{{ completedCount }}</view>
+        <view class="summary-label">收益笔数</view>
+        <view class="summary-count">{{ totalCount }}</view>
       </view>
     </view>
 
-    <view wx:if="{{ orders.length }}" class="income-list">
-      <view wx:for="{{ orders }}" wx:key="_id" class="income-row panel">
+    <view class="status-grid">
+      <view class="status-item panel">
+        <view class="summary-label">冻结中</view>
+        <view class="status-amount">{{ frozenAmountText }}</view>
+      </view>
+      <view class="status-item panel">
+        <view class="summary-label">可结算</view>
+        <view class="status-amount">{{ settleableAmountText }}</view>
+      </view>
+      <view class="status-item panel">
+        <view class="summary-label">已结算</view>
+        <view class="status-amount">{{ settledAmountText }}</view>
+      </view>
+      <view class="status-item panel">
+        <view class="summary-label">已冲回</view>
+        <view class="status-amount">{{ reversedAmountText }}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{ earnings.length }}" class="income-list">
+      <view wx:for="{{ earnings }}" wx:key="_id" class="income-row panel">
         <view>
           <view class="income-name">{{ item.service_name }}</view>
           <view class="income-time">{{ item.appointment_time }}</view>
+          <view class="income-time">状态：{{ item.statusText }}　平台服务费：{{ item.commissionText }}</view>
         </view>
-        <view class="income-price">{{ item.priceText }}</view>
+        <view class="income-price">{{ item.workerEarningText }}</view>
       </view>
     </view>
 

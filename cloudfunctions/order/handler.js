@@ -171,6 +171,99 @@ async function safeCreateMessage(env, data) {
   }
 }
 
+async function callPromotion(env, action, payload) {
+  if (!env.promotion || !env.promotion[action]) {
+    return null
+  }
+
+  const result = await env.promotion[action](payload)
+  if (result && result.success === false) {
+    throw serviceError(result.errorCode || 'PROMOTION_ERROR', result.message || '营销优惠处理失败')
+  }
+  return result ? result.data : null
+}
+
+function buildDefaultPromotionSnapshot(service = {}) {
+  const amount = Number(service.price || 0)
+  return {
+    original_amount: amount,
+    member_discount_amount: 0,
+    coupon_discount_amount: 0,
+    total_discount_amount: 0,
+    payable_amount: amount,
+    promotion_source: 'none',
+    member_snapshot: {
+      level: '',
+      discount_rate: 0,
+      member_plan_id: ''
+    },
+    coupon_snapshot: {
+      user_coupon_id: '',
+      coupon_template_id: '',
+      coupon_name: '',
+      type: '',
+      amount: 0,
+      discount_rate: 0,
+      threshold_amount: 0
+    }
+  }
+}
+
+function getSelectedCouponId(payload = {}) {
+  return trimText(payload.userCouponId || payload.user_coupon_id)
+}
+
+async function calculatePromotionSnapshot(env, service, payload) {
+  const userCouponId = getSelectedCouponId(payload)
+  try {
+    const promotionResult = await callPromotion(env, 'calculateOrderPromotion', {
+      service,
+      userCouponId
+    })
+    return promotionResult || buildDefaultPromotionSnapshot(service)
+  } catch (error) {
+    if (error.errorCode) {
+      throw error
+    }
+    if (!userCouponId) {
+      return buildDefaultPromotionSnapshot(service)
+    }
+    throw serviceError('PROMOTION_UNAVAILABLE', '优惠计算服务暂不可用，请稍后重试')
+  }
+}
+
+async function safeUseCouponForOrder(env, order) {
+  const userCouponId = order && order.coupon_snapshot && order.coupon_snapshot.user_coupon_id
+  if (!userCouponId || !env.promotion || !env.promotion.useCouponForOrder) {
+    return null
+  }
+
+  try {
+    return await callPromotion(env, 'useCouponForOrder', {
+      userCouponId,
+      orderId: order._id
+    })
+  } catch (error) {
+    return null
+  }
+}
+
+async function safeReleaseCouponForOrder(env, order) {
+  const userCouponId = order && order.coupon_snapshot && order.coupon_snapshot.user_coupon_id
+  if (!userCouponId || !env.promotion || !env.promotion.releaseCouponForOrder) {
+    return null
+  }
+
+  try {
+    return await callPromotion(env, 'releaseCouponForOrder', {
+      userCouponId,
+      orderId: order._id
+    })
+  } catch (error) {
+    return null
+  }
+}
+
 function normalizeFinishImages(value) {
   if (!value) return []
   if (!Array.isArray(value)) {
@@ -306,6 +399,7 @@ async function createOrder(event, env) {
   const address = await requireOwnedAddress(addressId, env)
   const now = getNow(env)
   const orderNoFactory = env.orderNoFactory || createDefaultOrderNo
+  const promotionSnapshot = await calculatePromotionSnapshot(env, service, payload)
   const order = await env.orders.create({
     order_no: orderNoFactory(),
     user_id: userId,
@@ -315,7 +409,15 @@ async function createOrder(event, env) {
     service_duration: service.duration || '',
     category_id: service.category_id,
     category_name: service.category_name,
-    price: service.price,
+    price: promotionSnapshot.original_amount,
+    original_amount: promotionSnapshot.original_amount,
+    member_discount_amount: promotionSnapshot.member_discount_amount,
+    coupon_discount_amount: promotionSnapshot.coupon_discount_amount,
+    total_discount_amount: promotionSnapshot.total_discount_amount,
+    payable_amount: promotionSnapshot.payable_amount,
+    promotion_source: promotionSnapshot.promotion_source,
+    member_snapshot: promotionSnapshot.member_snapshot,
+    coupon_snapshot: promotionSnapshot.coupon_snapshot,
     address_id: address._id,
     service_area_id: address.service_area_id || '',
     contact_name: address.contact_name,
@@ -333,7 +435,7 @@ async function createOrder(event, env) {
     out_trade_no: '',
     transaction_id: '',
     prepay_id: '',
-    pay_amount: Number(service.price || 0),
+    pay_amount: Number(promotionSnapshot.payable_amount || 0),
     status: ORDER_STATUS.PENDING_PAY,
     pay_status: PAY_STATUS.UNPAID,
     paid_at: null,
@@ -349,6 +451,24 @@ async function createOrder(event, env) {
     created_at: now,
     updated_at: now
   })
+
+  const userCouponId = promotionSnapshot.coupon_snapshot && promotionSnapshot.coupon_snapshot.user_coupon_id
+  if (userCouponId) {
+    try {
+      await callPromotion(env, 'lockCouponForOrder', {
+        userCouponId,
+        orderId: order._id
+      })
+    } catch (error) {
+      await env.orders.updateById(order._id, {
+        status: ORDER_STATUS.CANCELED,
+        cancel_reason: '优惠券锁定失败',
+        canceled_at: now,
+        updated_at: now
+      })
+      throw error
+    }
+  }
 
   return success({ order })
 }
@@ -378,6 +498,8 @@ async function mockPayOrder(event, env) {
     created_at: now,
     updated_at: now
   })
+
+  await safeUseCouponForOrder(env, updatedOrder)
 
   return success({ order: updatedOrder })
 }
@@ -570,6 +692,8 @@ async function cancelOrder(event, env) {
     canceled_at: now,
     updated_at: now
   })
+
+  await safeReleaseCouponForOrder(env, order)
 
   return success({ order: updatedOrder })
 }

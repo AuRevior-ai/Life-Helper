@@ -20,6 +20,18 @@ exports.main = async (event = {}) => {
     orders: createOrderRepository(db),
     afterSales: createAfterSaleRepository(db),
     refundLogs: createRefundLogRepository(db),
-    messages: createMessageRepository(db)
+    messages: createMessageRepository(db),
+    finance: {
+      async reverseOrderFinance(payload) {
+        const result = await cloud.callFunction({
+          name: 'finance',
+          data: {
+            action: 'reverseOrderFinance',
+            ...payload
+          }
+        })
+        return result.result || result
+      }
+    }
   })
 }

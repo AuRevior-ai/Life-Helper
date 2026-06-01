@@ -34,6 +34,10 @@
       <button class="entry-item" bindtap="goAfterSales">售后管理</button>
       <button class="entry-item" bindtap="goAreas">区域管理</button>
       <button class="entry-item" bindtap="goDispatchLogs">派单日志</button>
+      <button class="entry-item" bindtap="goFinanceLogs">财务流水</button>
+      <button class="entry-item" bindtap="goWorkerEarnings">师傅收益</button>
+      <button class="entry-item" bindtap="goMemberPlans">会员方案</button>
+      <button class="entry-item" bindtap="goCouponTemplates">优惠券管理</button>
       <button class="entry-item" bindtap="goServices">服务管理</button>
       <button class="entry-item" bindtap="goCategories">分类管理</button>
     </view>

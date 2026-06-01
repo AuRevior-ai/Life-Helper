@@ -1,0 +1,25 @@
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">{{ title }}</view>
+    <view class="page-subtitle">当前为模拟开通会员，不接入真实自动续费</view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载会员"></loading-view>
+
+  <block wx:else>
+    <view class="panel member-card">
+      <view class="card-title">当前会员</view>
+      <view class="card-line">{{ membershipStatusText }}</view>
+      <view wx:if="{{ membership.expired_at }}" class="card-line">到期时间：{{ membership.expired_at }}</view>
+    </view>
+
+    <view wx:for="{{ plans }}" wx:key="level" class="panel plan-card">
+      <view>
+        <view class="card-title">{{ item.levelText }}</view>
+        <view class="card-line">{{ item.priceText }} · {{ item.duration_days }} 天 · {{ item.discount_rate }} 折扣率</view>
+      </view>
+      <button class="mini-button" data-level="{{ item.level }}" bindtap="mockOpen">模拟开通</button>
+    </view>
+  </block>
+</view>
+
