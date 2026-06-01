@@ -2,6 +2,7 @@ const addressService = require('../../services/address.service')
 const orderService = require('../../services/order.service')
 const promotionService = require('../../services/promotion.service')
 const serviceService = require('../../services/service.service')
+const merchantService = require('../../services/merchant.service')
 const { APPOINTMENT_TIME_SLOTS } = require('../../config/constants')
 const { formatPrice, buildFullAddress } = require('../../utils/format')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../utils/toast')
@@ -10,6 +11,7 @@ Page({
   data: {
     title: '提交订单',
     serviceId: '',
+    merchantServiceId: '',
     service: null,
     priceText: '¥0.00',
     originalAmountText: '¥0.00',
@@ -39,6 +41,7 @@ Page({
     const minAppointmentDate = this.getTodayDate()
     this.setData({
       serviceId: options.serviceId || '',
+      merchantServiceId: options.merchantServiceId || '',
       minAppointmentDate,
       appointmentDate: minAppointmentDate,
       appointmentSlot: APPOINTMENT_TIME_SLOTS[0],
@@ -54,7 +57,7 @@ Page({
   },
 
   async loadPageData() {
-    if (!this.data.serviceId) {
+    if (!this.data.serviceId && !this.data.merchantServiceId) {
       this.setData({ loading: false })
       showError('缺少服务 ID')
       return
@@ -62,8 +65,11 @@ Page({
 
     this.setData({ loading: true })
     try {
+      const serviceLoader = this.data.merchantServiceId
+        ? this.loadMerchantServiceSnapshot()
+        : serviceService.getServiceDetail({ serviceId: this.data.serviceId })
       const [serviceData, addressData] = await Promise.all([
-        serviceService.getServiceDetail({ serviceId: this.data.serviceId }),
+        serviceLoader,
         addressService.getAddressList()
       ])
       this.applyService(serviceData.service)
@@ -72,6 +78,21 @@ Page({
       showError(error.message || '下单信息加载失败')
     } finally {
       this.setData({ loading: false })
+    }
+  },
+
+  async loadMerchantServiceSnapshot() {
+    const data = await merchantService.getStoreServices({ merchantServiceId: this.data.merchantServiceId })
+    const service = (data.services || []).find((item) => item._id === this.data.merchantServiceId) || data.service
+    return {
+      service: {
+        _id: service.service_id,
+        name: service.service_name,
+        category_id: service.category_id,
+        category_name: service.category_name,
+        price: service.price,
+        duration: service.duration
+      }
     }
   },
 
@@ -226,6 +247,7 @@ Page({
     try {
       const data = await orderService.createOrder({
         serviceId: this.data.serviceId,
+        merchantServiceId: this.data.merchantServiceId,
         addressId: this.data.selectedAddressId,
         appointmentDate: this.data.appointmentDate,
         appointmentSlot: this.data.appointmentSlot,

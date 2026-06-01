@@ -1,0 +1,6 @@
+<view class="page">
+  <view wx:for="{{stores}}" wx:key="_id" class="item" bindtap="goDetail" data-id="{{item._id}}">
+    <text class="title">{{item.store_name}}</text>
+    <text class="meta">{{item.service_communities}}</text>
+  </view>
+</view>

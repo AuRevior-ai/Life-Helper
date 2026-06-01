@@ -1,0 +1,5 @@
+<view class="page">
+  <input placeholder="平台服务ID" value="{{form.serviceId}}" bindinput="onInput" data-field="serviceId" />
+  <input placeholder="价格（分）" type="number" value="{{form.price}}" bindinput="onInput" data-field="price" />
+  <button bindtap="submit">保存</button>
+</view>

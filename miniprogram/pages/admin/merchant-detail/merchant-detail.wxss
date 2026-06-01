@@ -1,0 +1,3 @@
+.page { padding: 24rpx; }
+.title, text { display: block; margin-bottom: 16rpx; }
+button { margin-bottom: 16rpx; }

@@ -1,0 +1,6 @@
+<view class="page">
+  <view wx:for="{{merchants}}" wx:key="_id" class="item" bindtap="goDetail" data-id="{{item._id}}">
+    <text>{{item.store_name}}</text>
+    <text>{{item.audit_status}} / {{item.status}}</text>
+  </view>
+</view>

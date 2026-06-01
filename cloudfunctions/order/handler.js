@@ -298,6 +298,46 @@ async function findServiceById(serviceId, env) {
   return findServiceSnapshotById(serviceId)
 }
 
+async function findMerchantServiceSnapshot(merchantServiceId, env) {
+  if (!merchantServiceId) return null
+  if (!env.merchantServices || !env.merchantServices.findById) {
+    throw serviceError('MERCHANT_SERVICE_REPOSITORY_MISSING', '缺少商家服务集合')
+  }
+  const merchantService = await env.merchantServices.findById(merchantServiceId)
+  if (!merchantService || merchantService.status !== 'on') {
+    throw serviceError('MERCHANT_SERVICE_NOT_AVAILABLE', '商家服务不可用')
+  }
+  if (!env.merchants || !env.merchants.findById) {
+    throw serviceError('MERCHANT_REPOSITORY_MISSING', '缺少商家集合')
+  }
+  const merchant = await env.merchants.findById(merchantService.merchant_id)
+  if (!merchant || merchant.audit_status !== 'approved' || merchant.status !== 'normal') {
+    throw serviceError('MERCHANT_NOT_AVAILABLE', '商家暂不可用')
+  }
+  let provider = null
+  if (env.serviceProviders && env.serviceProviders.findById && merchantService.provider_id) {
+    provider = await env.serviceProviders.findById(merchantService.provider_id)
+  }
+  if (!provider && env.serviceProviders && env.serviceProviders.findByRef) {
+    provider = await env.serviceProviders.findByRef('merchant', merchant._id)
+  }
+  return {
+    service: {
+      _id: merchantService.service_id,
+      name: merchantService.service_name,
+      category_id: merchantService.category_id,
+      category_name: merchantService.category_name,
+      price: Number(merchantService.price || 0),
+      duration: merchantService.duration || '',
+      description: merchantService.description || '',
+      cover_image: merchantService.cover_image || ''
+    },
+    merchant,
+    provider,
+    merchantService
+  }
+}
+
 async function requireOwnedAddress(addressId, env) {
   const address = await env.addresses.findById(addressId)
   if (!address) {
@@ -388,10 +428,12 @@ async function requireAssignedWorkerOrder(orderId, env) {
 async function createOrder(event, env) {
   const userId = requireOpenid(env)
   const payload = getPayload(event)
-  const serviceId = requireText(payload.serviceId, 'SERVICE_ID_MISSING', '缺少服务 ID')
+  const merchantServiceId = trimText(payload.merchantServiceId || payload.merchant_service_id)
+  const serviceId = merchantServiceId ? '' : requireText(payload.serviceId, 'SERVICE_ID_MISSING', '缺少服务 ID')
   const addressId = requireText(payload.addressId, 'ADDRESS_ID_MISSING', '缺少地址 ID')
   const appointment = normalizeAppointment(payload, env)
-  const service = await findServiceById(serviceId, env)
+  const merchantSnapshot = await findMerchantServiceSnapshot(merchantServiceId, env)
+  const service = merchantSnapshot ? merchantSnapshot.service : await findServiceById(serviceId, env)
   if (!service) {
     throw serviceError('SERVICE_NOT_FOUND', '服务不存在或已下架')
   }
@@ -400,10 +442,38 @@ async function createOrder(event, env) {
   const now = getNow(env)
   const orderNoFactory = env.orderNoFactory || createDefaultOrderNo
   const promotionSnapshot = await calculatePromotionSnapshot(env, service, payload)
+  const providerType = merchantSnapshot ? 'merchant' : 'worker'
+  const providerId = merchantSnapshot && merchantSnapshot.provider ? merchantSnapshot.provider._id : ''
+  const merchant = merchantSnapshot ? merchantSnapshot.merchant : null
+  const merchantService = merchantSnapshot ? merchantSnapshot.merchantService : null
   const order = await env.orders.create({
     order_no: orderNoFactory(),
     user_id: userId,
     worker_id: '',
+    provider_type: providerType,
+    provider_id: providerId,
+    merchant_id: merchant ? merchant._id : '',
+    provider_snapshot: merchant ? {
+      provider_type: 'merchant',
+      provider_name: merchant.store_name,
+      avatar: merchant.store_logo || '',
+      phone: merchant.contact_phone || '',
+      merchant_id: merchant._id,
+      store_name: merchant.store_name
+    } : {
+      provider_type: 'worker',
+      provider_name: '',
+      avatar: '',
+      phone: ''
+    },
+    merchant_service_snapshot: merchantService ? {
+      merchant_service_id: merchantService._id,
+      service_id: merchantService.service_id,
+      service_name: merchantService.service_name,
+      category_id: merchantService.category_id,
+      category_name: merchantService.category_name,
+      price: Number(merchantService.price || 0)
+    } : null,
     service_id: service._id,
     service_name: service.name,
     service_duration: service.duration || '',
@@ -542,6 +612,10 @@ async function acceptOrder(event, env) {
 
   if (order.worker_id) {
     throw serviceError('ORDER_ALREADY_ACCEPTED', '该订单已被其他师傅接走')
+  }
+
+  if (order.provider_type === 'merchant' || order.merchant_id) {
+    throw serviceError('ORDER_PROVIDER_INVALID', '商家订单不能由个人师傅接单')
   }
 
   if (order.status !== ORDER_STATUS.PENDING_ACCEPT) {

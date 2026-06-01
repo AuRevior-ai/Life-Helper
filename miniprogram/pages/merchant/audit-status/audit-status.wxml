@@ -1,0 +1,4 @@
+<view class="page">
+  <text>审核状态：{{auditStatus}}</text>
+  <text wx:if="{{merchant.reject_reason}}">原因：{{merchant.reject_reason}}</text>
+</view>

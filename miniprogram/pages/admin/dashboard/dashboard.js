@@ -93,6 +93,10 @@ Page({
     wx.navigateTo({ url: '/pages/admin/tip-log-list/tip-log-list' })
   },
 
+  goMerchants() {
+    wx.navigateTo({ url: '/pages/admin/merchant-list/merchant-list' })
+  },
+
   goServices() {
     wx.navigateTo({ url: '/pages/admin/service-list/service-list' })
   },

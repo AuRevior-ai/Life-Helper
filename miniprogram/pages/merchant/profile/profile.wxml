@@ -1,0 +1,6 @@
+<view class="page">
+  <text class="title">{{merchant.store_name || '商家中心'}}</text>
+  <button bindtap="goServices">服务项目</button>
+  <button bindtap="goOrders">商家订单</button>
+  <button bindtap="goIncome">商家收益</button>
+</view>

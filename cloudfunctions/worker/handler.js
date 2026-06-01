@@ -397,6 +397,8 @@ async function getOrderHallList(event, env) {
   const orders = await env.orders.findByStatus('pending_accept')
   const filteredOrders = orders.filter((order) =>
     !order.worker_id &&
+    order.provider_type !== 'merchant' &&
+    !order.merchant_id &&
     orderMatchesWorkerCategory(order, worker) &&
     orderMatchesWorkerArea(order, worker)
   )

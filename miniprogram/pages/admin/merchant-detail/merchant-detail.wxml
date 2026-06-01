@@ -1,0 +1,9 @@
+<view class="page">
+  <text class="title">{{merchant.store_name}}</text>
+  <text>审核：{{merchant.audit_status}}</text>
+  <text>状态：{{merchant.status}}</text>
+  <button bindtap="approve">审核通过</button>
+  <button bindtap="reject">审核拒绝</button>
+  <button bindtap="enable">启用</button>
+  <button bindtap="disable">禁用</button>
+</view>

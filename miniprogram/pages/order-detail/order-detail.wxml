@@ -81,6 +81,10 @@
         <text>服务师傅</text>
         <button class="text-button" bindtap="goWorkerDetail">查看详情</button>
       </view>
+      <view wx:if="{{ order.provider_type === 'merchant' }}" class="info-row">
+        <text>服务商家</text>
+        <text>{{ order.provider_snapshot.store_name || order.provider_snapshot.provider_name }}</text>
+      </view>
       <view wx:if="{{ order.finish_remark }}" class="info-row info-row--address">
         <text>完工说明</text>
         <text>{{ order.finish_remark }}</text>

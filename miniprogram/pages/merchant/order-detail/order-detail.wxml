@@ -1,0 +1,8 @@
+<view class="page">
+  <text class="title">{{order.service_name}}</text>
+  <text>状态：{{order.status}}</text>
+  <button bindtap="accept">接单</button>
+  <button bindtap="start">开始服务</button>
+  <textarea placeholder="完工说明" value="{{finishRemark}}" bindinput="onRemarkInput" />
+  <button bindtap="finish">完成服务</button>
+</view>

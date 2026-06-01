@@ -1,0 +1,2 @@
+.page { padding: 32rpx; color: #1f2d2a; }
+text { display: block; margin-bottom: 16rpx; }

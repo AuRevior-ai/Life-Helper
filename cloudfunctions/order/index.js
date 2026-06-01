@@ -4,6 +4,11 @@ const { createAddressReadRepository, createOrderRepository } = require('./order-
 const { createDispatchLogRepository } = require('./dispatch-repository')
 const { createMessageRepository } = require('./message-repository')
 const { createWorkerReadRepository } = require('./worker-read-repository')
+const {
+  createMerchantServiceReadRepository,
+  createMerchantReadRepository,
+  createServiceProviderReadRepository
+} = require('./merchant-read-repository')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -30,6 +35,9 @@ exports.main = async (event = {}) => {
     addresses: createAddressReadRepository(db),
     orders: createOrderRepository(db),
     workers: createWorkerReadRepository(db),
+    merchants: createMerchantReadRepository(db),
+    merchantServices: createMerchantServiceReadRepository(db),
+    serviceProviders: createServiceProviderReadRepository(db),
     messages: createMessageRepository(db),
     dispatchLogs: createDispatchLogRepository(db),
     promotion: {

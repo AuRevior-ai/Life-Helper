@@ -313,6 +313,48 @@ const TIP_CHANNEL = Object.freeze({
   WECHAT: 'wechat'
 })
 
+const SERVICE_PROVIDER_TYPE = Object.freeze({
+  WORKER: 'worker',
+  MERCHANT: 'merchant'
+})
+
+const SERVICE_PROVIDER_TYPE_TEXT = Object.freeze({
+  [SERVICE_PROVIDER_TYPE.WORKER]: '个人师傅',
+  [SERVICE_PROVIDER_TYPE.MERCHANT]: '商家店铺'
+})
+
+const MERCHANT_AUDIT_STATUS = Object.freeze({
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected'
+})
+
+const MERCHANT_AUDIT_STATUS_TEXT = Object.freeze({
+  [MERCHANT_AUDIT_STATUS.PENDING]: '待审核',
+  [MERCHANT_AUDIT_STATUS.APPROVED]: '已通过',
+  [MERCHANT_AUDIT_STATUS.REJECTED]: '已拒绝'
+})
+
+const MERCHANT_STATUS = Object.freeze({
+  NORMAL: 'normal',
+  DISABLED: 'disabled'
+})
+
+const MERCHANT_STATUS_TEXT = Object.freeze({
+  [MERCHANT_STATUS.NORMAL]: '正常',
+  [MERCHANT_STATUS.DISABLED]: '已停用'
+})
+
+const MERCHANT_SERVICE_STATUS = Object.freeze({
+  ON: 'on',
+  OFF: 'off'
+})
+
+const MERCHANT_SERVICE_STATUS_TEXT = Object.freeze({
+  [MERCHANT_SERVICE_STATUS.ON]: '上架',
+  [MERCHANT_SERVICE_STATUS.OFF]: '下架'
+})
+
 const REVIEW_ACTION_TYPE = Object.freeze({
   CREATE_REVIEW: 'create_review',
   ADD_FOLLOWUP: 'add_followup',
@@ -436,6 +478,14 @@ module.exports = {
   TIP_STATUS,
   TIP_STATUS_TEXT,
   TIP_CHANNEL,
+  SERVICE_PROVIDER_TYPE,
+  SERVICE_PROVIDER_TYPE_TEXT,
+  MERCHANT_AUDIT_STATUS,
+  MERCHANT_AUDIT_STATUS_TEXT,
+  MERCHANT_STATUS,
+  MERCHANT_STATUS_TEXT,
+  MERCHANT_SERVICE_STATUS,
+  MERCHANT_SERVICE_STATUS_TEXT,
   REVIEW_ACTION_TYPE,
   WORKER_AUDIT_STATUS,
   WORKER_AUDIT_STATUS_TEXT,

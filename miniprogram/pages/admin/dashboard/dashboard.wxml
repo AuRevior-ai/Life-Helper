@@ -41,6 +41,7 @@
       <button class="entry-item" bindtap="goReviews">评价管理</button>
       <button class="entry-item" bindtap="goReviewAppeals">差评申诉</button>
       <button class="entry-item" bindtap="goTipLogs">打赏记录</button>
+      <button class="entry-item" bindtap="goMerchants">商家管理</button>
       <button class="entry-item" bindtap="goServices">服务管理</button>
       <button class="entry-item" bindtap="goCategories">分类管理</button>
     </view>

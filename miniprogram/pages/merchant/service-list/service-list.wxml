@@ -1,0 +1,7 @@
+<view class="page">
+  <button bindtap="goCreate">新增服务</button>
+  <view wx:for="{{services}}" wx:key="_id" class="item">
+    <text>{{item.service_name}}</text>
+    <text>{{item.status}}</text>
+  </view>
+</view>

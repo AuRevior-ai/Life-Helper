@@ -228,7 +228,10 @@ async function generateOrderFinance(event = {}, env = {}) {
   if (order.pay_status !== PAY_STATUS.PAID) {
     throw serviceError('ORDER_NOT_PAID', '订单未支付，不能生成财务记录')
   }
-  if (!order.worker_id) {
+  const providerType = order.provider_type || (order.merchant_id ? 'merchant' : 'worker')
+  const providerId = order.provider_id || order.worker_id || order.merchant_id || ''
+  const merchantId = order.merchant_id || ''
+  if (providerType !== 'merchant' && !order.worker_id) {
     throw serviceError('ORDER_WORKER_MISSING', '订单没有师傅，不能生成收益')
   }
 
@@ -244,6 +247,9 @@ async function generateOrderFinance(event = {}, env = {}) {
     order_no: order.order_no || '',
     user_id: order.user_id,
     worker_id: order.worker_id,
+    provider_type: providerType,
+    provider_id: providerId,
+    merchant_id: merchantId,
     order_amount: amounts.orderAmount,
     paid_amount: amounts.paidAmount,
     commission_rate: amounts.commissionRate,
@@ -281,6 +287,9 @@ async function generateOrderFinance(event = {}, env = {}) {
     order_no: order.order_no || '',
     user_id: order.user_id,
     worker_id: order.worker_id,
+    provider_type: providerType,
+    provider_id: providerId,
+    merchant_id: merchantId,
     service_name: order.service_name || '',
     appointment_time: order.appointment_time || '',
     order_amount: amounts.orderAmount,
@@ -613,4 +622,3 @@ module.exports = {
   SETTLEMENT_STATUS,
   calculateFinance
 }
-

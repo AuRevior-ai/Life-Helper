@@ -1,0 +1,6 @@
+<view class="page">
+  <view wx:for="{{orders}}" wx:key="_id" class="item" bindtap="goDetail" data-id="{{item._id}}">
+    <text>{{item.service_name}}</text>
+    <text>{{item.status}}</text>
+  </view>
+</view>

@@ -1,0 +1,2 @@
+.page { padding: 24rpx; }
+.item { display: flex; justify-content: space-between; padding: 20rpx; margin-top: 16rpx; background: #fff; border-radius: 8rpx; }
