@@ -117,6 +117,12 @@
     >去评价</button>
 
     <button
+      wx:if="{{ canViewReview }}"
+      class="primary-button"
+      bindtap="goReviewDetail"
+    >查看评价 / 追加评价</button>
+
+    <button
       wx:if="{{ canTip }}"
       class="primary-button"
       bindtap="goTip"

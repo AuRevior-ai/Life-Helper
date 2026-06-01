@@ -1,5 +1,6 @@
 const orderService = require('../../services/order.service')
 const paymentService = require('../../services/payment.service')
+const reviewService = require('../../services/review.service')
 const { isWechatPayMode } = require('../../config/payment')
 const {
   AFTER_SALE_STATUS_TEXT,
@@ -29,6 +30,8 @@ Page({
     canPay: false,
     canCancel: false,
     canReview: false,
+    canViewReview: false,
+    reviewId: '',
     canTip: false,
     canApplyAfterSale: false,
     canViewAfterSale: false,
@@ -56,6 +59,7 @@ Page({
         orderId: this.data.orderId
       })
       this.applyOrder(data.order)
+      await this.loadOrderReview(data.order)
     } catch (error) {
       showError(error.message || '订单加载失败')
     } finally {
@@ -78,6 +82,8 @@ Page({
       canPay: order.status === 'pending_pay' && order.pay_status === 'unpaid',
       canCancel: ['pending_pay', 'pending_accept'].includes(order.status),
       canReview: order.status === 'pending_review',
+      canViewReview: false,
+      reviewId: '',
       canTip:
         order.status === 'completed' &&
         order.pay_status === 'paid' &&
@@ -90,6 +96,30 @@ Page({
         (!order.after_sale_status || order.after_sale_status === 'none'),
       canViewAfterSale: Boolean(order.after_sale_id)
     })
+  },
+
+  async loadOrderReview(order) {
+    if (!order || order.status !== 'completed') {
+      return
+    }
+
+    try {
+      const data = await reviewService.getOrderReview({
+        orderId: this.data.orderId
+      })
+      const review = data.review
+      if (review && review._id) {
+        this.setData({
+          canViewReview: true,
+          reviewId: review._id
+        })
+      }
+    } catch (error) {
+      this.setData({
+        canViewReview: false,
+        reviewId: ''
+      })
+    }
   },
 
   async handlePay() {
@@ -173,6 +203,16 @@ Page({
   goReview() {
     wx.navigateTo({
       url: `/pages/review/review?orderId=${this.data.orderId}`
+    })
+  },
+
+  goReviewDetail() {
+    if (!this.data.reviewId) {
+      showError('评价信息暂未生成，请稍后刷新')
+      return
+    }
+    wx.navigateTo({
+      url: `/pages/review/detail/detail?reviewId=${this.data.reviewId}`
     })
   },
 
