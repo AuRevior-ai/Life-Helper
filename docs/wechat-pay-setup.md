@@ -1,6 +1,6 @@
 # 微信支付轻量接入配置说明
 
-本文记录阶段 13 的微信支付接入方式。当前工程默认仍使用模拟支付，未准备商户资料时不影响 MVP 业务闭环。
+本文记录微信支付接入边界。当前工程默认仍使用模拟支付，未准备商户资料时不影响 MVP 业务闭环。阶段 19.6 起，真实微信支付尚未实现时必须 fail-fast，不允许返回空 `prepay_id` 或空 `payParams`。
 
 ## 需要人工准备
 
@@ -13,7 +13,7 @@
 | 商户 API 证书序列号 | 用于请求签名 | 否 |
 | 支付回调 notify_url | 微信支付异步通知地址 | 否 |
 | 云环境 ID | 部署 `payment` 云函数的云环境 | 否 |
-| 是否启用真实支付 | `PAY_MODE=wechat` 时启用真实支付 | 否 |
+| 是否启用真实支付 | `PAY_MODE=wechat` 当前仅为占位，真实支付尚未实现 | 否 |
 
 ## 云数据库集合
 
@@ -41,7 +41,7 @@ handlePayNotify
 queryPaymentStatus
 ```
 
-默认 `PAY_MODE=mock`。未配置真实商户资料时，`payment.createPayment` 会返回 `REAL_PAY_DISABLED` 或配置缺失错误，小程序端继续使用模拟支付。
+默认 `PAY_MODE=mock`。当前只能使用 mock 支付。`PAY_MODE=wechat` 但真实 JSAPI 下单、签名、证书、APIv3 密钥和回调验签未完整实现时，`payment.createPayment` 必须返回 `WECHAT_PAY_NOT_IMPLEMENTED` 或等价错误：`真实微信支付尚未实现，请使用 mock 支付或完成正式支付接入`。
 
 ## 支付模式
 
@@ -57,7 +57,7 @@ miniprogram/config/payment.js
 CURRENT_PAY_MODE = PAY_MODE.MOCK
 ```
 
-真实支付测试前，需要在小程序端切换为 `PAY_MODE.WECHAT`，并在云函数环境变量或安全配置中提供商户资料。
+真实支付测试前，不能只切换为 `PAY_MODE.WECHAT`。必须完成 JSAPI 下单、请求签名、前端支付参数签名、支付回调验签、退款、退款回调和对账流程后，才能进入真实交易联调。
 
 ## 回调说明
 

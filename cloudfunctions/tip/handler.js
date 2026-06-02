@@ -7,10 +7,10 @@ const USER_ROLE = Object.freeze({ ADMIN: 'admin' })
 const ORDER_STATUS = Object.freeze({ COMPLETED: 'completed' })
 const PAY_STATUS = Object.freeze({ PAID: 'paid' })
 
-const { success, fail, serviceError } = require('../_shared/response')
-const { getPayload } = require('../_shared/payload')
-const { getNow } = require('../_shared/time')
-const { paginateList } = require('../_shared/pagination')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { paginateList } = require('./_shared/pagination')
 
 const TIP_STATUS = Object.freeze({
   MOCK_SUCCESS: 'mock_success',

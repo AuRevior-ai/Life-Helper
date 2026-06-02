@@ -1,0 +1,22 @@
+<view class="page">
+  <loading-view wx:if="{{ loading }}" text="正在加载保证金审核"></loading-view>
+  <empty-state
+    wx:elif="{{ collectionMissing }}"
+    title="保证金集合未创建"
+    description="请先在云开发数据库创建 merchant_deposits 集合，再进行保证金审核"
+  ></empty-state>
+  <block wx:elif="{{ deposits.length }}">
+    <view wx:for="{{deposits}}" wx:key="_id" class="item">
+      <text>{{item.merchant_id}}</text>
+      <text>{{item.deposit_status}} / {{item.required_amount}} 分</text>
+      <button data-id="{{item._id}}" bindtap="freeze">冻结</button>
+      <button data-id="{{item._id}}" data-result="APPROVED" bindtap="reviewRefund">同意退还</button>
+      <button data-id="{{item._id}}" data-result="REJECTED" bindtap="reviewRefund">驳回退还</button>
+    </view>
+  </block>
+  <empty-state
+    wx:else
+    title="暂无保证金记录"
+    description="商家完成模拟保证金流程后，会出现在这里"
+  ></empty-state>
+</view>

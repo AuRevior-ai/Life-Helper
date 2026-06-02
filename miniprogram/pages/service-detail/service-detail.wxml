@@ -1,6 +1,12 @@
 <view class="page-shell">
   <loading-view wx:if="{{ loading }}" text="正在加载详情"></loading-view>
 
+  <empty-state
+    wx:elif="{{ loadError }}"
+    title="加载失败"
+    description="{{ loadError }}"
+  ></empty-state>
+
   <block wx:elif="{{ service }}">
     <view class="detail-cover">
       <view class="detail-cover__tag">{{ service.category_name }}</view>

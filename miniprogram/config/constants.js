@@ -26,7 +26,8 @@ const CLOUD_FUNCTIONS = Object.freeze({
   FINANCE: 'finance',
   PROMOTION: 'promotion',
   TIP: 'tip',
-  MERCHANT: 'merchant'
+  MERCHANT: 'merchant',
+  QUALIFICATION: 'qualification'
 })
 
 const COLLECTIONS = Object.freeze({
@@ -55,7 +56,11 @@ const COLLECTIONS = Object.freeze({
   MERCHANTS: 'merchants',
   MERCHANT_SERVICES: 'merchant_services',
   SERVICE_PROVIDERS: 'service_providers',
-  MERCHANT_ACTION_LOGS: 'merchant_action_logs'
+  MERCHANT_ACTION_LOGS: 'merchant_action_logs',
+  MERCHANT_QUALIFICATIONS: 'merchant_qualifications',
+  MERCHANT_DEPOSITS: 'merchant_deposits',
+  MERCHANT_RISK_RECORDS: 'merchant_risk_records',
+  MERCHANT_ONBOARDING_LOGS: 'merchant_onboarding_logs'
 })
 
 module.exports = {

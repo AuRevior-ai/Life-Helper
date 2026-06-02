@@ -1,0 +1,12 @@
+{
+  "collection": "merchants",
+  "description": "商家入驻、审核、店铺主页和商家运营状态集合。",
+  "requiredFields": ["_id", "user_id", "name", "contact_phone", "audit_status", "status", "created_at", "updated_at"],
+  "optionalFields": ["logo", "description", "service_area", "service_categories", "address", "license_images", "audit_remark", "approved_at", "rejected_at", "enabled_at", "disabled_at", "rating", "sales_count"],
+  "serverOnlyFields": ["audit_status", "status", "audit_remark", "approved_at", "rejected_at", "enabled_at", "disabled_at", "rating", "sales_count", "created_at", "updated_at"],
+  "clientWritableFields": ["name", "contact_phone", "logo", "description", "service_area", "service_categories", "address", "license_images"],
+  "statusFields": ["audit_status", "status"],
+  "relationFields": ["user_id"],
+  "indexHints": ["user_id", "audit_status + created_at", "status + created_at"],
+  "compatibilityNotes": ["license_images are currently upload/archive placeholders, not real business-license verification.", "商家端当前是流程验证版，不代表正式运营级后台。"]
+}

@@ -1,3 +1,11 @@
-.page { padding: 24rpx; }
-input { box-sizing: border-box; width: 100%; margin-bottom: 16rpx; padding: 20rpx; background: #fff; border-radius: 8rpx; }
-button { background: #1f7a68; color: #fff; }
+.service-edit-page {
+  padding-top: 44rpx;
+}
+
+.service-input {
+  min-height: 80rpx;
+  line-height: 80rpx;
+  box-sizing: border-box;
+  padding: 0 22rpx;
+  overflow: visible;
+}

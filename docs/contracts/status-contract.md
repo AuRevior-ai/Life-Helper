@@ -8,6 +8,7 @@
 - 后端状态值不得随意改名，历史订单、售后、收益和商家记录依赖这些字符串。
 - 新增状态必须说明业务模块、中文含义、允许新增原因、影响页面、影响云函数和兼容策略。
 - 状态一致性由 `tests/phase19_5.engineering-governance.test.js` 约束核心状态。
+- 若新增状态会影响集合字段或 action 返回，必须同步 `docs/contracts/database-schema.md`、对应 `schema/*.schema.json`、`docs/contracts/api-actions.md` 和 `docs/contracts/api-actions.manifest.json`。
 
 ## 核心状态表
 
@@ -62,3 +63,53 @@
 6. 相关阶段复盘文档
 
 当前已知差异：阶段 19.5 已补齐 `payment` 云函数的 `PAY_STATUS.REFUNDED` 常量；复杂状态自动生成机制暂不引入。
+
+## 阶段 20：资质、保证金、风控与入驻状态
+
+### `QUALIFICATION_STATUS`
+
+| 状态值 | 中文含义 | 影响页面 | 云函数 | 兼容说明 |
+|---|---|---|---|---|
+| `NOT_SUBMITTED` | 未提交 | 商家资质页 | `qualification.getMyQualification` | 首次进入默认状态 |
+| `DRAFT` | 草稿 | 商家资质页 | `saveQualificationDraft` | 保存草稿后状态 |
+| `PENDING_REVIEW` | 待审核 | 商家资质页、管理员资质审核页 | `submitQualification`、`resubmitQualification` | 等待管理员复核 |
+| `APPROVED` | 已通过 | 商家风险状态页、商家服务发布 | `adminReviewQualification`、`merchant.createMerchantService` | 通过后才可能进入经营 |
+| `REJECTED` | 已驳回 | 商家资质页 | `adminReviewQualification` | 可重新提交 |
+| `NEED_SUPPLEMENT` | 需补充材料 | 商家资质页 | `adminReviewQualification` | 补充后重新提交 |
+| `EXPIRED` | 已过期 | 预留 | 预留 | 阶段 20 不做自动过期任务 |
+
+### `DEPOSIT_STATUS`
+
+| 状态值 | 中文含义 | 影响页面 | 云函数 | 兼容说明 |
+|---|---|---|---|---|
+| `NOT_REQUIRED` | 暂不需要 | 商家保证金页 | 预留 | 可用于免保证金配置 |
+| `UNPAID` | 未缴纳 | 商家保证金页 | `getMyDeposit` | 默认需要 mock 保证金 |
+| `MOCK_PAYING` | 模拟缴纳中 | 预留 | 预留 | 阶段 20 不做异步支付 |
+| `MOCK_PAID` | 已模拟缴纳 | 商家保证金页、入驻状态 | `mockPayDeposit` | 不代表真实扣款 |
+| `FROZEN` | 已冻结 | 管理员保证金审核页 | `adminFreezeDeposit` | 需管理员处理 |
+| `REFUND_PENDING` | 退还申请中 | 商家保证金页、管理员保证金审核页 | `applyDepositRefund` | mock 退还审核状态 |
+| `MOCK_REFUNDED` | 已模拟退还 | 商家保证金页 | `adminReviewDepositRefund` | 不代表真实退款 |
+| `REFUND_REJECTED` | 退还驳回 | 商家保证金页 | `adminReviewDepositRefund` | 可再次申请 |
+
+### `RISK_LEVEL`
+
+| 状态值 | 中文含义 | 影响页面 | 云函数 | 兼容说明 |
+|---|---|---|---|---|
+| `LOW` | 低风险 | 商家风险状态页、管理员风控页 | `adminSetRiskLevel` | 可正常计算入驻状态 |
+| `MEDIUM` | 中风险 | 管理员风控页 | `adminSetRiskLevel` | 阶段 20 不阻断经营 |
+| `HIGH` | 高风险 | 商家风险状态页、管理员风控页 | `adminSetRiskLevel` | 进入 `RISK_REVIEW` |
+| `BLOCKED` | 限制入驻 | 商家风险状态页、管理员风控页 | `adminSetRiskLevel`、`merchant.createMerchantService` | 禁止发布服务 |
+
+风险标签 `RISK_TAGS` 包括 `MATERIAL_INCOMPLETE`、`CATEGORY_RESTRICTED`、`DEPOSIT_UNPAID`、`QUALIFICATION_REJECTED`、`INSURANCE_MISSING`、`MANUAL_REVIEW_REQUIRED`。
+
+### `ONBOARDING_STATUS`
+
+| 状态值 | 中文含义 | 影响页面 | 云函数 | 兼容说明 |
+|---|---|---|---|---|
+| `INCOMPLETE` | 未完成 | 商家风险状态页 | `getOnboardingStatus` | 资质未完成默认 |
+| `QUALIFICATION_WAIT` | 资质待审核 | 商家风险状态页 | `submitQualification` | 资质待审核 |
+| `DEPOSIT_WAIT` | 保证金待处理 | 商家风险状态页 | `getOnboardingStatus` | 保证金未满足 |
+| `RISK_REVIEW` | 风控复核中 | 商家风险状态页 | `adminSetRiskLevel` | 高风险需复核 |
+| `ACTIVE` | 可正常经营 | 商家服务发布 | `getOnboardingStatus`、`merchant.createMerchantService` | 满足资质、保证金和风险规则 |
+| `LIMITED` | 受限经营 | 管理员风控页 | `adminSetOnboardingLimit` | 管理员手动限制 |
+| `BLOCKED` | 禁止经营 | 商家服务发布 | `adminSetRiskLevel`、`merchant.createMerchantService` | 风险阻断 |

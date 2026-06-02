@@ -27,23 +27,26 @@
     </view>
 
     <view class="section-head">管理入口</view>
-    <view class="entry-list panel">
-      <button class="entry-item" bindtap="goOrders">订单管理</button>
-      <button class="entry-item" bindtap="goUsers">用户管理</button>
-      <button class="entry-item" bindtap="goWorkers">师傅审核</button>
-      <button class="entry-item" bindtap="goAfterSales">售后管理</button>
-      <button class="entry-item" bindtap="goAreas">区域管理</button>
-      <button class="entry-item" bindtap="goDispatchLogs">派单日志</button>
-      <button class="entry-item" bindtap="goFinanceLogs">财务流水</button>
-      <button class="entry-item" bindtap="goWorkerEarnings">师傅收益</button>
-      <button class="entry-item" bindtap="goMemberPlans">会员方案</button>
-      <button class="entry-item" bindtap="goCouponTemplates">优惠券管理</button>
-      <button class="entry-item" bindtap="goReviews">评价管理</button>
-      <button class="entry-item" bindtap="goReviewAppeals">差评申诉</button>
-      <button class="entry-item" bindtap="goTipLogs">打赏记录</button>
-      <button class="entry-item" bindtap="goMerchants">商家管理</button>
-      <button class="entry-item" bindtap="goServices">服务管理</button>
-      <button class="entry-item" bindtap="goCategories">分类管理</button>
+    <view class="module-list">
+      <view wx:for="{{ entryGroups }}" wx:key="key" class="module-card panel">
+        <button class="module-header" data-index="{{ index }}" bindtap="toggleEntryGroup">
+          <view class="module-copy">
+            <view class="module-title">{{ item.title }}</view>
+            <view class="module-desc">{{ item.description }}</view>
+          </view>
+          <view class="module-meta">{{ item.entries.length }} 项 · {{ item.expanded ? '收起' : '展开' }}</view>
+        </button>
+        <view wx:if="{{ item.expanded }}" class="module-body">
+          <button
+            wx:for="{{ item.entries }}"
+            wx:for-item="entry"
+            wx:key="url"
+            class="entry-item"
+            data-url="{{ entry.url }}"
+            bindtap="goEntry"
+          >{{ entry.label }}</button>
+        </view>
+      </view>
     </view>
   </block>
 </view>

@@ -20,7 +20,27 @@
       <text class="form-label">小区</text>
       <input class="form-input" value="{{ form.community }}" data-field="community" bindinput="handleInput" />
     </view>
+    <view class="form-item">
+      <text class="form-label">中心点纬度</text>
+      <input class="form-input" type="digit" value="{{ form.latitude }}" data-field="latitude" bindinput="handleInput" placeholder="例如 30.2741" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">中心点经度</text>
+      <input class="form-input" type="digit" value="{{ form.longitude }}" data-field="longitude" bindinput="handleInput" placeholder="例如 120.1551" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">行政区编码</text>
+      <input class="form-input" value="{{ form.adcode }}" data-field="adcode" bindinput="handleInput" placeholder="例如 330106" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">地图地址</text>
+      <input class="form-input" value="{{ form.map_address }}" data-field="map_address" bindinput="handleInput" placeholder="地图选点后的标准地址" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">地图 POI</text>
+      <input class="form-input" value="{{ form.map_poi_name }}" data-field="map_poi_name" bindinput="handleInput" placeholder="例如 小区东门" />
+    </view>
   </view>
 
-  <button class="primary-button" loading="{{ saving }}" disabled="{{ saving }}" bindtap="handleSave">保存区域</button>
+  <button class="primary-button" loading="{{ saving }}" disabled="{{ saving }}" bindtap="handleSave">保存服务区域</button>
 </view>

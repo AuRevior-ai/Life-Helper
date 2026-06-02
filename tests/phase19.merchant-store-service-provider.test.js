@@ -537,7 +537,7 @@ test('phase 19 routes, constants, services, docs, and package are wired', () => 
   const status = read('miniprogram/config/status.js')
   const merchantService = read('miniprogram/services/merchant.service.js')
   const doc = read('docs/dev-records/19-merchant-store-service-provider.md')
-  const packageJson = read('cloudfunctions/merchant/package.json')
+  const packageJson = JSON.parse(read('cloudfunctions/merchant/package.json'))
 
   assert.match(appJson, /pages\/merchant\/store-list\/store-list/)
   assert.match(appJson, /pages\/merchant\/store-detail\/store-detail/)
@@ -554,5 +554,5 @@ test('phase 19 routes, constants, services, docs, and package are wired', () => 
   assert.match(merchantService, /adminApproveMerchant/)
   assert.match(doc, /阶段 19/)
   assert.match(doc, /service_providers/)
-  assert.match(packageJson, /3\.0\.1/)
+  assert.equal(packageJson.dependencies['wx-server-sdk'], '3.0.4')
 })

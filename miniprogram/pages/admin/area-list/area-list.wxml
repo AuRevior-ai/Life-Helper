@@ -1,16 +1,18 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">维护可服务小区，禁用后不再用于新地址和师傅区域</view>
+    <view class="page-subtitle">维护服务区域、地图中心点和行政区编码，供地址选点、半径模式和行政区模式使用</view>
   </view>
 
-  <button class="primary-button" bindtap="goCreate">新增服务小区</button>
+  <button class="primary-button" bindtap="goCreate">新增服务区域</button>
 
   <loading-view wx:if="{{ loading }}" text="正在加载区域"></loading-view>
   <block wx:elif="{{ areas.length }}">
     <view wx:for="{{ areas }}" wx:key="_id" class="panel">
       <view class="section-title">{{ item.full_name }}</view>
       <view class="muted-text">状态：{{ item.status }}</view>
+      <view class="muted-text">地图中心点：{{ item.latitude || item.center_latitude || '未填写' }}，{{ item.longitude || item.center_longitude || '未填写' }}</view>
+      <view class="muted-text">行政区编码：{{ item.adcode || '未填写' }}</view>
       <button class="ghost-button" data-id="{{ item._id }}" bindtap="goEdit">编辑</button>
       <button class="ghost-button" data-id="{{ item._id }}" data-status="{{ item.status }}" bindtap="toggleStatus">
         {{ item.status === 'enabled' ? '禁用' : '启用' }}
@@ -20,6 +22,6 @@
   <empty-state
     wx:else
     title="{{ collectionMissing ? '服务区域集合未创建' : '暂无服务区域' }}"
-    description="{{ collectionMissing ? '请先在云开发数据库创建 service_areas 集合，然后再新增小区' : '新增小区后，地址和师傅服务范围可按小区匹配' }}"
+    description="{{ collectionMissing ? '请先在云开发数据库创建 service_areas 集合，然后再新增服务区域' : '新增服务区域后，地址和服务范围可按地图中心点、行政区或小区匹配' }}"
   ></empty-state>
 </view>

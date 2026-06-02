@@ -12,9 +12,9 @@ const PAY_STATUS = Object.freeze({
   REFUNDED: 'refunded'
 })
 
-const { success, fail, serviceError } = require('../_shared/response')
-const { getPayload } = require('../_shared/payload')
-const { getNow } = require('../_shared/time')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
 
 const PAY_MODE = Object.freeze({
   MOCK: 'mock',

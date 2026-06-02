@@ -35,12 +35,20 @@ const USER_STATUS = Object.freeze({
   DISABLED: 'disabled'
 })
 
-const { success, fail, serviceError } = require('../_shared/response')
-const { getPayload } = require('../_shared/payload')
-const { getNow } = require('../_shared/time')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { canMerchantOperate, assertCanMerchantOperate } = require('./onboarding.service')
+const { sortProvidersByDistance } = require('./_shared/lbs-utils')
 
 function trimText(value) {
   return `${value || ''}`.trim()
+}
+
+function toNumberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
 }
 
 function normalizeArray(value) {
@@ -143,6 +151,17 @@ function normalizeMerchantPayload(payload = {}) {
     district: trimText(payload.district),
     street: trimText(payload.street),
     community: trimText(payload.community),
+    service_range_mode: trimText(payload.serviceRangeMode || payload.service_range_mode) || 'admin_area',
+    base_latitude: toNumberOrNull(payload.baseLatitude || payload.base_latitude || payload.latitude),
+    base_longitude: toNumberOrNull(payload.baseLongitude || payload.base_longitude || payload.longitude),
+    base_address: trimText(payload.baseAddress || payload.base_address),
+    base_poi_name: trimText(payload.basePoiName || payload.base_poi_name),
+    service_radius_km: Number(payload.serviceRadiusKm || payload.service_radius_km || 0),
+    service_districts: normalizeArray(payload.serviceDistricts || payload.service_districts),
+    service_streets: normalizeArray(payload.serviceStreets || payload.service_streets),
+    service_adcodes: normalizeArray(payload.serviceAdcodes || payload.service_adcodes),
+    lbs_enabled: payload.lbsEnabled === true || payload.lbs_enabled === true,
+    location_updated_at: payload.locationUpdatedAt || payload.location_updated_at || null,
     detail_address: trimText(payload.detailAddress || payload.detail_address),
     full_address: trimText(payload.fullAddress || payload.full_address),
     business_hours: trimText(payload.businessHours || payload.business_hours),
@@ -215,6 +234,18 @@ async function upsertMerchantProvider(merchant, env) {
     service_category_ids: merchant.service_category_ids || [],
     service_area_ids: merchant.service_area_ids || [],
     service_communities: merchant.service_communities || [],
+    service_range_mode: merchant.service_range_mode || 'admin_area',
+    base_latitude: merchant.base_latitude ?? null,
+    base_longitude: merchant.base_longitude ?? null,
+    base_address: merchant.base_address || '',
+    base_poi_name: merchant.base_poi_name || '',
+    service_radius_km: Number(merchant.service_radius_km || 0),
+    service_city: merchant.city || '',
+    service_districts: merchant.service_districts || (merchant.district ? [merchant.district] : []),
+    service_streets: merchant.service_streets || (merchant.street ? [merchant.street] : []),
+    service_adcodes: merchant.service_adcodes || [],
+    lbs_enabled: merchant.lbs_enabled === true,
+    location_updated_at: merchant.location_updated_at || null,
     audit_status: merchant.audit_status,
     status: merchant.status,
     online_status: 'available',
@@ -337,6 +368,13 @@ async function adminDisableMerchant(event, env) {
 async function createMerchantService(event, env) {
   const merchant = await requireOwnedApprovedMerchant(env)
   if (merchant.status !== MERCHANT_STATUS.NORMAL) throw serviceError('MERCHANT_DISABLED', '商家已被禁用')
+  if (env.qualifications && env.deposits && env.riskRecords) {
+    const operationGate = await canMerchantOperate({
+      merchantId: merchant._id,
+      providerType: SERVICE_PROVIDER_TYPE.MERCHANT
+    }, env)
+    assertCanMerchantOperate(operationGate)
+  }
   const payload = getPayload(event)
   const serviceId = requireText(payload.serviceId || payload.service_id, 'SERVICE_ID_MISSING', '缺少服务 ID')
   const service = await env.services.findById(serviceId)
@@ -419,11 +457,15 @@ function ensurePublicMerchant(merchant) {
 }
 
 async function getStoreList(event, env) {
+  const payload = getPayload(event)
   const merchants = await env.merchants.findAll()
-  const list = merchants.filter((merchant) =>
+  let list = merchants.filter((merchant) =>
     merchant.audit_status === MERCHANT_AUDIT_STATUS.APPROVED &&
     merchant.status === MERCHANT_STATUS.NORMAL
   )
+  if (payload.latitude !== undefined && payload.longitude !== undefined) {
+    list = sortProvidersByDistance({ latitude: payload.latitude, longitude: payload.longitude }, list)
+  }
   return success({ list, merchants: list })
 }
 

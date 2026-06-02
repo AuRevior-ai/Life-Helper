@@ -8,6 +8,7 @@ Page({
     serviceId: '',
     service: null,
     priceText: '¥0.00',
+    loadError: '',
     loading: true
   },
 
@@ -20,12 +21,12 @@ Page({
 
   async loadServiceDetail() {
     if (!this.data.serviceId) {
-      this.setData({ loading: false })
+      this.setData({ loading: false, loadError: '缺少服务 ID' })
       showError('缺少服务 ID')
       return
     }
 
-    this.setData({ loading: true })
+    this.setData({ loading: true, loadError: '' })
     try {
       const data = await serviceService.getServiceDetail({
         serviceId: this.data.serviceId
@@ -34,12 +35,14 @@ Page({
       this.setData({
         service,
         title: service.name,
-        priceText: formatPrice(service.price)
+        priceText: formatPrice(service.price),
+        loadError: ''
       })
       wx.setNavigationBarTitle({
         title: service.name
       })
     } catch (error) {
+      this.setData({ service: null, loadError: error.message || '服务详情加载失败' })
       showError(error.message || '服务详情加载失败')
     } finally {
       this.setData({ loading: false })

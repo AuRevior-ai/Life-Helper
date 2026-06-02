@@ -6,6 +6,11 @@ const EMPTY_FORM = Object.freeze({
   district: '',
   street: '',
   community: '',
+  latitude: '',
+  longitude: '',
+  adcode: '',
+  map_address: '',
+  map_poi_name: '',
   sort: 0
 })
 
@@ -40,6 +45,11 @@ Page({
           district: area.district || '',
           street: area.street || '',
           community: area.community || '',
+          latitude: area.latitude ?? area.center_latitude ?? '',
+          longitude: area.longitude ?? area.center_longitude ?? '',
+          adcode: area.adcode || '',
+          map_address: area.map_address || '',
+          map_poi_name: area.map_poi_name || '',
           sort: area.sort || 0
         }
       })

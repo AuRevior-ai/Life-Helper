@@ -6,6 +6,12 @@
 
   <loading-view wx:if="{{ loading }}" text="正在加载下单信息"></loading-view>
 
+  <empty-state
+    wx:elif="{{ loadError }}"
+    title="下单信息加载失败"
+    description="{{ loadError }}"
+  ></empty-state>
+
   <block wx:elif="{{ service }}">
     <view class="service-summary panel">
       <view>

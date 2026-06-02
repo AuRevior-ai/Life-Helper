@@ -1,0 +1,12 @@
+{
+  "collection": "worker_earnings",
+  "description": "服务方收益集合，历史命名为 worker_earnings，通过 provider_type 兼容师傅和商家。",
+  "requiredFields": ["_id", "order_id", "provider_id", "provider_type", "amount", "status", "created_at", "updated_at"],
+  "optionalFields": ["worker_id", "merchant_id", "order_no", "settlement_status", "freeze_until", "settled_at", "reversed_at", "refund_id", "remark"],
+  "serverOnlyFields": ["amount", "status", "settlement_status", "freeze_until", "settled_at", "reversed_at", "created_at", "updated_at"],
+  "clientWritableFields": [],
+  "statusFields": ["status", "settlement_status", "provider_type"],
+  "relationFields": ["order_id", "provider_id", "worker_id", "merchant_id", "refund_id"],
+  "indexHints": ["provider_id + provider_type + status", "order_id", "status + freeze_until"],
+  "compatibilityNotes": ["集合名沿用 worker_earnings；后续如迁移 provider_earnings 需保留兼容层。", "当前只支持 mock 解冻/回冲，无真实提现。"]
+}

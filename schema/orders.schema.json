@@ -1,0 +1,12 @@
+{
+  "collection": "orders",
+  "description": "订单主表，保存用户下单、服务方归属、支付、售后和评价状态快照。",
+  "requiredFields": ["_id", "user_id", "service_id", "service_snapshot", "status", "pay_status", "price", "created_at", "updated_at"],
+  "optionalFields": ["order_no", "address_snapshot", "appointment_date", "appointment_time_slot", "worker_id", "provider_id", "provider_type", "merchant_id", "accepted_at", "service_started_at", "service_finished_at", "completed_at", "canceled_at", "paid_at", "pay_amount", "out_trade_no", "prepay_id", "transaction_id", "after_sale_status", "refund_status", "review_id", "marketing_snapshot"],
+  "serverOnlyFields": ["status", "pay_status", "worker_id", "provider_id", "provider_type", "merchant_id", "accepted_at", "service_started_at", "service_finished_at", "completed_at", "paid_at", "out_trade_no", "prepay_id", "transaction_id", "after_sale_status", "refund_status", "created_at", "updated_at"],
+  "clientWritableFields": ["service_id", "address_id", "address_snapshot", "appointment_date", "appointment_time_slot", "remark", "coupon_id"],
+  "statusFields": ["status", "pay_status", "after_sale_status", "refund_status"],
+  "relationFields": ["user_id", "service_id", "worker_id", "provider_id", "merchant_id", "review_id"],
+  "indexHints": ["user_id + created_at", "worker_id + status + created_at", "provider_id + provider_type + created_at", "status + pay_status + created_at", "out_trade_no"],
+  "compatibilityNotes": ["service_snapshot and address_snapshot are historical snapshots and should not be overwritten from later source records.", "provider_id/provider_type were introduced for merchant compatibility; older worker-only orders may only have worker_id.", "真实云环境字段仍需按试运营数据回填校验。"]
+}

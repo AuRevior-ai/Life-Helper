@@ -1,3 +1,8 @@
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { matchProviderServiceRange } = require('./_shared/lbs-utils')
+
 const USER_ROLE = Object.freeze({ ADMIN: 'admin' })
 const USER_STATUS = Object.freeze({ NORMAL: 'normal', DISABLED: 'disabled' })
 const ORDER_STATUS = Object.freeze({
@@ -6,32 +11,6 @@ const ORDER_STATUS = Object.freeze({
 })
 const WORKER_STATUS = Object.freeze({ ENABLED: 'enabled' })
 const WORKER_ONLINE_STATUS = Object.freeze({ AVAILABLE: 'available' })
-
-function success(data, message = 'success') {
-  return { success: true, data, message }
-}
-
-function fail(errorCode, message) {
-  return { success: false, errorCode, message }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-  const { action, ...payload } = event
-  return payload
-}
 
 function trimText(value) {
   return `${value || ''}`.trim()
@@ -64,13 +43,20 @@ function workerMatchesCategory(worker, order) {
 }
 
 function workerMatchesArea(worker, order) {
-  const workerCommunities = Array.isArray(worker.service_communities)
-    ? worker.service_communities.map((item) => trimText(item)).filter(Boolean)
-    : []
-  if (workerCommunities.length) {
-    return Boolean(trimText(order.community)) && workerCommunities.includes(trimText(order.community))
+  return matchProviderServiceRange(buildOrderAddressForLbs(order), worker).matched
+}
+
+function buildOrderAddressForLbs(order = {}) {
+  return {
+    city: order.city || (order.address_snapshot && order.address_snapshot.city) || '',
+    district: order.district || (order.address_snapshot && order.address_snapshot.district) || '',
+    street: order.street || (order.address_snapshot && order.address_snapshot.street) || '',
+    community: order.community || (order.address_snapshot && order.address_snapshot.community) || '',
+    latitude: order.latitude ?? (order.address_snapshot && order.address_snapshot.latitude) ?? null,
+    longitude: order.longitude ?? (order.address_snapshot && order.address_snapshot.longitude) ?? null,
+    adcode: order.adcode || (order.address_snapshot && order.address_snapshot.adcode) || '',
+    full_address: order.full_address || (order.address_snapshot && order.address_snapshot.full_address) || ''
   }
-  return hasTextMatch(worker.service_area || worker.serviceArea, [order.community, order.city, order.full_address].filter(Boolean).join(' '))
 }
 
 function isWorkerAssignable(worker, order) {
@@ -126,8 +112,57 @@ async function getAssignableWorkers(event, env) {
   const order = await requireOrder(payload.orderId, env)
   const workers = await env.workers.findAll()
   return success({
-    workers: workers.filter((worker) => isWorkerAssignable(worker, order))
+    workers: workers
+      .filter((worker) => isWorkerAssignable(worker, order))
+      .map((worker) => ({
+        ...worker,
+        lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), worker)
+      }))
   })
+}
+
+function providerMatchesCategory(provider = {}, order = {}) {
+  const categoryId = trimText(order.category_id)
+  const categoryName = trimText(order.category_name || order.service_category)
+  const providerCategoryIds = Array.isArray(provider.service_category_ids) ? provider.service_category_ids.map((item) => trimText(item)) : []
+  if (categoryId && providerCategoryIds.length) return providerCategoryIds.includes(categoryId)
+  if (categoryName && provider.service_category) return hasTextMatch(provider.service_category, categoryName)
+  return true
+}
+
+function isServiceProviderAssignable(provider, order) {
+  return Boolean(
+    provider &&
+    provider.audit_status === 'approved' &&
+    (!provider.status || provider.status === 'normal' || provider.status === 'enabled') &&
+    (!provider.online_status || provider.online_status === WORKER_ONLINE_STATUS.AVAILABLE) &&
+    providerMatchesCategory(provider, order) &&
+    matchProviderServiceRange(buildOrderAddressForLbs(order), provider).matched
+  )
+}
+
+async function getAssignableProviders(event, env) {
+  await requireAdmin(env)
+  const payload = getPayload(event)
+  const order = await requireOrder(payload.orderId, env)
+  const workers = (await env.workers.findAll())
+    .filter((worker) => isWorkerAssignable(worker, order))
+    .map((worker) => ({
+      ...worker,
+      provider_type: 'worker',
+      provider_id: worker.user_id || worker._id,
+      display_name: worker.name || worker.display_name || '',
+      lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), worker)
+    }))
+  const serviceProviders = env.serviceProviders && env.serviceProviders.findAll
+    ? (await env.serviceProviders.findAll())
+      .filter((provider) => isServiceProviderAssignable(provider, order))
+      .map((provider) => ({
+        ...provider,
+        lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), provider)
+      }))
+    : []
+  return success({ providers: [...workers, ...serviceProviders] })
 }
 
 async function adminAssignOrder(event, env) {
@@ -300,6 +335,7 @@ async function getDispatchLogs(event, env) {
 
 const actions = Object.freeze({
   getAssignableWorkers,
+  getAssignableProviders,
   adminAssignOrder,
   adminUnassignOrder,
   getDispatchLogs
@@ -318,6 +354,7 @@ async function handleDispatch(event = {}, env) {
 module.exports = {
   handleDispatch,
   getAssignableWorkers,
+  getAssignableProviders,
   adminAssignOrder,
   adminUnassignOrder,
   getDispatchLogs,

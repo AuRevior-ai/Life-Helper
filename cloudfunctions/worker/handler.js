@@ -1,3 +1,8 @@
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { matchProviderServiceRange } = require('./_shared/lbs-utils')
+
 const WORKER_AUDIT_STATUS = Object.freeze({
   NOT_APPLIED: 'not_applied',
   PENDING: 'pending',
@@ -29,43 +34,14 @@ const USER_STATUS = Object.freeze({
 
 const REQUIRED_WORKER_FIELDS = ['name', 'phone', 'service_category', 'service_area']
 
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-
-  const { action, ...payload } = event
-  return payload
-}
-
 function trimText(value) {
   return `${value || ''}`.trim()
+}
+
+function toNumberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
 }
 
 function splitKeywords(value) {
@@ -99,21 +75,21 @@ function getOrderAreaText(order) {
     .join(' ')
 }
 
-function orderMatchesWorkerArea(order, worker) {
-  const orderCommunity = trimText(order.community)
-  const workerCommunities = Array.isArray(worker.service_communities)
-    ? worker.service_communities.map((item) => trimText(item)).filter(Boolean)
-    : []
-  if (workerCommunities.length > 0) {
-    return Boolean(orderCommunity) && workerCommunities.includes(orderCommunity)
+function buildOrderAddressForLbs(order = {}) {
+  return {
+    city: order.city || (order.address_snapshot && order.address_snapshot.city) || '',
+    district: order.district || (order.address_snapshot && order.address_snapshot.district) || '',
+    street: order.street || (order.address_snapshot && order.address_snapshot.street) || '',
+    community: order.community || (order.address_snapshot && order.address_snapshot.community) || '',
+    latitude: order.latitude ?? (order.address_snapshot && order.address_snapshot.latitude) ?? null,
+    longitude: order.longitude ?? (order.address_snapshot && order.address_snapshot.longitude) ?? null,
+    adcode: order.adcode || (order.address_snapshot && order.address_snapshot.adcode) || '',
+    full_address: order.full_address || (order.address_snapshot && order.address_snapshot.full_address) || getOrderAreaText(order)
   }
+}
 
-  const orderArea = getOrderAreaText(order)
-  const workerArea = worker.service_area || worker.serviceArea
-  if (!trimText(orderArea) || !trimText(workerArea)) {
-    return false
-  }
-  return hasTextMatch(workerArea, orderArea)
+function orderMatchesWorkerArea(order, worker) {
+  return matchProviderServiceRange(buildOrderAddressForLbs(order), worker).matched
 }
 
 async function safeCreateMessage(env, data) {
@@ -162,6 +138,20 @@ function normalizeWorkerPayload(payload = {}) {
     service_districts: Array.isArray(payload.service_districts || payload.serviceDistricts)
       ? (payload.service_districts || payload.serviceDistricts).map((item) => trimText(item)).filter(Boolean)
       : [],
+    service_streets: Array.isArray(payload.service_streets || payload.serviceStreets)
+      ? (payload.service_streets || payload.serviceStreets).map((item) => trimText(item)).filter(Boolean)
+      : [],
+    service_adcodes: Array.isArray(payload.service_adcodes || payload.serviceAdcodes)
+      ? (payload.service_adcodes || payload.serviceAdcodes).map((item) => trimText(item)).filter(Boolean)
+      : [],
+    service_range_mode: trimText(payload.service_range_mode || payload.serviceRangeMode) || 'admin_area',
+    base_latitude: toNumberOrNull(payload.base_latitude || payload.baseLatitude),
+    base_longitude: toNumberOrNull(payload.base_longitude || payload.baseLongitude),
+    base_address: trimText(payload.base_address || payload.baseAddress),
+    base_poi_name: trimText(payload.base_poi_name || payload.basePoiName),
+    service_radius_km: Number(payload.service_radius_km || payload.serviceRadiusKm || 0),
+    lbs_enabled: payload.lbs_enabled === true || payload.lbsEnabled === true,
+    location_updated_at: payload.location_updated_at || payload.locationUpdatedAt || null,
     intro: trimText(payload.intro),
     qualification_images: Array.isArray(payload.qualification_images)
       ? payload.qualification_images
@@ -401,7 +391,10 @@ async function getOrderHallList(event, env) {
     !order.merchant_id &&
     orderMatchesWorkerCategory(order, worker) &&
     orderMatchesWorkerArea(order, worker)
-  )
+  ).map((order) => ({
+    ...order,
+    lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), worker)
+  }))
   return success({ orders: filteredOrders })
 }
 
@@ -439,6 +432,37 @@ async function updateWorkerServiceAreas(event, env) {
     ...nextAreaPayload,
     updated_at: getNow(env)
   })
+  return success({ worker: updatedWorker })
+}
+
+async function updateWorkerServiceRange(event, env) {
+  const worker = await requireApprovedWorker(env)
+  const payload = getPayload(event)
+  const serviceRange = {
+    service_range_mode: trimText(payload.service_range_mode || payload.serviceRangeMode) || 'admin_area',
+    base_latitude: toNumberOrNull(payload.base_latitude || payload.baseLatitude),
+    base_longitude: toNumberOrNull(payload.base_longitude || payload.baseLongitude),
+    base_address: trimText(payload.base_address || payload.baseAddress),
+    base_poi_name: trimText(payload.base_poi_name || payload.basePoiName),
+    service_radius_km: Number(payload.service_radius_km || payload.serviceRadiusKm || 0),
+    service_city: trimText(payload.service_city || payload.serviceCity || worker.service_city),
+    service_districts: Array.isArray(payload.service_districts || payload.serviceDistricts)
+      ? (payload.service_districts || payload.serviceDistricts).map((item) => trimText(item)).filter(Boolean)
+      : worker.service_districts || [],
+    service_streets: Array.isArray(payload.service_streets || payload.serviceStreets)
+      ? (payload.service_streets || payload.serviceStreets).map((item) => trimText(item)).filter(Boolean)
+      : worker.service_streets || [],
+    service_communities: Array.isArray(payload.service_communities || payload.serviceCommunities)
+      ? (payload.service_communities || payload.serviceCommunities).map((item) => trimText(item)).filter(Boolean)
+      : worker.service_communities || [],
+    service_adcodes: Array.isArray(payload.service_adcodes || payload.serviceAdcodes)
+      ? (payload.service_adcodes || payload.serviceAdcodes).map((item) => trimText(item)).filter(Boolean)
+      : worker.service_adcodes || [],
+    lbs_enabled: payload.lbs_enabled !== false && payload.lbsEnabled !== false,
+    location_updated_at: getNow(env),
+    updated_at: getNow(env)
+  }
+  const updatedWorker = await env.workers.updateById(worker._id, serviceRange)
   return success({ worker: updatedWorker })
 }
 
@@ -489,7 +513,8 @@ const actions = Object.freeze({
   getWorkerDetail,
   adminGetWorkerDetail,
   updateWorkerOnlineStatus,
-  updateWorkerServiceAreas
+  updateWorkerServiceAreas,
+  updateWorkerServiceRange
 })
 
 async function handleWorker(event = {}, env) {
@@ -518,6 +543,7 @@ module.exports = {
   adminGetWorkerDetail,
   updateWorkerOnlineStatus,
   updateWorkerServiceAreas,
+  updateWorkerServiceRange,
   WORKER_AUDIT_STATUS,
   WORKER_STATUS,
   WORKER_ONLINE_STATUS

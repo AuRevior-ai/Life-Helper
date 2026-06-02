@@ -1,7 +1,50 @@
 const fs = require('node:fs')
 const path = require('node:path')
 
-const targetDir = path.resolve(process.argv[2] || 'release')
+const scanArg = process.argv[2] || '.'
+const targetDir = path.resolve(scanArg)
+
+function toPosix(relativePath) {
+  return relativePath.split(path.sep).join('/')
+}
+
+function isAllowedReferenceFile(relativePath) {
+  const normalized = toPosix(relativePath)
+  const basename = path.basename(normalized)
+  return (
+    normalized.startsWith('docs/') ||
+    normalized.startsWith('tests/') ||
+    /\.test\.js$/i.test(normalized) ||
+    /\.example\./i.test(basename) ||
+    /(^|[/._-])(mock|example)([/._-]|$)/i.test(normalized) ||
+    normalized === 'cloudfunctions/payment/wechat-pay-client.js'
+  )
+}
+
+function hasSensitivePaymentContent(fullPath, relativePath, entry) {
+  if (entry.isDirectory() || isAllowedReferenceFile(relativePath)) {
+    return false
+  }
+
+  const basename = path.basename(relativePath).toLowerCase()
+  if (['apiclient_key.pem', 'apiclient_cert.pem'].includes(basename)) {
+    return true
+  }
+
+  let content = ''
+  try {
+    content = fs.readFileSync(fullPath, 'utf8')
+  } catch (error) {
+    return false
+  }
+
+  return (
+    /-----BEGIN (RSA |EC |)PRIVATE KEY-----/.test(content) ||
+    /\b(?:mchid|merchant_id)\s*[:=]\s*['"]?\d{8,}['"]?/i.test(content) ||
+    /\b(?:apiv3|api_v3|apiV3)Key\s*[:=]\s*['"][A-Za-z0-9_-]{32,}['"]/i.test(content) ||
+    /\bWECHAT_PAY_(?:MCH_ID|API_V3_KEY|PRIVATE_KEY|CERT_SERIAL_NO)\s*=.+/i.test(content)
+  )
+}
 
 const forbiddenMatchers = [
   { label: '.git directory', test: (relativePath, entry) => relativePath === '.git' && entry.isDirectory() },
@@ -13,7 +56,7 @@ const forbiddenMatchers = [
   { label: 'certificate or private key', test: (relativePath) => /\.(pem|key|crt|cer|p12|pfx)$/i.test(relativePath) },
   { label: 'temporary archive', test: (relativePath) => /\.(zip|tar|tar\.gz|rar|7z)$/i.test(relativePath) },
   { label: 'test output', test: (relativePath) => /(^|[\\/])(coverage|test-results|playwright-report|\.nyc_output)([\\/]|$)/.test(relativePath) },
-  { label: 'real payment config', test: (relativePath) => /wechat-pay|apiclient_|mchid|apiv3/i.test(relativePath) }
+  { label: 'real payment config', test: (relativePath, entry, fullPath) => hasSensitivePaymentContent(fullPath, relativePath, entry) }
 ]
 
 function walk(dir, baseDir = dir, risks = []) {
@@ -22,7 +65,7 @@ function walk(dir, baseDir = dir, risks = []) {
     const relativePath = path.relative(baseDir, fullPath)
 
     for (const matcher of forbiddenMatchers) {
-      if (matcher.test(relativePath, entry)) {
+      if (matcher.test(relativePath, entry, fullPath)) {
         risks.push({ type: matcher.label, path: relativePath })
       }
     }
@@ -36,8 +79,10 @@ function walk(dir, baseDir = dir, risks = []) {
 }
 
 if (!fs.existsSync(targetDir)) {
-  console.log(`交付风险检查跳过：目录不存在 ${targetDir}`)
-  process.exit(0)
+  console.error(`待扫描目录不存在：${targetDir}`)
+  console.error('用法：npm run check:release-risk -- <候选交付目录>')
+  console.error('未传入目录时默认扫描当前工程。')
+  process.exit(1)
 }
 
 const risks = walk(targetDir)

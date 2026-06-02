@@ -63,7 +63,7 @@ test('shared cloudfunction utilities preserve response, payload, time, and pagin
 })
 
 test('at least five cloudfunctions consume shared low-risk utilities', () => {
-  const sharedRequirePattern = /require\(['"]\.\.\/_shared\/(?:response|payload|time|pagination)['"]\)/
+  const sharedRequirePattern = /require\(['"]\.\/_shared\/(?:response|payload|time|pagination)['"]\)/
   const wiredHandlers = listHandlerFiles().filter((relativePath) => sharedRequirePattern.test(read(relativePath)))
   assert.ok(wiredHandlers.length >= 5, `expected at least 5 shared utility consumers, got ${wiredHandlers.length}`)
 })
@@ -163,13 +163,16 @@ test('README and project config describe real AppID and mock payment boundary co
   const projectConfigExample = JSON.parse(read('project.config.example.json'))
   const readme = read('README.md')
 
-  assert.equal(projectConfig.appid, 'wxe8b7172da9c09545')
+  assert.ok(projectConfig.appid, 'project.config.json should declare the current AppID strategy')
+  assert.notEqual(projectConfig.appid, 'touristappid')
   assert.equal(projectConfigExample.appid, 'touristappid')
-  assert.match(readme, /wxe8b7172da9c09545/)
+  assert.match(readme, /真实小程序 AppID/)
+  assert.match(readme, /project\.config\.example\.json/)
+  assert.match(readme, /公开交付/)
   assert.doesNotMatch(readme, /当前 `appid` 使用 `touristappid`/)
-  assert.match(readme, /当前是 mock 支付/)
+  assert.match(readme, /当前只能使用 mock 支付/)
   assert.match(readme, /无真实扣款/)
   assert.match(readme, /无真实退款/)
   assert.match(readme, /无真实分账/)
-  assert.match(readme, /156 个测试/)
+  assert.match(readme, /自动化测试/)
 })

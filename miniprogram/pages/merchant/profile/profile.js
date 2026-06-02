@@ -16,5 +16,8 @@ Page({
 
   goServices() { wx.navigateTo({ url: '/pages/merchant/service-list/service-list' }) },
   goOrders() { wx.navigateTo({ url: '/pages/merchant/order-list/order-list' }) },
-  goIncome() { wx.navigateTo({ url: '/pages/merchant/income/income' }) }
+  goIncome() { wx.navigateTo({ url: '/pages/merchant/income/income' }) },
+  goQualification() { wx.navigateTo({ url: '/pages/merchant/qualification/qualification' }) },
+  goDeposit() { wx.navigateTo({ url: '/pages/merchant/deposit/deposit' }) },
+  goRiskStatus() { wx.navigateTo({ url: '/pages/merchant/risk-status/risk-status' }) }
 })

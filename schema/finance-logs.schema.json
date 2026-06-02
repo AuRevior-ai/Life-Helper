@@ -1,0 +1,12 @@
+{
+  "collection": "finance_logs",
+  "description": "平台财务流水集合，记录订单收入、平台佣金、服务方收益和退款回冲等 mock 账务。",
+  "requiredFields": ["_id", "type", "direction", "amount", "status", "created_at"],
+  "optionalFields": ["order_id", "order_no", "user_id", "provider_id", "provider_type", "worker_id", "merchant_id", "earning_id", "refund_id", "remark", "raw_data", "updated_at"],
+  "serverOnlyFields": ["type", "direction", "amount", "status", "earning_id", "raw_data", "created_at", "updated_at"],
+  "clientWritableFields": [],
+  "statusFields": ["type", "direction", "status"],
+  "relationFields": ["order_id", "user_id", "provider_id", "worker_id", "merchant_id", "earning_id", "refund_id"],
+  "indexHints": ["order_id + type", "provider_id + provider_type + created_at", "type + created_at", "status + created_at"],
+  "compatibilityNotes": ["当前财务流水基于 mock 支付，不代表微信真实清算、分账或提现。", "真实支付接入后需补充 transaction_id、channel reconciliation fields 等字段。"]
+}

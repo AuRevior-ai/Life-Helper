@@ -1,0 +1,5 @@
+.page { padding: 32rpx; background: #f6f8f5; min-height: 100vh; }
+.panel, .item { padding: 24rpx; margin-bottom: 20rpx; background: #ffffff; border-radius: 8rpx; }
+input { padding: 18rpx; margin-bottom: 16rpx; background: #f6f8f5; border-radius: 8rpx; }
+text { display: block; margin-bottom: 12rpx; }
+button { margin-top: 12rpx; }

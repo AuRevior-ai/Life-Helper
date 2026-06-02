@@ -1,0 +1,11 @@
+{
+  "collection": "merchant_risk_records",
+  "description": "阶段 20 入驻风控 mock 记录。",
+  "requiredFields": ["_id", "merchant_id", "provider_type", "risk_level", "risk_tags", "action", "operator_openid", "created_at", "updated_at"],
+  "serverOnlyFields": ["risk_level", "risk_tags", "risk_reason", "action", "operator_openid"],
+  "clientWritableFields": [],
+  "statusFields": ["risk_level", "risk_tags"],
+  "relationFields": ["merchant_id", "provider_id", "provider_type"],
+  "indexHints": ["merchant_id + provider_type + created_at", "risk_level + created_at", "operator_openid + created_at"],
+  "compatibilityNotes": "仅为管理员手动 mock 风控标记，不接入真实风控评分、征信或外部黑名单。"
+}

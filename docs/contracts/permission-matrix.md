@@ -1,6 +1,6 @@
 # 权限矩阵
 
-本文件记录多角色 action 权限边界。后续新增 action、状态流转、集合字段或资金相关能力必须同步本矩阵。当前角色包括游客、普通用户、师傅、商家、管理员和系统内部调用。
+本文件记录多角色 action 权限边界。后续新增 action、状态流转、集合字段、list 接口或资金相关能力必须同步本矩阵。当前角色包括游客、普通用户、师傅、商家、管理员和系统内部调用。新增 action 还必须同步 `docs/contracts/api-actions.manifest.json`；新增 list action 还必须同步 `docs/contracts/pagination-and-indexes.md`。
 
 ## 角色定义
 
@@ -31,6 +31,12 @@
 | `merchant.getStoreList/getStoreDetail/getStoreServices` | 允许 | 允许 | 允许 | 允许 | 允许 | 否 | 仅展示审核通过且正常店铺 |
 | `merchant.getMerchantOrder* / merchantAcceptOrder / merchantStartService / merchantFinishService` | 否 | 否 | 否 | 仅本人商家订单 | 管理查看 | 否 | 商家不能冒充个人师傅操作订单 |
 | `merchant.admin*` | 否 | 否 | 否 | 否 | 允许 | 否 | 审核、启停、查看日志 |
+| `qualification.getMyQualification/saveQualificationDraft/submitQualification/resubmitQualification` | 否 | 本人商家/服务方 | 本人服务方待扩展 | 仅本人商家 | 管理查看 | 否 | 不保存真实完整身份证号、营业执照号或保单号 |
+| `qualification.getMyDeposit/mockPayDeposit/applyDepositRefund` | 否 | 本人商家/服务方 | 本人服务方待扩展 | 仅本人商家 | 管理查看 | 否 | 模拟保证金，不产生真实扣款、退款或分账 |
+| `qualification.getMyRiskStatus/getOnboardingStatus` | 否 | 本人简要状态 | 本人简要状态待扩展 | 仅本人简要状态 | 允许查看详情 | 否 | 商家端不展示内部风控标签和管理员备注 |
+| `qualification.adminListQualifications/adminGetQualificationDetail/adminReviewQualification` | 否 | 否 | 否 | 否 | 允许 | 否 | 管理员审核资质并写操作日志 |
+| `qualification.adminListDeposits/adminFreezeDeposit/adminReviewDepositRefund` | 否 | 否 | 否 | 否 | 允许 | 否 | 管理员处理 mock 保证金，不接真实退款 |
+| `qualification.adminSetRiskLevel/adminAddRiskTag/adminListRiskRecords/adminGetOnboardingDetail` | 否 | 否 | 否 | 否 | 允许 | 否 | 管理员手动 mock 风控，不接真实风控模型 |
 | `review.createReview/addReviewFollowup/getOrderReview` | 否 | 仅本人订单 | 相关订单只读/回复 | 相关商家订单待补强 | 管理查看 | 订单完成触发 | 用户只能评价自己的订单 |
 | `review.workerReplyReview/workerCreateReviewAppeal` | 否 | 否 | 仅相关师傅评价 | 商家评价能力待补强 | 管理审核 | 否 | 当前主要面向师傅 |
 | `review.admin*` | 否 | 否 | 否 | 否 | 允许 | 否 | 隐藏/恢复/申诉审核需日志 |
@@ -60,6 +66,7 @@
 - 管理员接口必须有 `requireAdmin` 或等价校验。
 - 支付、退款、财务接口必须有归属校验、状态校验和幂等拦截。
 - mock 支付、mock 退款、mock 打赏、mock 解冻不能被误认为真实资金流。
+- mock 保证金、mock 资质认证、mock 保险信息和 mock 入驻风控不能被误认为真实支付、真实退款、真实身份认证、真实营业执照认证、真实 OCR 或真实保险核验。
 - 重复支付、重复退款、重复财务生成、重复核销必须被拦截。
 
 ## 当前风险记录

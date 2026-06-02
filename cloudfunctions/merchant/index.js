@@ -10,6 +10,12 @@ const {
   createOrderRepository,
   createMessageRepository
 } = require('./repositories')
+const {
+  createQualificationRepository,
+  createDepositRepository,
+  createRiskRecordRepository,
+  createOnboardingLogRepository
+} = require('./qualification-repositories')
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -28,6 +34,10 @@ exports.main = async (event = {}) => {
     merchantLogs: createMerchantLogRepository(db),
     services: createServiceRepository(db),
     orders: createOrderRepository(db),
-    messages: createMessageRepository(db)
+    messages: createMessageRepository(db),
+    qualifications: createQualificationRepository(db),
+    deposits: createDepositRepository(db),
+    riskRecords: createRiskRecordRepository(db),
+    onboardingLogs: createOnboardingLogRepository(db)
   })
 }

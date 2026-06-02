@@ -52,7 +52,7 @@
 
 ```bash
 npm test
-node scripts/check-release-risk.js <候选交付目录>
+npm run check:release-risk -- <候选交付目录>
 ```
 
-如果脚本报告 `.git`、私钥、证书、日志、真实支付配置或本地私有配置，必须重新生成交付包。
+如果未传入目录，脚本默认扫描当前工程；如果传入的待扫描目录不存在，脚本会以非 0 退出码提示“待扫描目录不存在”。如果脚本报告 `.git`、私钥、证书、日志、真实支付配置或本地私有配置，必须重新生成交付包。正常的 `docs/**/*.md`、`tests/**/*.test.js`、`*.example.*` 和明确 mock/example 占位文件不应被当作真实支付风险。

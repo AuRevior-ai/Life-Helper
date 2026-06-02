@@ -473,7 +473,7 @@ test('phase 16 services, pages, constants, and docs are wired', () => {
   const status = read('miniprogram/config/status.js')
   const financeService = read('miniprogram/services/finance.service.js')
   const workerIncome = read('miniprogram/pages/worker/income/income.js')
-  const dashboard = read('miniprogram/pages/admin/dashboard/dashboard.wxml')
+  const dashboard = read('miniprogram/pages/admin/dashboard/dashboard.js')
   const index = read('docs/dev-records/index.md')
   const report = read('docs/dev-records/16_finance-worker-earning-base.md')
 
@@ -494,6 +494,7 @@ test('phase 16 services, pages, constants, and docs are wired', () => {
   assert.match(financeService, /adminGetFinanceLogs/)
   assert.match(workerIncome, /financeService/)
   assert.match(dashboard, /财务流水/)
+  assert.match(dashboard, /finance-log-list\/finance-log-list/)
   assert.match(report, /finance_logs/)
   assert.match(index, /16_finance-worker-earning-base/)
   assert.equal(exists('cloudfunctions/finance/package.json'), true)

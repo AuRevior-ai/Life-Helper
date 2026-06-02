@@ -1,6 +1,6 @@
-const { success, fail, serviceError } = require('../_shared/response')
-const { getPayload } = require('../_shared/payload')
-const { getNow } = require('../_shared/time')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
 
 const REQUIRED_ADDRESS_FIELDS = ['contact_name', 'phone', 'city', 'community', 'detail_address']
 
@@ -17,6 +17,12 @@ function buildFullAddress(address = {}) {
 
 function isPhone(value) {
   return /^1[3-9]\d{9}$/.test(trimText(value))
+}
+
+function toNumberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
 }
 
 function requireOpenid(env) {
@@ -36,6 +42,15 @@ function normalizeAddressPayload(payload = {}) {
     street: trimText(payload.street),
     community: trimText(payload.community),
     detail_address: trimText(payload.detail_address),
+    latitude: toNumberOrNull(payload.latitude),
+    longitude: toNumberOrNull(payload.longitude),
+    map_address: trimText(payload.map_address || payload.mapAddress),
+    map_poi_name: trimText(payload.map_poi_name || payload.mapPoiName),
+    map_point_source: trimText(payload.map_point_source || payload.mapPointSource) || 'legacy_text',
+    city_code: trimText(payload.city_code || payload.cityCode),
+    adcode: trimText(payload.adcode),
+    district_code: trimText(payload.district_code || payload.districtCode),
+    location_updated_at: payload.location_updated_at || payload.locationUpdatedAt || null,
     is_default: Boolean(payload.is_default)
   }
   return {
@@ -80,7 +95,14 @@ async function enrichAddressArea(payload, env) {
     city: area.city || payload.city,
     district: area.district || payload.district,
     street: area.street || payload.street,
-    community: area.community || payload.community
+    community: area.community || payload.community,
+    latitude: payload.latitude ?? area.latitude ?? area.center_latitude ?? null,
+    longitude: payload.longitude ?? area.longitude ?? area.center_longitude ?? null,
+    map_address: payload.map_address || area.map_address || payload.map_address,
+    map_poi_name: payload.map_poi_name || area.map_poi_name || payload.map_poi_name,
+    adcode: payload.adcode || area.adcode || payload.adcode,
+    city_code: payload.city_code || area.city_code || payload.city_code,
+    district_code: payload.district_code || area.district_code || payload.district_code
   }
   return {
     ...nextPayload,

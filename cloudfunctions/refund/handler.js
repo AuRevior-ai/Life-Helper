@@ -1,4 +1,7 @@
 const { mockRefund: runMockRefund, wechatRefund } = require('./refund-adapter')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
 
 const USER_STATUS = Object.freeze({
   NORMAL: 'normal',
@@ -53,41 +56,6 @@ const ALLOWED_AFTER_SALE_ORDER_STATUS = Object.freeze([
   ORDER_STATUS.PENDING_REVIEW,
   ORDER_STATUS.COMPLETED
 ])
-
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env = {}) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-
-  const { action, ...payload } = event
-  return payload
-}
 
 function trimText(value) {
   return `${value || ''}`.trim()

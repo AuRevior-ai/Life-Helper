@@ -1,0 +1,11 @@
+{
+  "collection": "merchant_qualifications",
+  "description": "阶段 20 商家/服务方资质认证 mock 信息。",
+  "requiredFields": ["_id", "merchant_id", "provider_type", "qualification_status", "onboarding_status", "created_at", "updated_at"],
+  "serverOnlyFields": ["qualification_status", "onboarding_status", "reviewer_openid", "reviewed_at", "reject_reason", "submit_count"],
+  "clientWritableFields": ["subject_type", "real_name_mock", "phone", "service_categories", "experience_years", "skill_description", "certificate_files", "insurance_info", "agreement_checked"],
+  "statusFields": ["qualification_status", "onboarding_status", "insurance_info.review_status"],
+  "relationFields": ["merchant_id", "provider_id", "provider_type"],
+  "indexHints": ["merchant_id + provider_type", "qualification_status + updated_at", "onboarding_status + updated_at"],
+  "compatibilityNotes": "不保存真实完整身份证号、营业执照号或法人证件号；仅保存 masked/last4/mock 字段。"
+}

@@ -1,12 +1,13 @@
 const orderService = require('../../services/order.service')
-const { ORDER_STATUS, ORDER_STATUS_TEXT } = require('../../config/status')
+const { ORDER_STATUS } = require('../../config/status')
+const { getStatusView } = require('../../utils/status-view')
 const { showError } = require('../../utils/toast')
 
 const STATUS_OPTIONS = [
   { value: '', label: '全部' },
   ...Object.values(ORDER_STATUS).map((status) => ({
     value: status,
-    label: ORDER_STATUS_TEXT[status] || status
+    label: getStatusView('order', status).text
   }))
 ]
 

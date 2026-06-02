@@ -1,6 +1,6 @@
 # API Action 清单
 
-本文件按云函数整理当前实际存在的 action。后续新增、改名或废弃 action 必须同步本文件、权限矩阵、相关测试和阶段复盘。不得发明不存在的 action，也不得把 mock 能力描述成真实生产能力。
+本文件按云函数整理当前实际存在的 action。机器可读清单见 [`docs/contracts/api-actions.manifest.json`](api-actions.manifest.json)。后续新增、改名或废弃 action 必须同步本文件、manifest、权限矩阵、相关测试和阶段复盘。不得发明不存在的 action，也不得把 mock 能力描述成真实生产能力。
 
 说明：测试覆盖以当前 `tests/*.test.js` 为准，标注“已覆盖”表示至少有阶段测试覆盖主流程；“待补强”表示需要更细粒度契约或权限测试。
 
@@ -25,6 +25,7 @@
 | `promotion` | `getMemberPlans`, `mockOpenMembership`, `getMyMembership`, `adminGetMemberPlans`, `adminUpdateMemberPlan`, `adminCreateCouponTemplate`, `adminUpdateCouponTemplate`, `adminGetCouponTemplates`, `adminEnableCouponTemplate`, `adminDisableCouponTemplate`, `getReceivableCoupons`, `receiveCoupon`, `getMyCoupons`, `getAvailableCouponsForOrder`, `calculateOrderPromotion`, `lockCouponForOrder`, `useCouponForOrder`, `releaseCouponForOrder` | 用户端/管理员端/订单内部 | 用户本人；管理员；订单内部 | 支付金额计算 | mock 会员 | 已覆盖 |
 | `tip` | `createMockTip`, `getUserTipList`, `getWorkerTipList`, `adminGetTipLogs`, `getTipDetail` | 用户端/师傅端/管理员端 | 订单归属、收益归属、管理员 | 财务、消息 | mock 打赏 | 已覆盖 |
 | `merchant` | `applyMerchant`, `getMyMerchantInfo`, `getMerchantAuditStatus`, `createMerchantService`, `getMerchantServiceList`, `enableMerchantService`, `disableMerchantService`, `getStoreList`, `getStoreDetail`, `getStoreServices`, `getMerchantOrderList`, `getMerchantOrderDetail`, `merchantAcceptOrder`, `merchantStartService`, `merchantFinishService`, `adminGetMerchantList`, `adminGetMerchantDetail`, `adminApproveMerchant`, `adminRejectMerchant`, `adminEnableMerchant`, `adminDisableMerchant`, `adminGetMerchantOrders`, `adminGetMerchantActionLogs` | 商家端/用户端/管理员端 | 商家本人、公开店铺、管理员 | 财务、消息、商家日志 | 否 | 已覆盖 |
+| `qualification` | `getMyQualification`, `saveQualificationDraft`, `submitQualification`, `resubmitQualification`, `getMyDeposit`, `mockPayDeposit`, `applyDepositRefund`, `getMyRiskStatus`, `getOnboardingStatus`, `adminListQualifications`, `adminGetQualificationDetail`, `adminReviewQualification`, `adminListDeposits`, `adminFreezeDeposit`, `adminReviewDepositRefund`, `adminSetRiskLevel`, `adminAddRiskTag`, `adminListRiskRecords`, `adminGetOnboardingDetail`, `getQualificationRequirements`, `getDepositRules` | 商家端/管理员端 | 商家本人、管理员 | mock 保证金、mock 资质、mock 风控 | mock 保证金、mock 保险信息 | 已覆盖 |
 
 ## 关键 action 说明
 
@@ -51,6 +52,9 @@
 - `merchant.adminApproveMerchant`/`adminRejectMerchant`：管理员审核并同步 `service_providers`。
 - `merchant.createMerchantService`、`enableMerchantService`、`disableMerchantService`：商家只能管理自己的服务项目。
 - `merchant.merchantAcceptOrder`、`merchantStartService`、`merchantFinishService`：商家只能操作归属自己的商家订单，不能冒充个人师傅。
+- `qualification.getMyQualification`、`saveQualificationDraft`、`submitQualification`、`resubmitQualification`：商家/服务方只能处理自己的 mock 资质信息，后端只保存 masked/last4/mock 字段。
+- `qualification.getMyDeposit`、`mockPayDeposit`、`applyDepositRefund`：商家/服务方只能处理自己的模拟保证金，不返回真实支付参数，不调用真实微信支付。
+- `qualification.adminReviewQualification`、`adminFreezeDeposit`、`adminReviewDepositRefund`、`adminSetRiskLevel`、`adminAddRiskTag`：管理员复核资质、保证金和入驻风控，写入 `merchant_onboarding_logs`。
 
 ### 评价、打赏与消息
 

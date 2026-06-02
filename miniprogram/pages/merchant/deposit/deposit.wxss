@@ -1,0 +1,48 @@
+.deposit-page {
+  color: #1f2d2a;
+}
+
+.deposit-explain {
+  margin-bottom: 22rpx;
+  background: #fff8e8;
+  border-color: #f1dfb6;
+}
+
+.explain-title {
+  color: #7a4a00;
+  font-size: 30rpx;
+  font-weight: 800;
+}
+
+.explain-text {
+  margin-top: 10rpx;
+  color: #7a4a00;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.status-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #edf2ef;
+}
+
+.status-label {
+  color: #64716d;
+  font-size: 26rpx;
+}
+
+.status-value {
+  color: #183832;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.status-note {
+  margin-top: 18rpx;
+  color: #53625e;
+  font-size: 26rpx;
+  line-height: 1.6;
+}

@@ -1,3 +1,8 @@
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { paginateList } = require('./_shared/pagination')
+
 const USER_STATUS = Object.freeze({
   NORMAL: 'normal',
   DISABLED: 'disabled'
@@ -17,41 +22,6 @@ const ORDER_STATUS = Object.freeze({
   CANCELED: 'canceled'
 })
 
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-
-  const { action, ...payload } = event
-  return payload
-}
-
 function requireOpenid(env) {
   if (!env.openid) {
     throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -61,30 +31,6 @@ function requireOpenid(env) {
 
 function trimText(value) {
   return `${value || ''}`.trim()
-}
-
-function parsePositiveInteger(value, fallback) {
-  const number = Number(value)
-  if (!Number.isInteger(number) || number < 1) {
-    return fallback
-  }
-  return number
-}
-
-function paginateList(records, payload = {}) {
-  const page = parsePositiveInteger(payload.page, 1)
-  const pageSize = Math.min(parsePositiveInteger(payload.pageSize, 20), 50)
-  const total = records.length
-  const start = (page - 1) * pageSize
-  const list = records.slice(start, start + pageSize)
-  return {
-    list,
-    orders: list,
-    total,
-    page,
-    pageSize,
-    hasMore: start + pageSize < total
-  }
 }
 
 async function requireAdmin(env) {
@@ -184,7 +130,7 @@ async function getAllOrders(event, env) {
     )
   }
 
-  return success(paginateList(orders, payload))
+  return success(paginateList(orders, payload, { listKey: 'orders' }))
 }
 
 async function getOrderDetail(event, env) {

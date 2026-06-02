@@ -1,3 +1,7 @@
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+
 const USER_ROLE = Object.freeze({
   ADMIN: 'admin'
 })
@@ -12,34 +16,14 @@ const SERVICE_AREA_STATUS = Object.freeze({
   DISABLED: 'disabled'
 })
 
-function success(data, message = 'success') {
-  return { success: true, data, message }
-}
-
-function fail(errorCode, message) {
-  return { success: false, errorCode, message }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-  const { action, ...payload } = event
-  return payload
-}
-
 function trimText(value) {
   return `${value || ''}`.trim()
+}
+
+function toNumberOrNull(value) {
+  if (value === null || value === undefined || value === '') return null
+  const number = Number(value)
+  return Number.isFinite(number) ? number : null
 }
 
 function isMissingCollectionError(error = {}) {
@@ -86,6 +70,15 @@ function normalizeAreaPayload(payload = {}) {
     district: trimText(payload.district),
     street: trimText(payload.street),
     community: trimText(payload.community),
+    latitude: toNumberOrNull(payload.latitude),
+    longitude: toNumberOrNull(payload.longitude),
+    center_latitude: toNumberOrNull(payload.center_latitude || payload.centerLatitude || payload.latitude),
+    center_longitude: toNumberOrNull(payload.center_longitude || payload.centerLongitude || payload.longitude),
+    adcode: trimText(payload.adcode),
+    city_code: trimText(payload.city_code || payload.cityCode),
+    district_code: trimText(payload.district_code || payload.districtCode),
+    map_address: trimText(payload.map_address || payload.mapAddress),
+    map_poi_name: trimText(payload.map_poi_name || payload.mapPoiName),
     sort: Number.isFinite(Number(payload.sort)) ? Number(payload.sort) : 0
   }
 }
@@ -168,11 +161,50 @@ async function adminUpdateServiceArea(event, env) {
     district: nextArea.district,
     street: nextArea.street,
     community: nextArea.community,
+    latitude: nextArea.latitude,
+    longitude: nextArea.longitude,
+    center_latitude: nextArea.center_latitude,
+    center_longitude: nextArea.center_longitude,
+    adcode: nextArea.adcode,
+    city_code: nextArea.city_code,
+    district_code: nextArea.district_code,
+    map_address: nextArea.map_address,
+    map_poi_name: nextArea.map_poi_name,
     full_name: buildFullName(nextArea),
     sort: nextArea.sort,
     updated_at: getNow(env)
   })
   return success({ area })
+}
+
+async function adminUpdateServiceAreaLocation(event, env) {
+  await requireAdmin(env)
+  const payload = getPayload(event)
+  if (!payload.areaId) {
+    throw serviceError('SERVICE_AREA_ID_MISSING', '缺少服务区域 ID')
+  }
+  const area = await env.areas.updateById(payload.areaId, {
+    latitude: toNumberOrNull(payload.latitude),
+    longitude: toNumberOrNull(payload.longitude),
+    center_latitude: toNumberOrNull(payload.center_latitude || payload.centerLatitude || payload.latitude),
+    center_longitude: toNumberOrNull(payload.center_longitude || payload.centerLongitude || payload.longitude),
+    adcode: trimText(payload.adcode),
+    city_code: trimText(payload.city_code || payload.cityCode),
+    district_code: trimText(payload.district_code || payload.districtCode),
+    map_address: trimText(payload.map_address || payload.mapAddress),
+    map_poi_name: trimText(payload.map_poi_name || payload.mapPoiName),
+    updated_at: getNow(env)
+  })
+  if (!area) {
+    throw serviceError('SERVICE_AREA_NOT_FOUND', '服务区域不存在')
+  }
+  return success({ area })
+}
+
+async function adminGetServiceAreaMapList(event, env) {
+  await requireAdmin(env)
+  const areas = await env.areas.findAll()
+  return success({ areas })
 }
 
 async function updateAreaStatus(event, env, status) {
@@ -203,6 +235,8 @@ const actions = Object.freeze({
   getServiceAreaList,
   adminCreateServiceArea,
   adminUpdateServiceArea,
+  adminUpdateServiceAreaLocation,
+  adminGetServiceAreaMapList,
   adminEnableServiceArea,
   adminDisableServiceArea
 })
@@ -225,6 +259,8 @@ module.exports = {
   getServiceAreaList,
   adminCreateServiceArea,
   adminUpdateServiceArea,
+  adminUpdateServiceAreaLocation,
+  adminGetServiceAreaMapList,
   adminEnableServiceArea,
   adminDisableServiceArea,
   SERVICE_AREA_STATUS

@@ -2,6 +2,10 @@ const {
   DEFAULT_PLATFORM_COMMISSION_RATE_BPS,
   DEFAULT_SETTLEMENT_FREEZE_DAYS
 } = require('./finance-config')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { paginateList } = require('./_shared/pagination')
 
 const USER_STATUS = Object.freeze({
   NORMAL: 'normal',
@@ -56,32 +60,6 @@ const SETTLEMENT_STATUS = Object.freeze({
   REVERSED: 'reversed'
 })
 
-function success(data, message = 'success') {
-  return { success: true, data, message }
-}
-
-function fail(errorCode, message) {
-  return { success: false, errorCode, message }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-  const { action, ...payload } = event
-  return payload
-}
-
-function getNow(env = {}) {
-  return env.now ? env.now() : new Date()
-}
-
 function requireOpenid(env = {}) {
   if (!env.openid) {
     throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -98,27 +76,6 @@ async function requireAdmin(env = {}) {
     throw serviceError('PERMISSION_DENIED', '当前操作需要管理员权限')
   }
   return user
-}
-
-function parsePositiveInteger(value, fallback) {
-  const number = Number(value)
-  if (!Number.isInteger(number) || number < 1) return fallback
-  return number
-}
-
-function paginateList(records, payload = {}) {
-  const page = parsePositiveInteger(payload.page, 1)
-  const pageSize = Math.min(parsePositiveInteger(payload.pageSize, 20), 50)
-  const total = records.length
-  const start = (page - 1) * pageSize
-  const list = records.slice(start, start + pageSize)
-  return {
-    list,
-    total,
-    page,
-    pageSize,
-    hasMore: start + pageSize < total
-  }
 }
 
 function addDays(date, days) {

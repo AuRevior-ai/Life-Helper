@@ -1,0 +1,12 @@
+{
+  "collection": "refund_logs",
+  "description": "退款日志集合，记录售后审核后的 mock 退款和退款状态变更。",
+  "requiredFields": ["_id", "order_id", "after_sale_id", "channel", "status", "amount", "created_at"],
+  "optionalFields": ["refund_no", "user_id", "worker_id", "merchant_id", "provider_id", "provider_type", "reason", "error_code", "error_message", "raw_data", "updated_at"],
+  "serverOnlyFields": ["channel", "status", "amount", "refund_no", "error_code", "error_message", "raw_data", "created_at", "updated_at"],
+  "clientWritableFields": [],
+  "statusFields": ["channel", "status"],
+  "relationFields": ["order_id", "after_sale_id", "user_id", "worker_id", "merchant_id", "provider_id"],
+  "indexHints": ["order_id + created_at", "after_sale_id", "status + created_at", "provider_id + provider_type + created_at"],
+  "compatibilityNotes": ["当前退款为 mock 退款，不接入真实微信退款、退款回调或对账。", "真实退款接入前需补充微信退款单号、回调验签和幂等补偿字段。"]
+}

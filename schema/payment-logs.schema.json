@@ -1,0 +1,12 @@
+{
+  "collection": "payment_logs",
+  "description": "支付日志集合，记录支付创建、通知、查询、成功、失败和重复通知。",
+  "requiredFields": ["_id", "type", "status", "created_at"],
+  "optionalFields": ["order_id", "order_no", "user_id", "out_trade_no", "transaction_id", "prepay_id", "amount", "error_code", "error_message", "raw_data"],
+  "serverOnlyFields": ["type", "status", "out_trade_no", "transaction_id", "prepay_id", "amount", "error_code", "error_message", "raw_data", "created_at"],
+  "clientWritableFields": [],
+  "statusFields": ["type", "status"],
+  "relationFields": ["order_id", "user_id", "out_trade_no", "transaction_id"],
+  "indexHints": ["order_id + created_at", "out_trade_no", "transaction_id", "type + status + created_at"],
+  "compatibilityNotes": ["PAY_MODE=wechat 当前必须 fail-fast；不得返回空 prepay_id 或空 payParams。", "真实 JSAPI 下单、签名、回调验签完成前，此集合仅用于 mock/占位日志。"]
+}

@@ -1,5 +1,32 @@
-<view class="page">
-  <input placeholder="平台服务ID" value="{{form.serviceId}}" bindinput="onInput" data-field="serviceId" />
-  <input placeholder="价格（分）" type="number" value="{{form.price}}" bindinput="onInput" data-field="price" />
-  <button bindtap="submit">保存</button>
+<view class="page-shell service-edit-page">
+  <view class="page-header">
+    <view class="page-title">配置服务</view>
+    <view class="page-subtitle">绑定平台服务并设置商家展示价格</view>
+  </view>
+
+  <view class="panel form-panel">
+    <view class="form-item">
+      <text class="form-label">平台服务 ID</text>
+      <input
+        class="form-input service-input"
+        placeholder="输入平台服务 ID"
+        value="{{form.serviceId}}"
+        bindinput="onInput"
+        data-field="serviceId"
+      />
+    </view>
+    <view class="form-item">
+      <text class="form-label">价格</text>
+      <input
+        class="form-input service-input"
+        placeholder="单位：分，例如 9900"
+        type="number"
+        value="{{form.price}}"
+        bindinput="onInput"
+        data-field="price"
+      />
+    </view>
+  </view>
+
+  <button class="primary-button" bindtap="submit">保存服务</button>
 </view>

@@ -1,7 +1,7 @@
-const { success, fail, serviceError } = require('../_shared/response')
-const { getPayload } = require('../_shared/payload')
-const { getNow } = require('../_shared/time')
-const { paginateList } = require('../_shared/pagination')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { paginateList } = require('./_shared/pagination')
 
 function requireOpenid(env) {
   if (!env.openid) {

@@ -3,4 +3,7 @@
   <button bindtap="goServices">服务项目</button>
   <button bindtap="goOrders">商家订单</button>
   <button bindtap="goIncome">商家收益</button>
+  <button bindtap="goQualification">资质认证</button>
+  <button bindtap="goDeposit">保证金</button>
+  <button bindtap="goRiskStatus">入驻状态</button>
 </view>

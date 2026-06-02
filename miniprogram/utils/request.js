@@ -10,16 +10,31 @@ function createServiceError(result = {}) {
   return error
 }
 
+function createCloudFunctionError(name, error = {}) {
+  const rawMessage = error.errMsg || error.message || ''
+  const errCode = error.errCode || error.errcode || ''
+  const suffix = rawMessage ? `：${rawMessage}` : ''
+  const wrapped = new Error(`云函数 ${name} 调用失败，请确认 ${name} 云函数已上传并部署到当前云环境${suffix}`)
+  wrapped.errorCode = 'CLOUD_FUNCTION_CALL_FAILED'
+  wrapped.errCode = errCode
+  return wrapped
+}
+
 async function callCloudFunction(name, action, data = {}) {
   assertCloudAvailable()
 
-  const response = await wx.cloud.callFunction({
-    name,
-    data: {
-      action,
-      ...data
-    }
-  })
+  let response
+  try {
+    response = await wx.cloud.callFunction({
+      name,
+      data: {
+        action,
+        ...data
+      }
+    })
+  } catch (error) {
+    throw createCloudFunctionError(name, error)
+  }
 
   const result = response.result || {}
   if (!result.success) {
@@ -30,5 +45,6 @@ async function callCloudFunction(name, action, data = {}) {
 }
 
 module.exports = {
-  callCloudFunction
+  callCloudFunction,
+  createCloudFunctionError
 }

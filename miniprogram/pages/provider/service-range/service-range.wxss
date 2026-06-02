@@ -1,0 +1,7 @@
+.page { padding: 32rpx; min-height: 100vh; background: #f6f8f5; color: #1f2d2a; }
+.panel { padding: 28rpx; background: #ffffff; border-radius: 8rpx; }
+.title { display: block; font-size: 34rpx; font-weight: 700; margin-bottom: 16rpx; }
+.hint { display: block; color: #64716d; line-height: 1.6; margin-bottom: 20rpx; }
+input { display: block; padding: 18rpx; margin-bottom: 16rpx; background: #f6f8f5; border-radius: 8rpx; }
+button { margin-top: 12rpx; }
+.primary { background: #1f7a68; color: #ffffff; }

@@ -1,0 +1,62 @@
+.onboarding-page {
+  color: #1f2d2a;
+}
+
+.status-hero {
+  margin-bottom: 22rpx;
+  border-left: 8rpx solid #1f7a68;
+}
+
+.status-hero.warn {
+  border-left-color: #b65230;
+}
+
+.status-label {
+  color: #64716d;
+  font-size: 24rpx;
+}
+
+.status-title {
+  margin-top: 10rpx;
+  color: #183832;
+  font-size: 38rpx;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.status-summary {
+  margin-top: 12rpx;
+  color: #53625e;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.status-grid {
+  padding-top: 8rpx;
+  padding-bottom: 8rpx;
+}
+
+.status-row {
+  display: flex;
+  padding: 22rpx 0;
+  gap: 24rpx;
+  border-bottom: 1rpx solid #edf2ef;
+}
+
+.status-row:last-child {
+  border-bottom: 0;
+}
+
+.row-label {
+  width: 150rpx;
+  flex-shrink: 0;
+  color: #64716d;
+  font-size: 26rpx;
+}
+
+.row-value {
+  flex: 1;
+  color: #1f2d2a;
+  font-size: 28rpx;
+  line-height: 1.5;
+}

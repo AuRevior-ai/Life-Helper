@@ -1,3 +1,6 @@
+const { success, fail } = require('./_shared/response')
+const { getNow } = require('./_shared/time')
+
 const USER_ROLE = Object.freeze({
   USER: 'user'
 })
@@ -12,26 +15,6 @@ const DEFAULT_USER_PROFILE = Object.freeze({
   avatar: '',
   phone: ''
 })
-
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
 
 function compactProfile(event = {}) {
   const profile = event.profile || {}

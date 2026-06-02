@@ -1,6 +1,6 @@
 # 数据库 Schema 契约
 
-本文件基于当前 `cloudfunctions/`、`miniprogram/config/status.js` 与测试中的内存集合整理。字段未在代码中稳定出现时标注“待核实”。后续 Agent 新增集合或字段必须同步本文件，不能在页面或云函数里临时写入未记录字段。
+本文件基于当前 `cloudfunctions/`、`miniprogram/config/status.js` 与测试中的内存集合整理。字段未在代码中稳定出现时标注“待核实”。阶段 19.6 起，核心集合同步维护机器可读 JSON schema：`schema/orders.schema.json`、`schema/users.schema.json`、`schema/merchants.schema.json`、`schema/service-providers.schema.json`、`schema/finance-logs.schema.json`、`schema/worker-earnings.schema.json`、`schema/payment-logs.schema.json`、`schema/refund-logs.schema.json`。后续 Agent 新增集合或字段必须同步本文件和对应 JSON schema，不能在页面或云函数里临时写入未记录字段。
 
 ## 总规则
 
@@ -9,6 +9,7 @@
 - `created_at`、`updated_at` 默认由后端 `getNow` 生成。
 - 审核、支付、退款、财务、收益字段只能由云函数或管理员动作写入。
 - mock 支付、mock 退款、mock 打赏、mock 会员和 mock 解冻产生的流水不代表真实清算。
+- 阶段 20 的 mock 保证金、mock 资质认证、mock 保险信息和 mock 入驻风控不代表真实认证、真实支付、真实退款、真实 OCR 或真实保险核验。
 
 ## 集合清单
 
@@ -66,6 +67,30 @@
 用途：商家自有服务项目。
 
 字段：`_id`、`merchant_id`、`service_id`、`name`、`price`、`duration`、`description`、`cover_image`、`status`、`created_at`、`updated_at`。商家可创建/上下架自己的服务项目，不能操作其他商家的服务。关联 `merchants`、`services`、`orders`。索引建议：`merchant_id + status`、`service_id`。价格仍需以后端校验，避免前端篡改。
+
+### `merchant_qualifications`
+
+用途：阶段 20 商家/服务方资质认证 mock 信息。机器契约：`schema/merchant-qualifications.schema.json`。
+
+核心字段：`_id`、`merchant_id`、`provider_id`、`provider_type`、`subject_type`、`qualification_status`、`onboarding_status`、`real_name_mock`、`id_card_masked`、`id_card_last4`、`business_name`、`business_license_no_masked`、`legal_person_name_mock`、`legal_person_id_masked`、`service_categories`、`experience_years`、`certificate_files`、`license_files`、`storefront_files`、`insurance_info`、`agreement_checked`、`submit_count`、`reviewer_openid`、`reviewed_at`、`reject_reason`、`supplement_required_fields`、`created_at`、`updated_at`。不保存真实完整身份证号、营业执照号、法人证件号。
+
+### `merchant_deposits`
+
+用途：阶段 20 模拟保证金状态和流水。机器契约：`schema/merchant-deposits.schema.json`。
+
+核心字段：`_id`、`merchant_id`、`provider_id`、`provider_type`、`required_amount`、`paid_amount`、`currency`、`deposit_status`、`mock_pay_no`、`mock_paid_at`、`frozen_reason`、`refund_apply_reason`、`refund_review_result`、`refund_reject_reason`、`operator_openid`、`created_at`、`updated_at`。不调用真实微信支付，不返回真实支付参数，不写入真实可提现余额。
+
+### `merchant_risk_records`
+
+用途：阶段 20 入驻风控 mock 记录。机器契约：`schema/merchant-risk-records.schema.json`。
+
+核心字段：`_id`、`merchant_id`、`provider_id`、`provider_type`、`risk_level`、`risk_tags`、`risk_reason`、`action`、`operator_openid`、`created_at`、`updated_at`。仅管理员可写，商家端只展示简化风险提示。
+
+### `merchant_onboarding_logs`
+
+用途：阶段 20 入驻流程、资质审核、保证金和风控操作日志。机器契约：`schema/merchant-onboarding-logs.schema.json`。
+
+核心字段：`_id`、`merchant_id`、`provider_id`、`provider_type`、`event_type`、`before_status`、`after_status`、`operator_role`、`operator_openid`、`remark`、`created_at`。
 
 ### `service_providers`
 

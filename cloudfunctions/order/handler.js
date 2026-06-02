@@ -1,4 +1,8 @@
 const { findServiceSnapshotById } = require('./service-data')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
+const { paginateList } = require('./_shared/pagination')
 
 const ORDER_STATUS = Object.freeze({
   PENDING_PAY: 'pending_pay',
@@ -33,32 +37,6 @@ const MESSAGE_TYPE = Object.freeze({
   SERVICE_FINISHED: 'service_finished'
 })
 
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
-
 async function bestEffort(promiseFactory, env) {
   const timeoutMs = Number(env.sideEffectTimeoutMs || 800)
   let timeoutId
@@ -74,15 +52,6 @@ async function bestEffort(promiseFactory, env) {
   } finally {
     if (timeoutId) clearTimeout(timeoutId)
   }
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-
-  const { action, ...payload } = event
-  return payload
 }
 
 function trimText(value) {
@@ -102,30 +71,6 @@ function requireText(value, errorCode, message) {
     throw serviceError(errorCode, message)
   }
   return text
-}
-
-function parsePositiveInteger(value, fallback) {
-  const number = Number(value)
-  if (!Number.isInteger(number) || number < 1) {
-    return fallback
-  }
-  return number
-}
-
-function paginateList(records, payload = {}) {
-  const page = parsePositiveInteger(payload.page, 1)
-  const pageSize = Math.min(parsePositiveInteger(payload.pageSize, 20), 50)
-  const total = records.length
-  const start = (page - 1) * pageSize
-  const list = records.slice(start, start + pageSize)
-  return {
-    list,
-    orders: list,
-    total,
-    page,
-    pageSize,
-    hasMore: start + pageSize < total
-  }
 }
 
 function isDateOnly(value) {
@@ -296,6 +241,23 @@ function buildFullAddress(address = {}) {
     .join(' ')
 }
 
+function buildAddressSnapshot(address = {}) {
+  return {
+    city: address.city || '',
+    district: address.district || '',
+    street: address.street || '',
+    community: address.community || '',
+    detail_address: address.detail_address || '',
+    full_address: buildFullAddress(address),
+    latitude: address.latitude ?? null,
+    longitude: address.longitude ?? null,
+    map_address: address.map_address || '',
+    map_poi_name: address.map_poi_name || '',
+    adcode: address.adcode || '',
+    map_point_source: address.map_point_source || ''
+  }
+}
+
 function createDefaultOrderNo() {
   const random = Math.floor(Math.random() * 100000)
     .toString()
@@ -459,6 +421,7 @@ async function createOrder(event, env) {
   const providerId = merchantSnapshot && merchantSnapshot.provider ? merchantSnapshot.provider._id : ''
   const merchant = merchantSnapshot ? merchantSnapshot.merchant : null
   const merchantService = merchantSnapshot ? merchantSnapshot.merchantService : null
+  const addressSnapshot = buildAddressSnapshot(address)
   const order = await env.orders.create({
     order_no: orderNoFactory(),
     user_id: userId,
@@ -511,6 +474,13 @@ async function createOrder(event, env) {
     community: address.community,
     detail_address: address.detail_address,
     full_address: buildFullAddress(address),
+    latitude: address.latitude ?? null,
+    longitude: address.longitude ?? null,
+    adcode: address.adcode || '',
+    map_address: address.map_address || '',
+    map_poi_name: address.map_poi_name || '',
+    map_point_source: address.map_point_source || '',
+    address_snapshot: addressSnapshot,
     appointment_date: appointment.appointment_date,
     appointment_slot: appointment.appointment_slot,
     appointment_time: appointment.appointment_time,
@@ -596,7 +566,7 @@ async function getUserOrderList(event, env) {
     orders = orders.filter((order) => order.status === payload.status)
   }
 
-  return success(paginateList(orders, payload))
+  return success(paginateList(orders, payload, { listKey: 'orders' }))
 }
 
 async function getWorkerOrderList(event, env) {
@@ -608,7 +578,7 @@ async function getWorkerOrderList(event, env) {
     orders = orders.filter((order) => order.status === payload.status)
   }
 
-  return success(paginateList(orders, payload))
+  return success(paginateList(orders, payload, { listKey: 'orders' }))
 }
 
 async function acceptOrder(event, env) {

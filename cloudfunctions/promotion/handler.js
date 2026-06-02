@@ -1,4 +1,7 @@
 const { calculateOrderPromotion: calculatePromotion } = require('./promotion-calculator')
+const { success, fail, serviceError } = require('./_shared/response')
+const { getPayload } = require('./_shared/payload')
+const { getNow } = require('./_shared/time')
 
 const USER_ROLE = Object.freeze({ ADMIN: 'admin' })
 const USER_STATUS = Object.freeze({ DISABLED: 'disabled' })
@@ -73,30 +76,6 @@ const DEFAULT_MEMBER_PLANS = Object.freeze([
     sort: 30
   }
 ])
-
-function success(data, message = 'success') {
-  return { success: true, data, message }
-}
-
-function fail(errorCode, message) {
-  return { success: false, errorCode, message }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') return event.payload
-  const { action, ...payload } = event
-  return payload
-}
-
-function getNow(env = {}) {
-  return env.now ? env.now() : new Date()
-}
 
 function addDays(date, days) {
   return new Date(date.getTime() + days * 24 * 60 * 60 * 1000)

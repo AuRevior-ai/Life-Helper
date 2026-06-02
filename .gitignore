@@ -39,3 +39,4 @@ tmp/
 temp/
 .worktrees/
 worktrees/
+background/*.docx

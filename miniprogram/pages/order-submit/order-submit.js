@@ -33,6 +33,7 @@ Page({
     minAppointmentDate: '',
     appointment_time: '',
     remark: '',
+    loadError: '',
     loading: true,
     submitting: false
   },
@@ -58,12 +59,12 @@ Page({
 
   async loadPageData() {
     if (!this.data.serviceId && !this.data.merchantServiceId) {
-      this.setData({ loading: false })
+      this.setData({ loading: false, loadError: '缺少服务 ID' })
       showError('缺少服务 ID')
       return
     }
 
-    this.setData({ loading: true })
+    this.setData({ loading: true, loadError: '' })
     try {
       const serviceLoader = this.data.merchantServiceId
         ? this.loadMerchantServiceSnapshot()
@@ -75,6 +76,7 @@ Page({
       this.applyService(serviceData.service)
       this.applyAddresses(addressData.addresses || [])
     } catch (error) {
+      this.setData({ service: null, loadError: error.message || '下单信息加载失败' })
       showError(error.message || '下单信息加载失败')
     } finally {
       this.setData({ loading: false })
@@ -110,7 +112,8 @@ Page({
       service,
       priceText: formatPrice(service.price),
       originalAmountText: formatPrice(service.price),
-      payableAmountText: formatPrice(service.price)
+      payableAmountText: formatPrice(service.price),
+      loadError: ''
     })
     this.loadPromotionPreview()
   },

@@ -5,6 +5,8 @@
   "description": "同城社区便民综合服务平台微信小程序 MVP",
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "check:release-risk": "node scripts/check-release-risk.js"
+    "check:release-risk": "node scripts/check-release-risk.js",
+    "check:cloudfunction-deps": "node scripts/check-cloudfunction-deps.js",
+    "check:shared-sync": "node scripts/check-cloudfunction-shared-sync.js"
   }
 }
