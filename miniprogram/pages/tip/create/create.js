@@ -40,12 +40,15 @@ Page({
     showLoading('提交中')
     try {
       await tipService.createMockTip({ orderId: this.data.orderId, amount: this.getAmount() })
-      showSuccess('打赏成功')
-      wx.navigateBack()
-    } catch (error) {
-      showError(error.message || '打赏失败')
-    } finally {
       hideLoading()
+      this.setData({ submitting: false })
+      showSuccess('打赏成功')
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 600)
+    } catch (error) {
+      hideLoading()
+      showError(error.message || '打赏失败')
       this.setData({ submitting: false })
     }
   }

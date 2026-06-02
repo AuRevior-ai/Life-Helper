@@ -30,7 +30,9 @@ Page({
       } else {
         showSuccess('申诉审核已拒绝')
       }
-      await this.loadAppeal()
+      setTimeout(() => {
+        wx.navigateBack()
+      }, 600)
     } catch (error) {
       hideLoading()
       showError(error.message || '处理失败')

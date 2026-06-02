@@ -37,6 +37,12 @@ function trimText(value) {
   return `${value || ''}`.trim()
 }
 
+function isMissingCollectionError(error = {}) {
+  return error.errCode === -502005 ||
+    error.code === -502005 ||
+    /-502005|database collection not|collection .*not/i.test(error.message || '')
+}
+
 function splitKeywords(value) {
   return trimText(value)
     .split(/[,，、\s]+/)
@@ -275,10 +281,21 @@ async function adminUnassignOrder(event, env) {
 async function getDispatchLogs(event, env) {
   await requireAdmin(env)
   const payload = getPayload(event)
-  const logs = payload.orderId && env.dispatchLogs.findByOrderId
-    ? await env.dispatchLogs.findByOrderId(payload.orderId)
-    : await env.dispatchLogs.findAll()
-  return success({ logs })
+  try {
+    const logs = payload.orderId && env.dispatchLogs.findByOrderId
+      ? await env.dispatchLogs.findByOrderId(payload.orderId)
+      : await env.dispatchLogs.findAll()
+    return success({ logs })
+  } catch (error) {
+    if (isMissingCollectionError(error)) {
+      return success({
+        logs: [],
+        collection_missing: true,
+        collection_name: 'dispatch_logs'
+      })
+    }
+    throw error
+  }
 }
 
 const actions = Object.freeze({

@@ -1,4 +1,5 @@
 const merchantService = require('../../../services/merchant.service')
+const { showError } = require('../../../utils/toast')
 
 Page({
   data: {
@@ -10,9 +11,11 @@ Page({
   },
 
   async loadStores() {
-    const result = await merchantService.getStoreList()
-    if (result.success) {
-      this.setData({ stores: result.data.list || [] })
+    try {
+      const data = await merchantService.getStoreList()
+      this.setData({ stores: data.list || [] })
+    } catch (error) {
+      showError(error.message || '商家列表加载失败')
     }
   },
 

@@ -5,6 +5,7 @@ Page({
   data: {
     title: '区域管理',
     areas: [],
+    collectionMissing: false,
     loading: true
   },
 
@@ -16,7 +17,10 @@ Page({
     this.setData({ loading: true })
     try {
       const data = await areaService.getServiceAreaList({ includeDisabled: true })
-      this.setData({ areas: data.areas || [] })
+      this.setData({
+        areas: data.areas || [],
+        collectionMissing: data.collection_missing === true
+      })
     } catch (error) {
       showError(error.message || '区域加载失败')
     } finally {

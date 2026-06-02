@@ -1,5 +1,6 @@
 const merchantService = require('../../../services/merchant.service')
 const { formatPrice } = require('../../../utils/format')
+const { showError } = require('../../../utils/toast')
 
 Page({
   data: {
@@ -14,13 +15,15 @@ Page({
   },
 
   async loadDetail() {
-    const result = await merchantService.getStoreDetail({ merchantId: this.data.merchantId })
-    if (result.success) {
-      const services = (result.data.services || []).map((item) => ({
+    try {
+      const data = await merchantService.getStoreDetail({ merchantId: this.data.merchantId })
+      const services = (data.services || []).map((item) => ({
         ...item,
         priceText: formatPrice(item.price).replace('¥', '')
       }))
-      this.setData({ merchant: result.data.merchant, services })
+      this.setData({ merchant: data.merchant || {}, services })
+    } catch (error) {
+      showError(error.message || '商家详情加载失败')
     }
   },
 

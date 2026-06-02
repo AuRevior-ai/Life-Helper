@@ -1,4 +1,30 @@
-<view class="page">
-  <text>审核状态：{{auditStatus}}</text>
-  <text wx:if="{{merchant.reject_reason}}">原因：{{merchant.reject_reason}}</text>
+<view class="page-shell">
+  <view class="page-header">
+    <view class="page-title">商家入驻状态</view>
+    <view class="page-subtitle">查看入驻审核结果，通过后进入商家工作台</view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载商家状态"></loading-view>
+
+  <view wx:else class="panel status-panel">
+    <view class="info-row">
+      <text>审核状态</text>
+      <text>{{ statusText }}</text>
+    </view>
+    <view wx:if="{{ hasMerchant }}" class="info-row">
+      <text>商家名称</text>
+      <text>{{ merchant.store_name || '未填写' }}</text>
+    </view>
+    <view wx:if="{{ hasMerchant }}" class="info-row">
+      <text>联系人</text>
+      <text>{{ merchant.contact_name || '未填写' }} {{ merchant.contact_phone || '' }}</text>
+    </view>
+    <view wx:if="{{ merchant && merchant.reject_reason }}" class="info-row info-row--address">
+      <text>拒绝原因</text>
+      <text>{{ merchant.reject_reason }}</text>
+    </view>
+
+    <button wx:if="{{ canEnterProfile }}" class="primary-button" bindtap="goProfile">进入商家工作台</button>
+    <button wx:if="{{ canApply }}" class="primary-button" bindtap="goApply">申请商家入驻</button>
+  </view>
 </view>

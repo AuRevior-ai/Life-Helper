@@ -1,4 +1,5 @@
 const orderService = require('../../../services/order.service')
+const reviewService = require('../../../services/review.service')
 const { formatOrderStatus, formatPayStatus, formatPrice } = require('../../../utils/format')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../../utils/toast')
 
@@ -7,6 +8,7 @@ Page({
     title: '师傅订单详情',
     orderId: '',
     order: null,
+    review: null,
     priceText: '¥0.00',
     statusText: '',
     payStatusText: '',
@@ -38,14 +40,8 @@ Page({
         orderId: this.data.orderId
       })
       const order = data.order
-      this.setData({
-        order,
-        priceText: formatPrice(order.price),
-        statusText: formatOrderStatus(order.status),
-        payStatusText: formatPayStatus(order.pay_status),
-        canStart: order.status === 'accepted',
-        canFinish: order.status === 'serving'
-      })
+      this.applyOrder(order)
+      await this.loadOrderReview(order)
     } catch (error) {
       showError(error.message || '订单详情加载失败')
     } finally {
@@ -101,8 +97,25 @@ Page({
       statusText: formatOrderStatus(order.status),
       payStatusText: formatPayStatus(order.pay_status),
       canStart: order.status === 'accepted',
-      canFinish: order.status === 'serving'
+      canFinish: order.status === 'serving',
+      review: null
     })
+  },
+
+  async loadOrderReview(order) {
+    if (!order || !['pending_review', 'completed'].includes(order.status)) {
+      this.setData({ review: null })
+      return
+    }
+
+    try {
+      const data = await reviewService.getOrderReview({
+        orderId: this.data.orderId
+      })
+      this.setData({ review: data.review || null })
+    } catch (error) {
+      this.setData({ review: null })
+    }
   },
 
   handleFinishRemarkInput(event) {

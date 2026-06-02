@@ -17,5 +17,9 @@
       </button>
     </view>
   </block>
-  <empty-state wx:else title="暂无服务区域" description="新增小区后，地址和师傅服务范围可按小区匹配"></empty-state>
+  <empty-state
+    wx:else
+    title="{{ collectionMissing ? '服务区域集合未创建' : '暂无服务区域' }}"
+    description="{{ collectionMissing ? '请先在云开发数据库创建 service_areas 集合，然后再新增小区' : '新增小区后，地址和师傅服务范围可按小区匹配' }}"
+  ></empty-state>
 </view>

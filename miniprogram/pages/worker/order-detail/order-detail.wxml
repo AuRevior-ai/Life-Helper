@@ -53,6 +53,26 @@
       </view>
     </view>
 
+    <view wx:if="{{ review }}" class="info-panel panel">
+      <view class="section-title">用户评价</view>
+      <view class="info-row">
+        <text>评分</text>
+        <text>{{ review.rating }} 分</text>
+      </view>
+      <view class="info-row info-row--address">
+        <text>评价内容</text>
+        <text>{{ review.content || '暂无文字评价' }}</text>
+      </view>
+      <view class="info-row info-row--address">
+        <text>追评内容</text>
+        <text>{{ review.followup_content || '暂无追评' }}</text>
+      </view>
+      <view class="info-row info-row--address">
+        <text>师傅回复</text>
+        <text>{{ review.worker_reply_content || '暂无回复' }}</text>
+      </view>
+    </view>
+
     <button
       wx:if="{{ canStart }}"
       class="primary-button"

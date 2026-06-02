@@ -42,6 +42,12 @@ function trimText(value) {
   return `${value || ''}`.trim()
 }
 
+function isMissingCollectionError(error = {}) {
+  return error.errCode === -502005 ||
+    error.code === -502005 ||
+    /-502005|database collection not|collection .*not/i.test(error.message || '')
+}
+
 function requireOpenid(env) {
   if (!env.openid) {
     throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -95,14 +101,36 @@ async function getServiceAreaList(event, env) {
   const includeDisabled = payload.includeDisabled === true
   if (includeDisabled) {
     await requireAdmin(env)
-    const areas = await env.areas.findAll()
-    return success({ areas })
+    try {
+      const areas = await env.areas.findAll()
+      return success({ areas })
+    } catch (error) {
+      if (isMissingCollectionError(error)) {
+        return success({
+          areas: [],
+          collection_missing: true,
+          collection_name: 'service_areas'
+        })
+      }
+      throw error
+    }
   }
 
-  const areas = env.areas.findEnabled
-    ? await env.areas.findEnabled()
-    : (await env.areas.findAll()).filter((area) => area.status === SERVICE_AREA_STATUS.ENABLED)
-  return success({ areas })
+  try {
+    const areas = env.areas.findEnabled
+      ? await env.areas.findEnabled()
+      : (await env.areas.findAll()).filter((area) => area.status === SERVICE_AREA_STATUS.ENABLED)
+    return success({ areas })
+  } catch (error) {
+    if (isMissingCollectionError(error)) {
+      return success({
+        areas: [],
+        collection_missing: true,
+        collection_name: 'service_areas'
+      })
+    }
+    throw error
+  }
 }
 
 async function adminCreateServiceArea(event, env) {

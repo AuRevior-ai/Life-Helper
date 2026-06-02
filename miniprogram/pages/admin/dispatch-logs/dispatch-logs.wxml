@@ -12,5 +12,9 @@
       <view class="muted-text">原因：{{ item.reason }}</view>
     </view>
   </block>
-  <empty-state wx:else title="暂无派单日志" description="接单、指派和回流后会生成记录"></empty-state>
+  <empty-state
+    wx:else
+    title="{{ collectionMissing ? '派单日志集合未创建' : '暂无派单日志' }}"
+    description="{{ collectionMissing ? '请先在云开发数据库创建 dispatch_logs 集合，后续接单和指派会写入日志' : '接单、指派和回流后会生成记录' }}"
+  ></empty-state>
 </view>
