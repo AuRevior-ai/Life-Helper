@@ -47,11 +47,23 @@ test('message list requests current identity role and backend filters messages b
   assert.match(messageListJs, /role: getCurrentIdentityRole\(\)/)
 
   const { handleMessage } = require('../cloudfunctions/message/handler')
+  const userResult = await handleMessage({ action: 'getMessageList', role: 'user' }, {
+    openid: 'openid_same',
+    messages: createMessages([
+      { _id: 'msg_reply_legacy', user_id: 'openid_same', role: 'worker', type: 'worker_review_reply', is_read: false },
+      { _id: 'msg_worker', user_id: 'openid_same', role: 'worker', is_read: false }
+    ])
+  })
+  assert.equal(userResult.success, true)
+  assert.deepEqual(userResult.data.list.map((message) => message._id), ['msg_reply_legacy'])
+  assert.equal(userResult.data.list[0].role, 'user')
+
   const workerResult = await handleMessage({ action: 'getMessageList', role: 'worker' }, {
     openid: 'openid_same',
     messages: createMessages([
       { _id: 'msg_user', user_id: 'openid_same', role: 'user', is_read: false },
       { _id: 'msg_worker', user_id: 'openid_same', role: 'worker', is_read: false },
+      { _id: 'msg_reply_legacy', user_id: 'openid_same', role: 'worker', type: 'worker_review_reply', is_read: false },
       { _id: 'msg_common', user_id: 'openid_same', is_read: false }
     ])
   })
