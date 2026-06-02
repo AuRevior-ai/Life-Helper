@@ -346,6 +346,7 @@ test('worker can reply own visible review but not another worker review', async 
   assert.equal(result.success, true)
   assert.equal(result.data.review.worker_reply_content, '感谢认可，我们会继续保持')
   assert.equal(env.messages.records.some((item) => item.type === 'worker_review_reply'), true)
+  assert.equal(env.messages.records.find((item) => item.type === 'worker_review_reply').role, 'user')
   assert.equal(env.reviewActionLogs.records.some((item) => item.action === 'worker_reply'), true)
 
   const otherEnv = createReviewEnv('openid_other_worker')

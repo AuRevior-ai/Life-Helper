@@ -350,6 +350,7 @@ async function workerReplyReview(event, env) {
   })
   await safeCreateMessage(env, {
     user_id: review.user_id,
+    role: 'user',
     title: '师傅回复了评价',
     content: '师傅回复了你的评价',
     type: 'worker_review_reply',

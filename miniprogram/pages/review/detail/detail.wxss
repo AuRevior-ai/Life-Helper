@@ -1,3 +1,95 @@
-.panel {
-  padding: 24rpx;
+.review-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.review-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #edf1ef;
+  background: #fbfcfb;
+}
+
+.review-card__title {
+  color: #1f2d2a;
+  font-size: 34rpx;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.review-card__meta {
+  margin-top: 8rpx;
+  color: #7b8884;
+  font-size: 24rpx;
+}
+
+.rating-badge {
+  min-width: 112rpx;
+  height: 112rpx;
+  border-radius: 56rpx;
+  background: #fff4e8;
+  color: #b85d21;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-top: 20rpx;
+}
+
+.rating-badge__score {
+  font-size: 44rpx;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.rating-badge__unit {
+  margin-left: 4rpx;
+  font-size: 22rpx;
+}
+
+.content-section {
+  padding: 28rpx 32rpx;
+  border-bottom: 1rpx solid #edf1ef;
+}
+
+.content-section--last {
+  border-bottom: 0;
+}
+
+.section-label {
+  color: #65736f;
+  font-size: 24rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.section-body {
+  color: #1f2d2a;
+  font-size: 30rpx;
+  line-height: 1.65;
+}
+
+.section-body--empty {
+  color: #9aa5a1;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.review-tag {
+  padding: 8rpx 16rpx;
+  border-radius: 6rpx;
+  background: #eef5f2;
+  color: #48645b;
+  font-size: 24rpx;
+}
+
+.review-action {
+  margin: 24rpx 32rpx 32rpx;
 }
