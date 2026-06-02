@@ -52,7 +52,7 @@ Page({
       order,
       priceText: formatPrice(order.pay_amount || order.payable_amount || order.price),
       state: paid ? 'success' : failed ? 'failed' : 'processing',
-      stateText: paid ? '支付成功' : failed ? '支付失败' : '支付处理中',
+        stateText: paid ? '模拟支付成功' : failed ? '支付失败' : '支付处理中',
       description: paid
         ? '订单已提交，正在等待师傅接单。'
         : failed

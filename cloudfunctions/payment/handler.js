@@ -8,8 +8,13 @@ const PAY_STATUS = Object.freeze({
   UNPAID: 'unpaid',
   PAYING: 'paying',
   PAID: 'paid',
-  FAILED: 'failed'
+  FAILED: 'failed',
+  REFUNDED: 'refunded'
 })
+
+const { success, fail, serviceError } = require('../_shared/response')
+const { getPayload } = require('../_shared/payload')
+const { getNow } = require('../_shared/time')
 
 const PAY_MODE = Object.freeze({
   MOCK: 'mock',
@@ -26,41 +31,6 @@ const LOG_TYPE = Object.freeze({
   DUPLICATE_NOTIFY: 'duplicate_notify',
   QUERY_PAYMENT: 'query_payment'
 })
-
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env = {}) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-
-  const { action, ...payload } = event
-  return payload
-}
 
 function requireOpenid(env = {}) {
   if (!env.openid) {

@@ -1,39 +1,8 @@
+const { success, fail, serviceError } = require('../_shared/response')
+const { getPayload } = require('../_shared/payload')
+const { getNow } = require('../_shared/time')
+
 const REQUIRED_ADDRESS_FIELDS = ['contact_name', 'phone', 'city', 'community', 'detail_address']
-
-function success(data, message = 'success') {
-  return {
-    success: true,
-    data,
-    message
-  }
-}
-
-function fail(errorCode, message) {
-  return {
-    success: false,
-    errorCode,
-    message
-  }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getNow(env) {
-  return env.now ? env.now() : new Date()
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') {
-    return event.payload
-  }
-
-  const { action, ...payload } = event
-  return payload
-}
 
 function trimText(value) {
   return `${value || ''}`.trim()

@@ -1,8 +1,8 @@
 {
-  "description": "同城社区便民综合服务平台 MVP",
+  "description": "同城社区便民综合服务平台 MVP - 公开模板配置示例",
   "compileType": "miniprogram",
   "libVersion": "latest",
-  "appid": "wxe8b7172da9c09545",
+  "appid": "touristappid",
   "projectname": "local-community-service-mvp",
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",

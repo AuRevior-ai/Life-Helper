@@ -139,7 +139,7 @@ Page({
         orderId: this.data.orderId
       })
       this.applyOrder(data.order)
-      showSuccess('支付成功')
+      showSuccess('模拟支付成功')
     } catch (error) {
       showError(error.message || '支付失败')
     } finally {

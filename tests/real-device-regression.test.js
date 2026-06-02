@@ -36,7 +36,7 @@ function createMissingCollectionRepository() {
 test('tip success feedback stays visible before navigating back', () => {
   const tipCreate = read('miniprogram/pages/tip/create/create.js')
 
-  assert.match(tipCreate, /hideLoading\(\)[\s\S]*showSuccess\('打赏成功'\)/)
+  assert.match(tipCreate, /hideLoading\(\)[\s\S]*showSuccess\('模拟打赏成功'\)/)
   assert.match(tipCreate, /setTimeout\([\s\S]*wx\.navigateBack/)
 })
 

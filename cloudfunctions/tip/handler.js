@@ -7,6 +7,11 @@ const USER_ROLE = Object.freeze({ ADMIN: 'admin' })
 const ORDER_STATUS = Object.freeze({ COMPLETED: 'completed' })
 const PAY_STATUS = Object.freeze({ PAID: 'paid' })
 
+const { success, fail, serviceError } = require('../_shared/response')
+const { getPayload } = require('../_shared/payload')
+const { getNow } = require('../_shared/time')
+const { paginateList } = require('../_shared/pagination')
+
 const TIP_STATUS = Object.freeze({
   MOCK_SUCCESS: 'mock_success',
   SUCCESS: 'success',
@@ -18,30 +23,6 @@ const TIP_CHANNEL = Object.freeze({
   MOCK: 'mock',
   WECHAT: 'wechat'
 })
-
-function success(data, message = 'success') {
-  return { success: true, data, message }
-}
-
-function fail(errorCode, message) {
-  return { success: false, errorCode, message }
-}
-
-function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
-}
-
-function getPayload(event = {}) {
-  if (event.payload && typeof event.payload === 'object') return event.payload
-  const { action, ...payload } = event
-  return payload
-}
-
-function getNow(env = {}) {
-  return env.now ? env.now() : new Date()
-}
 
 function requireOpenid(env = {}) {
   if (!env.openid) throw serviceError('OPENID_MISSING', '无法获取用户 openid')
@@ -57,21 +38,6 @@ async function requireAdmin(env = {}) {
     throw serviceError('PERMISSION_DENIED', '当前操作需要管理员权限')
   }
   return user
-}
-
-function parsePositiveInteger(value, fallback) {
-  const number = Number(value)
-  if (!Number.isInteger(number) || number < 1) return fallback
-  return number
-}
-
-function paginateList(records, payload = {}) {
-  const page = parsePositiveInteger(payload.page, 1)
-  const pageSize = Math.min(parsePositiveInteger(payload.pageSize, 20), 50)
-  const total = records.length
-  const start = (page - 1) * pageSize
-  const list = records.slice(start, start + pageSize)
-  return { list, tips: list, total, page, pageSize, hasMore: start + pageSize < total }
 }
 
 function createTipNo(env = {}) {
@@ -272,12 +238,12 @@ async function createMockTip(event = {}, env = {}) {
 
 async function getUserTipList(event = {}, env = {}) {
   const tips = await env.tipLogs.findByUserId(requireOpenid(env))
-  return success(paginateList(tips, getPayload(event)))
+  return success(paginateList(tips, getPayload(event), { listKey: 'tips' }))
 }
 
 async function getWorkerTipList(event = {}, env = {}) {
   const tips = await env.tipLogs.findByWorkerId(requireOpenid(env))
-  return success(paginateList(tips, getPayload(event)))
+  return success(paginateList(tips, getPayload(event), { listKey: 'tips' }))
 }
 
 async function getTipDetail(event = {}, env = {}) {
@@ -298,7 +264,7 @@ async function adminGetTipLogs(event = {}, env = {}) {
   if (payload.workerId) tips = tips.filter((tip) => tip.worker_id === payload.workerId)
   if (payload.userId) tips = tips.filter((tip) => tip.user_id === payload.userId)
   if (payload.status) tips = tips.filter((tip) => tip.status === payload.status)
-  return success(paginateList(tips, payload))
+  return success(paginateList(tips, payload, { listKey: 'tips' }))
 }
 
 const actions = Object.freeze({

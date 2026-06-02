@@ -42,7 +42,7 @@ Page({
       await tipService.createMockTip({ orderId: this.data.orderId, amount: this.getAmount() })
       hideLoading()
       this.setData({ submitting: false })
-      showSuccess('打赏成功')
+      showSuccess('模拟打赏成功')
       setTimeout(() => {
         wx.navigateBack()
       }, 600)
