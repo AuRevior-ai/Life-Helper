@@ -1,66 +1,102 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">登录后管理账号资料，并选择本次进入的身份端</view>
+<view class="mine-page">
+  <view class="mine-header">
+    <view class="mine-title">{{ title }}</view>
+    <view class="mine-subtitle">登录后管理账号资料，并选择本次进入的身份端</view>
   </view>
 
-  <view class="profile-card panel">
-    <view class="profile-avatar">{{ avatarText }}</view>
-    <view class="profile-main">
-      <view class="profile-name">{{ displayName }}</view>
-      <view class="profile-meta">{{ roleText }} · {{ statusText }}</view>
-      <view class="profile-phone">{{ displayPhone }}</view>
+  <view class="profile-card">
+    <view class="avatar-wrap">
+      <image class="avatar-image" src="{{ userInfo.avatar }}" mode="aspectFill"></image>
     </view>
+    <view class="user-info">
+      <view class="user-name">{{ userInfo.nickname }}</view>
+      <view class="user-meta">{{ userInfo.role }} · {{ userInfo.status }}</view>
+      <view class="user-phone">{{ userInfo.phone }}</view>
+    </view>
+    <image class="profile-bg-image" src="{{ profileBg }}" mode="aspectFit"></image>
   </view>
 
-  <button wx:if="{{ !isLoggedIn }}" class="primary-button" bindtap="handleLogin">微信授权登录</button>
-  <button wx:else class="ghost-button" bindtap="handleLogout">退出登录</button>
+  <button wx:if="{{ !isLoggedIn }}" class="logout-btn" bindtap="handleLogin">微信授权登录</button>
+  <button wx:else class="logout-btn" bindtap="handleLogout">退出登录</button>
 
-  <view class="menu-panel panel">
-    <view wx:if="{{ isLoggedIn }}" class="menu-title">账号资料</view>
-    <view wx:if="{{ isLoggedIn }}" class="menu-item emphasized" bindtap="goRoleSelect">
-      <text>选择登录身份</text>
-      <text class="menu-item__hint">五端入口</text>
+  <view class="account-card">
+    <view class="account-title">账号资料</view>
+
+    <view wx:if="{{ isLoggedIn }}" class="menu-row" data-key="role" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--user"></view>
+      <text class="menu-label">选择登录身份</text>
+      <text class="menu-hint">五端入口</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goProfileEdit">
-      <text>完善资料</text>
-      <text class="menu-item__hint">昵称和手机号</text>
+
+    <view class="menu-row" data-key="profile" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--board"></view>
+      <text class="menu-label">完善资料</text>
+      <text class="menu-hint">昵称和手机号</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isUserIdentity }}" class="menu-item" bindtap="goOrderList">
-      <text>我的订单</text>
-      <text class="menu-item__hint">查看服务进度</text>
+
+    <view wx:if="{{ isUserIdentity }}" class="menu-row" data-key="orders" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--order"></view>
+      <text class="menu-label">我的订单</text>
+      <text class="menu-hint">查看服务进度</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view class="menu-item" bindtap="goMessageList">
-      <text>消息中心</text>
-      <text class="menu-item__hint">订单和审核提醒</text>
+
+    <view class="menu-row" data-key="messages" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--bell"></view>
+      <text class="menu-label">消息中心</text>
+      <text class="menu-hint">订单和审核提醒</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isUserIdentity }}" class="menu-item" bindtap="goMemberCenter">
-      <text>会员中心</text>
-      <text class="menu-item__hint">会员权益</text>
+
+    <view wx:if="{{ isUserIdentity }}" class="menu-row" data-key="member" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--crown"></view>
+      <text class="menu-label">会员中心</text>
+      <text class="menu-hint">会员权益</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isUserIdentity }}" class="menu-item" bindtap="goCouponList">
-      <text>我的优惠券</text>
-      <text class="menu-item__hint">领取与使用</text>
+
+    <view wx:if="{{ isUserIdentity }}" class="menu-row" data-key="coupons" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--ticket"></view>
+      <text class="menu-label">我的优惠券</text>
+      <text class="menu-hint">领取与使用</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isUserIdentity }}" class="menu-item" bindtap="goAddressList">
-      <text>地址管理</text>
-      <text class="menu-item__hint">维护服务地址</text>
+
+    <view wx:if="{{ isUserIdentity }}" class="menu-row" data-key="address" bindtap="handleMenuTap">
+      <view class="menu-icon menu-icon--pin"></view>
+      <text class="menu-label">地址管理</text>
+      <text class="menu-hint">维护服务地址</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isWorkerIdentity }}" class="menu-item" bindtap="goWorkerCenter">
-      <text>师傅工作台</text>
-      <text class="menu-item__hint">接单状态与评价</text>
+
+    <view wx:if="{{ isWorkerIdentity }}" class="menu-row worker-menu-row" bindtap="goWorkerCenter">
+      <view class="menu-icon menu-icon--user"></view>
+      <text class="menu-label">师傅工作台</text>
+      <text class="menu-hint">接单状态与评价</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isWorkerIdentity }}" class="menu-item" bindtap="goWorkerHall">
-      <text>接单大厅</text>
-      <text class="menu-item__hint">查看可接订单</text>
+
+    <view wx:if="{{ isWorkerIdentity }}" class="menu-row worker-menu-row" bindtap="goWorkerHall">
+      <view class="menu-icon menu-icon--order"></view>
+      <text class="menu-label">接单大厅</text>
+      <text class="menu-hint">查看可接订单</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isWorkerIdentity }}" class="menu-item" bindtap="goWorkerOrders">
-      <text>师傅订单</text>
-      <text class="menu-item__hint">处理服务订单</text>
+
+    <view wx:if="{{ isWorkerIdentity }}" class="menu-row worker-menu-row" bindtap="goWorkerOrders">
+      <view class="menu-icon menu-icon--board"></view>
+      <text class="menu-label">师傅订单</text>
+      <text class="menu-hint">处理服务订单</text>
+      <text class="menu-arrow">›</text>
     </view>
-    <view wx:if="{{ isWorkerIdentity }}" class="menu-item" bindtap="goMerchantApply">
-      <text>商家入驻</text>
-      <text class="menu-item__hint">申请或查看店铺审核</text>
+
+    <view wx:if="{{ isWorkerIdentity }}" class="menu-row worker-menu-row" bindtap="goMerchantApply">
+      <view class="menu-icon menu-icon--board"></view>
+      <text class="menu-label">商家入驻</text>
+      <text class="menu-hint">申请或查看店铺审核</text>
+      <text class="menu-arrow">›</text>
     </view>
   </view>
 </view>

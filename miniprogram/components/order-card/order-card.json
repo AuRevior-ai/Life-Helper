@@ -1,3 +1,6 @@
 {
-  "component": true
+  "component": true,
+  "usingComponents": {
+    "status-tag": "/components/status-tag/status-tag"
+  }
 }

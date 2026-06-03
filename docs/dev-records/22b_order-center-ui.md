@@ -1,0 +1,117 @@
+# 阶段 22B：用户端订单中心 UI 视觉重构
+
+## 1. 阶段基本信息
+
+- 阶段编号：22B
+- 阶段名称：用户端订单中心 UI 视觉重构
+- 开始时间：2026-06-03
+- 完成时间：2026-06-03
+- 阶段状态：已完成基础版
+
+## 2. 本阶段目标
+
+本阶段只重构用户端订单中心页面，而不是全站 UI 重构。订单中心直接承接用户下单后的核心查看、筛选、支付、取消、评价和详情查看路径，适合在首页 UI 基线之后优先统一；同时缩小改动范围，可以避免误触订单状态机、云函数、支付、退款、财务、派单、数据库等核心业务逻辑。
+
+## 3. 本阶段完成内容
+
+- [x] 将用户端订单页标题调整为“订单中心”。
+- [x] 将状态筛选从 picker 调整为横向滚动 tab。
+- [x] 按参考图重构用户端订单卡片为图片、信息、状态价格和底部操作区。
+- [x] 增强 `order-card` 用户端视觉变体，保留默认变体给其它端复用。
+- [x] 增强 `status-tag` 订单中心状态色值。
+- [x] 保留订单列表加载、分页、下拉刷新和详情跳转。
+- [x] 保留并接入已有模拟支付、取消订单和评价跳转能力。
+- [x] 保留 `empty-state` 和 `loading-view`。
+- [x] 新增阶段 22B 自动化测试。
+- [x] 新增阶段开发报告并更新阶段索引。
+
+## 4. 新增文件
+
+| 文件 | 说明 |
+|---|---|
+| `tests/phase22b.order-center-ui.test.js` | 订单中心 UI 与业务保护测试 |
+| `docs/dev-records/22b_order-center-ui.md` | 阶段 22B 开发报告 |
+
+## 5. 修改文件
+
+| 文件 | 说明 |
+|---|---|
+| `miniprogram/pages/order-list/order-list.js` | 保留加载逻辑，新增横向 tab 切换和已有订单操作入口 |
+| `miniprogram/pages/order-list/order-list.wxml` | 重构订单中心页面结构 |
+| `miniprogram/pages/order-list/order-list.wxss` | 重写订单中心页面视觉样式 |
+| `miniprogram/components/order-card/order-card.js` | 增加用户端展示字段、状态 tone 和操作按钮配置 |
+| `miniprogram/components/order-card/order-card.wxml` | 增加订单中心高密度卡片变体 |
+| `miniprogram/components/order-card/order-card.wxss` | 增加订单中心卡片视觉样式并保留默认样式 |
+| `miniprogram/components/order-card/order-card.json` | 引入 `status-tag` 展示组件 |
+| `miniprogram/components/status-tag/status-tag.wxss` | 增强订单状态标签色值 |
+| `docs/dev-records/index.md` | 更新阶段索引 |
+
+## 6. 订单中心新版结构说明
+
+新版页面包含顶部标题区、横向状态筛选条、订单卡片列表、加载状态、空状态和原生 tabBar 兼容留白。
+
+订单卡片采用三列结构：左侧图片或占位图，中间展示服务名称、预约时间、服务地址，右侧展示状态标签和价格。操作按钮固定在卡片底部右侧，避免“取消订单 / 模拟支付”双按钮挤出卡片。
+
+## 7. 视觉规范说明
+
+页面使用 `#F7F8FA` 浅灰背景、白色大圆角卡片、绿色主按钮、橙色价格、灰色辅助信息和柔和阴影。卡片圆角为 `28rpx`，按钮使用 `999rpx` 胶囊圆角。图片区域优先使用订单图片字段，缺失时使用本地 WXSS 渐变占位，不引入在线图片。
+
+## 8. 组件变化说明
+
+`order-card` 新增 `variant="center"` 用户端视觉变体，默认变体继续保留给师傅端等已有页面使用。`status-tag` 增加订单中心专用 tone 样式。`empty-state` 和 `loading-view` 未修改。
+
+## 9. 业务保护说明
+
+本阶段未修改订单状态机、云函数 handler、数据库结构、services 层核心逻辑、支付、退款、财务、派单、商家、资质、保证金或 LBS 核心逻辑。订单列表仍通过 `orderService.getUserOrderList` 加载，模拟支付和取消订单仍调用已有 `orderService.mockPayOrder` 与 `orderService.cancelOrder`。
+
+## 10. TabBar 处理说明
+
+当前项目使用 `app.json` 原生 tabBar，不是 `custom-tab-bar`。本阶段不强行切换 tabBar 实现，只在订单页增加底部留白，避免内容被原生 tabBar 遮挡。参考图中的圆角浮层 tabBar 留到后续全局 UI 阶段统一处理。
+
+## 11. 测试记录
+
+新增测试文件：
+
+```text
+tests/phase22b.order-center-ui.test.js
+```
+
+测试命令：
+
+```bash
+npm test
+```
+
+测试结果：已通过。
+
+## 12. 已知问题与遗留事项
+
+- 其它用户端页面尚未完全同步订单中心卡片密度和状态视觉。
+- 原生 tabBar 暂未复刻参考图中的浮层圆角效果。
+- 订单图片目前依赖已有字段，缺失时仍使用占位图。
+
+## 13. 对下一阶段的影响
+
+后续可以沿用首页和订单中心的绿色主色、白色圆角卡片、橙色价格、胶囊按钮和状态标签规范，同步服务列表、服务详情、我的页面以及师傅端、商家端和管理员端。
+
+## 14. 下一阶段计划
+
+阶段 22C：核心用户端页面 UI 同步与交互体验统一。
+
+## 15. 本阶段复盘
+
+### 做得好的地方
+
+订单中心视觉密度更接近参考图，并且通过 `variant` 避免影响共用订单卡片的其它端页面。
+
+### 不足的地方
+
+真实服务图片资产仍不完整，当前保留占位图以保证页面稳定。
+
+### 后续改进建议
+
+后续可以补齐本地服务图片资产，并在全局 UI 阶段统一原生 tabBar 或自定义 tabBar 方案。
+
+## 16. 阶段结论
+
+阶段 22B 已完成基础版，可以进入阶段 22C。

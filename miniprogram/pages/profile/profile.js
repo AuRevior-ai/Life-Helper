@@ -9,11 +9,29 @@ const {
 const { USER_ROLE } = require('../../config/roles')
 const { hideLoading, showError, showLoading, showSuccess } = require('../../utils/toast')
 
+const PROFILE_AVATAR_PLACEHOLDER = '/assets/profile/profile-avatar-placeholder.png'
+const PROFILE_BG_PLACEHOLDER = '/assets/profile/profile-card-bg-placeholder.png'
+
+function normalizeProfileAvatar(avatar) {
+  const src = `${avatar || ''}`.trim()
+  const lowerSrc = src.toLowerCase()
+  const isWechatDefaultAvatar = lowerSrc.includes('thirdwx.qlogo.cn') || lowerSrc.includes('wx.qlogo.cn')
+  return src && !isWechatDefaultAvatar ? src : PROFILE_AVATAR_PLACEHOLDER
+}
+
 Page({
   data: {
     title: '我的',
     currentUser: null,
     isLoggedIn: false,
+    profileBg: PROFILE_BG_PLACEHOLDER,
+    userInfo: {
+      nickname: '微信用户',
+      role: '普通用户',
+      status: '正常',
+      phone: '17779977696',
+      avatar: PROFILE_AVATAR_PLACEHOLDER
+    },
     avatarText: '未',
     displayName: '未登录',
     displayPhone: '手机号待填写',
@@ -25,7 +43,16 @@ Page({
   },
 
   onShow() {
+    this.setActiveTabBar()
     this.refreshCurrentUser()
+  },
+
+  setActiveTabBar() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({
+        selected: 2
+      })
+    }
   },
 
   refreshCurrentUser() {
@@ -35,14 +62,25 @@ Page({
   applyCurrentUser(user) {
     const isLoggedIn = Boolean(user)
     const activeRole = isLoggedIn ? getCurrentIdentityRole() : ''
+    const displayName = isLoggedIn ? user.nickname || '微信用户' : '微信用户'
+    const displayPhone = isLoggedIn ? user.phone || '17779977696' : '17779977696'
+    const roleText = isLoggedIn ? getCurrentUserRoleText() : '普通用户'
+    const statusText = isLoggedIn ? this.getStatusText(user.status) : '正常'
     this.setData({
       currentUser: user,
       isLoggedIn,
-      avatarText: isLoggedIn ? (user.nickname || '社区用户').slice(0, 1) : '未',
-      displayName: isLoggedIn ? user.nickname || '社区用户' : '未登录',
-      displayPhone: isLoggedIn ? user.phone || '手机号待填写' : '登录后完善手机号',
-      roleText: isLoggedIn ? getCurrentUserRoleText() : '未登录',
-      statusText: isLoggedIn ? this.getStatusText(user.status) : '未登录',
+      userInfo: {
+        nickname: displayName,
+        role: roleText,
+        status: statusText,
+        phone: displayPhone,
+        avatar: normalizeProfileAvatar(isLoggedIn ? user.avatar : '')
+      },
+      avatarText: displayName.slice(0, 1),
+      displayName,
+      displayPhone,
+      roleText,
+      statusText,
       isUserIdentity: !isLoggedIn || activeRole === USER_ROLE.USER,
       isWorkerIdentity: activeRole === USER_ROLE.WORKER,
       isAdminIdentity: activeRole === USER_ROLE.ADMIN
@@ -108,6 +146,29 @@ Page({
     getApp().globalData.currentUser = null
     this.applyCurrentUser(null)
     showSuccess('已退出')
+  },
+
+  handleMenuTap(event) {
+    const key = event.currentTarget.dataset.key
+    const actionMap = {
+      role: this.goRoleSelect,
+      profile: this.goProfileEdit,
+      orders: this.goOrderList,
+      messages: this.goMessageList,
+      member: this.goMemberCenter,
+      coupons: this.goCouponList,
+      address: this.goAddressList
+    }
+    const action = actionMap[key]
+    if (action) {
+      action.call(this)
+    }
+  },
+
+  goHome() {
+    wx.switchTab({
+      url: '/pages/index/index'
+    })
   },
 
   goOrderList() {

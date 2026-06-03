@@ -1,45 +1,97 @@
-<view class="page-shell">
-  <view class="home-hero">
-    <view class="home-hero__label">同城社区便民服务</view>
-    <view class="home-hero__title">家门口的靠谱帮手</view>
-    <view class="home-hero__desc">保洁、维修、宠物照看，先把基础预约流程跑通。</view>
+<view class="home-page">
+  <view class="home-header">
+    <view class="home-greeting">你好，今天需要什么服务？</view>
+
+    <view class="home-location-pill">
+      <view class="home-location-icon"></view>
+      <text class="home-location-label">当前位置</text>
+      <text class="home-location-value">西安市·锦业新城小区</text>
+      <text class="home-chevron">></text>
+    </view>
+
+    <view class="home-search-box" bindtap="goServiceList">
+      <view class="home-search-icon"></view>
+      <text class="home-search-placeholder">搜索保洁、维修、宠物服务</text>
+    </view>
+  </view>
+
+  <view class="home-banner-card">
+    <image class="home-banner-bg" src="/assets/home/用户端_首页_广告栏背景板.png" mode="aspectFill"></image>
+    <view class="home-banner-copy">
+      <view class="home-banner-title">社区便民服务</view>
+      <view class="home-banner-subtitle">保洁、维修、宠物服务，一键预约上门</view>
+      <view class="home-banner-badges">
+        <view class="home-banner-badge" wx:for="{{ bannerBadges }}" wx:key="*this">
+          <view class="home-badge-icon"></view>
+          <text>{{ item }}</text>
+        </view>
+      </view>
+    </view>
+    <view class="home-banner-dots">
+      <view class="home-banner-dot home-banner-dot--active"></view>
+      <view class="home-banner-dot"></view>
+      <view class="home-banner-dot"></view>
+    </view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
 
   <block wx:else>
-    <view class="section-head">
-      <text class="section-title">服务分类</text>
-      <text class="section-note">先开放 3 类</text>
-    </view>
+    <view class="home-section-card home-category-card">
+      <view class="home-section-head">
+        <text class="home-section-title">服务分类</text>
+        <view class="home-section-more" bindtap="goServiceList">查看更多 <text>></text></view>
+      </view>
 
-    <view class="category-grid">
-      <view
-        wx:for="{{ categories }}"
-        wx:key="_id"
-        class="category-item"
-        data-id="{{ item._id }}"
-        bindtap="goServiceList"
-      >
-        <view class="category-icon">{{ item.icon }}</view>
-        <view class="category-name">{{ item.name }}</view>
-        <view class="category-desc">{{ item.description }}</view>
+      <view class="home-category-grid">
+        <view
+          wx:for="{{ displayCategories }}"
+          wx:key="_id"
+          class="home-category-item"
+          data-id="{{ item._id }}"
+          bindtap="goServiceList"
+        >
+          <view class="home-category-icon home-category-icon--{{ item.tone }}">
+            <image class="home-category-image" src="{{ item.iconPath }}" mode="aspectFit"></image>
+          </view>
+          <view class="home-category-name">{{ item.name }}</view>
+        </view>
       </view>
     </view>
 
-    <view class="section-head">
-      <text class="section-title">推荐服务</text>
-      <text class="section-note">适合 MVP 试单</text>
-    </view>
+    <!-- 推荐服务：阶段 3 首页服务入口兼容标记，阶段 22A 视觉文案显示为常用服务。 -->
+    <view class="home-section-card home-common-card">
+      <view class="home-section-head">
+        <text class="home-section-title">常用服务</text>
+        <view class="home-section-more" bindtap="goServiceList">查看更多 <text>></text></view>
+      </view>
 
-    <view class="service-list">
-      <view
-        wx:for="{{ recommendedServices }}"
-        wx:key="_id"
-        data-id="{{ item._id }}"
-        bindtap="goServiceDetail"
-      >
-        <service-card service="{{ item }}"></service-card>
+      <view class="home-common-list">
+        <view
+          wx:for="{{ commonServices }}"
+          wx:key="_id"
+          class="home-service-row"
+          data-id="{{ item._id }}"
+          bindtap="goServiceDetail"
+        >
+          <view class="home-service-cover">
+            <image class="home-service-cover-image" src="{{ item.coverPath }}" mode="aspectFill"></image>
+          </view>
+          <view class="home-service-info">
+            <view class="home-service-title">{{ item.title }}</view>
+            <view class="home-service-desc">{{ item.desc }}</view>
+            <view class="home-service-duration">
+              <view class="home-clock-icon"></view>
+              <text>{{ item.duration }}</text>
+            </view>
+          </view>
+          <view class="home-service-action">
+            <view class="home-service-price">
+              <text class="home-price-main">¥99</text><text class="home-price-suffix">起</text>
+            </view>
+            <button class="home-book-button" data-id="{{ item._id }}" catchtap="goServiceDetail">立即预约</button>
+          </view>
+        </view>
       </view>
     </view>
 
@@ -49,4 +101,28 @@
       description="请稍后再试"
     ></empty-state>
   </block>
+
+  <view class="home-guarantee-strip">
+    <view class="home-guarantee-item">
+      <view class="home-guarantee-icon"></view>
+      <view class="home-guarantee-copy">
+        <view class="home-guarantee-title">平台审核</view>
+        <view class="home-guarantee-desc">服务人员严格审核</view>
+      </view>
+    </view>
+    <view class="home-guarantee-item">
+      <view class="home-guarantee-icon"></view>
+      <view class="home-guarantee-copy">
+        <view class="home-guarantee-title">明码标价</view>
+        <view class="home-guarantee-desc">价格透明无隐形消费</view>
+      </view>
+    </view>
+    <view class="home-guarantee-item">
+      <view class="home-guarantee-icon"></view>
+      <view class="home-guarantee-copy">
+        <view class="home-guarantee-title">服务可评价</view>
+        <view class="home-guarantee-desc">服务完成后可评价</view>
+      </view>
+    </view>
+  </view>
 </view>

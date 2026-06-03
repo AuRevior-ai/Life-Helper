@@ -1,15 +1,22 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看已提交的服务订单和处理进度</view>
+<view class="order-page">
+  <view class="order-header">
+    <view class="order-title">{{ title }}</view>
   </view>
 
-  <view class="filter-bar panel">
-    <text>状态</text>
-    <picker mode="selector" range="{{ statusLabels }}" value="{{ selectedStatusIndex }}" bindchange="onStatusChange">
-      <view class="picker-value">{{ statusLabels[selectedStatusIndex] }}</view>
-    </picker>
-  </view>
+  <scroll-view class="order-status-tabs" scroll-x enable-flex>
+    <view class="order-tab-list">
+      <view
+        wx:for="{{ statusOptions }}"
+        wx:key="value"
+        class="order-tab {{ selectedStatusIndex === index ? 'order-tab--active' : '' }}"
+        data-index="{{ index }}"
+        bindtap="onStatusTap"
+      >
+        <text>{{ item.label }}</text>
+        <view wx:if="{{ selectedStatusIndex === index }}" class="order-tab__line"></view>
+      </view>
+    </view>
+  </scroll-view>
 
   <loading-view wx:if="{{ loading && !orders.length }}" text="正在加载订单"></loading-view>
 
@@ -18,15 +25,17 @@
       wx:for="{{ orders }}"
       wx:key="_id"
       order="{{ item }}"
+      variant="center"
       bind:select="goOrderDetail"
+      bind:action="handleOrderAction"
     ></order-card>
   </view>
 
-  <view wx:else>
+  <view wx:else class="order-empty">
     <empty-state
       title="暂无订单"
-      description="从首页选择服务后即可下单"
+      description="去首页看看需要的服务吧"
     ></empty-state>
-    <button class="primary-button" bindtap="goHome">去首页</button>
+    <button class="order-empty__button" bindtap="goHome">去首页</button>
   </view>
 </view>

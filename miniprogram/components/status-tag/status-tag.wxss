@@ -1,11 +1,13 @@
 .status-tag {
   display: inline-flex;
   align-items: center;
-  min-height: 42rpx;
+  min-height: 40rpx;
   padding: 0 16rpx;
-  border-radius: 8rpx;
-  font-size: 22rpx;
-  font-weight: 600;
+  border-radius: 999rpx;
+  font-size: 23rpx;
+  font-weight: 700;
+  line-height: 40rpx;
+  white-space: nowrap;
 }
 
 .status-tag--default {
@@ -26,4 +28,34 @@
 .status-tag--success {
   color: #1f7a68;
   background: #daf1e9;
+}
+
+.status-tag--order-pending {
+  color: #ff6a00;
+  background: #fff3e8;
+}
+
+.status-tag--order-accepted {
+  color: #16a34a;
+  background: #eaf8e8;
+}
+
+.status-tag--order-serving {
+  color: #ffffff;
+  background: #16a34a;
+}
+
+.status-tag--order-review {
+  color: #22c55e;
+  background: #dcfce7;
+}
+
+.status-tag--order-completed {
+  color: #128a43;
+  background: #eef8ef;
+}
+
+.status-tag--order-canceled {
+  color: #9ca3af;
+  background: #f3f4f6;
 }

@@ -1,3 +1,4 @@
+/* default card */
 .order-card {
   padding: 24rpx;
   border: 1rpx solid #dfe8e3;
@@ -14,9 +15,9 @@
 }
 
 .order-card__name {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .order-card__status {
@@ -37,6 +38,178 @@
 }
 
 .order-card__price {
-  color: #c66b2d;
+  color: #ff6a00;
+  font-weight: 800;
+}
+
+/* order center card */
+.order-card--center {
+  position: relative;
+  display: grid;
+  min-height: 226rpx;
+  box-sizing: border-box;
+  grid-template-columns: 168rpx minmax(0, 1fr) 164rpx;
+  column-gap: 18rpx;
+  align-items: start;
+  overflow: hidden;
+  padding: 24rpx 24rpx 82rpx;
+  border: 0;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(31, 41, 55, 0.06);
+}
+
+/* order image */
+.order-card__media {
+  width: 168rpx;
+  height: 126rpx;
+}
+
+.order-card__image,
+.order-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 14rpx;
+}
+
+.order-card__image {
+  display: block;
+}
+
+.order-card__image-placeholder {
+  background: linear-gradient(135deg, #eef2f3 0%, #dfe8e3 100%);
+}
+
+/* order info */
+.order-card--center .order-card__main {
+  min-width: 0;
+  padding-top: 2rpx;
+}
+
+.order-card--center .order-card__name {
+  overflow: hidden;
+  margin-bottom: 14rpx;
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-card__meta {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8rpx;
+  color: #6b7280;
+  font-size: 23rpx;
+  line-height: 34rpx;
+}
+
+.order-card__meta text {
+  overflow: hidden;
+  min-width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-card__meta-icon {
+  position: relative;
+  width: 22rpx;
+  height: 22rpx;
+  flex: 0 0 22rpx;
+  box-sizing: border-box;
+  border: 3rpx solid #9ca3af;
+  border-radius: 50%;
+}
+
+.order-card__meta-icon--time::after {
+  position: absolute;
+  top: 4rpx;
+  left: 8rpx;
+  width: 6rpx;
+  height: 8rpx;
+  border-left: 2rpx solid #9ca3af;
+  border-bottom: 2rpx solid #9ca3af;
+  content: "";
+}
+
+.order-card__meta-icon--location {
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+}
+
+.order-card__meta-icon--location::after {
+  position: absolute;
+  top: 5rpx;
+  left: 5rpx;
+  width: 6rpx;
+  height: 6rpx;
+  border-radius: 50%;
+  background: #9ca3af;
+  content: "";
+}
+
+/* status pill */
+.order-card__aside {
+  display: flex;
+  min-width: 0;
+  height: 118rpx;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 28rpx;
+  text-align: right;
+}
+
+.order-card--center .order-card__price {
+  color: #ff6a00;
+  font-size: 34rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+  white-space: nowrap;
+}
+
+/* action buttons */
+.order-card__actions {
+  position: absolute;
+  right: 24rpx;
+  bottom: 24rpx;
+  display: flex;
+  max-width: calc(100% - 48rpx);
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14rpx;
+}
+
+.order-card__action {
+  display: flex;
+  width: auto;
+  min-width: 112rpx;
+  height: 52rpx;
+  margin: 0;
+  padding: 0 24rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999rpx;
+  font-size: 24rpx;
   font-weight: 700;
+  line-height: 52rpx;
+  white-space: nowrap;
+}
+
+.order-card__action::after {
+  border: 0;
+}
+
+.order-card__action--primary {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.order-card__action--secondary {
+  border: 1rpx solid #d1d5db;
+  background: #ffffff;
+  color: #4b5563;
 }

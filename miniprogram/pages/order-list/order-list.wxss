@@ -1,24 +1,106 @@
+/* page */
+.order-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 96rpx 32rpx 170rpx;
+  background: #f7f8fa;
+  color: #111827;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* header */
+.order-header {
+  margin-bottom: 28rpx;
+}
+
+.order-title {
+  color: #111827;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+/* tabs */
+.order-status-tabs {
+  width: 100%;
+  margin-bottom: 22rpx;
+  white-space: nowrap;
+}
+
+.order-tab-list {
+  display: inline-flex;
+  min-width: 100%;
+  align-items: center;
+  gap: 38rpx;
+}
+
+.order-tab {
+  position: relative;
+  display: inline-flex;
+  height: 58rpx;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  color: #374151;
+  font-size: 27rpx;
+  font-weight: 500;
+  line-height: 36rpx;
+}
+
+.order-tab--active {
+  color: #16a34a;
+  font-weight: 800;
+}
+
+.order-tab__line {
+  width: 32rpx;
+  height: 5rpx;
+  margin-top: 8rpx;
+  border-radius: 999rpx;
+  background: #16a34a;
+}
+
+/* order card */
 .order-list {
   display: flex;
   flex-direction: column;
-  gap: 18rpx;
+  gap: 22rpx;
 }
 
-.filter-bar {
+/* order image */
+
+/* order info */
+
+/* status pill */
+
+/* action buttons */
+
+/* empty/loading */
+.order-empty {
+  padding-top: 18rpx;
+}
+
+.order-empty__button {
   display: flex;
+  width: 240rpx;
+  height: 64rpx;
+  margin: 0 auto;
+  padding: 0 28rpx;
   align-items: center;
-  justify-content: space-between;
-  gap: 18rpx;
-  margin-bottom: 18rpx;
-  color: #64716d;
-  font-size: 25rpx;
+  justify-content: center;
+  border-radius: 999rpx;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 64rpx;
 }
 
-.picker-value {
-  min-width: 180rpx;
-  padding: 14rpx 18rpx;
-  border-radius: 8rpx;
-  background: #f6f8f5;
-  color: #1f2d2a;
-  text-align: right;
+.order-empty__button::after {
+  border: 0;
+}
+
+/* tabbar compatibility */
+.page-shell {
+  padding-top: 96rpx;
 }
