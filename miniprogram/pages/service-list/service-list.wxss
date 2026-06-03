@@ -1,7 +1,9 @@
+@import "../../styles/ui-kit.wxss";
+
 .category-tabs {
   width: 100%;
-  white-space: nowrap;
   margin-bottom: 24rpx;
+  white-space: nowrap;
 }
 
 .category-tab {
@@ -9,25 +11,27 @@
   align-items: center;
   justify-content: center;
   min-width: 148rpx;
-  height: 64rpx;
+  height: 58rpx;
   margin-right: 14rpx;
-  padding: 0 24rpx;
-  border: 1rpx solid #dfe8e3;
-  border-radius: 10rpx;
+  padding: 0 26rpx;
+  border: 1rpx solid #d1d5db;
+  border-radius: 999rpx;
   background: #ffffff;
-  color: #52635e;
+  color: #374151;
   font-size: 25rpx;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
 .category-tab--active {
-  border-color: #1f7a68;
-  background: #1f7a68;
+  border-color: #16a34a;
+  background: #16a34a;
   color: #ffffff;
+  font-weight: 800;
 }
 
 .service-list {
   display: flex;
   flex-direction: column;
-  gap: 18rpx;
+  gap: 22rpx;
 }

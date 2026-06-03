@@ -1,6 +1,12 @@
+@import "../../../styles/ui-kit.wxss";
+
 .member-card,
 .plan-card {
-  margin-bottom: 20rpx;
+  margin-bottom: 22rpx;
+}
+
+.member-card {
+  padding: 30rpx 28rpx;
 }
 
 .plan-card {
@@ -11,14 +17,17 @@
 }
 
 .card-title {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 30rpx;
   font-weight: 800;
 }
 
 .card-line {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
   margin-top: 10rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 24rpx;
 }
 
@@ -26,9 +35,6 @@
   width: 180rpx;
   height: 68rpx;
   margin: 0;
-  border-radius: 8rpx;
-  background: #1f7a68;
-  color: #ffffff;
   font-size: 24rpx;
   line-height: 68rpx;
 }

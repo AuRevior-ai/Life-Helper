@@ -1,20 +1,28 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">一笔订单最多使用一张优惠券</view>
+<view class="coupon-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">一笔订单最多使用一张优惠券</view>
   </view>
 
-  <button class="primary-button" bindtap="goReceive">领取优惠券</button>
+  <button class="coupon-action ui-primary-button" bindtap="goReceive">
+    领取优惠券
+  </button>
 
   <loading-view wx:if="{{ loading }}" text="正在加载优惠券"></loading-view>
 
   <block wx:elif="{{ coupons.length }}">
-    <view wx:for="{{ coupons }}" wx:key="_id" class="panel coupon-card">
+    <view wx:for="{{ coupons }}" wx:key="_id" class="ui-card coupon-card">
       <view class="card-top">
         <view class="card-title">{{ item.coupon_name }}</view>
-        <view class="card-amount">{{ item.amountText }}</view>
+        <view class="card-amount ui-price">{{ item.amountText }}</view>
       </view>
-      <view class="card-line">状态：{{ item.statusText }}</view>
+      <view class="card-line">
+        <text>状态：</text>
+        <status-tag
+          text="{{ item.statusText }}"
+          tone="{{ item.statusTone }}"
+        ></status-tag>
+      </view>
       <view class="card-line">有效期至：{{ item.valid_end_at }}</view>
     </view>
   </block>

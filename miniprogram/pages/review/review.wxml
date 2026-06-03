@@ -1,10 +1,10 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">给本次服务打分，帮助后续服务更稳定</view>
+<view class="review-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">给本次服务打分，帮助后续服务更稳定</view>
   </view>
 
-  <view class="review-panel panel">
+  <view class="review-panel ui-card">
     <view class="form-label">评分</view>
     <view class="rating-row">
       <view
@@ -30,7 +30,7 @@
   </view>
 
   <button
-    class="primary-button"
+    class="submit-button ui-primary-button"
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="handleSubmit"

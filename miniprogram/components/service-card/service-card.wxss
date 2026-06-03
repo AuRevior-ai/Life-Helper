@@ -1,18 +1,20 @@
 .service-card {
   display: flex;
-  gap: 20rpx;
+  gap: 22rpx;
   padding: 24rpx;
-  border: 1rpx solid #dfe8e3;
-  border-radius: 12rpx;
+  border: 0;
+  border-radius: 28rpx;
   background: #ffffff;
+  box-shadow: 0 8rpx 28rpx rgba(31, 41, 55, 0.06);
+  box-sizing: border-box;
 }
 
 .service-card__cover {
-  width: 132rpx;
+  width: 152rpx;
   height: 132rpx;
-  flex: 0 0 132rpx;
-  border-radius: 10rpx;
-  background: linear-gradient(135deg, #d8ebe4, #f4d58d);
+  flex: 0 0 152rpx;
+  border-radius: 14rpx;
+  background: linear-gradient(135deg, #eef2f3 0%, #dfe8e3 100%);
 }
 
 .service-card__body {
@@ -21,16 +23,24 @@
 }
 
 .service-card__name {
-  color: #1f2d2a;
+  overflow: hidden;
+  color: #111827;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 800;
+  line-height: 38rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .service-card__desc {
+  display: -webkit-box;
+  overflow: hidden;
   margin-top: 8rpx;
-  color: #64716d;
-  font-size: 24rpx;
+  color: #6b7280;
+  font-size: 25rpx;
   line-height: 1.4;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .service-card__meta {
@@ -38,11 +48,12 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 16rpx;
-  color: #72807b;
+  color: #9ca3af;
   font-size: 24rpx;
 }
 
 .service-card__price {
-  color: #c66b2d;
-  font-weight: 700;
+  color: #ff6a00;
+  font-size: 30rpx;
+  font-weight: 900;
 }

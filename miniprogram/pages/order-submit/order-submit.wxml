@@ -1,7 +1,7 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">确认服务、地址和预约时间后创建订单</view>
+<view class="order-submit-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">确认服务、地址和预约时间后创建订单</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载下单信息"></loading-view>
@@ -13,26 +13,28 @@
   ></empty-state>
 
   <block wx:elif="{{ service }}">
-    <view class="service-summary panel">
+    <view class="service-summary ui-card">
       <view>
         <view class="summary-name">{{ service.name }}</view>
         <view class="summary-meta"
           >{{ service.category_name }} · {{ service.duration }}</view
         >
       </view>
-      <view class="summary-price">{{ priceText }}</view>
+      <view class="summary-price ui-price">{{ priceText }}</view>
     </view>
 
-    <view class="section-head">
-      <text>服务地址</text>
-      <button class="text-button" bindtap="goAddAddress">新增地址</button>
+    <view class="ui-section-head order-section-head">
+      <text class="ui-section-title">服务地址</text>
+      <button class="ui-secondary-button" bindtap="goAddAddress">
+        新增地址
+      </button>
     </view>
 
     <view wx:if="{{ addresses.length }}" class="address-picker">
       <view
         wx:for="{{ addresses }}"
         wx:key="_id"
-        class="select-address panel {{ selectedAddressId === item._id ? 'select-address--active' : '' }}"
+        class="select-address ui-card ui-card--compact {{ selectedAddressId === item._id ? 'select-address--active' : '' }}"
         data-id="{{ item._id }}"
         bindtap="selectAddress"
       >
@@ -41,7 +43,9 @@
             <text class="address-name">{{ item.contact_name }}</text>
             <text class="address-phone">{{ item.phone }}</text>
           </view>
-          <text wx:if="{{ item.is_default }}" class="default-tag">默认</text>
+          <text wx:if="{{ item.is_default }}" class="ui-pill ui-pill--green"
+            >默认</text
+          >
         </view>
         <view class="address-text"
           >{{ item.city }} {{ item.community }} {{ item.detail_address }}</view
@@ -55,7 +59,7 @@
       description="请先添加服务地址"
     ></empty-state>
 
-    <view class="form-panel panel">
+    <view class="form-panel ui-card">
       <view class="form-item">
         <text class="form-label">预约日期</text>
         <picker
@@ -91,12 +95,12 @@
       </view>
     </view>
 
-    <view class="order-total panel">
+    <view class="order-total ui-card ui-card--compact">
       <text>服务原价</text>
       <text>{{ originalAmountText }}</text>
     </view>
 
-    <view class="promotion-panel panel">
+    <view class="promotion-panel ui-card">
       <picker
         mode="selector"
         range="{{ couponLabels }}"
@@ -122,7 +126,7 @@
     </view>
 
     <button
-      class="primary-button"
+      class="submit-button ui-primary-button"
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
       bindtap="handleSubmit"

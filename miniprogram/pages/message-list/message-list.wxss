@@ -1,17 +1,22 @@
+@import "../../styles/ui-kit.wxss";
+
+.message-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
 .message-list {
   display: flex;
   flex-direction: column;
-  gap: 18rpx;
+  gap: 22rpx;
   margin-top: 18rpx;
 }
 
-.message-item {
-  border-color: #dfe8e3;
-}
-
 .message-item--unread {
-  border-color: #1f7a68;
-  box-shadow: 0 8rpx 22rpx rgba(31, 122, 104, 0.1);
+  outline: 2rpx solid #16a34a;
+  box-shadow: 0 8rpx 28rpx rgba(22, 163, 74, 0.1);
 }
 
 .message-top {
@@ -22,14 +27,14 @@
 }
 
 .message-title {
-  color: #1f2d2a;
+  min-width: 0;
+  color: #111827;
   font-size: 30rpx;
   font-weight: 800;
 }
 
-.message-state,
 .message-type {
-  color: #1f7a68;
+  color: #16a34a;
   font-size: 23rpx;
   font-weight: 700;
 }
@@ -40,7 +45,7 @@
 
 .message-content {
   margin-top: 12rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 25rpx;
   line-height: 1.5;
 }

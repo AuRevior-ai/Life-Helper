@@ -1,10 +1,9 @@
 const refundService = require("../../../services/refund.service");
 const {
-  AFTER_SALE_STATUS_TEXT,
   AFTER_SALE_TYPE_TEXT,
-  REFUND_STATUS_TEXT,
 } = require("../../../config/status");
 const { formatPrice } = require("../../../utils/format");
+const { getStatusView } = require("../../../utils/status-view");
 const { showError } = require("../../../utils/toast");
 
 Page({
@@ -17,6 +16,8 @@ Page({
     typeText: "",
     statusText: "",
     refundStatusText: "",
+    statusView: { text: "", tone: "default" },
+    refundStatusView: { text: "", tone: "default" },
     amountText: "¥0.00",
     loading: true,
   },
@@ -47,10 +48,13 @@ Page({
         order,
         refundLogs: data.refundLogs || [],
         typeText: AFTER_SALE_TYPE_TEXT[afterSale.type] || afterSale.type,
-        statusText:
-          AFTER_SALE_STATUS_TEXT[afterSale.status] || afterSale.status,
-        refundStatusText:
-          REFUND_STATUS_TEXT[order.refund_status || "none"] || "未退款",
+        statusText: getStatusView("afterSale", afterSale.status).text,
+        refundStatusText: getStatusView(
+          "refund",
+          order.refund_status || "none",
+        ).text,
+        statusView: getStatusView("afterSale", afterSale.status),
+        refundStatusView: getStatusView("refund", order.refund_status || "none"),
         amountText: formatPrice(afterSale.amount),
         loading: false,
       });

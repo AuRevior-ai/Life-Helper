@@ -1,14 +1,14 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看服务人员资料和用户评价</view>
+<view class="worker-detail-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">查看服务人员资料和用户评价</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载师傅详情"></loading-view>
 
   <block wx:elif="{{ worker }}">
-    <view class="worker-profile panel">
-      <view class="worker-avatar"
+    <view class="worker-profile ui-feature-card">
+      <view class="worker-avatar ui-avatar-placeholder"
         >{{ worker.name ? worker.name.slice(0, 1) : '师' }}</view
       >
       <view class="worker-info">
@@ -23,7 +23,7 @@
       </view>
     </view>
 
-    <view class="stats-grid panel">
+    <view class="stats-grid ui-card">
       <view>
         <text class="stat-value">{{ completedCount }}</text>
         <text class="stat-label">完成订单</text>
@@ -34,16 +34,16 @@
       </view>
     </view>
 
-    <view wx:if="{{ worker.intro }}" class="panel intro-panel">
-      <view class="section-title">个人简介</view>
+    <view wx:if="{{ worker.intro }}" class="ui-card intro-panel">
+      <view class="ui-section-title section-title">个人简介</view>
       <view class="intro-text">{{ worker.intro }}</view>
     </view>
 
-    <view class="section-head">
-      <text>用户评价</text>
+    <view class="ui-section-head review-section-head">
+      <text class="ui-section-title">用户评价</text>
     </view>
     <view wx:if="{{ reviews.length }}" class="review-list">
-      <view wx:for="{{ reviews }}" wx:key="_id" class="panel review-item">
+      <view wx:for="{{ reviews }}" wx:key="_id" class="ui-card ui-card--compact review-item">
         <view class="review-rating">{{ item.rating }} 分</view>
         <view class="review-content"
           >{{ item.content || '用户未填写评价内容' }}</view

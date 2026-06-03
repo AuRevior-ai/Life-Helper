@@ -1,10 +1,12 @@
+@import "../../../styles/ui-kit.wxss";
+
 .form-panel {
   margin-bottom: 24rpx;
 }
 
 .form-item {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #edf2ef;
+  border-bottom: 1rpx solid #edf0f2;
 }
 
 .form-item:last-child {
@@ -13,7 +15,7 @@
 
 .form-label {
   margin-bottom: 12rpx;
-  color: #33433f;
+  color: #374151;
   font-size: 26rpx;
   font-weight: 700;
 }
@@ -23,8 +25,19 @@
   align-items: center;
   gap: 12rpx;
   padding: 8rpx 0;
-  color: #33433f;
+  color: #374151;
   font-size: 26rpx;
+}
+
+input,
+textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  background: #f7f8fa;
+  color: #111827;
+  font-size: 28rpx;
 }
 
 textarea {
@@ -33,6 +46,15 @@ textarea {
 
 .image-count {
   margin-top: 12rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 24rpx;
+}
+
+.image-button,
+.submit-button {
+  width: 100%;
+  height: 76rpx;
+  margin-top: 22rpx;
+  font-size: 28rpx;
+  line-height: 76rpx;
 }

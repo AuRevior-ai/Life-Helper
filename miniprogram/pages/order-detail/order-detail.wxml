@@ -1,7 +1,7 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
+<view class="order-detail-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle"
       >订单状态和服务信息以创建订单时的快照为准；模拟支付不产生真实扣款。</view
     >
   </view>
@@ -9,36 +9,48 @@
   <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
 
   <block wx:elif="{{ order }}">
-    <view class="detail-card panel">
+    <view class="detail-card ui-card">
       <view class="detail-card__top">
         <view>
           <view class="order-name">{{ order.service_name }}</view>
           <view class="order-no">订单号：{{ order.order_no }}</view>
         </view>
-        <view class="order-price">{{ priceText }}</view>
+        <view class="order-price ui-price">{{ priceText }}</view>
       </view>
 
       <view class="status-grid">
         <view>
           <text class="meta-label">订单状态</text>
-          <text class="meta-value">{{ statusText }}</text>
+          <status-tag
+            text="{{ orderStatusView.text }}"
+            tone="{{ orderStatusView.tone }}"
+          ></status-tag>
         </view>
         <view>
           <text class="meta-label">支付状态</text>
-          <text class="meta-value">{{ payStatusText }}</text>
+          <status-tag
+            text="{{ payStatusView.text }}"
+            tone="{{ payStatusView.tone }}"
+          ></status-tag>
         </view>
         <view>
           <text class="meta-label">售后状态</text>
-          <text class="meta-value">{{ afterSaleStatusText }}</text>
+          <status-tag
+            text="{{ afterSaleStatusView.text }}"
+            tone="{{ afterSaleStatusView.tone }}"
+          ></status-tag>
         </view>
         <view>
           <text class="meta-label">退款状态</text>
-          <text class="meta-value">{{ refundStatusText }}</text>
+          <status-tag
+            text="{{ refundStatusView.text }}"
+            tone="{{ refundStatusView.tone }}"
+          ></status-tag>
         </view>
       </view>
     </view>
 
-    <view class="info-panel panel">
+    <view class="info-panel ui-card">
       <view class="info-row">
         <text>服务分类</text>
         <text>{{ order.category_name }}</text>
@@ -84,7 +96,9 @@
       </view>
       <view wx:if="{{ order.worker_id }}" class="info-row">
         <text>服务师傅</text>
-        <button class="text-button" bindtap="goWorkerDetail">查看详情</button>
+        <button class="ui-secondary-button" bindtap="goWorkerDetail">
+          查看详情
+        </button>
       </view>
       <view wx:if="{{ order.provider_type === 'merchant' }}" class="info-row">
         <text>服务商家</text>
@@ -116,7 +130,7 @@
 
     <button
       wx:if="{{ canPay }}"
-      class="primary-button"
+      class="action-button ui-primary-button"
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
       bindtap="handlePay"
@@ -126,7 +140,7 @@
 
     <button
       wx:if="{{ canCancel }}"
-      class="ghost-button"
+      class="action-button ui-secondary-button"
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
       bindtap="handleCancelOrder"
@@ -134,25 +148,25 @@
       取消订单
     </button>
 
-    <button wx:if="{{ canReview }}" class="primary-button" bindtap="goReview">
+    <button wx:if="{{ canReview }}" class="action-button ui-primary-button" bindtap="goReview">
       去评价
     </button>
 
     <button
       wx:if="{{ canViewReview }}"
-      class="primary-button"
+      class="action-button ui-primary-button"
       bindtap="goReviewDetail"
     >
       查看评价 / 追加评价
     </button>
 
-    <button wx:if="{{ canTip }}" class="primary-button" bindtap="goTip">
+    <button wx:if="{{ canTip }}" class="action-button ui-primary-button" bindtap="goTip">
       打赏师傅
     </button>
 
     <button
       wx:if="{{ canApplyAfterSale }}"
-      class="ghost-button"
+      class="action-button ui-secondary-button"
       bindtap="goAfterSaleApply"
     >
       申请售后 / 申请退款
@@ -160,7 +174,7 @@
 
     <button
       wx:if="{{ canViewAfterSale }}"
-      class="ghost-button"
+      class="action-button ui-secondary-button"
       bindtap="goAfterSaleDetail"
     >
       查看售后

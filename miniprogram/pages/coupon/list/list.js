@@ -1,12 +1,14 @@
 const promotionService = require("../../../services/promotion.service");
-const { USER_COUPON_STATUS_TEXT } = require("../../../config/status");
 const { formatPrice } = require("../../../utils/format");
+const { getStatusView } = require("../../../utils/status-view");
 const { showError } = require("../../../utils/toast");
 
 function mapCoupon(coupon = {}) {
+  const statusView = getStatusView("coupon", coupon.status);
   return {
     ...coupon,
-    statusText: USER_COUPON_STATUS_TEXT[coupon.status] || coupon.status,
+    statusText: statusView.text,
+    statusTone: statusView.tone,
     amountText: formatPrice(coupon.amount),
   };
 }

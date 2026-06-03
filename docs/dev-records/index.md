@@ -8,7 +8,7 @@
 
 当前阶段：
 
-阶段 22C-0：UI 风格提取与设计规范沉淀已完成
+阶段 22C-1：用户端核心页面 UI 重构已完成
 
 阶段状态：
 
@@ -16,11 +16,11 @@
 
 最近完成阶段：
 
-阶段 22C-0：UI 风格提取与设计规范沉淀
+阶段 22C-1：用户端核心页面 UI 重构
 
 下一阶段：
 
-阶段 22C-1：用户端核心页面 UI 重构
+阶段 22C-2：用户端剩余页面细节统一与真机视觉 QA
 
 阶段 22C 前置维护：
 
@@ -64,6 +64,7 @@
 | 阶段 22B  | `22b_order-center-ui.md`                    | 已完成基础版   | 2026-06-03 | 用户端订单中心 UI 视觉重构，未改核心业务逻辑                                    |
 | 22C 前置维护 | `22c-pre-maintenance.md`                 | 已完成         | 2026-06-03 | README 阶段同步、公开配置跟踪移除、raw 单行渲染误判说明和 22C 迁移规则补充      |
 | 阶段 22C-0 | `22c-ui-style-extraction.md`              | 已完成基础版   | 2026-06-03 | 从首页、订单中心、我的页提取用户端 UI 规范，新增 style guide 和 ui-kit           |
+| 阶段 22C-1 | `22c1-user-core-ui-refactor.md`           | 已完成基础版   | 2026-06-03 | 用户端核心浏览、交易、账户与补充页面 UI 重构，未改核心业务逻辑                  |
 
 ---
 
@@ -327,7 +328,8 @@
 | 阶段 22A | `22a_home-ui-baseline.md`                  | 首页 UI 视觉重构与全局风格基线建立 | P0   | 阶段21.5        | 建立首页浅灰背景、白色圆角卡片、绿色主色、暖橙价格和胶囊按钮基线     | 已完成基础版 |
 | 阶段 22B | `22b_order-center-ui.md`                   | 用户端订单中心 UI 视觉重构       | P0     | 阶段22A         | 重构订单中心卡片、筛选 tab、状态标签和操作区，不改订单业务逻辑       | 已完成基础版 |
 | 阶段 22C-0 | `22c-ui-style-extraction.md`             | UI 风格提取与设计规范沉淀       | P0     | 阶段22B         | 从首页、订单中心、我的提取规范，新增 `docs/ui-style-guide.md` 与 `ui-kit.wxss` | 已完成基础版 |
-| 阶段 22C-1 | `22c_user-core-ui-sync.md`               | 用户端核心页面 UI 重构          | P0     | 阶段22C-0       | 逐页同步服务列表、服务详情、地址、消息、优惠券/会员等用户端页面       | 下一阶段     |
+| 阶段 22C-1 | `22c1-user-core-ui-refactor.md`          | 用户端核心页面 UI 重构          | P0     | 阶段22C-0       | 逐页同步服务列表、服务详情、订单提交/详情、地址、消息、优惠券/会员等页面 | 已完成基础版 |
+| 阶段 22C-2 | `22c2-user-ui-qa-and-remaining.md`       | 用户端剩余页面细节统一与真机视觉 QA | P1 | 阶段22C-1       | 处理 review/detail、review/followup、商家店铺浏览页和真机截图走查     | 下一阶段     |
 | 阶段 23 | `23_community-partner-base.md`              | 小区合伙人基础版                 | P0     | 阶段16/21       | 小区合伙人入驻、绑定小区、数据看板、收益预估                         | 计划中       |
 | 阶段 24 | `24_city-partner-base.md`                   | 城市合伙人基础版                 | P1     | 阶段23          | 城市合伙人绑定城市、管理小区合伙人、查看城市数据                     | 计划中       |
 | 阶段 25 | `25_commission-engine-v1.md`                | 分佣引擎 V1                      | P0     | 阶段16/23/24    | 按品类配置服务方/小区/城市/平台分佣比例与回冲                        | 计划中       |
@@ -499,6 +501,29 @@
 - `docs/ui-style-guide.md`
 - `miniprogram/styles/ui-kit.wxss`
 - `docs/dev-records/22c-ui-style-extraction.md`
+
+阶段 22C-1 已完成用户端核心页面 UI 重构，覆盖：
+
+- `service-list`
+- `service-detail`
+- `order-submit`
+- `order-detail`
+- `pay-result`
+- `address-list`
+- `address-edit`
+- `message-list`
+- `coupon/list`
+- `coupon/receive`
+- `member/center`
+- `profile-edit`
+- `after-sale/apply`
+- `after-sale/detail`
+- `review/review`
+- `worker-detail`
+- `tip/create`
+- `map/pick-location`
+
+提示词中的 `coupon/coupon` 和 `after-sale/after-sale` 当前不存在，未创建新业务页面。
 
 核心功能：
 
@@ -1063,9 +1088,9 @@ docs/dev-records/XX_stage-name.md
 4. 阶段 22C 前置维护已同步 README 与阶段索引，移除公开仓库中真实 `project.config.json` 跟踪，并补充 GitHub raw 单行渲染误判说明。
 5. 阶段 22C-0 已完成 UI 风格提取与设计规范沉淀，后续页面重构应参考 `docs/ui-style-guide.md` 并按需引入 `miniprogram/styles/ui-kit.wxss`。
 
-阶段 22C-1 开始前必须确认：
+阶段 22C-2 开始前必须确认：
 
-1. 页面优先级为：服务列表 service-list、服务详情 service-detail、地址列表 address-list、消息中心 message-list、优惠券/会员等用户端辅助页面。
-2. 用户端页面的状态文案和状态 tone 应逐步迁移到 `getStatusView(type, status)`，并优先通过 `status-tag` 展示。
-3. UI 阶段是否严格遵守 `docs/ui-refactor-guardrails.md`，不改核心业务逻辑。
+1. 优先处理 `review/detail`、`review/followup` 和用户可访问的商家店铺浏览页。
+2. 继续让用户端页面的状态文案和状态 tone 逐步迁移到 `getStatusView(type, status)`，并优先通过 `status-tag` 展示。
+3. UI 阶段必须严格遵守 `docs/ui-refactor-guardrails.md`，不改核心业务逻辑。
 4. 不新增真实支付、真实退款、真实提现、真实认证、自动派单、AI 派单、路径规划、实时轨迹、多门店、分佣或合伙人系统。

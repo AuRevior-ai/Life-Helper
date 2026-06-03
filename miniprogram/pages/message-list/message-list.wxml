@@ -1,10 +1,11 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">未读 {{ unreadCount }} 条</view>
+<view class="message-page ui-page ui-page--dense">
+  <view class="ui-header message-header">
+    <view>
+      <view class="ui-title">{{ title }}</view>
+      <view class="ui-subtitle">未读 {{ unreadCount }} 条</view>
+    </view>
+    <button class="ui-secondary-button" bindtap="markAllRead">全部已读</button>
   </view>
-
-  <button class="ghost-button" bindtap="markAllRead">全部已读</button>
 
   <loading-view
     wx:if="{{ loading && !messages.length }}"
@@ -15,14 +16,14 @@
     <view
       wx:for="{{ messages }}"
       wx:key="_id"
-      class="message-item panel {{ item.is_read ? '' : 'message-item--unread' }}"
+      class="message-item ui-card ui-card--compact {{ item.is_read ? '' : 'message-item--unread' }}"
       data-id="{{ item._id }}"
       data-index="{{ index }}"
       bindtap="handleMessageTap"
     >
       <view class="message-top">
         <text class="message-title">{{ item.title }}</text>
-        <text class="message-state">{{ item.readText }}</text>
+        <text class="message-state ui-pill {{ item.is_read ? 'ui-pill--gray' : 'ui-pill--green' }}">{{ item.readText }}</text>
       </view>
       <view class="message-type">{{ item.typeText }}</view>
       <view class="message-content">{{ item.content }}</view>

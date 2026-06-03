@@ -1,7 +1,7 @@
-<view class="page">
-  <view class="panel">
-    <text class="title">地图选点</text>
-    <text class="hint"
+<view class="map-page ui-page ui-page--dense">
+  <view class="ui-card map-panel">
+    <text class="ui-title title">地图选点</text>
+    <text class="ui-subtitle hint"
       >当前页面为基础选点入口。真实地图组件和地图 key
       需按配置文档启用；定位失败时可手动填写坐标。</text
     >
@@ -35,6 +35,8 @@
       bindinput="onInput"
       placeholder="adcode"
     />
-    <button class="primary" bindtap="confirmPoint">确认位置</button>
+    <button class="map-button ui-primary-button" bindtap="confirmPoint">
+      确认位置
+    </button>
   </view>
 </view>

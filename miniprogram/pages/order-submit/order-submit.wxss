@@ -1,3 +1,5 @@
+@import "../../styles/ui-kit.wxss";
+
 .service-summary,
 .order-total,
 .address-row {
@@ -8,22 +10,24 @@
 }
 
 .summary-name {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 32rpx;
   font-weight: 800;
 }
 
 .summary-meta {
   margin-top: 10rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 25rpx;
 }
 
 .summary-price {
   flex: 0 0 auto;
-  color: #c66b2d;
   font-size: 36rpx;
-  font-weight: 800;
+}
+
+.order-section-head {
+  margin: 32rpx 0 18rpx;
 }
 
 .address-picker {
@@ -32,43 +36,39 @@
   gap: 18rpx;
 }
 
-.select-address {
-  border-color: #dfe8e3;
-}
-
 .select-address--active {
-  border-color: #1f7a68;
-  box-shadow: 0 8rpx 24rpx rgba(31, 122, 104, 0.12);
+  outline: 2rpx solid #16a34a;
+  box-shadow: 0 8rpx 28rpx rgba(22, 163, 74, 0.12);
 }
 
 .address-name {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 28rpx;
   font-weight: 800;
 }
 
 .address-phone {
   margin-left: 16rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 24rpx;
 }
 
 .address-text {
   margin-top: 14rpx;
-  color: #33433f;
+  color: #374151;
   font-size: 26rpx;
   line-height: 1.5;
 }
 
 .order-total {
   margin-top: 22rpx;
-  color: #1f2d2a;
+  color: #111827;
   font-size: 30rpx;
   font-weight: 800;
 }
 
 .order-total text:last-child {
-  color: #c66b2d;
+  color: #ff6a00;
 }
 
 .promotion-panel {
@@ -80,26 +80,35 @@
   align-items: center;
   justify-content: space-between;
   margin-top: 16rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 26rpx;
 }
 
 .amount-row--payable {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 30rpx;
   font-weight: 800;
 }
 
 .amount-row--payable text:last-child {
-  color: #c66b2d;
+  color: #ff6a00;
 }
 
 .picker-value {
   min-height: 72rpx;
   padding: 18rpx 22rpx;
-  border-radius: 8rpx;
-  background: #f6f8f5;
-  color: #1f2d2a;
+  border-radius: 18rpx;
+  background: #f7f8fa;
+  color: #111827;
   font-size: 28rpx;
   box-sizing: border-box;
+}
+
+.submit-button {
+  width: 100%;
+  height: 88rpx;
+  margin-top: 34rpx;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 88rpx;
 }

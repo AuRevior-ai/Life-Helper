@@ -1,4 +1,4 @@
-<view class="page-shell">
+<view class="service-detail-page ui-page ui-page--dense">
   <loading-view wx:if="{{ loading }}" text="正在加载详情"></loading-view>
 
   <empty-state
@@ -8,19 +8,21 @@
   ></empty-state>
 
   <block wx:elif="{{ service }}">
-    <view class="detail-cover">
-      <view class="detail-cover__tag">{{ service.category_name }}</view>
+    <view class="detail-cover ui-media-placeholder">
+      <view class="detail-cover__tag ui-pill ui-pill--green"
+        >{{ service.category_name }}</view
+      >
     </view>
 
-    <view class="detail-header">
+    <view class="detail-header ui-card">
       <view>
-        <view class="page-title">{{ service.name }}</view>
-        <view class="page-subtitle">{{ service.description }}</view>
+        <view class="ui-title detail-title">{{ service.name }}</view>
+        <view class="ui-subtitle">{{ service.description }}</view>
       </view>
-      <view class="detail-price">{{ priceText }}</view>
+      <view class="detail-price ui-price">{{ priceText }}</view>
     </view>
 
-    <view class="detail-meta panel">
+    <view class="detail-meta ui-card ui-card--compact">
       <view>
         <text class="meta-label">服务时长</text>
         <text class="meta-value">{{ service.duration }}</text>
@@ -31,15 +33,17 @@
       </view>
     </view>
 
-    <view class="section-title">服务流程</view>
-    <view class="flow-panel panel">
+    <view class="ui-section-title section-title">服务流程</view>
+    <view class="flow-panel ui-card ui-card--compact">
       <view wx:for="{{ service.flow_steps }}" wx:key="*this" class="flow-item">
         <view class="flow-index">{{ index + 1 }}</view>
         <view class="flow-text">{{ item }}</view>
       </view>
     </view>
 
-    <button class="primary-button" bindtap="goSubmitOrder">立即预约</button>
+    <button class="detail-submit ui-primary-button" bindtap="goSubmitOrder">
+      立即预约
+    </button>
   </block>
 
   <empty-state

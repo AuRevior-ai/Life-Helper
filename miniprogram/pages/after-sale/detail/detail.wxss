@@ -1,3 +1,5 @@
+@import "../../../styles/ui-kit.wxss";
+
 .detail-panel {
   margin-top: 8rpx;
 }
@@ -7,8 +9,8 @@
   justify-content: space-between;
   gap: 20rpx;
   padding: 18rpx 0;
-  border-bottom: 1rpx solid #edf2ef;
-  color: #33433f;
+  border-bottom: 1rpx solid #edf0f2;
+  color: #374151;
   font-size: 26rpx;
 }
 
@@ -18,7 +20,7 @@
 
 .detail-row text:first-child {
   flex: 0 0 150rpx;
-  color: #72807b;
+  color: #6b7280;
 }
 
 .detail-row text:last-child {

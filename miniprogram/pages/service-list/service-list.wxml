@@ -1,7 +1,7 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
+<view class="service-list-page ui-page ui-page--dense ui-safe-tabbar">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle"
       >{{ currentCategory ? currentCategory.description :
       '浏览当前已开放的社区服务' }}</view
     >
@@ -34,7 +34,7 @@
     <empty-state
       wx:if="{{ !services.length }}"
       title="暂无服务"
-      description="该分类暂时没有上架服务"
+      description="可以切换分类，或回到首页看看推荐服务"
     ></empty-state>
   </view>
 </view>

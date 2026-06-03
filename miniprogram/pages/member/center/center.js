@@ -4,6 +4,7 @@ const {
   MEMBER_STATUS_TEXT,
 } = require("../../../config/status");
 const { formatPrice } = require("../../../utils/format");
+const { getStatusView } = require("../../../utils/status-view");
 const { showError, showSuccess } = require("../../../utils/toast");
 
 function mapPlan(plan = {}) {
@@ -19,6 +20,7 @@ Page({
     title: "会员中心",
     membership: null,
     membershipStatusText: "未开通",
+    membershipStatusView: { text: "未开通", tone: "default" },
     plans: [],
     loading: true,
   },
@@ -35,12 +37,16 @@ Page({
         promotionService.getMyMembership(),
       ]);
       const membership = memberData.membership || null;
+      const membershipStatusView = membership
+        ? getStatusView("member", membership.status)
+        : { text: "未开通", tone: "default" };
       this.setData({
         plans: (plansData.plans || []).map(mapPlan),
         membership,
         membershipStatusText: membership
           ? `${MEMBER_LEVEL_TEXT[membership.level] || membership.level} · ${MEMBER_STATUS_TEXT[membership.status] || membership.status}`
           : "未开通",
+        membershipStatusView,
       });
     } catch (error) {
       showError(error.message || "会员信息加载失败");

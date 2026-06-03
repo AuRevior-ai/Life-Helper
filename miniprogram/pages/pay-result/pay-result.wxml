@@ -1,13 +1,13 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">支付状态以后端确认为准</view>
+<view class="pay-result-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">支付状态以后端确认为准</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在确认支付结果"></loading-view>
 
   <block wx:else>
-    <view class="result-panel panel {{ state }}">
+    <view class="result-panel ui-card {{ state }}">
       <view class="result-mark"
         >{{ state === 'success' ? '✓' : state === 'failed' ? '!' : '...'
         }}</view
@@ -26,8 +26,14 @@
       </view>
     </view>
 
-    <button class="primary-button" bindtap="refreshResult">刷新结果</button>
-    <button class="ghost-button" bindtap="goOrderDetail">返回订单详情</button>
-    <button class="ghost-button" bindtap="goOrderList">查看我的订单</button>
+    <button class="result-button ui-primary-button" bindtap="refreshResult">
+      刷新结果
+    </button>
+    <button class="result-button ui-secondary-button" bindtap="goOrderDetail">
+      返回订单详情
+    </button>
+    <button class="result-button ui-secondary-button" bindtap="goOrderList">
+      查看我的订单
+    </button>
   </block>
 </view>

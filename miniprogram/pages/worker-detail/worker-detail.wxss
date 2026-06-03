@@ -1,15 +1,17 @@
+@import "../../styles/ui-kit.wxss";
+
 .worker-profile {
   display: flex;
   align-items: center;
   gap: 22rpx;
+  padding: 30rpx 28rpx;
 }
 
 .worker-avatar {
   width: 104rpx;
   height: 104rpx;
   border-radius: 52rpx;
-  background: #1f7a68;
-  color: #ffffff;
+  color: #16a34a;
   font-size: 40rpx;
   font-weight: 800;
   line-height: 104rpx;
@@ -21,7 +23,7 @@
 }
 
 .worker-name {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 34rpx;
   font-weight: 800;
 }
@@ -30,7 +32,7 @@
 .intro-text,
 .review-content {
   margin-top: 10rpx;
-  color: #64716d;
+  color: #6b7280;
   font-size: 25rpx;
   line-height: 1.5;
 }
@@ -39,7 +41,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18rpx;
-  margin-top: 20rpx;
+  margin-top: 22rpx;
   text-align: center;
 }
 
@@ -49,31 +51,34 @@
 }
 
 .stat-value {
-  color: #c66b2d;
+  color: #ff6a00;
   font-size: 40rpx;
   font-weight: 800;
 }
 
 .stat-label {
   margin-top: 6rpx;
-  color: #72807b;
+  color: #6b7280;
   font-size: 23rpx;
 }
 
 .intro-panel,
 .review-list {
-  margin-top: 20rpx;
+  margin-top: 22rpx;
 }
 
-.section-title,
 .review-rating {
-  color: #1f2d2a;
+  color: #111827;
   font-size: 28rpx;
   font-weight: 800;
+}
+
+.review-section-head {
+  margin-top: 32rpx;
 }
 
 .review-list {
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 18rpx;
 }

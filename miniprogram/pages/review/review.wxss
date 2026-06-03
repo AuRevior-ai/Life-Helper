@@ -1,3 +1,5 @@
+@import "../../styles/ui-kit.wxss";
+
 .review-panel {
   margin-top: 0;
 }
@@ -14,16 +16,29 @@
   height: 72rpx;
   align-items: center;
   justify-content: center;
-  border: 1rpx solid #dfe8e3;
-  border-radius: 10rpx;
-  background: #f6f8f5;
-  color: #64716d;
+  border: 1rpx solid #d1d5db;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #6b7280;
   font-size: 30rpx;
   font-weight: 800;
 }
 
 .rating-item--active {
-  border-color: #1f7a68;
-  background: #1f7a68;
+  border-color: #16a34a;
+  background: #16a34a;
   color: #ffffff;
+}
+
+.form-textarea {
+  border-radius: 18rpx;
+  background: #f7f8fa;
+}
+
+.submit-button {
+  width: 100%;
+  height: 88rpx;
+  margin-top: 34rpx;
+  font-size: 31rpx;
+  line-height: 88rpx;
 }

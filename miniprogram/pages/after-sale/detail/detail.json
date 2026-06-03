@@ -1,3 +1,8 @@
 {
-  "navigationBarTitleText": "售后详情"
+  "navigationBarTitleText": "售后详情",
+  "usingComponents": {
+    "empty-state": "../../../components/empty-state/empty-state",
+    "loading-view": "../../../components/loading-view/loading-view",
+    "status-tag": "../../../components/status-tag/status-tag"
+  }
 }

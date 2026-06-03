@@ -1,12 +1,12 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
+<view class="after-sale-apply-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle"
       >平台审核后将按订单金额处理模拟退款，不产生真实退款。</view
     >
   </view>
 
-  <view class="panel form-panel">
+  <view class="ui-card form-panel">
     <view class="form-item">
       <view class="form-label">售后类型</view>
       <radio-group bindchange="handleTypeChange">
@@ -45,14 +45,16 @@
       ></textarea>
     </view>
 
-    <button class="ghost-button" bindtap="chooseImages">选择凭证图片</button>
+    <button class="image-button ui-secondary-button" bindtap="chooseImages">
+      选择凭证图片
+    </button>
     <view wx:if="{{ images.length }}" class="image-count"
       >已选择 {{ images.length }} 张</view
     >
   </view>
 
   <button
-    class="primary-button"
+    class="submit-button ui-primary-button"
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="submitAfterSale"

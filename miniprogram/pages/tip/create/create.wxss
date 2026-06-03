@@ -1,3 +1,26 @@
-.panel {
-  padding: 24rpx;
+@import "../../../styles/ui-kit.wxss";
+
+.tip-amount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.tip-input {
+  width: 100%;
+  height: 76rpx;
+  margin-top: 22rpx;
+  padding: 0 24rpx;
+  border-radius: 18rpx;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.tip-button {
+  width: 100%;
+  height: 88rpx;
+  margin-top: 34rpx;
+  font-size: 31rpx;
+  line-height: 88rpx;
 }

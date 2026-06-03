@@ -1,7 +1,7 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">当前为模拟打赏，不发起真实微信支付</view>
+<view class="tip-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">当前为模拟打赏，不发起真实微信支付</view>
   </view>
   <picker
     mode="selector"
@@ -9,17 +9,20 @@
     value="{{ amountIndex }}"
     bindchange="chooseAmount"
   >
-    <view class="panel">选择金额：{{ amountText }}</view>
+    <view class="tip-amount ui-card">
+      <text>选择金额</text>
+      <text class="ui-price">{{ amountText }}</text>
+    </view>
   </picker>
   <input
-    class="form-input"
+    class="tip-input form-input"
     type="digit"
     value="{{ customAmount }}"
     placeholder="自定义金额，单位元"
     bindinput="onCustomInput"
   />
   <button
-    class="primary-button"
+    class="tip-button ui-primary-button"
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="submit"

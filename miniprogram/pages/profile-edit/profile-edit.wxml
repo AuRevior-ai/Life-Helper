@@ -1,12 +1,12 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
+<view class="profile-edit-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle"
       >补充昵称和手机号，便于下单、接单和管理时识别身份</view
     >
   </view>
 
-  <view class="panel form-panel">
+  <view class="ui-card form-panel">
     <view class="form-item">
       <text class="form-label">昵称</text>
       <input
@@ -30,7 +30,7 @@
   </view>
 
   <button
-    class="primary-button"
+    class="save-button ui-primary-button"
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="saveProfile"

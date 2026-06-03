@@ -1,12 +1,12 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">请填写真实联系人信息，师傅会按此地址上门</view>
+<view class="address-edit-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">请填写真实联系人信息，师傅会按此地址上门</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载地址"></loading-view>
 
-  <view wx:else class="form-panel panel">
+  <view wx:else class="form-panel ui-card">
     <view class="form-item">
       <text class="form-label">联系人</text>
       <input
@@ -64,13 +64,13 @@
       <switch
         checked="{{ form.is_default }}"
         bindchange="handleDefaultChange"
-        color="#1f7a68"
+        color="#16a34a"
       />
     </view>
   </view>
 
   <button
-    class="primary-button"
+    class="save-button ui-primary-button"
     loading="{{ saving }}"
     disabled="{{ saving }}"
     bindtap="handleSave"

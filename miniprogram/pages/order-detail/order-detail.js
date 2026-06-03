@@ -6,11 +6,8 @@ const {
   AFTER_SALE_STATUS_TEXT,
   REFUND_STATUS_TEXT,
 } = require("../../config/status");
-const {
-  formatOrderStatus,
-  formatPayStatus,
-  formatPrice,
-} = require("../../utils/format");
+const { formatPrice } = require("../../utils/format");
+const { getStatusView } = require("../../utils/status-view");
 const {
   hideLoading,
   showError,
@@ -32,6 +29,10 @@ Page({
     payStatusText: "",
     afterSaleStatusText: "",
     refundStatusText: "",
+    orderStatusView: { text: "", tone: "default" },
+    payStatusView: { text: "", tone: "default" },
+    afterSaleStatusView: { text: "", tone: "default" },
+    refundStatusView: { text: "", tone: "default" },
     canPay: false,
     canCancel: false,
     canReview: false,
@@ -82,12 +83,19 @@ Page({
       payableAmountText: formatPrice(
         order.payable_amount || order.pay_amount || order.price,
       ),
-      statusText: formatOrderStatus(order.status),
-      payStatusText: formatPayStatus(order.pay_status),
+      statusText: getStatusView("order", order.status).text,
+      payStatusText: getStatusView("pay", order.pay_status).text,
       afterSaleStatusText:
         AFTER_SALE_STATUS_TEXT[order.after_sale_status || "none"] || "无售后",
       refundStatusText:
         REFUND_STATUS_TEXT[order.refund_status || "none"] || "未退款",
+      orderStatusView: getStatusView("order", order.status),
+      payStatusView: getStatusView("pay", order.pay_status),
+      afterSaleStatusView: getStatusView(
+        "afterSale",
+        order.after_sale_status || "none",
+      ),
+      refundStatusView: getStatusView("refund", order.refund_status || "none"),
       canPay: order.status === "pending_pay" && order.pay_status === "unpaid",
       canCancel: ["pending_pay", "pending_accept"].includes(order.status),
       canReview: order.status === "pending_review",

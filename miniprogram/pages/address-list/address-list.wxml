@@ -1,21 +1,25 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">维护上门服务时使用的联系人和地址</view>
+<view class="address-list-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">维护上门服务时使用的联系人和地址</view>
   </view>
 
-  <button class="primary-button" bindtap="goAddAddress">新增地址</button>
+  <button class="address-add-button ui-primary-button" bindtap="goAddAddress">
+    新增地址
+  </button>
 
   <loading-view wx:if="{{ loading }}" text="正在加载地址"></loading-view>
 
   <block wx:elif="{{ addresses.length }}">
-    <view wx:for="{{ addresses }}" wx:key="_id" class="address-card panel">
+    <view wx:for="{{ addresses }}" wx:key="_id" class="address-card ui-card">
       <view class="address-card__top">
         <view>
           <text class="address-card__name">{{ item.contact_name }}</text>
           <text class="address-card__phone">{{ item.phone }}</text>
         </view>
-        <text wx:if="{{ item.is_default }}" class="default-tag">默认</text>
+        <text wx:if="{{ item.is_default }}" class="ui-pill ui-pill--green"
+          >默认</text
+        >
       </view>
       <view class="address-card__address">
         {{ item.city }} {{ item.community }} {{ item.detail_address }}
@@ -23,21 +27,21 @@
       <view class="address-card__actions">
         <button
           wx:if="{{ !item.is_default }}"
-          class="text-button"
+          class="ui-secondary-button"
           data-id="{{ item._id }}"
           catchtap="handleSetDefault"
         >
           设为默认
         </button>
         <button
-          class="text-button"
+          class="ui-secondary-button"
           data-id="{{ item._id }}"
           catchtap="goEditAddress"
         >
           编辑
         </button>
         <button
-          class="text-button danger"
+          class="ui-secondary-button address-danger-button"
           data-id="{{ item._id }}"
           catchtap="handleDeleteAddress"
         >
