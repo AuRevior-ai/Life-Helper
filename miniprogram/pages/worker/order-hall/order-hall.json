@@ -1,8 +1,9 @@
 {
-  "navigationBarTitleText": "接单大厅",
+  "navigationStyle": "custom",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "empty-state": "/components/empty-state/empty-state",
-    "loading-view": "/components/loading-view/loading-view"
+    "loading-view": "/components/loading-view/loading-view",
+    "worker-tab-bar": "/components/worker-tab-bar/worker-tab-bar"
   }
 }

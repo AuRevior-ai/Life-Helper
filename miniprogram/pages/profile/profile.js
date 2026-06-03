@@ -189,7 +189,7 @@ Page({
 
   goWorkerCenter() {
     wx.navigateTo({
-      url: "/pages/worker/profile/profile",
+      url: "/pages/worker/audit-status/audit-status",
     });
   },
 

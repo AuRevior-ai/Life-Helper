@@ -1,7 +1,7 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">审核通过后即可进入接单大厅</view>
+    <view class="page-subtitle">选择个人师傅端后先确认审核状态</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载审核状态"></loading-view>
@@ -12,6 +12,12 @@
       <view class="status-text">{{ auditStatusText }}</view>
       <view wx:if="{{ worker && worker.reject_reason }}" class="status-reason">
         {{ worker.reject_reason }}
+      </view>
+      <view wx:if="{{ isApproved }}" class="status-tip status-tip--approved">
+        {{ approvedTip }}
+      </view>
+      <view wx:if="{{ isRejected }}" class="status-tip status-tip--rejected">
+        未通过审核，请联系管理员
       </view>
     </view>
 
@@ -31,21 +37,7 @@
     </view>
 
     <button
-      wx:if="{{ isApproved }}"
-      class="primary-button"
-      bindtap="goOrderHall"
-    >
-      进入接单大厅
-    </button>
-    <button
-      wx:if="{{ isApproved }}"
-      class="ghost-button"
-      bindtap="goWorkerOrders"
-    >
-      我的师傅订单
-    </button>
-    <button
-      wx:if="{{ isRejected || isNotApplied }}"
+      wx:if="{{ isNotApplied }}"
       class="primary-button"
       bindtap="goApply"
     >

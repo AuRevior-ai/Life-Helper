@@ -1,6 +1,9 @@
 const workerService = require("../../../services/worker.service");
 const { formatWorkerAuditStatus } = require("../../../utils/format");
-const { showError } = require("../../../utils/toast");
+const { showError, showToast } = require("../../../utils/toast");
+
+const APPROVED_REDIRECT_DELAY = 3000;
+const APPROVED_REDIRECT_TIP = "您已通过审核，即将跳转到接单大厅";
 
 Page({
   data: {
@@ -12,13 +15,24 @@ Page({
     isApproved: false,
     isRejected: false,
     isNotApplied: false,
+    approvedTip: APPROVED_REDIRECT_TIP,
+    rejectedTip: "未通过审核，请联系管理员",
   },
 
   onShow() {
     this.loadAuditStatus();
   },
 
+  onHide() {
+    this.clearApprovedRedirectTimer();
+  },
+
+  onUnload() {
+    this.clearApprovedRedirectTimer();
+  },
+
   async loadAuditStatus() {
+    this.clearApprovedRedirectTimer();
     this.setData({ loading: true });
     try {
       const data = await workerService.getAuditStatus();
@@ -34,6 +48,9 @@ Page({
         isRejected: auditStatus === "rejected",
         isNotApplied: auditStatus === "not_applied",
       });
+      if (auditStatus === "approved") {
+        this.scheduleApprovedRedirect();
+      }
     } catch (error) {
       showError(error.message || "状态加载失败");
     } finally {
@@ -41,21 +58,26 @@ Page({
     }
   },
 
+  clearApprovedRedirectTimer() {
+    if (this.approvedRedirectTimer) {
+      clearTimeout(this.approvedRedirectTimer);
+      this.approvedRedirectTimer = null;
+    }
+  },
+
+  scheduleApprovedRedirect() {
+    showToast(APPROVED_REDIRECT_TIP);
+    this.approvedRedirectTimer = setTimeout(() => {
+      this.approvedRedirectTimer = null;
+      wx.redirectTo({
+        url: "/pages/worker/order-hall/order-hall",
+      });
+    }, APPROVED_REDIRECT_DELAY);
+  },
+
   goApply() {
     wx.redirectTo({
       url: "/pages/worker/apply/apply",
-    });
-  },
-
-  goOrderHall() {
-    wx.navigateTo({
-      url: "/pages/worker/order-hall/order-hall",
-    });
-  },
-
-  goWorkerOrders() {
-    wx.navigateTo({
-      url: "/pages/worker/order-list/order-list",
     });
   },
 });

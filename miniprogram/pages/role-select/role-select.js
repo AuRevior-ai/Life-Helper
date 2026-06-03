@@ -72,11 +72,8 @@ Page({
         roleText: getCurrentUserRoleText(),
       });
     }
-    wx.navigateTo({
-      url:
-        this.data.currentUser.role === USER_ROLE.WORKER
-          ? "/pages/worker/order-hall/order-hall"
-          : "/pages/worker/audit-status/audit-status",
+    wx.redirectTo({
+      url: "/pages/worker/audit-status/audit-status",
     });
   },
 

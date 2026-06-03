@@ -1,22 +1,133 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-  </view>
-  <view class="panel">
-    <view class="section-title">接单状态</view>
-    <picker
-      mode="selector"
-      range="{{ statusLabels }}"
-      value="{{ selectedStatusIndex }}"
-      bindchange="onOnlineStatusChange"
+<view class="worker-profile-page">
+  <view class="worker-profile-header">
+    <view class="worker-profile-title">我的</view>
+    <view class="worker-profile-subtitle"
+      >管理接单状态、服务范围与个人工作信息</view
     >
-      <view class="form-input">{{ onlineStatusText }}</view>
-    </picker>
-    <view class="muted-text">暂停接单不会影响已有订单</view>
   </view>
-  <view class="panel muted-text">
-    服务小区：{{ worker.service_area || '未配置' }}
+
+  <view class="worker-card profile-card" bindtap="goProfileEdit">
+    <view class="master-avatar">
+      <image class="master-avatar__image" src="{{ avatar }}" mode="aspectFill"></image>
+      <view class="master-avatar__badge"></view>
+    </view>
+    <view class="profile-main">
+      <view class="profile-name-row">
+        <text class="profile-name">{{ workerName }}</text>
+        <view class="verified-pill">
+          <view class="verified-pill__icon"></view>
+          <text>{{ auditTagText || '认证师傅' }}</text>
+        </view>
+      </view>
+      <view class="rating-row">
+        <text class="rating-star">★</text>
+        <text>{{ ratingText }} 分</text>
+      </view>
+      <view class="finished-text">本月完成 {{ monthlyFinishedText }} 单</view>
+    </view>
+    <view class="card-arrow">›</view>
   </view>
-  <button class="primary-button" bindtap="goReviewList">用户评价</button>
-  <button class="primary-button" bindtap="goMessageList">消息中心</button>
+
+  <view class="worker-card status-card">
+    <view class="round-icon round-icon--check"></view>
+    <view class="status-main">
+      <view class="card-title">接单状态</view>
+      <view class="card-desc">暂停接单不会影响已有订单</view>
+    </view>
+    <view class="status-action">
+      <view class="status-pill">{{ onlineText }}</view>
+      <switch
+        class="status-switch"
+        checked="{{ isOnline }}"
+        color="#16a34a"
+        bindchange="onOnlineSwitchChange"
+      ></switch>
+    </view>
+  </view>
+
+  <view class="worker-card range-card" bindtap="goServiceRange">
+    <view class="round-icon round-icon--pin"></view>
+    <view class="range-main">
+      <view class="card-title">服务小区 / 服务范围</view>
+      <view class="card-desc">{{ serviceRangeText }}</view>
+    </view>
+    <view class="range-action">
+      <text>去设置</text>
+      <text class="card-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="worker-card stats-card">
+    <view class="stat-item">
+      <view class="stat-label">本月收益</view>
+      <view class="stat-value">{{ safeStats.incomeText }}</view>
+      <view class="stat-icon stat-icon--wallet"></view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-label">待处理评价</view>
+      <view class="stat-value">{{ safeStats.pendingReviews }}</view>
+      <view class="stat-icon stat-icon--chat"></view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-label">消息提醒</view>
+      <view class="stat-value">{{ safeStats.unreadMessages }}</view>
+      <view class="stat-icon stat-icon--bell"></view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-label">服务评分</view>
+      <view class="stat-value">{{ safeStats.rating }}</view>
+      <view class="stat-icon stat-icon--star">★</view>
+    </view>
+  </view>
+
+  <view class="worker-card menu-card">
+    <view
+      class="menu-row"
+      data-url="/pages/worker/review-list/review-list"
+      bindtap="handleMenuTap"
+    >
+      <view class="menu-icon menu-icon--green menu-icon--chat"></view>
+      <text class="menu-title">用户评价</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view
+      class="menu-row"
+      data-url="/pages/message-list/message-list"
+      bindtap="handleMenuTap"
+    >
+      <view class="menu-icon menu-icon--blue menu-icon--bell"></view>
+      <text class="menu-title">消息中心</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view
+      class="menu-row"
+      data-url="/pages/worker/income/income"
+      bindtap="handleMenuTap"
+    >
+      <view class="menu-icon menu-icon--orange menu-icon--wallet"></view>
+      <text class="menu-title">我的收益</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-row" bindtap="goServiceRange">
+      <view class="menu-icon menu-icon--green menu-icon--pin"></view>
+      <text class="menu-title">服务范围</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view
+      class="menu-row"
+      data-url="/pages/profile-edit/profile-edit"
+      bindtap="handleMenuTap"
+    >
+      <view class="menu-icon menu-icon--blue menu-icon--profile"></view>
+      <text class="menu-title">身份与资料</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <button class="bottom-action" bindtap="switchIdentity">↔ 切换身份</button>
+  <button class="bottom-action bottom-action--logout" bindtap="logout">
+    退出登录
+  </button>
 </view>
+
+<worker-tab-bar active="profile"></worker-tab-bar>

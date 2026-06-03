@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "师傅中心"
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "worker-tab-bar": "/components/worker-tab-bar/worker-tab-bar"
+  }
 }

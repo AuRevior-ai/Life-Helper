@@ -1,21 +1,69 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看已经由你接下的服务订单</view>
+<view class="worker-orders-page worker-tab-page">
+  <view class="worker-orders-header">
+    <view class="worker-orders-title">我的订单</view>
+    <view class="worker-orders-subtitle">查看已经由你接下的服务订单</view>
   </view>
 
-  <button class="ghost-button" bindtap="goOrderHall">进入接单大厅</button>
+  <scroll-view
+    class="worker-order-tabs"
+    scroll-x="{{ true }}"
+    enhanced="{{ true }}"
+    show-scrollbar="{{ false }}"
+  >
+    <view
+      class="worker-order-tab {{ selectedStatusIndex === 0 ? 'worker-order-tab--active' : '' }}"
+      data-index="0"
+      bindtap="onStatusTabTap"
+    >
+      全部
+    </view>
+    <view
+      class="worker-order-tab {{ selectedStatusIndex === 1 ? 'worker-order-tab--active' : '' }}"
+      data-index="1"
+      bindtap="onStatusTabTap"
+    >
+      待上门
+    </view>
+    <view
+      class="worker-order-tab {{ selectedStatusIndex === 2 ? 'worker-order-tab--active' : '' }}"
+      data-index="2"
+      bindtap="onStatusTabTap"
+    >
+      服务中
+    </view>
+    <view
+      class="worker-order-tab {{ selectedStatusIndex === 3 ? 'worker-order-tab--active' : '' }}"
+      data-index="3"
+      bindtap="onStatusTabTap"
+    >
+      待完成
+    </view>
+    <view
+      class="worker-order-tab {{ selectedStatusIndex === 4 ? 'worker-order-tab--active' : '' }}"
+      data-index="4"
+      bindtap="onStatusTabTap"
+    >
+      已完成
+    </view>
+  </scroll-view>
 
-  <view class="filter-bar panel">
-    <text>状态</text>
+  <view class="worker-order-filter-panel">
     <picker
       mode="selector"
       range="{{ statusLabels }}"
       value="{{ selectedStatusIndex }}"
       bindchange="onStatusChange"
     >
-      <view class="picker-value">{{ statusLabels[selectedStatusIndex] }}</view>
+      <view class="filter-cell">
+        <view class="filter-label">状态</view>
+        <view class="filter-value">{{ selectedStatusLabel || '全部' }}</view>
+      </view>
     </picker>
+    <view class="filter-divider"></view>
+    <view class="filter-cell" bindtap="onTimeRangeTap">
+      <view class="filter-label">时间范围</view>
+      <view class="filter-value">{{ timeRangeLabel || '本周' }}</view>
+    </view>
   </view>
 
   <loading-view
@@ -23,13 +71,51 @@
     text="正在加载师傅订单"
   ></loading-view>
 
-  <view wx:elif="{{ orders.length }}" class="order-list">
-    <order-card
+  <view wx:elif="{{ orders.length }}" class="worker-order-list">
+    <view
       wx:for="{{ orders }}"
       wx:key="_id"
-      order="{{ item }}"
-      bind:select="goOrderDetail"
-    ></order-card>
+      class="worker-order-card"
+      data-id="{{ item._id }}"
+      bindtap="goOrderDetail"
+    >
+      <view class="worker-order-visual-placeholder"></view>
+      <view class="worker-order-main">
+        <view class="worker-order-title-row">
+          <text class="worker-order-name">{{ item.serviceName }}</text>
+          <view class="worker-order-tags">
+            <text class="worker-order-tag worker-order-tag--green">平台派单</text>
+            <text class="worker-order-tag worker-order-tag--warm">离你最近</text>
+          </view>
+        </view>
+        <view class="worker-order-info worker-order-info--time">{{ item.appointmentText }}</view>
+        <view class="worker-order-info worker-order-info--address">{{ item.addressText }}</view>
+        <view class="worker-order-distance">距离你 {{ item.distanceText }}</view>
+        <view class="worker-order-info worker-order-info--contact">{{ item.contactText }}</view>
+      </view>
+      <view class="worker-order-side">
+        <view class="worker-order-status worker-order-status--{{ item.statusTone }}">{{ item.statusText }}</view>
+        <view class="worker-order-price">{{ item.priceText }}</view>
+        <view class="worker-order-price-label">订单金额</view>
+      </view>
+      <view class="worker-order-actions">
+        <button
+          class="worker-order-action worker-order-action--secondary"
+          data-id="{{ item._id }}"
+          catchtap="goOrderDetail"
+        >
+          查看详情
+        </button>
+        <button
+          wx:if="{{ item.primaryActionText }}"
+          class="worker-order-action worker-order-action--primary"
+          data-id="{{ item._id }}"
+          catchtap="onPrimaryActionTap"
+        >
+          {{ item.primaryActionText }}
+        </button>
+      </view>
+    </view>
   </view>
 
   <empty-state
@@ -38,3 +124,5 @@
     description="接单成功后订单会显示在这里"
   ></empty-state>
 </view>
+
+<worker-tab-bar active="orders"></worker-tab-bar>

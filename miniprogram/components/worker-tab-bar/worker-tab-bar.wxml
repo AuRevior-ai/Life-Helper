@@ -1,0 +1,12 @@
+<view class="worker-tabbar">
+  <view
+    wx:for="{{ tabs }}"
+    wx:key="key"
+    class="worker-tabbar__item {{ active === item.key ? 'worker-tabbar__item--active' : '' }}"
+    data-key="{{ item.key }}"
+    bindtap="onTabTap"
+  >
+    <view class="worker-tabbar__icon worker-tabbar__icon--{{ item.icon }}"></view>
+    <text class="worker-tabbar__text">{{ item.text }}</text>
+  </view>
+</view>

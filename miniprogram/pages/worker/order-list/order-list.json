@@ -1,9 +1,9 @@
 {
-  "navigationBarTitleText": "师傅订单",
+  "navigationStyle": "custom",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "empty-state": "/components/empty-state/empty-state",
     "loading-view": "/components/loading-view/loading-view",
-    "order-card": "/components/order-card/order-card"
+    "worker-tab-bar": "/components/worker-tab-bar/worker-tab-bar"
   }
 }

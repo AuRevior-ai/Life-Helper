@@ -20,9 +20,9 @@
       <view class="identity-card__label">接单服务</view>
       <view class="identity-card__title">个人师傅端</view>
       <view class="identity-card__desc"
-        >申请师傅入驻、查看审核状态，审核通过后进入接单大厅。</view
+        >申请师傅入驻、查看审核状态，审核通过后直接进入师傅端首页。</view
       >
-      <view class="identity-card__action">进入工作台</view>
+      <view class="identity-card__action">进入个人师傅端</view>
     </view>
 
     <view class="identity-card worker panel" bindtap="enterMerchantRole">

@@ -1,36 +1,72 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">只展示已支付且等待师傅接单的订单</view>
+<view class="hall-page worker-tab-page">
+  <view class="hall-header">
+    <view class="hall-title">接单大厅</view>
+    <view class="hall-subtitle">只展示已支付且等待师傅接单的订单</view>
   </view>
 
-  <button class="ghost-button" bindtap="goWorkerOrders">我的师傅订单</button>
-  <view class="panel muted-text">当前接单状态：{{ onlineStatusText }}</view>
+  <view class="hall-status-card">
+    <view class="status-icon status-icon--check"></view>
+    <view class="status-content">
+      <view class="status-title-row">
+        <text class="status-title">当前接单状态：</text>
+        <text class="status-online">{{ onlineStatusText || '在线接单' }}</text>
+      </view>
+      <view class="status-meta">
+        今日可接单 <text>{{ availableCountText }}</text> 单 / 服务区域
+        <text>{{ serviceRadiusText }}</text> 公里内
+      </view>
+    </view>
+    <switch
+      class="status-switch"
+      checked="{{ isOnline }}"
+      color="#16a34a"
+      bindchange="onOnlineSwitchChange"
+    ></switch>
+  </view>
+
+  <scroll-view
+    class="hall-filter-bar"
+    scroll-x="{{ true }}"
+    enhanced="{{ true }}"
+    show-scrollbar="{{ false }}"
+  >
+    <view class="filter-pill filter-pill--active" data-filter="category" bindtap="onFilterTap">全部分类 <text></text></view>
+    <view class="filter-pill filter-pill--location" data-filter="distance" bindtap="onFilterTap">距离优先</view>
+    <view class="filter-pill filter-pill--pin" data-filter="nearby" bindtap="onFilterTap">3km以内</view>
+    <view class="filter-pill filter-pill--time" data-filter="time" bindtap="onFilterTap">可上门优先 <text></text></view>
+  </scroll-view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载可接订单"></loading-view>
 
   <block wx:elif="{{ orders.length }}">
-    <view wx:for="{{ orders }}" wx:key="_id" class="hall-card panel">
-      <view class="hall-card__top">
-        <view>
-          <view class="order-name">{{ item.service_name }}</view>
-          <view class="order-time">{{ item.appointment_time }}</view>
+    <view wx:for="{{ orders }}" wx:key="_id" class="hall-order-card">
+      <view class="order-visual-placeholder"></view>
+      <view class="order-main">
+        <view class="order-title-row">
+          <text class="order-name">{{ item.serviceName }}</text>
+          <view class="tag-group">
+            <text class="order-tag order-tag--green">平台派单</text>
+            <text class="order-tag order-tag--warm">离你最近</text>
+          </view>
         </view>
-        <view class="order-price">{{ item.priceText }}</view>
+        <view class="order-info order-info--time">{{ item.appointmentText }}</view>
+        <view class="order-info order-info--address">{{ item.addressText }}</view>
+        <view class="order-distance">距离你 {{ item.distanceText }}</view>
+        <view class="order-info order-info--contact">{{ item.contactText }}</view>
       </view>
-      <view class="order-address">{{ item.full_address }}</view>
-      <view class="order-contact"
-        >{{ item.contact_name }} {{ item.contact_phone }}</view
-      >
-      <button
-        class="primary-button"
-        data-id="{{ item._id }}"
-        loading="{{ submittingId === item._id }}"
-        disabled="{{ submittingId === item._id }}"
-        bindtap="acceptOrder"
-      >
-        接单
-      </button>
+      <view class="order-side">
+        <view class="order-price">{{ item.priceText }}</view>
+        <view class="order-income-label">预计收入</view>
+        <button
+          class="accept-button"
+          data-id="{{ item._id }}"
+          loading="{{ submittingId === item._id }}"
+          disabled="{{ submittingId === item._id }}"
+          bindtap="acceptOrder"
+        >
+          接单
+        </button>
+      </view>
     </view>
   </block>
 
@@ -40,3 +76,5 @@
     description="用户模拟支付后的订单会进入接单大厅"
   ></empty-state>
 </view>
+
+<worker-tab-bar active="hall"></worker-tab-bar>
