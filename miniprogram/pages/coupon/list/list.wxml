@@ -19,6 +19,9 @@
     </view>
   </block>
 
-  <empty-state wx:else title="暂无优惠券" description="可前往领券中心领取"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无优惠券"
+    description="可前往领券中心领取"
+  ></empty-state>
 </view>
-

@@ -1,56 +1,233 @@
 {
   "address": {
-    "actions": ["getAddressList", "createAddress", "updateAddress", "deleteAddress", "setDefaultAddress"]
+    "actions": [
+      "getAddressList",
+      "createAddress",
+      "updateAddress",
+      "deleteAddress",
+      "setDefaultAddress"
+    ]
   },
   "admin": {
-    "actions": ["getDashboard", "getAllUsers", "disableUser", "getAllOrders", "getOrderDetail", "adminUpdateOrderStatus", "getOrderStats", "getServiceStats"]
+    "actions": [
+      "getDashboard",
+      "getAllUsers",
+      "disableUser",
+      "getAllOrders",
+      "getOrderDetail",
+      "adminUpdateOrderStatus",
+      "getOrderStats",
+      "getServiceStats"
+    ]
   },
   "area": {
-    "actions": ["getServiceAreaList", "adminCreateServiceArea", "adminUpdateServiceArea", "adminEnableServiceArea", "adminDisableServiceArea"]
+    "actions": [
+      "getServiceAreaList",
+      "adminCreateServiceArea",
+      "adminUpdateServiceArea",
+      "adminEnableServiceArea",
+      "adminDisableServiceArea"
+    ]
   },
   "dispatch": {
-    "actions": ["getAssignableWorkers", "adminAssignOrder", "adminUnassignOrder", "getDispatchLogs"]
+    "actions": [
+      "getAssignableWorkers",
+      "adminAssignOrder",
+      "adminUnassignOrder",
+      "getDispatchLogs"
+    ]
   },
   "finance": {
-    "actions": ["generateOrderFinance", "reverseOrderFinance", "getWorkerIncomeSummary", "getWorkerEarningList", "adminGetFinanceLogs", "adminGetWorkerEarnings", "adminGetOrderFinanceDetail", "mockUnlockSettlement"]
+    "actions": [
+      "generateOrderFinance",
+      "reverseOrderFinance",
+      "getWorkerIncomeSummary",
+      "getWorkerEarningList",
+      "adminGetFinanceLogs",
+      "adminGetWorkerEarnings",
+      "adminGetOrderFinanceDetail",
+      "mockUnlockSettlement"
+    ]
   },
   "login": {
     "actions": ["handleLogin"]
   },
   "merchant": {
-    "actions": ["applyMerchant", "getMyMerchantInfo", "getMerchantAuditStatus", "createMerchantService", "getMerchantServiceList", "enableMerchantService", "disableMerchantService", "getStoreList", "getStoreDetail", "getStoreServices", "getMerchantOrderList", "getMerchantOrderDetail", "merchantAcceptOrder", "merchantStartService", "merchantFinishService", "adminGetMerchantList", "adminGetMerchantDetail", "adminApproveMerchant", "adminRejectMerchant", "adminEnableMerchant", "adminDisableMerchant", "adminGetMerchantOrders", "adminGetMerchantActionLogs"]
+    "actions": [
+      "applyMerchant",
+      "getMyMerchantInfo",
+      "getMerchantAuditStatus",
+      "createMerchantService",
+      "getMerchantServiceList",
+      "enableMerchantService",
+      "disableMerchantService",
+      "getStoreList",
+      "getStoreDetail",
+      "getStoreServices",
+      "getMerchantOrderList",
+      "getMerchantOrderDetail",
+      "merchantAcceptOrder",
+      "merchantStartService",
+      "merchantFinishService",
+      "adminGetMerchantList",
+      "adminGetMerchantDetail",
+      "adminApproveMerchant",
+      "adminRejectMerchant",
+      "adminEnableMerchant",
+      "adminDisableMerchant",
+      "adminGetMerchantOrders",
+      "adminGetMerchantActionLogs"
+    ]
   },
   "message": {
-    "actions": ["getMessageList", "markMessageRead", "markAllMessagesRead", "getUnreadCount"]
+    "actions": [
+      "getMessageList",
+      "markMessageRead",
+      "markAllMessagesRead",
+      "getUnreadCount"
+    ]
   },
   "order": {
-    "actions": ["createOrder", "mockPayOrder", "getUserOrderList", "getWorkerOrderList", "getOrderDetail", "cancelOrder", "acceptOrder", "startService", "finishService", "getWorkerIncomeStats"]
+    "actions": [
+      "createOrder",
+      "mockPayOrder",
+      "getUserOrderList",
+      "getWorkerOrderList",
+      "getOrderDetail",
+      "cancelOrder",
+      "acceptOrder",
+      "startService",
+      "finishService",
+      "getWorkerIncomeStats"
+    ]
   },
   "payment": {
     "actions": ["createPayment", "handlePayNotify", "queryPaymentStatus"]
   },
   "promotion": {
-    "actions": ["getMemberPlans", "mockOpenMembership", "getMyMembership", "adminGetMemberPlans", "adminUpdateMemberPlan", "adminCreateCouponTemplate", "adminUpdateCouponTemplate", "adminGetCouponTemplates", "adminEnableCouponTemplate", "adminDisableCouponTemplate", "getReceivableCoupons", "receiveCoupon", "getMyCoupons", "getAvailableCouponsForOrder", "calculateOrderPromotion", "lockCouponForOrder", "useCouponForOrder", "releaseCouponForOrder"]
+    "actions": [
+      "getMemberPlans",
+      "mockOpenMembership",
+      "getMyMembership",
+      "adminGetMemberPlans",
+      "adminUpdateMemberPlan",
+      "adminCreateCouponTemplate",
+      "adminUpdateCouponTemplate",
+      "adminGetCouponTemplates",
+      "adminEnableCouponTemplate",
+      "adminDisableCouponTemplate",
+      "getReceivableCoupons",
+      "receiveCoupon",
+      "getMyCoupons",
+      "getAvailableCouponsForOrder",
+      "calculateOrderPromotion",
+      "lockCouponForOrder",
+      "useCouponForOrder",
+      "releaseCouponForOrder"
+    ]
   },
   "qualification": {
-    "actions": ["getMyQualification", "saveQualificationDraft", "submitQualification", "resubmitQualification", "getMyDeposit", "mockPayDeposit", "applyDepositRefund", "getMyRiskStatus", "getOnboardingStatus", "adminListQualifications", "adminGetQualificationDetail", "adminReviewQualification", "adminListDeposits", "adminFreezeDeposit", "adminReviewDepositRefund", "adminSetRiskLevel", "adminAddRiskTag", "adminListRiskRecords", "adminGetOnboardingDetail", "getQualificationRequirements", "getDepositRules", "adminSetOnboardingLimit"]
+    "actions": [
+      "getMyQualification",
+      "saveQualificationDraft",
+      "submitQualification",
+      "resubmitQualification",
+      "getMyDeposit",
+      "mockPayDeposit",
+      "applyDepositRefund",
+      "getMyRiskStatus",
+      "getOnboardingStatus",
+      "adminListQualifications",
+      "adminGetQualificationDetail",
+      "adminReviewQualification",
+      "adminListDeposits",
+      "adminFreezeDeposit",
+      "adminReviewDepositRefund",
+      "adminSetRiskLevel",
+      "adminAddRiskTag",
+      "adminListRiskRecords",
+      "adminGetOnboardingDetail",
+      "getQualificationRequirements",
+      "getDepositRules",
+      "adminSetOnboardingLimit"
+    ]
   },
   "refund": {
-    "actions": ["createAfterSale", "getUserAfterSaleList", "getAfterSaleDetail", "adminGetAfterSaleList", "adminReviewAfterSale", "mockRefund", "getRefundLogs"]
+    "actions": [
+      "createAfterSale",
+      "getUserAfterSaleList",
+      "getAfterSaleDetail",
+      "adminGetAfterSaleList",
+      "adminReviewAfterSale",
+      "mockRefund",
+      "getRefundLogs"
+    ]
   },
   "review": {
-    "actions": ["createReview", "getOrderReview", "getReviewDetail", "addReviewFollowup", "workerReplyReview", "workerCreateReviewAppeal", "adminHideReview", "adminRestoreReview", "adminReviewAppeal", "adminGetReviewList", "adminGetReviewDetail", "adminGetReviewAppealList", "adminGetReviewAppealDetail", "getWorkerReviewList", "getWorkerReviews"]
+    "actions": [
+      "createReview",
+      "getOrderReview",
+      "getReviewDetail",
+      "addReviewFollowup",
+      "workerReplyReview",
+      "workerCreateReviewAppeal",
+      "adminHideReview",
+      "adminRestoreReview",
+      "adminReviewAppeal",
+      "adminGetReviewList",
+      "adminGetReviewDetail",
+      "adminGetReviewAppealList",
+      "adminGetReviewAppealDetail",
+      "getWorkerReviewList",
+      "getWorkerReviews"
+    ]
   },
   "service": {
-    "actions": ["getCategoryList", "getServiceList", "getServiceDetail", "seedServiceData", "createCategory", "updateCategory", "deleteCategory", "createService", "updateService", "updateServiceStatus", "deleteService"]
+    "actions": [
+      "getCategoryList",
+      "getServiceList",
+      "getServiceDetail",
+      "seedServiceData",
+      "createCategory",
+      "updateCategory",
+      "deleteCategory",
+      "createService",
+      "updateService",
+      "updateServiceStatus",
+      "deleteService"
+    ]
   },
   "tip": {
-    "actions": ["createMockTip", "getUserTipList", "getWorkerTipList", "adminGetTipLogs", "getTipDetail"]
+    "actions": [
+      "createMockTip",
+      "getUserTipList",
+      "getWorkerTipList",
+      "adminGetTipLogs",
+      "getTipDetail"
+    ]
   },
   "user": {
-    "actions": ["getCurrentUser", "updateUserInfo", "updateUserRole", "disableUser", "claimInitialAdmin"]
+    "actions": [
+      "getCurrentUser",
+      "updateUserInfo",
+      "updateUserRole",
+      "disableUser",
+      "claimInitialAdmin"
+    ]
   },
   "worker": {
-    "actions": ["applyWorker", "getWorkerInfo", "getAuditStatus", "getWorkerApplyList", "approveWorker", "rejectWorker", "getOrderHallList", "getWorkerDetail", "adminGetWorkerDetail", "updateWorkerOnlineStatus", "updateWorkerServiceAreas"]
+    "actions": [
+      "applyWorker",
+      "getWorkerInfo",
+      "getAuditStatus",
+      "getWorkerApplyList",
+      "approveWorker",
+      "rejectWorker",
+      "getOrderHallList",
+      "getWorkerDetail",
+      "adminGetWorkerDetail",
+      "updateWorkerOnlineStatus",
+      "updateWorkerServiceAreas"
+    ]
   }
 }

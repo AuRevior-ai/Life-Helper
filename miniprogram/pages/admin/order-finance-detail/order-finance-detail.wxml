@@ -10,25 +10,41 @@
     <view class="panel detail-panel">
       <view class="detail-line">订单：{{ order.order_no || order._id }}</view>
       <view class="detail-line">服务：{{ order.service_name }}</view>
-      <view class="detail-line">财务状态：{{ order.finance_generated ? '已生成' : '未生成' }}</view>
-      <view class="detail-line">平台服务费：{{ order.platform_commission_amount }}</view>
-      <view class="detail-line">师傅收益：{{ order.worker_earning_amount }}</view>
-      <view wx:if="{{ order.finance_reverse_status }}" class="detail-line">回冲状态：{{ order.finance_reverse_status }}</view>
+      <view class="detail-line"
+        >财务状态：{{ order.finance_generated ? '已生成' : '未生成' }}</view
+      >
+      <view class="detail-line"
+        >平台服务费：{{ order.platform_commission_amount }}</view
+      >
+      <view class="detail-line"
+        >师傅收益：{{ order.worker_earning_amount }}</view
+      >
+      <view wx:if="{{ order.finance_reverse_status }}" class="detail-line"
+        >回冲状态：{{ order.finance_reverse_status }}</view
+      >
     </view>
 
     <view class="section-head">收益明细</view>
     <view wx:for="{{ earnings }}" wx:key="_id" class="panel finance-row">
       <view class="row-main">{{ item.earningText }}</view>
-      <view class="row-sub">状态：{{ item.statusText }}　平台服务费：{{ item.commissionText }}</view>
+      <view class="row-sub"
+        >状态：{{ item.statusText }}　平台服务费：{{ item.commissionText
+        }}</view
+      >
     </view>
 
     <view class="section-head">财务流水</view>
     <view wx:for="{{ logs }}" wx:key="_id" class="panel finance-row">
       <view class="row-main">{{ item.typeText }} {{ item.amountText }}</view>
-      <view class="row-sub">状态：{{ item.status }}　来源：{{ item.source }}</view>
+      <view class="row-sub"
+        >状态：{{ item.status }}　来源：{{ item.source }}</view
+      >
     </view>
 
-    <empty-state wx:if="{{ !logs.length && !earnings.length }}" title="暂无财务记录" description="订单完成并生成财务后会显示在这里"></empty-state>
+    <empty-state
+      wx:if="{{ !logs.length && !earnings.length }}"
+      title="暂无财务记录"
+      description="订单完成并生成财务后会显示在这里"
+    ></empty-state>
   </block>
 </view>
-

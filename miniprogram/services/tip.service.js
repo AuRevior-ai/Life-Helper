@@ -1,10 +1,10 @@
-const { CLOUD_FUNCTIONS } = require('../config/constants')
-const { createActionService } = require('./_base.service')
+const { CLOUD_FUNCTIONS } = require("../config/constants");
+const { createActionService } = require("./_base.service");
 
 module.exports = createActionService(CLOUD_FUNCTIONS.TIP, [
-  'createMockTip',
-  'getUserTipList',
-  'getWorkerTipList',
-  'adminGetTipLogs',
-  'getTipDetail'
-])
+  "createMockTip",
+  "getUserTipList",
+  "getWorkerTipList",
+  "adminGetTipLogs",
+  "getTipDetail",
+]);

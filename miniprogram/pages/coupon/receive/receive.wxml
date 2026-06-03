@@ -10,10 +10,19 @@
     <view wx:for="{{ templates }}" wx:key="_id" class="panel coupon-card">
       <view class="card-title">{{ item.name }}</view>
       <view class="card-line">{{ item.typeText }} · {{ item.amountText }}</view>
-      <button class="primary-button" data-id="{{ item._id }}" bindtap="receiveCoupon">领取</button>
+      <button
+        class="primary-button"
+        data-id="{{ item._id }}"
+        bindtap="receiveCoupon"
+      >
+        领取
+      </button>
     </view>
   </block>
 
-  <empty-state wx:else title="暂无可领取优惠券" description="平台发布后会显示在这里"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无可领取优惠券"
+    description="平台发布后会显示在这里"
+  ></empty-state>
 </view>
-

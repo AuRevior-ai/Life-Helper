@@ -1,21 +1,21 @@
-const cloud = require('wx-server-sdk')
-const { handleTip } = require('./handler')
+const cloud = require("wx-server-sdk");
+const { handleTip } = require("./handler");
 const {
   createFinanceLogRepository,
   createMessageRepository,
   createOrderRepository,
   createTipLogRepository,
   createUserRepository,
-  createWorkerEarningRepository
-} = require('./repositories')
+  createWorkerEarningRepository,
+} = require("./repositories");
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
-})
+  env: cloud.DYNAMIC_CURRENT_ENV,
+});
 
 exports.main = async (event = {}) => {
-  const wxContext = cloud.getWXContext()
-  const db = cloud.database()
+  const wxContext = cloud.getWXContext();
+  const db = cloud.database();
 
   return handleTip(event, {
     openid: wxContext.OPENID,
@@ -24,6 +24,6 @@ exports.main = async (event = {}) => {
     tipLogs: createTipLogRepository(db),
     financeLogs: createFinanceLogRepository(db),
     workerEarnings: createWorkerEarningRepository(db),
-    messages: createMessageRepository(db)
-  })
-}
+    messages: createMessageRepository(db),
+  });
+};

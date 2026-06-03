@@ -32,44 +32,44 @@
 
 ## 4. 新增文件
 
-| 文件 | 作用 |
-|---|---|
-| `cloudfunctions/review/appeal-repository.js` | 差评申诉仓储 |
-| `cloudfunctions/review/review-log-repository.js` | 评价操作日志仓储 |
-| `cloudfunctions/review/user-repository.js` | 管理员权限校验用户仓储 |
-| `cloudfunctions/tip/handler.js` | 模拟打赏核心逻辑 |
-| `cloudfunctions/tip/index.js` | tip 云函数入口 |
-| `cloudfunctions/tip/repositories.js` | 打赏、财务、收益仓储 |
-| `cloudfunctions/tip/package.json` | tip 云函数依赖 |
-| `miniprogram/services/tip.service.js` | 前端打赏服务 |
-| `miniprogram/pages/review/detail/*` | 用户评价详情 |
-| `miniprogram/pages/review/followup/*` | 用户追评 |
-| `miniprogram/pages/tip/create/*` | 用户模拟打赏 |
-| `miniprogram/pages/worker/review-list/*` | 师傅评价列表 |
-| `miniprogram/pages/worker/review-detail/*` | 师傅评价详情、回复和申诉 |
-| `miniprogram/pages/worker/tip-list/*` | 师傅打赏记录 |
-| `miniprogram/pages/admin/review-list/*` | 管理员评价列表 |
-| `miniprogram/pages/admin/review-detail/*` | 管理员评价详情与隐藏恢复 |
-| `miniprogram/pages/admin/review-appeal-list/*` | 管理员申诉列表 |
-| `miniprogram/pages/admin/review-appeal-detail/*` | 管理员申诉处理 |
-| `miniprogram/pages/admin/tip-log-list/*` | 管理员打赏记录 |
-| `tests/phase18.review-tip-appeal.test.js` | 阶段 18 自动化测试 |
+| 文件                                             | 作用                     |
+| ------------------------------------------------ | ------------------------ |
+| `cloudfunctions/review/appeal-repository.js`     | 差评申诉仓储             |
+| `cloudfunctions/review/review-log-repository.js` | 评价操作日志仓储         |
+| `cloudfunctions/review/user-repository.js`       | 管理员权限校验用户仓储   |
+| `cloudfunctions/tip/handler.js`                  | 模拟打赏核心逻辑         |
+| `cloudfunctions/tip/index.js`                    | tip 云函数入口           |
+| `cloudfunctions/tip/repositories.js`             | 打赏、财务、收益仓储     |
+| `cloudfunctions/tip/package.json`                | tip 云函数依赖           |
+| `miniprogram/services/tip.service.js`            | 前端打赏服务             |
+| `miniprogram/pages/review/detail/*`              | 用户评价详情             |
+| `miniprogram/pages/review/followup/*`            | 用户追评                 |
+| `miniprogram/pages/tip/create/*`                 | 用户模拟打赏             |
+| `miniprogram/pages/worker/review-list/*`         | 师傅评价列表             |
+| `miniprogram/pages/worker/review-detail/*`       | 师傅评价详情、回复和申诉 |
+| `miniprogram/pages/worker/tip-list/*`            | 师傅打赏记录             |
+| `miniprogram/pages/admin/review-list/*`          | 管理员评价列表           |
+| `miniprogram/pages/admin/review-detail/*`        | 管理员评价详情与隐藏恢复 |
+| `miniprogram/pages/admin/review-appeal-list/*`   | 管理员申诉列表           |
+| `miniprogram/pages/admin/review-appeal-detail/*` | 管理员申诉处理           |
+| `miniprogram/pages/admin/tip-log-list/*`         | 管理员打赏记录           |
+| `tests/phase18.review-tip-appeal.test.js`        | 阶段 18 自动化测试       |
 
 ## 5. 修改文件
 
-| 文件 | 修改原因 |
-|---|---|
-| `cloudfunctions/review/handler.js` | 扩展评价、追评、回复、申诉和管理员评价管理 action |
-| `cloudfunctions/review/index.js` | 注入申诉、日志和用户仓储 |
-| `cloudfunctions/review/review-repository.js` | 增加评价详情、全量列表和更新方法 |
-| `miniprogram/config/constants.js` | 增加 tip 云函数和新增集合常量 |
-| `miniprogram/config/status.js` | 增加评价、申诉、打赏、消息状态常量 |
-| `miniprogram/services/review.service.js` | 增加阶段 18 review action |
-| `miniprogram/app.json` | 注册阶段 18 页面 |
-| `miniprogram/pages/order-detail/*` | 增加打赏师傅入口 |
-| `miniprogram/pages/admin/dashboard/*` | 增加评价管理、差评申诉和打赏记录入口 |
-| `README.md` | 更新当前阶段、能力说明和测试数量 |
-| `docs/dev-records/index.md` | 更新阶段索引、P0 完成项和遗留问题 |
+| 文件                                         | 修改原因                                          |
+| -------------------------------------------- | ------------------------------------------------- |
+| `cloudfunctions/review/handler.js`           | 扩展评价、追评、回复、申诉和管理员评价管理 action |
+| `cloudfunctions/review/index.js`             | 注入申诉、日志和用户仓储                          |
+| `cloudfunctions/review/review-repository.js` | 增加评价详情、全量列表和更新方法                  |
+| `miniprogram/config/constants.js`            | 增加 tip 云函数和新增集合常量                     |
+| `miniprogram/config/status.js`               | 增加评价、申诉、打赏、消息状态常量                |
+| `miniprogram/services/review.service.js`     | 增加阶段 18 review action                         |
+| `miniprogram/app.json`                       | 注册阶段 18 页面                                  |
+| `miniprogram/pages/order-detail/*`           | 增加打赏师傅入口                                  |
+| `miniprogram/pages/admin/dashboard/*`        | 增加评价管理、差评申诉和打赏记录入口              |
+| `README.md`                                  | 更新当前阶段、能力说明和测试数量                  |
+| `docs/dev-records/index.md`                  | 更新阶段索引、P0 完成项和遗留问题                 |
 
 ## 6. 数据库变化
 

@@ -1,45 +1,92 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">维护服务名称、分类、价格和上下架状态，保存后会进入服务目录</view>
+    <view class="page-subtitle"
+      >维护服务名称、分类、价格和上下架状态，保存后会进入服务目录</view
+    >
   </view>
 
   <view class="panel form-panel">
     <view class="form-item">
       <text class="form-label">服务分类</text>
-      <picker mode="selector" range="{{ categoryNames }}" value="{{ categoryIndex }}" bindchange="onCategoryChange">
+      <picker
+        mode="selector"
+        range="{{ categoryNames }}"
+        value="{{ categoryIndex }}"
+        bindchange="onCategoryChange"
+      >
         <view class="picker-value">{{ selectedCategoryName }}</view>
       </picker>
     </view>
     <view class="form-item">
       <text class="form-label">服务名称</text>
-      <input class="form-input" value="{{ name }}" data-field="name" placeholder="例如：日常保洁" bindinput="onInput" />
+      <input
+        class="form-input"
+        value="{{ name }}"
+        data-field="name"
+        placeholder="例如：日常保洁"
+        bindinput="onInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">服务说明</text>
-      <textarea class="form-textarea" value="{{ description }}" data-field="description" placeholder="填写服务说明" bindinput="onInput"></textarea>
+      <textarea
+        class="form-textarea"
+        value="{{ description }}"
+        data-field="description"
+        placeholder="填写服务说明"
+        bindinput="onInput"
+      ></textarea>
     </view>
     <view class="form-item">
       <text class="form-label">服务时长</text>
-      <input class="form-input" value="{{ duration }}" data-field="duration" placeholder="例如：2 小时" bindinput="onInput" />
+      <input
+        class="form-input"
+        value="{{ duration }}"
+        data-field="duration"
+        placeholder="例如：2 小时"
+        bindinput="onInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">价格（元）</text>
-      <input class="form-input" type="digit" value="{{ price }}" data-field="price" placeholder="例如：99.00" bindinput="onInput" />
+      <input
+        class="form-input"
+        type="digit"
+        value="{{ price }}"
+        data-field="price"
+        placeholder="例如：99.00"
+        bindinput="onInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">状态</text>
-      <picker mode="selector" range="{{ statusOptions }}" value="{{ statusIndex }}" bindchange="onStatusChange">
+      <picker
+        mode="selector"
+        range="{{ statusOptions }}"
+        value="{{ statusIndex }}"
+        bindchange="onStatusChange"
+      >
         <view class="picker-value">{{ statusOptions[statusIndex] }}</view>
       </picker>
     </view>
     <view class="form-item">
       <text class="form-label">推荐到首页</text>
-      <switch checked="{{ recommended }}" bindchange="onRecommendedChange"></switch>
+      <switch
+        checked="{{ recommended }}"
+        bindchange="onRecommendedChange"
+      ></switch>
     </view>
     <view class="form-item">
       <text class="form-label">排序</text>
-      <input class="form-input" type="number" value="{{ sort }}" data-field="sort" placeholder="数字越小越靠前" bindinput="onInput" />
+      <input
+        class="form-input"
+        type="number"
+        value="{{ sort }}"
+        data-field="sort"
+        placeholder="数字越小越靠前"
+        bindinput="onInput"
+      />
     </view>
   </view>
 
@@ -48,5 +95,7 @@
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="saveService"
-  >保存服务</button>
+  >
+    保存服务
+  </button>
 </view>

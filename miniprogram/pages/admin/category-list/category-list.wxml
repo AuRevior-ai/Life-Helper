@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看服务分类，初版分类数据可从种子目录同步</view>
+    <view class="page-subtitle"
+      >查看服务分类，初版分类数据可从种子目录同步</view
+    >
   </view>
 
   <view class="toolbar">
@@ -10,8 +12,12 @@
       loading="{{ seeding }}"
       disabled="{{ seeding }}"
       bindtap="seedServiceData"
-    >同步种子服务</button>
-    <button class="primary-button compact" bindtap="goCreateCategory">新增分类</button>
+    >
+      同步种子服务
+    </button>
+    <button class="primary-button compact" bindtap="goCreateCategory">
+      新增分类
+    </button>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载分类"></loading-view>
@@ -23,9 +29,14 @@
           <view class="category-name">{{ item.name }}</view>
           <view class="category-meta">排序：{{ item.sort }}</view>
         </view>
-        <view class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}">{{ item.statusText }}</view>
+        <view
+          class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}"
+          >{{ item.statusText }}</view
+        >
       </view>
-      <view wx:if="{{ item.description }}" class="category-desc">{{ item.description }}</view>
+      <view wx:if="{{ item.description }}" class="category-desc"
+        >{{ item.description }}</view
+      >
       <button
         class="text-button"
         data-id="{{ item._id }}"
@@ -35,7 +46,9 @@
         data-status="{{ item.status }}"
         data-sort="{{ item.sort }}"
         bindtap="goEditCategory"
-      >编辑分类</button>
+      >
+        编辑分类
+      </button>
     </view>
   </view>
 

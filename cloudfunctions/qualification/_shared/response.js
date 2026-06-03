@@ -1,27 +1,27 @@
-function success(data, message = 'success') {
+function success(data, message = "success") {
   return {
     success: true,
     data,
-    message
-  }
+    message,
+  };
 }
 
 function fail(errorCode, message) {
   return {
     success: false,
     errorCode,
-    message
-  }
+    message,
+  };
 }
 
 function serviceError(errorCode, message) {
-  const error = new Error(message)
-  error.errorCode = errorCode
-  return error
+  const error = new Error(message);
+  error.errorCode = errorCode;
+  return error;
 }
 
 module.exports = {
   success,
   fail,
-  serviceError
-}
+  serviceError,
+};

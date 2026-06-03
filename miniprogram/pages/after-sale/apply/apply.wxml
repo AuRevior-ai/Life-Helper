@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">平台审核后将按订单金额处理模拟退款</view>
+    <view class="page-subtitle"
+      >平台审核后将按订单金额处理模拟退款，不产生真实退款。</view
+    >
   </view>
 
   <view class="panel form-panel">
@@ -9,11 +11,17 @@
       <view class="form-label">售后类型</view>
       <radio-group bindchange="handleTypeChange">
         <label class="radio-row">
-          <radio value="refund_only" checked="{{ type === 'refund_only' }}"></radio>
+          <radio
+            value="refund_only"
+            checked="{{ type === 'refund_only' }}"
+          ></radio>
           <text>仅退款</text>
         </label>
         <label class="radio-row">
-          <radio value="cancel_and_refund" checked="{{ type === 'cancel_and_refund' }}"></radio>
+          <radio
+            value="cancel_and_refund"
+            checked="{{ type === 'cancel_and_refund' }}"
+          ></radio>
           <text>取消并退款</text>
         </label>
       </radio-group>
@@ -21,16 +29,26 @@
 
     <view class="form-item">
       <view class="form-label">售后原因</view>
-      <input value="{{ reason }}" bindinput="handleReasonInput" placeholder="请填写售后原因"></input>
+      <input
+        value="{{ reason }}"
+        bindinput="handleReasonInput"
+        placeholder="请填写售后原因"
+      />
     </view>
 
     <view class="form-item">
       <view class="form-label">问题描述</view>
-      <textarea value="{{ description }}" bindinput="handleDescriptionInput" placeholder="补充说明问题，可选"></textarea>
+      <textarea
+        value="{{ description }}"
+        bindinput="handleDescriptionInput"
+        placeholder="补充说明问题，可选"
+      ></textarea>
     </view>
 
     <button class="ghost-button" bindtap="chooseImages">选择凭证图片</button>
-    <view wx:if="{{ images.length }}" class="image-count">已选择 {{ images.length }} 张</view>
+    <view wx:if="{{ images.length }}" class="image-count"
+      >已选择 {{ images.length }} 张</view
+    >
   </view>
 
   <button
@@ -38,5 +56,7 @@
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="submitAfterSale"
-  >提交申请</button>
+  >
+    提交申请
+  </button>
 </view>

@@ -49,44 +49,44 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase5-worker.md` | 阶段五实施计划 |
-| `tests/phase5.worker.test.js` | 师傅入驻、审核、接单和页面接入测试 |
-| `cloudfunctions/worker/handler.js` | 师傅入驻、审核和接单大厅业务逻辑 |
-| `cloudfunctions/worker/worker-repository.js` | `workers` 集合读写封装 |
-| `cloudfunctions/worker/user-repository.js` | `users` 集合管理员校验和角色更新封装 |
-| `cloudfunctions/worker/order-read-repository.js` | 接单大厅订单只读封装 |
-| `cloudfunctions/order/worker-read-repository.js` | 订单云函数内师傅审核状态读取封装 |
-| `docs/dev-records/05_phase-worker.md` | 本阶段开发记录与复盘 |
+| 文件路径                                             | 说明                                 |
+| ---------------------------------------------------- | ------------------------------------ |
+| `docs/superpowers/plans/2026-05-30-phase5-worker.md` | 阶段五实施计划                       |
+| `tests/phase5.worker.test.js`                        | 师傅入驻、审核、接单和页面接入测试   |
+| `cloudfunctions/worker/handler.js`                   | 师傅入驻、审核和接单大厅业务逻辑     |
+| `cloudfunctions/worker/worker-repository.js`         | `workers` 集合读写封装               |
+| `cloudfunctions/worker/user-repository.js`           | `users` 集合管理员校验和角色更新封装 |
+| `cloudfunctions/worker/order-read-repository.js`     | 接单大厅订单只读封装                 |
+| `cloudfunctions/order/worker-read-repository.js`     | 订单云函数内师傅审核状态读取封装     |
+| `docs/dev-records/05_phase-worker.md`                | 本阶段开发记录与复盘                 |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `cloudfunctions/worker/index.js` | 从占位入口改为调用 `handleWorker` |
-| `cloudfunctions/order/handler.js` | 增加接单、师傅订单列表和师傅详情权限 |
-| `cloudfunctions/order/index.js` | 注入师傅只读仓库 |
-| `cloudfunctions/order/order-repository.js` | 增加按 `worker_id` 查询订单 |
-| `miniprogram/pages/worker/apply/*` | 师傅入驻表单 |
-| `miniprogram/pages/worker/audit-status/*` | 师傅审核状态页 |
-| `miniprogram/pages/admin/worker-audit/*` | 管理员师傅审核页 |
-| `miniprogram/pages/worker/order-hall/*` | 接单大厅页 |
-| `miniprogram/pages/worker/order-list/*` | 师傅订单列表页 |
-| `miniprogram/pages/worker/order-detail/*` | 师傅订单详情页 |
-| `miniprogram/pages/profile/profile.js` | 师傅入口跳转到审核状态或接单大厅 |
-| `docs/dev-records/index.md` | 更新阶段五完成状态、P0 完成情况和遗留问题 |
-| `README.md` | 补充阶段五说明和验证步骤 |
+| 文件路径                                   | 修改内容                                  |
+| ------------------------------------------ | ----------------------------------------- |
+| `cloudfunctions/worker/index.js`           | 从占位入口改为调用 `handleWorker`         |
+| `cloudfunctions/order/handler.js`          | 增加接单、师傅订单列表和师傅详情权限      |
+| `cloudfunctions/order/index.js`            | 注入师傅只读仓库                          |
+| `cloudfunctions/order/order-repository.js` | 增加按 `worker_id` 查询订单               |
+| `miniprogram/pages/worker/apply/*`         | 师傅入驻表单                              |
+| `miniprogram/pages/worker/audit-status/*`  | 师傅审核状态页                            |
+| `miniprogram/pages/admin/worker-audit/*`   | 管理员师傅审核页                          |
+| `miniprogram/pages/worker/order-hall/*`    | 接单大厅页                                |
+| `miniprogram/pages/worker/order-list/*`    | 师傅订单列表页                            |
+| `miniprogram/pages/worker/order-detail/*`  | 师傅订单详情页                            |
+| `miniprogram/pages/profile/profile.js`     | 师傅入口跳转到审核状态或接单大厅          |
+| `docs/dev-records/index.md`                | 更新阶段五完成状态、P0 完成情况和遗留问题 |
+| `README.md`                                | 补充阶段五说明和验证步骤                  |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -94,40 +94,40 @@
 
 本阶段新增真实云数据库集合：
 
-| 集合 | 作用 | 当前写入方式 |
-|---|---|---|
+| 集合      | 作用                                 | 当前写入方式    |
+| --------- | ------------------------------------ | --------------- |
 | `workers` | 保存师傅入驻申请、审核状态和服务信息 | `worker` 云函数 |
 
 ### `workers` 主要字段
 
-| 字段 | 说明 |
-|---|---|
-| `_id` | 云数据库文档 ID |
-| `user_id` | 当前阶段使用师傅用户 openid |
-| `name` | 师傅姓名 |
-| `phone` | 师傅手机号 |
-| `service_category` | 服务分类 |
-| `service_area` | 服务区域 |
-| `intro` | 个人简介 |
+| 字段                   | 说明                                   |
+| ---------------------- | -------------------------------------- |
+| `_id`                  | 云数据库文档 ID                        |
+| `user_id`              | 当前阶段使用师傅用户 openid            |
+| `name`                 | 师傅姓名                               |
+| `phone`                | 师傅手机号                             |
+| `service_category`     | 服务分类                               |
+| `service_area`         | 服务区域                               |
+| `intro`                | 个人简介                               |
 | `qualification_images` | 资质图片数组，阶段五不上传，默认空数组 |
-| `audit_status` | `pending` / `approved` / `rejected` |
-| `status` | `enabled` / `disabled` |
-| `reviewer_id` | 审核管理员 openid |
-| `reject_reason` | 拒绝原因 |
-| `approved_at` | 通过时间 |
-| `rejected_at` | 拒绝时间 |
-| `created_at` | 创建时间 |
-| `updated_at` | 更新时间 |
+| `audit_status`         | `pending` / `approved` / `rejected`    |
+| `status`               | `enabled` / `disabled`                 |
+| `reviewer_id`          | 审核管理员 openid                      |
+| `reject_reason`        | 拒绝原因                               |
+| `approved_at`          | 通过时间                               |
+| `rejected_at`          | 拒绝时间                               |
+| `created_at`           | 创建时间                               |
+| `updated_at`           | 更新时间                               |
 
 ### `orders` 字段变化
 
 阶段五开始使用以下字段推进订单：
 
-| 字段 | 说明 |
-|---|---|
-| `worker_id` | 接单师傅 openid |
-| `accepted_at` | 师傅接单时间 |
-| `status` | 接单后从 `pending_accept` 变为 `accepted` |
+| 字段          | 说明                                      |
+| ------------- | ----------------------------------------- |
+| `worker_id`   | 接单师傅 openid                           |
+| `accepted_at` | 师傅接单时间                              |
+| `status`      | 接单后从 `pending_accept` 变为 `accepted` |
 
 ### 数据库权限说明
 
@@ -139,43 +139,43 @@
 
 ### `worker`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `applyWorker` | `name`, `phone`, `service_category`, `service_area`, `intro` | `{ worker }` | 当前登录用户 |
-| `getWorkerInfo` | 无 | `{ worker }` | 当前登录用户 |
-| `getAuditStatus` | 无 | `{ audit_status, worker }` | 当前登录用户 |
-| `getWorkerApplyList` | 可选 `status` | `{ workers }` | 管理员 |
-| `approveWorker` | `workerId` | `{ worker }` | 管理员 |
-| `rejectWorker` | `workerId`, `reason` | `{ worker }` | 管理员 |
-| `getOrderHallList` | 无 | `{ orders }` | 已审核师傅 |
+| 功能                 | 入参                                                         | 出参                       | 权限要求     |
+| -------------------- | ------------------------------------------------------------ | -------------------------- | ------------ |
+| `applyWorker`        | `name`, `phone`, `service_category`, `service_area`, `intro` | `{ worker }`               | 当前登录用户 |
+| `getWorkerInfo`      | 无                                                           | `{ worker }`               | 当前登录用户 |
+| `getAuditStatus`     | 无                                                           | `{ audit_status, worker }` | 当前登录用户 |
+| `getWorkerApplyList` | 可选 `status`                                                | `{ workers }`              | 管理员       |
+| `approveWorker`      | `workerId`                                                   | `{ worker }`               | 管理员       |
+| `rejectWorker`       | `workerId`, `reason`                                         | `{ worker }`               | 管理员       |
+| `getOrderHallList`   | 无                                                           | `{ orders }`               | 已审核师傅   |
 
 ### `order`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `acceptOrder` | `orderId` | `{ order }` | 已审核师傅 |
-| `getWorkerOrderList` | 无 | `{ orders }` | 已审核师傅 |
-| `getOrderDetail` | `orderId` | `{ order }` | 订单用户或已分配师傅 |
+| 功能                 | 入参      | 出参         | 权限要求             |
+| -------------------- | --------- | ------------ | -------------------- |
+| `acceptOrder`        | `orderId` | `{ order }`  | 已审核师傅           |
+| `getWorkerOrderList` | 无        | `{ orders }` | 已审核师傅           |
+| `getOrderDetail`     | `orderId` | `{ order }`  | 订单用户或已分配师傅 |
 
 ### 统一错误码
 
-| 错误码 | 说明 |
-|---|---|
-| `OPENID_MISSING` | 无法获取当前用户 openid |
-| `USER_NOT_FOUND` | 当前用户不存在 |
-| `USER_DISABLED` | 当前用户被禁用 |
-| `PERMISSION_DENIED` | 无权操作目标资源 |
-| `WORKER_REQUIRED` | 入驻字段不完整 |
-| `WORKER_PHONE_INVALID` | 手机号格式不正确 |
+| 错误码                    | 说明                         |
+| ------------------------- | ---------------------------- |
+| `OPENID_MISSING`          | 无法获取当前用户 openid      |
+| `USER_NOT_FOUND`          | 当前用户不存在               |
+| `USER_DISABLED`           | 当前用户被禁用               |
+| `PERMISSION_DENIED`       | 无权操作目标资源             |
+| `WORKER_REQUIRED`         | 入驻字段不完整               |
+| `WORKER_PHONE_INVALID`    | 手机号格式不正确             |
 | `WORKER_ALREADY_APPROVED` | 师傅已通过审核，不能重复申请 |
-| `WORKER_NOT_APPROVED` | 当前师傅尚未通过审核 |
-| `WORKER_ID_MISSING` | 缺少师傅申请 ID |
-| `WORKER_NOT_FOUND` | 师傅申请不存在 |
-| `ORDER_ID_MISSING` | 缺少订单 ID |
-| `ORDER_NOT_FOUND` | 订单不存在 |
-| `ORDER_STATUS_INVALID` | 当前订单状态不能接单 |
-| `ACTION_NOT_FOUND` | 未知 action |
-| `INTERNAL_ERROR` | 未预期内部错误 |
+| `WORKER_NOT_APPROVED`     | 当前师傅尚未通过审核         |
+| `WORKER_ID_MISSING`       | 缺少师傅申请 ID              |
+| `WORKER_NOT_FOUND`        | 师傅申请不存在               |
+| `ORDER_ID_MISSING`        | 缺少订单 ID                  |
+| `ORDER_NOT_FOUND`         | 订单不存在                   |
+| `ORDER_STATUS_INVALID`    | 当前订单状态不能接单         |
+| `ACTION_NOT_FOUND`        | 未知 action                  |
+| `INTERNAL_ERROR`          | 未预期内部错误               |
 
 ---
 
@@ -288,15 +288,15 @@ order.acceptOrder 校验师傅已审核、订单仍可接
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未在微信开发者工具中真实编译和预览阶段五页面 | 可能存在小程序运行时细节问题 | 部署 `worker/order` 云函数后做一次微信端验证 | P1 |
-| 尚未创建真实 `workers` 集合 | 微信端无法保存师傅申请 | 微信云开发控制台创建集合 | P0 |
-| 尚未部署 `worker` 云函数 | 微信端无法申请、审核和读取接单大厅 | 微信开发者工具上传并部署云函数 | P0 |
-| 管理员入口仍依赖手动修改 `users.role` | 普通用户无法自行进入管理员审核页 | 阶段七实现更完整的管理入口 | P1 |
-| 接单没有数据库事务锁 | 极端并发下可能出现重复接单风险 | 后续用云数据库原子更新或事务强化 | P1 |
-| 师傅资质图片未上传 | 审核依据较弱 | 优化阶段接入云存储上传 | P2 |
-| 师傅开始服务和完成服务尚未实现 | 订单接单后不能继续闭环 | 阶段六处理 | P0 |
+| 问题                                           | 影响                               | 后续处理建议                                 | 优先级 |
+| ---------------------------------------------- | ---------------------------------- | -------------------------------------------- | ------ |
+| 尚未在微信开发者工具中真实编译和预览阶段五页面 | 可能存在小程序运行时细节问题       | 部署 `worker/order` 云函数后做一次微信端验证 | P1     |
+| 尚未创建真实 `workers` 集合                    | 微信端无法保存师傅申请             | 微信云开发控制台创建集合                     | P0     |
+| 尚未部署 `worker` 云函数                       | 微信端无法申请、审核和读取接单大厅 | 微信开发者工具上传并部署云函数               | P0     |
+| 管理员入口仍依赖手动修改 `users.role`          | 普通用户无法自行进入管理员审核页   | 阶段七实现更完整的管理入口                   | P1     |
+| 接单没有数据库事务锁                           | 极端并发下可能出现重复接单风险     | 后续用云数据库原子更新或事务强化             | P1     |
+| 师傅资质图片未上传                             | 审核依据较弱                       | 优化阶段接入云存储上传                       | P2     |
+| 师傅开始服务和完成服务尚未实现                 | 订单接单后不能继续闭环             | 阶段六处理                                   | P0     |
 
 ---
 

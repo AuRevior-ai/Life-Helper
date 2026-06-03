@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">订单状态和服务信息以创建订单时的快照为准</view>
+    <view class="page-subtitle"
+      >订单状态和服务信息以创建订单时的快照为准；模拟支付不产生真实扣款。</view
+    >
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
@@ -73,7 +75,10 @@
         <text>实付金额</text>
         <text>{{ payableAmountText }}</text>
       </view>
-      <view wx:if="{{ order.coupon_snapshot && order.coupon_snapshot.coupon_name }}" class="info-row">
+      <view
+        wx:if="{{ order.coupon_snapshot && order.coupon_snapshot.coupon_name }}"
+        class="info-row"
+      >
         <text>使用优惠券</text>
         <text>{{ order.coupon_snapshot.coupon_name }}</text>
       </view>
@@ -83,14 +88,29 @@
       </view>
       <view wx:if="{{ order.provider_type === 'merchant' }}" class="info-row">
         <text>服务商家</text>
-        <text>{{ order.provider_snapshot.store_name || order.provider_snapshot.provider_name }}</text>
+        <text
+          >{{ order.provider_snapshot.store_name ||
+          order.provider_snapshot.provider_name }}</text
+        >
       </view>
-      <view wx:if="{{ order.finish_remark }}" class="info-row info-row--address">
+      <view
+        wx:if="{{ order.finish_remark }}"
+        class="info-row info-row--address"
+      >
         <text>完工说明</text>
         <text>{{ order.finish_remark }}</text>
       </view>
-      <view wx:if="{{ order.finish_images && order.finish_images.length }}" class="finish-images">
-        <image wx:for="{{ order.finish_images }}" wx:key="*this" class="finish-image" src="{{ item }}" mode="aspectFill"></image>
+      <view
+        wx:if="{{ order.finish_images && order.finish_images.length }}"
+        class="finish-images"
+      >
+        <image
+          wx:for="{{ order.finish_images }}"
+          wx:key="*this"
+          class="finish-image"
+          src="{{ item }}"
+          mode="aspectFill"
+        ></image>
       </view>
     </view>
 
@@ -100,7 +120,9 @@
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
       bindtap="handlePay"
-    >模拟支付</button>
+    >
+      模拟支付
+    </button>
 
     <button
       wx:if="{{ canCancel }}"
@@ -108,37 +130,41 @@
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
       bindtap="handleCancelOrder"
-    >取消订单</button>
+    >
+      取消订单
+    </button>
 
-    <button
-      wx:if="{{ canReview }}"
-      class="primary-button"
-      bindtap="goReview"
-    >去评价</button>
+    <button wx:if="{{ canReview }}" class="primary-button" bindtap="goReview">
+      去评价
+    </button>
 
     <button
       wx:if="{{ canViewReview }}"
       class="primary-button"
       bindtap="goReviewDetail"
-    >查看评价 / 追加评价</button>
+    >
+      查看评价 / 追加评价
+    </button>
 
-    <button
-      wx:if="{{ canTip }}"
-      class="primary-button"
-      bindtap="goTip"
-    >打赏师傅</button>
+    <button wx:if="{{ canTip }}" class="primary-button" bindtap="goTip">
+      打赏师傅
+    </button>
 
     <button
       wx:if="{{ canApplyAfterSale }}"
       class="ghost-button"
       bindtap="goAfterSaleApply"
-    >申请售后 / 申请退款</button>
+    >
+      申请售后 / 申请退款
+    </button>
 
     <button
       wx:if="{{ canViewAfterSale }}"
       class="ghost-button"
       bindtap="goAfterSaleDetail"
-    >查看售后</button>
+    >
+      查看售后
+    </button>
   </block>
 
   <empty-state

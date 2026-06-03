@@ -24,5 +24,9 @@
     </view>
   </block>
 
-  <empty-state wx:else title="暂无售后申请" description="用户提交后会显示在这里"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无售后申请"
+    description="用户提交后会显示在这里"
+  ></empty-state>
 </view>

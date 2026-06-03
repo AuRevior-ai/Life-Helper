@@ -1,7 +1,10 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">{{ currentCategory ? currentCategory.description : '浏览当前已开放的社区服务' }}</view>
+    <view class="page-subtitle"
+      >{{ currentCategory ? currentCategory.description :
+      '浏览当前已开放的社区服务' }}</view
+    >
   </view>
 
   <scroll-view scroll-x class="category-tabs">

@@ -1,7 +1,13 @@
-const { fail } = require('./_shared/response')
-const qualification = require('./qualification.service')
-const deposit = require('./deposit.service')
-const risk = require('./risk.service')
+const { fail } = require("./_shared/response");
+const qualification = require("./qualification.service");
+const deposit = require("./deposit.service");
+const risk = require("./risk.service");
+const {
+  QUALIFICATION_STATUS,
+  DEPOSIT_STATUS,
+  RISK_LEVEL,
+  ONBOARDING_STATUS,
+} = require("./qualification.constants");
 
 const actions = Object.freeze({
   getMyQualification: qualification.getMyQualification,
@@ -25,20 +31,27 @@ const actions = Object.freeze({
   adminAddRiskTag: risk.adminAddRiskTag,
   adminListRiskRecords: risk.adminListRiskRecords,
   adminGetOnboardingDetail: risk.adminGetOnboardingDetail,
-  adminSetOnboardingLimit: risk.adminSetOnboardingLimit
-})
+  adminSetOnboardingLimit: risk.adminSetOnboardingLimit,
+});
 
 async function handleQualification(event = {}, env = {}) {
-  const action = actions[event.action]
-  if (!action) return fail('ACTION_NOT_FOUND', '未知资质保证金操作')
+  const action = actions[event.action];
+  if (!action) return fail("ACTION_NOT_FOUND", "未知资质保证金操作");
   try {
-    return await action(event, env)
+    return await action(event, env);
   } catch (error) {
-    return fail(error.errorCode || 'INTERNAL_ERROR', error.message || '资质保证金操作失败')
+    return fail(
+      error.errorCode || "INTERNAL_ERROR",
+      error.message || "资质保证金操作失败",
+    );
   }
 }
 
 module.exports = {
   handleQualification,
-  actions
-}
+  actions,
+  QUALIFICATION_STATUS,
+  DEPOSIT_STATUS,
+  RISK_LEVEL,
+  ONBOARDING_STATUS,
+};

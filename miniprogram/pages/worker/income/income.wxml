@@ -42,7 +42,10 @@
         <view>
           <view class="income-name">{{ item.service_name }}</view>
           <view class="income-time">{{ item.appointment_time }}</view>
-          <view class="income-time">状态：{{ item.statusText }}　平台服务费：{{ item.commissionText }}</view>
+          <view class="income-time"
+            >状态：{{ item.statusText }}　平台服务费：{{ item.commissionText
+            }}</view
+          >
         </view>
         <view class="income-price">{{ item.workerEarningText }}</view>
       </view>

@@ -1,1 +1,4 @@
-.page { padding: 32rpx; color: #1f2d2a; }
+.page {
+  padding: 32rpx;
+  color: #1f2d2a;
+}

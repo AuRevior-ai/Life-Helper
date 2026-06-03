@@ -1,55 +1,57 @@
-const areaService = require('../../../services/area.service')
-const { showError, showSuccess } = require('../../../utils/toast')
+const areaService = require("../../../services/area.service");
+const { showError, showSuccess } = require("../../../utils/toast");
 
 Page({
   data: {
-    title: '区域管理',
+    title: "区域管理",
     areas: [],
     collectionMissing: false,
-    loading: true
+    loading: true,
   },
 
   onShow() {
-    this.loadAreas()
+    this.loadAreas();
   },
 
   async loadAreas() {
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     try {
-      const data = await areaService.getServiceAreaList({ includeDisabled: true })
+      const data = await areaService.getServiceAreaList({
+        includeDisabled: true,
+      });
       this.setData({
         areas: data.areas || [],
-        collectionMissing: data.collection_missing === true
-      })
+        collectionMissing: data.collection_missing === true,
+      });
     } catch (error) {
-      showError(error.message || '区域加载失败')
+      showError(error.message || "区域加载失败");
     } finally {
-      this.setData({ loading: false })
+      this.setData({ loading: false });
     }
   },
 
   goCreate() {
-    wx.navigateTo({ url: '/pages/admin/area-edit/area-edit' })
+    wx.navigateTo({ url: "/pages/admin/area-edit/area-edit" });
   },
 
   goEdit(event) {
     wx.navigateTo({
-      url: `/pages/admin/area-edit/area-edit?areaId=${event.currentTarget.dataset.id}`
-    })
+      url: `/pages/admin/area-edit/area-edit?areaId=${event.currentTarget.dataset.id}`,
+    });
   },
 
   async toggleStatus(event) {
-    const { id, status } = event.currentTarget.dataset
+    const { id, status } = event.currentTarget.dataset;
     try {
-      if (status === 'enabled') {
-        await areaService.adminDisableServiceArea({ areaId: id })
+      if (status === "enabled") {
+        await areaService.adminDisableServiceArea({ areaId: id });
       } else {
-        await areaService.adminEnableServiceArea({ areaId: id })
+        await areaService.adminEnableServiceArea({ areaId: id });
       }
-      showSuccess('区域状态已更新')
-      this.loadAreas()
+      showSuccess("区域状态已更新");
+      this.loadAreas();
     } catch (error) {
-      showError(error.message || '状态更新失败')
+      showError(error.message || "状态更新失败");
     }
-  }
-})
+  },
+});

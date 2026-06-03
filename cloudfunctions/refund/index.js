@@ -1,18 +1,18 @@
-const cloud = require('wx-server-sdk')
-const { handleRefund } = require('./handler')
-const { createAfterSaleRepository } = require('./after-sale-repository')
-const { createMessageRepository } = require('./message-repository')
-const { createOrderRepository } = require('./order-repository')
-const { createRefundLogRepository } = require('./refund-repository')
-const { createUserRepository } = require('./user-repository')
+const cloud = require("wx-server-sdk");
+const { handleRefund } = require("./handler");
+const { createAfterSaleRepository } = require("./after-sale-repository");
+const { createMessageRepository } = require("./message-repository");
+const { createOrderRepository } = require("./order-repository");
+const { createRefundLogRepository } = require("./refund-repository");
+const { createUserRepository } = require("./user-repository");
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
-})
+  env: cloud.DYNAMIC_CURRENT_ENV,
+});
 
 exports.main = async (event = {}) => {
-  const wxContext = cloud.getWXContext()
-  const db = cloud.database()
+  const wxContext = cloud.getWXContext();
+  const db = cloud.database();
 
   return handleRefund(event, {
     openid: wxContext.OPENID,
@@ -24,14 +24,14 @@ exports.main = async (event = {}) => {
     finance: {
       async reverseOrderFinance(payload) {
         const result = await cloud.callFunction({
-          name: 'finance',
+          name: "finance",
           data: {
-            action: 'reverseOrderFinance',
-            ...payload
-          }
-        })
-        return result.result || result
-      }
-    }
-  })
-}
+            action: "reverseOrderFinance",
+            ...payload,
+          },
+        });
+        return result.result || result;
+      },
+    },
+  });
+};

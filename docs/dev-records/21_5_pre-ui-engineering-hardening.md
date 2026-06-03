@@ -23,26 +23,29 @@
 - [x] 新增 `docs/ui-refactor-guardrails.md`。
 - [x] 新增阶段 21.5 保护测试。
 - [x] 更新 `README.md` 与 `docs/dev-records/index.md`。
+- [x] 补强公开交付风险扫描，候选目录中真实 `project.config.json` 会被识别为风险。
+- [x] 补齐资质、保证金、风控、准入状态的前后端防漂移测试出口。
+- [x] 补强支付、退款、打赏、会员、保证金、资质和风控 mock 页面提示。
 
 ## 4. 新增文件
 
-| 文件 | 说明 |
-|---|---|
-| `scripts/sync-cloudfunction-shared.js` | 将根共享工具同步到各云函数 `_shared` 副本 |
-| `scripts/check-cloudfunction-shared-sync.js` | 检查根共享工具与各副本是否一致 |
-| `miniprogram/utils/status-view.js` | 统一输出状态展示 `{ text, tone }` |
-| `docs/ui-refactor-guardrails.md` | UI 阶段业务保护清单 |
-| `docs/dev-records/21_5_pre-ui-engineering-hardening.md` | 本阶段开发记录 |
-| `tests/phase21_5.pre-ui-engineering-hardening.test.js` | UI 重构前工程保护测试 |
+| 文件                                                    | 说明                                      |
+| ------------------------------------------------------- | ----------------------------------------- |
+| `scripts/sync-cloudfunction-shared.js`                  | 将根共享工具同步到各云函数 `_shared` 副本 |
+| `scripts/check-cloudfunction-shared-sync.js`            | 检查根共享工具与各副本是否一致            |
+| `miniprogram/utils/status-view.js`                      | 统一输出状态展示 `{ text, tone }`         |
+| `docs/ui-refactor-guardrails.md`                        | UI 阶段业务保护清单                       |
+| `docs/dev-records/21_5_pre-ui-engineering-hardening.md` | 本阶段开发记录                            |
+| `tests/phase21_5.pre-ui-engineering-hardening.test.js`  | UI 重构前工程保护测试                     |
 
 ## 5. 修改文件
 
-| 文件 | 说明 |
-|---|---|
-| `package.json` | 新增 `check:shared-sync` |
-| `README.md` | 明确当前最新阶段、21.5 前置收口和阶段 22 UI 重构方向 |
-| `docs/dev-records/index.md` | 增加阶段 21.5 并更新下一阶段入口 |
-| `miniprogram/pages/order-list/order-list.js` | 示例接入 `status-view` 输出订单状态文案 |
+| 文件                                         | 说明                                                 |
+| -------------------------------------------- | ---------------------------------------------------- |
+| `package.json`                               | 新增 `check:shared-sync`                             |
+| `README.md`                                  | 明确当前最新阶段、21.5 前置收口和阶段 22 UI 重构方向 |
+| `docs/dev-records/index.md`                  | 增加阶段 21.5 并更新下一阶段入口                     |
+| `miniprogram/pages/order-list/order-list.js` | 示例接入 `status-view` 输出订单状态文案              |
 
 ## 6. 共享工具同步检查
 
@@ -59,7 +62,7 @@
 `miniprogram/utils/status-view.js` 提供：
 
 ```js
-getStatusView(type, status)
+getStatusView(type, status);
 ```
 
 返回：
@@ -79,11 +82,12 @@ getStatusView(type, status)
 
 ## 9. 交付风险说明
 
-开发目录包含 `.git`、`project.config.json`、可能存在的 `project.private.config.json` 和本地开发生成文件。交付目录必须与开发目录区分，公开交付时不得包含 `.git`、`project.private.config.json`、证书、私钥、真实支付配置、日志、压缩包和 `node_modules`。`project.config.example.json` 用于公开模板，真实 AppID 和私有配置由接收方在本地配置。
+开发目录包含 `.git`、`project.config.json`、可能存在的 `project.private.config.json` 和本地开发生成文件。交付目录必须与开发目录区分，公开交付时不得包含 `.git`、真实 `project.config.json`、`project.private.config.json`、地图 key、token、secret、证书、私钥、真实支付配置、日志、压缩包和 `node_modules`。`project.config.example.json` 用于公开模板，真实 AppID 和私有配置由接收方在本地配置。
 
 ## 10. 测试记录
 
 - `node --test tests/phase21_5.pre-ui-engineering-hardening.test.js`
+- `node --test tests/phase19_5.engineering-governance.test.js`
 - `npm run check:shared-sync`
 - `npm test`
 

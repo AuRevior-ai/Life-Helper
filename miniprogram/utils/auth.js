@@ -1,50 +1,50 @@
-const { USER_ROLE_TEXT } = require('../config/roles')
+const { USER_ROLE_TEXT } = require("../config/roles");
 
-const STORAGE_KEY = 'CURRENT_USER'
+const STORAGE_KEY = "CURRENT_USER";
 
 function getCurrentUser() {
-  if (typeof wx === 'undefined') return null
-  return wx.getStorageSync(STORAGE_KEY) || null
+  if (typeof wx === "undefined") return null;
+  return wx.getStorageSync(STORAGE_KEY) || null;
 }
 
 function setCurrentUser(user) {
-  if (typeof wx === 'undefined') return
-  wx.setStorageSync(STORAGE_KEY, user)
+  if (typeof wx === "undefined") return;
+  wx.setStorageSync(STORAGE_KEY, user);
 }
 
 function clearCurrentUser() {
-  if (typeof wx === 'undefined') return
-  wx.removeStorageSync(STORAGE_KEY)
+  if (typeof wx === "undefined") return;
+  wx.removeStorageSync(STORAGE_KEY);
 }
 
 function getCurrentIdentityRole() {
-  const user = getCurrentUser()
-  return user ? user.active_role || user.role : ''
+  const user = getCurrentUser();
+  return user ? user.active_role || user.role : "";
 }
 
 function setCurrentIdentityRole(role) {
-  const user = getCurrentUser()
-  if (!user || !role) return null
+  const user = getCurrentUser();
+  if (!user || !role) return null;
 
   const nextUser = {
     ...user,
-    active_role: role
-  }
-  setCurrentUser(nextUser)
-  return nextUser
+    active_role: role,
+  };
+  setCurrentUser(nextUser);
+  return nextUser;
 }
 
 function hasRole(role) {
-  return getCurrentIdentityRole() === role
+  return getCurrentIdentityRole() === role;
 }
 
 function isLoggedIn() {
-  return Boolean(getCurrentUser())
+  return Boolean(getCurrentUser());
 }
 
 function getCurrentUserRoleText(role) {
-  const targetRole = role || getCurrentIdentityRole()
-  return USER_ROLE_TEXT[targetRole] || '未登录'
+  const targetRole = role || getCurrentIdentityRole();
+  return USER_ROLE_TEXT[targetRole] || "未登录";
 }
 
 module.exports = {
@@ -55,5 +55,5 @@ module.exports = {
   setCurrentIdentityRole,
   hasRole,
   isLoggedIn,
-  getCurrentUserRoleText
-}
+  getCurrentUserRoleText,
+};

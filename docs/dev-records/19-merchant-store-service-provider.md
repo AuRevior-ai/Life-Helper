@@ -32,41 +32,41 @@
 
 ## 4. 新增文件
 
-| 文件 | 作用 |
-|---|---|
-| `cloudfunctions/merchant/*` | 商家入驻、审核、服务、店铺、订单和日志云函数 |
-| `cloudfunctions/order/merchant-read-repository.js` | 订单云函数读取商家服务、商家和服务方索引 |
-| `miniprogram/services/merchant.service.js` | 前端商家云函数 action 服务 |
-| `miniprogram/pages/merchant/store-list/*` | 用户店铺列表 |
-| `miniprogram/pages/merchant/store-detail/*` | 用户店铺主页 |
-| `miniprogram/pages/merchant/apply/*` | 商家入驻申请 |
-| `miniprogram/pages/merchant/audit-status/*` | 商家审核状态 |
-| `miniprogram/pages/merchant/profile/*` | 商家中心 |
-| `miniprogram/pages/merchant/service-list/*` | 商家服务列表 |
-| `miniprogram/pages/merchant/service-edit/*` | 商家服务配置 |
-| `miniprogram/pages/merchant/order-list/*` | 商家订单列表 |
-| `miniprogram/pages/merchant/order-detail/*` | 商家订单详情 |
-| `miniprogram/pages/merchant/income/*` | 商家收益占位页 |
-| `miniprogram/pages/admin/merchant-list/*` | 管理员商家列表 |
-| `miniprogram/pages/admin/merchant-detail/*` | 管理员商家详情和审核 |
-| `tests/phase19.merchant-store-service-provider.test.js` | 阶段 19 自动化测试 |
+| 文件                                                    | 作用                                         |
+| ------------------------------------------------------- | -------------------------------------------- |
+| `cloudfunctions/merchant/*`                             | 商家入驻、审核、服务、店铺、订单和日志云函数 |
+| `cloudfunctions/order/merchant-read-repository.js`      | 订单云函数读取商家服务、商家和服务方索引     |
+| `miniprogram/services/merchant.service.js`              | 前端商家云函数 action 服务                   |
+| `miniprogram/pages/merchant/store-list/*`               | 用户店铺列表                                 |
+| `miniprogram/pages/merchant/store-detail/*`             | 用户店铺主页                                 |
+| `miniprogram/pages/merchant/apply/*`                    | 商家入驻申请                                 |
+| `miniprogram/pages/merchant/audit-status/*`             | 商家审核状态                                 |
+| `miniprogram/pages/merchant/profile/*`                  | 商家中心                                     |
+| `miniprogram/pages/merchant/service-list/*`             | 商家服务列表                                 |
+| `miniprogram/pages/merchant/service-edit/*`             | 商家服务配置                                 |
+| `miniprogram/pages/merchant/order-list/*`               | 商家订单列表                                 |
+| `miniprogram/pages/merchant/order-detail/*`             | 商家订单详情                                 |
+| `miniprogram/pages/merchant/income/*`                   | 商家收益占位页                               |
+| `miniprogram/pages/admin/merchant-list/*`               | 管理员商家列表                               |
+| `miniprogram/pages/admin/merchant-detail/*`             | 管理员商家详情和审核                         |
+| `tests/phase19.merchant-store-service-provider.test.js` | 阶段 19 自动化测试                           |
 
 ## 5. 修改文件
 
-| 文件 | 修改原因 |
-|---|---|
-| `cloudfunctions/order/handler.js` | 支持 `merchantServiceId` 下单和商家订单字段 |
-| `cloudfunctions/order/index.js` | 注入商家只读仓储 |
-| `cloudfunctions/worker/handler.js` | 师傅接单大厅排除商家订单 |
-| `cloudfunctions/finance/handler.js` | 财务记录兼容商家服务方字段 |
-| `miniprogram/config/constants.js` | 新增商家云函数和集合常量 |
-| `miniprogram/config/status.js` | 新增服务方、商家、商家服务状态常量 |
-| `miniprogram/app.json` | 注册阶段 19 页面 |
-| `miniprogram/pages/order-submit/order-submit.js` | 支持店铺服务下单入口参数 |
-| `miniprogram/pages/order-detail/order-detail.wxml` | 展示订单商家快照 |
-| `miniprogram/pages/admin/dashboard/*` | 增加商家管理入口 |
-| `README.md` | 更新当前阶段、能力说明和测试数量 |
-| `docs/dev-records/index.md` | 更新阶段状态、完成项和遗留问题 |
+| 文件                                               | 修改原因                                    |
+| -------------------------------------------------- | ------------------------------------------- |
+| `cloudfunctions/order/handler.js`                  | 支持 `merchantServiceId` 下单和商家订单字段 |
+| `cloudfunctions/order/index.js`                    | 注入商家只读仓储                            |
+| `cloudfunctions/worker/handler.js`                 | 师傅接单大厅排除商家订单                    |
+| `cloudfunctions/finance/handler.js`                | 财务记录兼容商家服务方字段                  |
+| `miniprogram/config/constants.js`                  | 新增商家云函数和集合常量                    |
+| `miniprogram/config/status.js`                     | 新增服务方、商家、商家服务状态常量          |
+| `miniprogram/app.json`                             | 注册阶段 19 页面                            |
+| `miniprogram/pages/order-submit/order-submit.js`   | 支持店铺服务下单入口参数                    |
+| `miniprogram/pages/order-detail/order-detail.wxml` | 展示订单商家快照                            |
+| `miniprogram/pages/admin/dashboard/*`              | 增加商家管理入口                            |
+| `README.md`                                        | 更新当前阶段、能力说明和测试数量            |
+| `docs/dev-records/index.md`                        | 更新阶段状态、完成项和遗留问题              |
 
 ## 6. 数据库变化
 

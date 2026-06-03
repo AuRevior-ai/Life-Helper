@@ -13,7 +13,10 @@
           <view class="user-name">{{ item.displayName }}</view>
           <view class="openid">{{ item.openid }}</view>
         </view>
-        <view class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}">{{ item.statusText }}</view>
+        <view
+          class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}"
+          >{{ item.statusText }}</view
+        >
       </view>
       <view class="user-meta">角色：{{ item.roleText }}</view>
       <button
@@ -23,7 +26,9 @@
         loading="{{ submittingId === item._id }}"
         disabled="{{ submittingId === item._id }}"
         bindtap="disableUser"
-      >禁用</button>
+      >
+        禁用
+      </button>
     </view>
   </view>
 

@@ -1,31 +1,31 @@
-function showToast(title, icon = 'none') {
-  if (typeof wx === 'undefined') return
+function showToast(title, icon = "none") {
+  if (typeof wx === "undefined") return;
   wx.showToast({
     title,
     icon,
-    duration: 2000
-  })
+    duration: 2000,
+  });
 }
 
-function showSuccess(title = '操作成功') {
-  showToast(title, 'success')
+function showSuccess(title = "操作成功") {
+  showToast(title, "success");
 }
 
-function showError(title = '操作失败') {
-  showToast(title, 'none')
+function showError(title = "操作失败") {
+  showToast(title, "none");
 }
 
-function showLoading(title = '加载中') {
-  if (typeof wx === 'undefined') return
+function showLoading(title = "加载中") {
+  if (typeof wx === "undefined") return;
   wx.showLoading({
     title,
-    mask: true
-  })
+    mask: true,
+  });
 }
 
 function hideLoading() {
-  if (typeof wx === 'undefined') return
-  wx.hideLoading()
+  if (typeof wx === "undefined") return;
+  wx.hideLoading();
 }
 
 module.exports = {
@@ -33,5 +33,5 @@ module.exports = {
   showSuccess,
   showError,
   showLoading,
-  hideLoading
-}
+  hideLoading,
+};

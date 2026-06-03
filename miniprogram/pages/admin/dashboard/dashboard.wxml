@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">集中查看运营概况，并进入订单、用户、师傅与服务管理</view>
+    <view class="page-subtitle"
+      >集中查看运营概况，并进入订单、用户、师傅与服务管理</view
+    >
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载看板"></loading-view>
@@ -29,12 +31,19 @@
     <view class="section-head">管理入口</view>
     <view class="module-list">
       <view wx:for="{{ entryGroups }}" wx:key="key" class="module-card panel">
-        <button class="module-header" data-index="{{ index }}" bindtap="toggleEntryGroup">
+        <button
+          class="module-header"
+          data-index="{{ index }}"
+          bindtap="toggleEntryGroup"
+        >
           <view class="module-copy">
             <view class="module-title">{{ item.title }}</view>
             <view class="module-desc">{{ item.description }}</view>
           </view>
-          <view class="module-meta">{{ item.entries.length }} 项 · {{ item.expanded ? '收起' : '展开' }}</view>
+          <view class="module-meta"
+            >{{ item.entries.length }} 项 · {{ item.expanded ? '收起' : '展开'
+            }}</view
+          >
         </button>
         <view wx:if="{{ item.expanded }}" class="module-body">
           <button
@@ -44,7 +53,9 @@
             class="entry-item"
             data-url="{{ entry.url }}"
             bindtap="goEntry"
-          >{{ entry.label }}</button>
+          >
+            {{ entry.label }}
+          </button>
         </view>
       </view>
     </view>

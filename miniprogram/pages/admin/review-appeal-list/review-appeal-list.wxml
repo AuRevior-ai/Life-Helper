@@ -2,7 +2,12 @@
   <view class="page-header"><view class="page-title">{{ title }}</view></view>
   <loading-view wx:if="{{ loading }}" text="正在加载申诉"></loading-view>
   <view wx:elif="{{ groupedAppeals.length }}">
-    <view wx:for="{{ groupedAppeals }}" wx:key="workerId" wx:for-item="group" class="worker-group">
+    <view
+      wx:for="{{ groupedAppeals }}"
+      wx:key="workerId"
+      wx:for-item="group"
+      class="worker-group"
+    >
       <view class="worker-group__title">师傅：{{ group.workerName }}</view>
       <view
         wx:for="{{ group.appeals }}"
@@ -17,5 +22,9 @@
       </view>
     </view>
   </view>
-  <empty-state wx:else title="暂无申诉" description="师傅提交差评申诉后会展示在这里"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无申诉"
+    description="师傅提交差评申诉后会展示在这里"
+  ></empty-state>
 </view>

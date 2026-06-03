@@ -25,19 +25,19 @@
 
 ## 4. 新增文件
 
-| 文件 | 说明 |
-|---|---|
-| `tests/phase22a.home-ui-baseline.test.js` | 首页 UI 基线与业务保护测试 |
-| `docs/dev-records/22a_home-ui-baseline.md` | 阶段 22A 开发报告 |
+| 文件                                       | 说明                       |
+| ------------------------------------------ | -------------------------- |
+| `tests/phase22a.home-ui-baseline.test.js`  | 首页 UI 基线与业务保护测试 |
+| `docs/dev-records/22a_home-ui-baseline.md` | 阶段 22A 开发报告          |
 
 ## 5. 修改文件
 
-| 文件 | 说明 |
-|---|---|
-| `miniprogram/pages/index/index.js` | 增加首页展示基线数据、分类兜底和搜索/查看更多跳转兜底 |
-| `miniprogram/pages/index/index.wxml` | 重构首页展示结构 |
-| `miniprogram/pages/index/index.wxss` | 重写首页样式并建立首页视觉基线 |
-| `docs/dev-records/index.md` | 更新当前阶段和阶段记录列表 |
+| 文件                                 | 说明                                                  |
+| ------------------------------------ | ----------------------------------------------------- |
+| `miniprogram/pages/index/index.js`   | 增加首页展示基线数据、分类兜底和搜索/查看更多跳转兜底 |
+| `miniprogram/pages/index/index.wxml` | 重构首页展示结构                                      |
+| `miniprogram/pages/index/index.wxss` | 重写首页样式并建立首页视觉基线                        |
+| `docs/dev-records/index.md`          | 更新当前阶段和阶段记录列表                            |
 
 ## 6. 首页新版结构说明
 

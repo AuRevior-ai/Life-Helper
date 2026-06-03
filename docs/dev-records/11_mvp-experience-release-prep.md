@@ -97,18 +97,18 @@
 
 新增集合：
 
-| 集合 | 用途 |
-|---|---|
+| 集合       | 用途                   |
+| ---------- | ---------------------- |
 | `messages` | 保存用户和师傅站内消息 |
 
 `orders` 新增字段：
 
-| 字段 | 说明 |
-|---|---|
-| `appointment_date` | 预约日期，格式 `YYYY-MM-DD` |
-| `appointment_slot` | 预约时间段 |
-| `finish_remark` | 师傅完工说明 |
-| `finish_images` | 完工图片 fileID 数组，最多 3 张 |
+| 字段               | 说明                            |
+| ------------------ | ------------------------------- |
+| `appointment_date` | 预约日期，格式 `YYYY-MM-DD`     |
+| `appointment_slot` | 预约时间段                      |
+| `finish_remark`    | 师傅完工说明                    |
+| `finish_images`    | 完工图片 fileID 数组，最多 3 张 |
 
 ## 8. 云函数 / 接口变化
 

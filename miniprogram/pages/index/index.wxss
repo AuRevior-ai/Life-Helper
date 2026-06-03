@@ -5,7 +5,9 @@
   box-sizing: border-box;
   background: #f7f8fa;
   color: #111827;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 .home-section-card {

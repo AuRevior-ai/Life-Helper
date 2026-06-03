@@ -13,12 +13,18 @@
         bindtap="onStatusTap"
       >
         <text>{{ item.label }}</text>
-        <view wx:if="{{ selectedStatusIndex === index }}" class="order-tab__line"></view>
+        <view
+          wx:if="{{ selectedStatusIndex === index }}"
+          class="order-tab__line"
+        ></view>
       </view>
     </view>
   </scroll-view>
 
-  <loading-view wx:if="{{ loading && !orders.length }}" text="正在加载订单"></loading-view>
+  <loading-view
+    wx:if="{{ loading && !orders.length }}"
+    text="正在加载订单"
+  ></loading-view>
 
   <view wx:elif="{{ orders.length }}" class="order-list">
     <order-card

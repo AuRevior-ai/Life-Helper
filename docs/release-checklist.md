@@ -7,6 +7,7 @@
 - `.git/`：不能进入交付包，避免暴露提交历史、已删除文件、旧 AppID、旧配置和调试信息。
 - `node_modules/`、`cloudfunctions/*/node_modules/`、`miniprogram_npm/`：依赖和构建产物不进入源码交付包。
 - `.env`、`.env.*`：可能包含环境变量、管理员初始化码、支付密钥或回调地址。
+- `project.config.json`：本地开发配置，可能包含真实小程序 AppID，公开交付包只保留 `project.config.example.json`。
 - `project.private.config.json`：微信开发者工具本地私有配置，不适合公开提交。
 - `*.pem`、`*.key`、`*.crt`、`*.cer`、`*.p12`、`*.pfx`、`apiclient_*`：私钥文件、证书文件和微信支付商户证书必须排除。
 - 真实支付配置文件：包含 `mchid`、APIv3 密钥、证书路径、回调密钥、商户号的文件不能进入交付包。
@@ -16,12 +17,13 @@
 
 ## AppID 与配置
 
-当前 `project.config.json` 包含真实小程序 AppID：`wxe8b7172da9c09545`。这是内部开发配置，不能作为公开模板直接交付。公开交付或模板化交付时：
+当前开发目录的 `project.config.json` 可能包含真实小程序 AppID。这是内部开发配置，不能作为公开模板直接交付。公开交付或模板化交付时：
 
 1. 使用 `project.config.example.json` 作为示例配置。
 2. 将示例中的 `appid` 保持为 `touristappid`，或由接收方在微信开发者工具中替换为自己的 AppID。
-3. 不删除开发者本地 `project.config.json`，但公开包中如需隐藏真实 AppID，应使用 example 配置替代。
+3. 不删除开发者本地 `project.config.json`，但公开包中必须排除真实 `project.config.json`，使用 example 配置替代。
 4. `project.private.config.json` 必须排除。
+5. 地图 key、支付商户号、APIv3 密钥、证书路径、token、secret 和回调密钥只能通过真实环境私有配置注入，不能写入公开源码。
 
 ## mock 支付边界
 
@@ -52,6 +54,7 @@
 
 ```bash
 npm test
+npm run check:shared-sync
 npm run check:release-risk -- <候选交付目录>
 ```
 

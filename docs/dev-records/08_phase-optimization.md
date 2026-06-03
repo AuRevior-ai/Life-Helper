@@ -36,31 +36,31 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase8-optimization.md` | 阶段八实施计划 |
-| `tests/phase8.optimization.test.js` | 最终验证清单、README 收口和占位页测试 |
-| `docs/wechat-mvp-verification.md` | 八阶段完成后的真实微信开发者工具验证清单 |
-| `docs/dev-records/08_phase-optimization.md` | 本阶段开发记录与复盘 |
+| 文件路径                                                   | 说明                                     |
+| ---------------------------------------------------------- | ---------------------------------------- |
+| `docs/superpowers/plans/2026-05-30-phase8-optimization.md` | 阶段八实施计划                           |
+| `tests/phase8.optimization.test.js`                        | 最终验证清单、README 收口和占位页测试    |
+| `docs/wechat-mvp-verification.md`                          | 八阶段完成后的真实微信开发者工具验证清单 |
+| `docs/dev-records/08_phase-optimization.md`                | 本阶段开发记录与复盘                     |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `README.md` | 增加阶段八、第一版 MVP 完成说明和完整验证清单链接 |
+| 文件路径                                  | 修改内容                                              |
+| ----------------------------------------- | ----------------------------------------------------- |
+| `README.md`                               | 增加阶段八、第一版 MVP 完成说明和完整验证清单链接     |
 | `miniprogram/pages/admin/category-edit/*` | 从“暂无数据”改为 MVP 阶段延后说明，并提供返回分类管理 |
-| `miniprogram/pages/admin/service-edit/*` | 从“暂无数据”改为 MVP 阶段延后说明，并提供进入服务管理 |
-| `docs/dev-records/index.md` | 标记阶段八完成，更新整体进度和遗留问题状态 |
+| `miniprogram/pages/admin/service-edit/*`  | 从“暂无数据”改为 MVP 阶段延后说明，并提供进入服务管理 |
+| `docs/dev-records/index.md`               | 标记阶段八完成，更新整体进度和遗留问题状态            |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -70,15 +70,15 @@
 
 真实微信验证前仍需创建以下集合：
 
-| 集合 |
-|---|
-| `users` |
+| 集合                 |
+| -------------------- |
+| `users`              |
 | `service_categories` |
-| `services` |
-| `addresses` |
-| `orders` |
-| `workers` |
-| `reviews` |
+| `services`           |
+| `addresses`          |
+| `orders`             |
+| `workers`            |
+| `reviews`            |
 
 ---
 
@@ -88,16 +88,16 @@
 
 真实微信验证前需部署以下云函数：
 
-| 云函数 |
-|---|
-| `cloudfunctions/login` |
-| `cloudfunctions/user` |
+| 云函数                   |
+| ------------------------ |
+| `cloudfunctions/login`   |
+| `cloudfunctions/user`    |
 | `cloudfunctions/service` |
 | `cloudfunctions/address` |
-| `cloudfunctions/order` |
-| `cloudfunctions/worker` |
-| `cloudfunctions/review` |
-| `cloudfunctions/admin` |
+| `cloudfunctions/order`   |
+| `cloudfunctions/worker`  |
+| `cloudfunctions/review`  |
+| `cloudfunctions/admin`   |
 
 ---
 
@@ -178,15 +178,15 @@
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未在微信开发者工具中真实编译和预览 | 可能存在平台运行时细节问题 | 按 `docs/wechat-mvp-verification.md` 执行完整验证 | P0 |
-| 尚未创建真实云数据库集合 | 真实环境无法保存业务数据 | 微信验证前创建 7 个集合 | P0 |
-| 尚未部署真实云函数 | 小程序无法调用后端能力 | 微信验证前部署 8 个云函数 | P0 |
-| 管理员初始化依赖手动修改 `users.role` | 不适合正式上线 | 后续增加初始化脚本或受控管理员邀请 | P1 |
-| 真实支付、退款、提现未实现 | 不能用于真实交易收款 | 商业化前接入微信支付和财务模型 | P1 |
-| 跨集合写入暂未做事务级一致性增强 | 极端失败可能导致状态不一致 | 优化阶段后续迭代事务或补偿逻辑 | P1 |
-| 服务/分类编辑表单暂未开放 | 管理员只能同步种子和上下架 | 后续补完整编辑表单 | P2 |
+| 问题                                  | 影响                       | 后续处理建议                                      | 优先级 |
+| ------------------------------------- | -------------------------- | ------------------------------------------------- | ------ |
+| 尚未在微信开发者工具中真实编译和预览  | 可能存在平台运行时细节问题 | 按 `docs/wechat-mvp-verification.md` 执行完整验证 | P0     |
+| 尚未创建真实云数据库集合              | 真实环境无法保存业务数据   | 微信验证前创建 7 个集合                           | P0     |
+| 尚未部署真实云函数                    | 小程序无法调用后端能力     | 微信验证前部署 8 个云函数                         | P0     |
+| 管理员初始化依赖手动修改 `users.role` | 不适合正式上线             | 后续增加初始化脚本或受控管理员邀请                | P1     |
+| 真实支付、退款、提现未实现            | 不能用于真实交易收款       | 商业化前接入微信支付和财务模型                    | P1     |
+| 跨集合写入暂未做事务级一致性增强      | 极端失败可能导致状态不一致 | 优化阶段后续迭代事务或补偿逻辑                    | P1     |
+| 服务/分类编辑表单暂未开放             | 管理员只能同步种子和上下架 | 后续补完整编辑表单                                | P2     |
 
 ---
 

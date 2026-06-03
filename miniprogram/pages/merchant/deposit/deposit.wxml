@@ -1,12 +1,17 @@
 <view class="page-shell deposit-page">
   <view class="page-header">
     <view class="page-title">保证金</view>
-    <view class="page-subtitle">当前为模拟保证金流程，不会产生真实扣款、退款或分账。</view>
+    <view class="page-subtitle"
+      >当前为模拟保证金流程，不会产生真实扣款、退款或冻结。</view
+    >
   </view>
 
   <view class="panel deposit-explain">
     <view class="explain-title">怎样算通过？</view>
-    <view class="explain-text">状态显示为 MOCK_PAID（已模拟缴纳）才算完成保证金流程；冻结保证金是管理员在风险复核时使用的管控动作，不是正常缴费步骤。</view>
+    <view class="explain-text"
+      >状态显示为
+      MOCK_PAID（已模拟缴纳）才算完成保证金流程；冻结保证金是管理员在风险复核时使用的管控动作，不是正常缴费步骤。</view
+    >
   </view>
 
   <view class="panel">
@@ -23,9 +28,21 @@
       <text class="status-value">{{depositView.paidAmountText}}</text>
     </view>
     <view class="status-note">{{depositView.helperText}}</view>
-    <view wx:if="{{deposit.frozen_reason}}" class="status-note">冻结原因：{{deposit.frozen_reason}}</view>
-    <view wx:if="{{deposit.refund_reject_reason}}" class="status-note">退还驳回：{{deposit.refund_reject_reason}}</view>
-    <button wx:if="{{canMockPay}}" class="primary-button" bindtap="mockPay">模拟缴纳保证金</button>
-    <button wx:if="{{canApplyRefund}}" class="ghost-button" bindtap="applyRefund">申请模拟退还</button>
+    <view wx:if="{{deposit.frozen_reason}}" class="status-note"
+      >冻结原因：{{deposit.frozen_reason}}</view
+    >
+    <view wx:if="{{deposit.refund_reject_reason}}" class="status-note"
+      >退还驳回：{{deposit.refund_reject_reason}}</view
+    >
+    <button wx:if="{{canMockPay}}" class="primary-button" bindtap="mockPay">
+      模拟缴纳保证金
+    </button>
+    <button
+      wx:if="{{canApplyRefund}}"
+      class="ghost-button"
+      bindtap="applyRefund"
+    >
+      申请模拟退还
+    </button>
   </view>
 </view>

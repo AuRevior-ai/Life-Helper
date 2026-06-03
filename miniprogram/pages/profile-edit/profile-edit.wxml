@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">补充昵称和手机号，便于下单、接单和管理时识别身份</view>
+    <view class="page-subtitle"
+      >补充昵称和手机号，便于下单、接单和管理时识别身份</view
+    >
   </view>
 
   <view class="panel form-panel">
@@ -32,5 +34,7 @@
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="saveProfile"
-  >保存资料</button>
+  >
+    保存资料
+  </button>
 </view>

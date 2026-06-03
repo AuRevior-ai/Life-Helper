@@ -30,8 +30,26 @@
       </view>
     </view>
 
-    <button wx:if="{{ isApproved }}" class="primary-button" bindtap="goOrderHall">进入接单大厅</button>
-    <button wx:if="{{ isApproved }}" class="ghost-button" bindtap="goWorkerOrders">我的师傅订单</button>
-    <button wx:if="{{ isRejected || isNotApplied }}" class="primary-button" bindtap="goApply">重新提交申请</button>
+    <button
+      wx:if="{{ isApproved }}"
+      class="primary-button"
+      bindtap="goOrderHall"
+    >
+      进入接单大厅
+    </button>
+    <button
+      wx:if="{{ isApproved }}"
+      class="ghost-button"
+      bindtap="goWorkerOrders"
+    >
+      我的师傅订单
+    </button>
+    <button
+      wx:if="{{ isRejected || isNotApplied }}"
+      class="primary-button"
+      bindtap="goApply"
+    >
+      重新提交申请
+    </button>
   </block>
 </view>

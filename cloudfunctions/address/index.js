@@ -1,19 +1,19 @@
-const cloud = require('wx-server-sdk')
-const { handleAddress } = require('./handler')
-const { createAddressRepository } = require('./address-repository')
-const { createAreaReadRepository } = require('./area-read-repository')
+const cloud = require("wx-server-sdk");
+const { handleAddress } = require("./handler");
+const { createAddressRepository } = require("./address-repository");
+const { createAreaReadRepository } = require("./area-read-repository");
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
-})
+  env: cloud.DYNAMIC_CURRENT_ENV,
+});
 
 exports.main = async (event = {}) => {
-  const wxContext = cloud.getWXContext()
-  const db = cloud.database()
+  const wxContext = cloud.getWXContext();
+  const db = cloud.database();
 
   return handleAddress(event, {
     openid: wxContext.OPENID,
     addresses: createAddressRepository(db),
-    areas: createAreaReadRepository(db)
-  })
-}
+    areas: createAreaReadRepository(db),
+  });
+};

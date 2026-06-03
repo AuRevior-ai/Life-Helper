@@ -1,92 +1,101 @@
-const orderService = require('../../../services/order.service')
-const reviewService = require('../../../services/review.service')
-const { formatOrderStatus, formatPayStatus, formatPrice } = require('../../../utils/format')
-const { hideLoading, showError, showLoading, showSuccess } = require('../../../utils/toast')
+const orderService = require("../../../services/order.service");
+const reviewService = require("../../../services/review.service");
+const {
+  formatOrderStatus,
+  formatPayStatus,
+  formatPrice,
+} = require("../../../utils/format");
+const {
+  hideLoading,
+  showError,
+  showLoading,
+  showSuccess,
+} = require("../../../utils/toast");
 
 Page({
   data: {
-    title: '师傅订单详情',
-    orderId: '',
+    title: "师傅订单详情",
+    orderId: "",
     order: null,
     review: null,
-    priceText: '¥0.00',
-    statusText: '',
-    payStatusText: '',
+    priceText: "¥0.00",
+    statusText: "",
+    payStatusText: "",
     canStart: false,
     canFinish: false,
-    finishRemark: '',
+    finishRemark: "",
     finishImages: [],
     loading: true,
-    submitting: false
+    submitting: false,
   },
 
   onLoad(options = {}) {
     this.setData({
-      orderId: options.orderId || ''
-    })
-    this.loadOrderDetail()
+      orderId: options.orderId || "",
+    });
+    this.loadOrderDetail();
   },
 
   async loadOrderDetail() {
     if (!this.data.orderId) {
-      this.setData({ loading: false })
-      showError('缺少订单 ID')
-      return
+      this.setData({ loading: false });
+      showError("缺少订单 ID");
+      return;
     }
 
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     try {
       const data = await orderService.getOrderDetail({
-        orderId: this.data.orderId
-      })
-      const order = data.order
-      this.applyOrder(order)
-      await this.loadOrderReview(order)
+        orderId: this.data.orderId,
+      });
+      const order = data.order;
+      this.applyOrder(order);
+      await this.loadOrderReview(order);
     } catch (error) {
-      showError(error.message || '订单详情加载失败')
+      showError(error.message || "订单详情加载失败");
     } finally {
-      this.setData({ loading: false })
+      this.setData({ loading: false });
     }
   },
 
   async startService() {
-    this.setData({ submitting: true })
-    showLoading('开始服务')
+    this.setData({ submitting: true });
+    showLoading("开始服务");
     try {
       const data = await orderService.startService({
-        orderId: this.data.orderId
-      })
-      this.applyOrder(data.order)
-      showSuccess('已开始服务')
+        orderId: this.data.orderId,
+      });
+      this.applyOrder(data.order);
+      showSuccess("已开始服务");
     } catch (error) {
-      showError(error.message || '操作失败')
+      showError(error.message || "操作失败");
     } finally {
-      hideLoading()
-      this.setData({ submitting: false })
+      hideLoading();
+      this.setData({ submitting: false });
     }
   },
 
   async finishService() {
     if (!this.data.finishRemark.trim()) {
-      showError('请填写完工说明')
-      return
+      showError("请填写完工说明");
+      return;
     }
 
-    this.setData({ submitting: true })
-    showLoading('完成服务')
+    this.setData({ submitting: true });
+    showLoading("完成服务");
     try {
       const data = await orderService.finishService({
         orderId: this.data.orderId,
         finishRemark: this.data.finishRemark,
-        finishImages: this.data.finishImages
-      })
-      this.applyOrder(data.order)
-      showSuccess('已提交验收')
+        finishImages: this.data.finishImages,
+      });
+      this.applyOrder(data.order);
+      showSuccess("已提交验收");
     } catch (error) {
-      showError(error.message || '操作失败')
+      showError(error.message || "操作失败");
     } finally {
-      hideLoading()
-      this.setData({ submitting: false })
+      hideLoading();
+      this.setData({ submitting: false });
     }
   },
 
@@ -96,65 +105,70 @@ Page({
       priceText: formatPrice(order.price),
       statusText: formatOrderStatus(order.status),
       payStatusText: formatPayStatus(order.pay_status),
-      canStart: order.status === 'accepted',
-      canFinish: order.status === 'serving',
-      review: null
-    })
+      canStart: order.status === "accepted",
+      canFinish: order.status === "serving",
+      review: null,
+    });
   },
 
   async loadOrderReview(order) {
-    if (!order || !['pending_review', 'completed'].includes(order.status)) {
-      this.setData({ review: null })
-      return
+    if (!order || !["pending_review", "completed"].includes(order.status)) {
+      this.setData({ review: null });
+      return;
     }
 
     try {
       const data = await reviewService.getOrderReview({
-        orderId: this.data.orderId
-      })
-      this.setData({ review: data.review || null })
+        orderId: this.data.orderId,
+      });
+      this.setData({ review: data.review || null });
     } catch (error) {
-      this.setData({ review: null })
+      this.setData({ review: null });
     }
   },
 
   handleFinishRemarkInput(event) {
     this.setData({
-      finishRemark: event.detail.value
-    })
+      finishRemark: event.detail.value,
+    });
   },
 
   chooseFinishImages() {
-    const remaining = 3 - this.data.finishImages.length
+    const remaining = 3 - this.data.finishImages.length;
     if (remaining <= 0) {
-      showError('完工图片最多 3 张')
-      return
+      showError("完工图片最多 3 张");
+      return;
     }
 
     wx.chooseMedia({
       count: remaining,
-      mediaType: ['image'],
-      sourceType: ['album', 'camera'],
+      mediaType: ["image"],
+      sourceType: ["album", "camera"],
       success: async (res) => {
-        const tempFiles = res.tempFiles || []
-        const uploaded = []
+        const tempFiles = res.tempFiles || [];
+        const uploaded = [];
         for (const file of tempFiles) {
-          const tempFilePath = file.tempFilePath
-          const cloudPath = `finish-images/${this.data.orderId}-${Date.now()}-${uploaded.length}.jpg`
-          const uploadResult = await wx.cloud.uploadFile({ cloudPath, filePath: tempFilePath })
-          uploaded.push(uploadResult.fileID)
+          const tempFilePath = file.tempFilePath;
+          const cloudPath = `finish-images/${this.data.orderId}-${Date.now()}-${uploaded.length}.jpg`;
+          const uploadResult = await wx.cloud.uploadFile({
+            cloudPath,
+            filePath: tempFilePath,
+          });
+          uploaded.push(uploadResult.fileID);
         }
         this.setData({
-          finishImages: this.data.finishImages.concat(uploaded).slice(0, 3)
-        })
+          finishImages: this.data.finishImages.concat(uploaded).slice(0, 3),
+        });
       },
-      fail: () => {}
-    })
+      fail: () => {},
+    });
   },
 
   removeFinishImage(event) {
-    const index = Number(event.currentTarget.dataset.index)
-    const finishImages = this.data.finishImages.filter((item, itemIndex) => itemIndex !== index)
-    this.setData({ finishImages })
-  }
-})
+    const index = Number(event.currentTarget.dataset.index);
+    const finishImages = this.data.finishImages.filter(
+      (item, itemIndex) => itemIndex !== index,
+    );
+    this.setData({ finishImages });
+  },
+});

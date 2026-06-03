@@ -2,13 +2,13 @@ Component({
   properties: {
     worker: {
       type: Object,
-      value: {}
-    }
+      value: {},
+    },
   },
 
   methods: {
     onTap() {
-      this.triggerEvent('select', this.properties.worker)
-    }
-  }
-})
+      this.triggerEvent("select", this.properties.worker);
+    },
+  },
+});

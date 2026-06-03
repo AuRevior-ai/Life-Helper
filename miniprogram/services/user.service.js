@@ -1,10 +1,10 @@
-const { CLOUD_FUNCTIONS } = require('../config/constants')
-const { createActionService } = require('./_base.service')
+const { CLOUD_FUNCTIONS } = require("../config/constants");
+const { createActionService } = require("./_base.service");
 
 module.exports = createActionService(CLOUD_FUNCTIONS.USER, [
-  'getCurrentUser',
-  'updateUserInfo',
-  'updateUserRole',
-  'disableUser',
-  'claimInitialAdmin'
-])
+  "getCurrentUser",
+  "updateUserInfo",
+  "updateUserRole",
+  "disableUser",
+  "claimInitialAdmin",
+]);

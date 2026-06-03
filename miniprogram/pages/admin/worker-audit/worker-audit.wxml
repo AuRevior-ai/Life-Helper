@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">审核待入驻师傅，通过后用户角色会更新为师傅</view>
+    <view class="page-subtitle"
+      >审核待入驻师傅，通过后用户角色会更新为师傅</view
+    >
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载申请"></loading-view>
@@ -17,27 +19,35 @@
       </view>
       <view class="worker-line">服务分类：{{ item.service_category }}</view>
       <view class="worker-line">服务区域：{{ item.service_area }}</view>
-      <view wx:if="{{ item.intro }}" class="worker-intro">{{ item.intro }}</view>
+      <view wx:if="{{ item.intro }}" class="worker-intro"
+        >{{ item.intro }}</view
+      >
       <view class="worker-actions">
         <button
           class="text-button"
           data-id="{{ item._id }}"
           bindtap="goWorkerDetail"
-        >查看详情</button>
+        >
+          查看详情
+        </button>
         <button
           class="text-button"
           data-id="{{ item._id }}"
           loading="{{ submittingId === item._id }}"
           disabled="{{ submittingId === item._id }}"
           bindtap="approveWorker"
-        >通过</button>
+        >
+          通过
+        </button>
         <button
           class="text-button danger"
           data-id="{{ item._id }}"
           loading="{{ submittingId === item._id }}"
           disabled="{{ submittingId === item._id }}"
           bindtap="rejectWorker"
-        >拒绝</button>
+        >
+          拒绝
+        </button>
       </view>
     </view>
   </block>

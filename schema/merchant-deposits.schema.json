@@ -1,11 +1,32 @@
 {
   "collection": "merchant_deposits",
   "description": "阶段 20 mock 保证金状态和流水。",
-  "requiredFields": ["_id", "merchant_id", "provider_type", "required_amount", "paid_amount", "currency", "deposit_status", "created_at", "updated_at"],
-  "serverOnlyFields": ["deposit_status", "mock_pay_no", "mock_paid_at", "operator_openid", "refund_review_result", "refund_reject_reason"],
+  "requiredFields": [
+    "_id",
+    "merchant_id",
+    "provider_type",
+    "required_amount",
+    "paid_amount",
+    "currency",
+    "deposit_status",
+    "created_at",
+    "updated_at"
+  ],
+  "serverOnlyFields": [
+    "deposit_status",
+    "mock_pay_no",
+    "mock_paid_at",
+    "operator_openid",
+    "refund_review_result",
+    "refund_reject_reason"
+  ],
   "clientWritableFields": ["refund_apply_reason"],
   "statusFields": ["deposit_status", "refund_review_result"],
   "relationFields": ["merchant_id", "provider_id", "provider_type"],
-  "indexHints": ["merchant_id + provider_type", "deposit_status + updated_at", "mock_pay_no"],
+  "indexHints": [
+    "merchant_id + provider_type",
+    "deposit_status + updated_at",
+    "mock_pay_no"
+  ],
   "compatibilityNotes": "仅模拟保证金，不调用真实微信支付，不返回真实支付参数，不写入可提现余额。"
 }

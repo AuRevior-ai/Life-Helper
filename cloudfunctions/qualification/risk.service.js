@@ -1,156 +1,178 @@
-const { success, serviceError } = require('./_shared/response')
-const { getPayload } = require('./_shared/payload')
-const { getNow } = require('./_shared/time')
-const { paginateList } = require('./_shared/pagination')
-const { PROVIDER_TYPE, RISK_LEVEL } = require('./qualification.constants')
-const { trimText, requireValidRiskLevel } = require('./qualification.validator')
-const { requireAdmin, requireOpenid, resolveMyProviderContext } = require('./qualification.service')
+const { success, serviceError } = require("./_shared/response");
+const { getPayload } = require("./_shared/payload");
+const { getNow } = require("./_shared/time");
+const { paginateList } = require("./_shared/pagination");
+const { PROVIDER_TYPE, RISK_LEVEL } = require("./qualification.constants");
+const {
+  trimText,
+  requireValidRiskLevel,
+} = require("./qualification.validator");
+const {
+  requireAdmin,
+  requireOpenid,
+  resolveMyProviderContext,
+} = require("./qualification.service");
 const {
   findLatestRisk,
   getOnboardingSnapshot,
-  createOnboardingLog
-} = require('./onboarding.service')
+  createOnboardingLog,
+} = require("./onboarding.service");
 
 async function createRiskRecord(context, env, data) {
-  const now = getNow(env)
+  const now = getNow(env);
   return env.riskRecords.create({
     ...context,
     risk_level: data.risk_level || RISK_LEVEL.LOW,
     risk_tags: data.risk_tags || [],
-    risk_reason: data.risk_reason || '',
-    action: data.action || 'risk_update',
-    operator_openid: env.openid || '',
+    risk_reason: data.risk_reason || "",
+    action: data.action || "risk_update",
+    operator_openid: env.openid || "",
     created_at: now,
-    updated_at: now
-  })
+    updated_at: now,
+  });
 }
 
 async function getMyRiskStatus(event, env) {
-  const context = await resolveMyProviderContext(env)
-  const snapshot = await getOnboardingSnapshot(context, env)
+  const context = await resolveMyProviderContext(env);
+  const snapshot = await getOnboardingSnapshot(context, env);
   return success({
     risk_level: snapshot.risk ? snapshot.risk.risk_level : RISK_LEVEL.LOW,
     onboarding_status: snapshot.onboarding_status,
     can_operate: snapshot.can_operate,
-    message: snapshot.message
-  })
+    message: snapshot.message,
+  });
 }
 
 async function adminSetRiskLevel(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
-  const merchantId = payload.merchantId || payload.merchant_id
-  if (!merchantId) throw serviceError('MERCHANT_ID_MISSING', '缺少商家 ID')
-  const riskLevel = trimText(payload.riskLevel || payload.risk_level)
-  requireValidRiskLevel(riskLevel)
+  await requireAdmin(env);
+  const payload = getPayload(event);
+  const merchantId = payload.merchantId || payload.merchant_id;
+  if (!merchantId) throw serviceError("MERCHANT_ID_MISSING", "缺少商家 ID");
+  const riskLevel = trimText(payload.riskLevel || payload.risk_level);
+  requireValidRiskLevel(riskLevel);
   const context = {
     merchant_id: merchantId,
-    provider_id: payload.providerId || payload.provider_id || '',
-    provider_type: payload.providerType || payload.provider_type || PROVIDER_TYPE.MERCHANT
-  }
-  const existing = await findLatestRisk(context, env)
+    provider_id: payload.providerId || payload.provider_id || "",
+    provider_type:
+      payload.providerType || payload.provider_type || PROVIDER_TYPE.MERCHANT,
+  };
+  const existing = await findLatestRisk(context, env);
   const risk = await createRiskRecord(context, env, {
     risk_level: riskLevel,
     risk_tags: existing ? existing.risk_tags || [] : [],
     risk_reason: trimText(payload.reason),
-    action: 'set_risk_level'
-  })
-  const snapshot = await getOnboardingSnapshot(context, env)
+    action: "set_risk_level",
+  });
+  const snapshot = await getOnboardingSnapshot(context, env);
   await createOnboardingLog(env, {
     ...context,
-    event_type: 'risk_level_set',
+    event_type: "risk_level_set",
     before_status: existing ? existing.risk_level : RISK_LEVEL.LOW,
     after_status: riskLevel,
-    operator_role: 'admin',
+    operator_role: "admin",
     operator_openid: requireOpenid(env),
-    remark: trimText(payload.reason)
-  })
-  return success({ risk, onboarding_status: snapshot.onboarding_status })
+    remark: trimText(payload.reason),
+  });
+  return success({ risk, onboarding_status: snapshot.onboarding_status });
 }
 
 async function adminAddRiskTag(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
-  const merchantId = payload.merchantId || payload.merchant_id
-  if (!merchantId) throw serviceError('MERCHANT_ID_MISSING', '缺少商家 ID')
+  await requireAdmin(env);
+  const payload = getPayload(event);
+  const merchantId = payload.merchantId || payload.merchant_id;
+  if (!merchantId) throw serviceError("MERCHANT_ID_MISSING", "缺少商家 ID");
   const context = {
     merchant_id: merchantId,
-    provider_id: payload.providerId || payload.provider_id || '',
-    provider_type: payload.providerType || payload.provider_type || PROVIDER_TYPE.MERCHANT
-  }
-  const existing = await findLatestRisk(context, env)
-  const riskTag = trimText(payload.riskTag || payload.risk_tag)
-  const riskTags = Array.from(new Set([...(existing ? existing.risk_tags || [] : []), riskTag].filter(Boolean)))
+    provider_id: payload.providerId || payload.provider_id || "",
+    provider_type:
+      payload.providerType || payload.provider_type || PROVIDER_TYPE.MERCHANT,
+  };
+  const existing = await findLatestRisk(context, env);
+  const riskTag = trimText(payload.riskTag || payload.risk_tag);
+  const riskTags = Array.from(
+    new Set(
+      [...(existing ? existing.risk_tags || [] : []), riskTag].filter(Boolean),
+    ),
+  );
   const risk = await createRiskRecord(context, env, {
     risk_level: existing ? existing.risk_level : RISK_LEVEL.MEDIUM,
     risk_tags: riskTags,
     risk_reason: trimText(payload.reason),
-    action: 'add_risk_tag'
-  })
+    action: "add_risk_tag",
+  });
   await createOnboardingLog(env, {
     ...context,
-    event_type: 'risk_tag_added',
-    operator_role: 'admin',
+    event_type: "risk_tag_added",
+    operator_role: "admin",
     operator_openid: requireOpenid(env),
-    remark: riskTag
-  })
-  return success({ risk })
+    remark: riskTag,
+  });
+  return success({ risk });
 }
 
 async function adminListRiskRecords(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
-  let list = await env.riskRecords.findAll()
+  await requireAdmin(env);
+  const payload = getPayload(event);
+  let list = await env.riskRecords.findAll();
   if (payload.merchantId || payload.merchant_id) {
-    const merchantId = payload.merchantId || payload.merchant_id
-    list = list.filter((item) => item.merchant_id === merchantId)
+    const merchantId = payload.merchantId || payload.merchant_id;
+    list = list.filter((item) => item.merchant_id === merchantId);
   }
-  return success(paginateList(list, payload, { listKey: 'riskRecords' }))
+  return success(paginateList(list, payload, { listKey: "riskRecords" }));
 }
 
 async function adminGetOnboardingDetail(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
+  await requireAdmin(env);
+  const payload = getPayload(event);
   const context = {
     merchant_id: payload.merchantId || payload.merchant_id,
-    provider_type: payload.providerType || payload.provider_type || PROVIDER_TYPE.MERCHANT
-  }
-  const snapshot = await getOnboardingSnapshot(context, env)
-  return success(snapshot)
+    provider_type:
+      payload.providerType || payload.provider_type || PROVIDER_TYPE.MERCHANT,
+  };
+  const snapshot = await getOnboardingSnapshot(context, env);
+  return success(snapshot);
 }
 
 async function adminSetOnboardingLimit(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
-  const merchantId = payload.merchantId || payload.merchant_id
-  const list = await env.qualifications.findAll()
-  const existing = list.find((item) => item.merchant_id === merchantId && item.provider_type === PROVIDER_TYPE.MERCHANT)
-  if (!existing) throw serviceError('QUALIFICATION_NOT_FOUND', '资质记录不存在')
+  await requireAdmin(env);
+  const payload = getPayload(event);
+  const merchantId = payload.merchantId || payload.merchant_id;
+  const list = await env.qualifications.findAll();
+  const existing = list.find(
+    (item) =>
+      item.merchant_id === merchantId &&
+      item.provider_type === PROVIDER_TYPE.MERCHANT,
+  );
+  if (!existing)
+    throw serviceError("QUALIFICATION_NOT_FOUND", "资质记录不存在");
   const qualification = await env.qualifications.updateById(existing._id, {
     manual_limited: payload.limited !== false,
     manual_limit_reason: trimText(payload.reason),
-    updated_at: getNow(env)
-  })
-  const snapshot = await getOnboardingSnapshot(qualification, env)
+    updated_at: getNow(env),
+  });
+  const snapshot = await getOnboardingSnapshot(qualification, env);
   await createOnboardingLog(env, {
     ...qualification,
-    event_type: 'onboarding_manual_limit',
+    event_type: "onboarding_manual_limit",
     after_status: snapshot.onboarding_status,
-    operator_role: 'admin',
+    operator_role: "admin",
     operator_openid: requireOpenid(env),
-    remark: trimText(payload.reason)
-  })
-  return success({ qualification, onboarding_status: snapshot.onboarding_status })
+    remark: trimText(payload.reason),
+  });
+  return success({
+    qualification,
+    onboarding_status: snapshot.onboarding_status,
+  });
 }
 
 async function getOnboardingStatus(event, env) {
-  const context = await resolveMyProviderContext(env)
-  const snapshot = await getOnboardingSnapshot(context, env)
+  const context = await resolveMyProviderContext(env);
+  const snapshot = await getOnboardingSnapshot(context, env);
   return success({
     onboarding_status: snapshot.onboarding_status,
     can_operate: snapshot.can_operate,
-    message: snapshot.message
-  })
+    message: snapshot.message,
+  });
 }
 
 module.exports = {
@@ -160,5 +182,5 @@ module.exports = {
   adminListRiskRecords,
   adminGetOnboardingDetail,
   adminSetOnboardingLimit,
-  getOnboardingStatus
-}
+  getOnboardingStatus,
+};

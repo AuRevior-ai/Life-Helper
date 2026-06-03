@@ -136,9 +136,18 @@ npm run check:release-risk -- <候选交付目录>
 
 ## 微信开发者工具
 
-使用微信开发者工具打开当前目录。项目配置文件为 `project.config.json`，小程序根目录为 `miniprogram/`，云函数根目录为 `cloudfunctions/`。
+使用微信开发者工具打开当前目录。项目配置文件为本地 `project.config.json`，小程序根目录为 `miniprogram/`，云函数根目录为 `cloudfunctions/`。
 
-当前 `project.config.json` 包含真实小程序 AppID：`wxe8b7172da9c09545`，这是内部开发配置，不适合直接公开提交。公开模板或交付包请使用 `project.config.example.json`，其中 `appid` 为 `touristappid`；接收方应在微信开发者工具中替换为自己的 AppID。不要擅自删除开发者本地 `project.config.json`，但公开交付时必须避免泄露真实 AppID 和 `project.private.config.json`。
+本地 `project.config.json` 可能包含真实小程序 AppID，这是内部开发配置，不适合直接公开提交。公开模板或交付包请使用 `project.config.example.json`，其中 `appid` 为 `touristappid`；接收方应在微信开发者工具中替换为自己的 AppID。不要擅自删除开发者本地 `project.config.json`，但公开交付时必须避免泄露真实 AppID 和 `project.private.config.json`。
+
+### 公开交付前配置检查说明
+
+公开交付版本只保留 `project.config.example.json`。候选交付目录不得包含真实 `project.config.json`、`project.private.config.json`、地图 key、支付商户号、APIv3 密钥、token、secret、证书路径、私钥、真实回调密钥、日志、压缩包、`node_modules` 或云函数本地依赖。打包后必须运行：
+
+```bash
+npm run check:shared-sync
+npm run check:release-risk -- <候选交付目录>
+```
 
 ## 云开发说明
 

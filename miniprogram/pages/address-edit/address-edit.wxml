@@ -40,7 +40,9 @@
 
     <view class="form-item">
       <text class="form-label">城市 / 区县 / 街道</text>
-      <view class="form-input">{{ form.city }} {{ form.district }} {{ form.street }}</view>
+      <view class="form-input"
+        >{{ form.city }} {{ form.district }} {{ form.street }}</view
+      >
     </view>
 
     <view class="form-item">
@@ -59,7 +61,11 @@
         <view class="switch-title">默认地址</view>
         <view class="switch-hint">下单时优先使用</view>
       </view>
-      <switch checked="{{ form.is_default }}" bindchange="handleDefaultChange" color="#1f7a68" />
+      <switch
+        checked="{{ form.is_default }}"
+        bindchange="handleDefaultChange"
+        color="#1f7a68"
+      />
     </view>
   </view>
 
@@ -68,5 +74,7 @@
     loading="{{ saving }}"
     disabled="{{ saving }}"
     bindtap="handleSave"
-  >保存地址</button>
+  >
+    保存地址
+  </button>
 </view>

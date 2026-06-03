@@ -1,21 +1,21 @@
-const cloud = require('wx-server-sdk')
-const { handleQualification } = require('./handler')
+const cloud = require("wx-server-sdk");
+const { handleQualification } = require("./handler");
 const {
   createUserRepository,
   createMerchantRepository,
   createQualificationRepository,
   createDepositRepository,
   createRiskRecordRepository,
-  createOnboardingLogRepository
-} = require('./repositories')
+  createOnboardingLogRepository,
+} = require("./repositories");
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
-})
+  env: cloud.DYNAMIC_CURRENT_ENV,
+});
 
 exports.main = async (event = {}) => {
-  const wxContext = cloud.getWXContext()
-  const db = cloud.database()
+  const wxContext = cloud.getWXContext();
+  const db = cloud.database();
   return handleQualification(event, {
     openid: wxContext.OPENID,
     users: createUserRepository(db),
@@ -23,6 +23,6 @@ exports.main = async (event = {}) => {
     qualifications: createQualificationRepository(db),
     deposits: createDepositRepository(db),
     riskRecords: createRiskRecordRepository(db),
-    onboardingLogs: createOnboardingLogRepository(db)
-  })
-}
+    onboardingLogs: createOnboardingLogRepository(db),
+  });
+};

@@ -8,7 +8,10 @@
 
   <block wx:else>
     <view class="result-panel panel {{ state }}">
-      <view class="result-mark">{{ state === 'success' ? '✓' : state === 'failed' ? '!' : '...' }}</view>
+      <view class="result-mark"
+        >{{ state === 'success' ? '✓' : state === 'failed' ? '!' : '...'
+        }}</view
+      >
       <view class="result-title">{{ stateText }}</view>
       <view class="result-desc">{{ description }}</view>
       <view wx:if="{{ order }}" class="result-meta">

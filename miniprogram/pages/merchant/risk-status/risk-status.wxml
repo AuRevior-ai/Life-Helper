@@ -1,7 +1,9 @@
 <view class="page-shell onboarding-page">
   <view class="page-header">
     <view class="page-title">准入进度</view>
-    <view class="page-subtitle">查看资质、保证金和风控复核后的经营权限</view>
+    <view class="page-subtitle"
+      >当前为模拟风控流程，不代表真实合规审核；仅用于查看资质、保证金和风控复核后的经营权限。</view
+    >
   </view>
 
   <view class="status-hero panel {{statusView.tone}}">

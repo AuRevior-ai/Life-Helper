@@ -16,7 +16,9 @@
     <view class="service-summary panel">
       <view>
         <view class="summary-name">{{ service.name }}</view>
-        <view class="summary-meta">{{ service.category_name }} · {{ service.duration }}</view>
+        <view class="summary-meta"
+          >{{ service.category_name }} · {{ service.duration }}</view
+        >
       </view>
       <view class="summary-price">{{ priceText }}</view>
     </view>
@@ -41,7 +43,9 @@
           </view>
           <text wx:if="{{ item.is_default }}" class="default-tag">默认</text>
         </view>
-        <view class="address-text">{{ item.city }} {{ item.community }} {{ item.detail_address }}</view>
+        <view class="address-text"
+          >{{ item.city }} {{ item.community }} {{ item.detail_address }}</view
+        >
       </view>
     </view>
 
@@ -54,14 +58,24 @@
     <view class="form-panel panel">
       <view class="form-item">
         <text class="form-label">预约日期</text>
-        <picker mode="date" value="{{ appointmentDate }}" start="{{ minAppointmentDate }}" bindchange="handleAppointmentDateChange">
+        <picker
+          mode="date"
+          value="{{ appointmentDate }}"
+          start="{{ minAppointmentDate }}"
+          bindchange="handleAppointmentDateChange"
+        >
           <view class="picker-value">{{ appointmentDate }}</view>
         </picker>
       </view>
 
       <view class="form-item">
         <text class="form-label">预约时间段</text>
-        <picker mode="selector" range="{{ appointmentSlots }}" value="{{ appointmentSlotIndex }}" bindchange="handleAppointmentSlotChange">
+        <picker
+          mode="selector"
+          range="{{ appointmentSlots }}"
+          value="{{ appointmentSlotIndex }}"
+          bindchange="handleAppointmentSlotChange"
+        >
           <view class="picker-value">{{ appointmentSlot }}</view>
         </picker>
       </view>
@@ -83,8 +97,15 @@
     </view>
 
     <view class="promotion-panel panel">
-      <picker mode="selector" range="{{ couponLabels }}" value="{{ selectedCouponIndex }}" bindchange="handleCouponChange">
-        <view class="picker-value">优惠券：{{ couponLabels[selectedCouponIndex] }}</view>
+      <picker
+        mode="selector"
+        range="{{ couponLabels }}"
+        value="{{ selectedCouponIndex }}"
+        bindchange="handleCouponChange"
+      >
+        <view class="picker-value"
+          >优惠券：{{ couponLabels[selectedCouponIndex] }}</view
+        >
       </picker>
       <view class="amount-row">
         <text>会员优惠</text>
@@ -105,7 +126,9 @@
       loading="{{ submitting }}"
       disabled="{{ submitting }}"
       bindtap="handleSubmit"
-    >提交订单</button>
+    >
+      提交订单
+    </button>
   </block>
 
   <empty-state

@@ -42,38 +42,38 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase6-review-order-close.md` | 阶段六实施计划 |
-| `tests/phase6.review-order-close.test.js` | 开始服务、完成服务、评价、收入统计和页面接入测试 |
-| `cloudfunctions/review/handler.js` | 评价云函数业务逻辑 |
-| `cloudfunctions/review/review-repository.js` | `reviews` 集合读写封装 |
-| `cloudfunctions/review/order-repository.js` | 评价云函数内订单读写封装 |
-| `docs/dev-records/06_phase-review-order-close.md` | 本阶段开发记录与复盘 |
+| 文件路径                                                         | 说明                                             |
+| ---------------------------------------------------------------- | ------------------------------------------------ |
+| `docs/superpowers/plans/2026-05-30-phase6-review-order-close.md` | 阶段六实施计划                                   |
+| `tests/phase6.review-order-close.test.js`                        | 开始服务、完成服务、评价、收入统计和页面接入测试 |
+| `cloudfunctions/review/handler.js`                               | 评价云函数业务逻辑                               |
+| `cloudfunctions/review/review-repository.js`                     | `reviews` 集合读写封装                           |
+| `cloudfunctions/review/order-repository.js`                      | 评价云函数内订单读写封装                         |
+| `docs/dev-records/06_phase-review-order-close.md`                | 本阶段开发记录与复盘                             |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `cloudfunctions/order/handler.js` | 增加开始服务、完成服务、收入统计和阶段六订单状态 |
-| `cloudfunctions/review/index.js` | 从占位入口改为调用 `handleReview` |
-| `miniprogram/services/order.service.js` | 增加 `getWorkerIncomeStats` |
-| `miniprogram/pages/worker/order-detail/*` | 师傅订单详情接入开始服务、完成服务 |
-| `miniprogram/pages/order-detail/*` | 用户订单详情接入去评价入口 |
-| `miniprogram/pages/review/*` | 用户评价页接入评分和评价提交 |
-| `miniprogram/pages/worker/income/*` | 师傅收入统计页接入累计收入和完成订单列表 |
-| `docs/dev-records/index.md` | 更新阶段六完成状态、P0 完成情况和遗留问题 |
-| `README.md` | 补充阶段六说明和验证步骤 |
+| 文件路径                                  | 修改内容                                         |
+| ----------------------------------------- | ------------------------------------------------ |
+| `cloudfunctions/order/handler.js`         | 增加开始服务、完成服务、收入统计和阶段六订单状态 |
+| `cloudfunctions/review/index.js`          | 从占位入口改为调用 `handleReview`                |
+| `miniprogram/services/order.service.js`   | 增加 `getWorkerIncomeStats`                      |
+| `miniprogram/pages/worker/order-detail/*` | 师傅订单详情接入开始服务、完成服务               |
+| `miniprogram/pages/order-detail/*`        | 用户订单详情接入去评价入口                       |
+| `miniprogram/pages/review/*`              | 用户评价页接入评分和评价提交                     |
+| `miniprogram/pages/worker/income/*`       | 师傅收入统计页接入累计收入和完成订单列表         |
+| `docs/dev-records/index.md`               | 更新阶段六完成状态、P0 完成情况和遗留问题        |
+| `README.md`                               | 补充阶段六说明和验证步骤                         |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -81,33 +81,33 @@
 
 本阶段新增真实云数据库集合：
 
-| 集合 | 作用 | 当前写入方式 |
-|---|---|---|
+| 集合      | 作用                       | 当前写入方式    |
+| --------- | -------------------------- | --------------- |
 | `reviews` | 保存用户对订单和师傅的评价 | `review` 云函数 |
 
 ### `reviews` 主要字段
 
-| 字段 | 说明 |
-|---|---|
-| `_id` | 云数据库文档 ID |
-| `order_id` | 订单 ID |
-| `user_id` | 评价用户 openid |
-| `worker_id` | 被评价师傅 openid |
-| `service_id` | 服务 ID 快照 |
-| `service_name` | 服务名称快照 |
-| `rating` | 1-5 星评分 |
-| `content` | 文字评价 |
-| `created_at` | 创建时间 |
-| `updated_at` | 更新时间 |
+| 字段           | 说明              |
+| -------------- | ----------------- |
+| `_id`          | 云数据库文档 ID   |
+| `order_id`     | 订单 ID           |
+| `user_id`      | 评价用户 openid   |
+| `worker_id`    | 被评价师傅 openid |
+| `service_id`   | 服务 ID 快照      |
+| `service_name` | 服务名称快照      |
+| `rating`       | 1-5 星评分        |
+| `content`      | 文字评价          |
+| `created_at`   | 创建时间          |
+| `updated_at`   | 更新时间          |
 
 ### `orders` 字段变化
 
-| 字段 | 说明 |
-|---|---|
-| `started_at` | 师傅开始服务时间 |
-| `finished_at` | 师傅完成服务时间 |
-| `reviewed_at` | 用户评价时间 |
-| `status` | 新增阶段流转：`serving`、`pending_review`、`completed` |
+| 字段          | 说明                                                   |
+| ------------- | ------------------------------------------------------ |
+| `started_at`  | 师傅开始服务时间                                       |
+| `finished_at` | 师傅完成服务时间                                       |
+| `reviewed_at` | 用户评价时间                                           |
+| `status`      | 新增阶段流转：`serving`、`pending_review`、`completed` |
 
 ---
 
@@ -115,34 +115,34 @@
 
 ### `order`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `startService` | `orderId` | `{ order }` | 已审核且已接单师傅 |
-| `finishService` | `orderId` | `{ order }` | 已审核且已接单师傅 |
-| `getWorkerIncomeStats` | 无 | `{ completed_count, total_amount, orders }` | 已审核师傅 |
+| 功能                   | 入参      | 出参                                        | 权限要求           |
+| ---------------------- | --------- | ------------------------------------------- | ------------------ |
+| `startService`         | `orderId` | `{ order }`                                 | 已审核且已接单师傅 |
+| `finishService`        | `orderId` | `{ order }`                                 | 已审核且已接单师傅 |
+| `getWorkerIncomeStats` | 无        | `{ completed_count, total_amount, orders }` | 已审核师傅         |
 
 ### `review`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `createReview` | `orderId`, `rating`, `content` | `{ review, order }` | 订单用户 |
-| `getOrderReview` | `orderId` | `{ review }` | 当前阶段不做复杂展示权限 |
-| `getWorkerReviews` | 可选 `workerId` | `{ reviews }` | 当前阶段用于后续展示扩展 |
+| 功能               | 入参                           | 出参                | 权限要求                 |
+| ------------------ | ------------------------------ | ------------------- | ------------------------ |
+| `createReview`     | `orderId`, `rating`, `content` | `{ review, order }` | 订单用户                 |
+| `getOrderReview`   | `orderId`                      | `{ review }`        | 当前阶段不做复杂展示权限 |
+| `getWorkerReviews` | 可选 `workerId`                | `{ reviews }`       | 当前阶段用于后续展示扩展 |
 
 ### 统一错误码
 
-| 错误码 | 说明 |
-|---|---|
-| `OPENID_MISSING` | 无法获取当前用户 openid |
-| `WORKER_NOT_APPROVED` | 当前师傅尚未通过审核 |
-| `ORDER_ID_MISSING` | 缺少订单 ID |
-| `ORDER_NOT_FOUND` | 订单不存在 |
-| `ORDER_STATUS_INVALID` | 当前订单状态不能执行该操作 |
-| `PERMISSION_DENIED` | 无权操作目标资源 |
-| `REVIEW_RATING_INVALID` | 评分不在 1-5 范围 |
-| `REVIEW_ALREADY_EXISTS` | 订单已评价 |
-| `ACTION_NOT_FOUND` | 未知 action |
-| `INTERNAL_ERROR` | 未预期内部错误 |
+| 错误码                  | 说明                       |
+| ----------------------- | -------------------------- |
+| `OPENID_MISSING`        | 无法获取当前用户 openid    |
+| `WORKER_NOT_APPROVED`   | 当前师傅尚未通过审核       |
+| `ORDER_ID_MISSING`      | 缺少订单 ID                |
+| `ORDER_NOT_FOUND`       | 订单不存在                 |
+| `ORDER_STATUS_INVALID`  | 当前订单状态不能执行该操作 |
+| `PERMISSION_DENIED`     | 无权操作目标资源           |
+| `REVIEW_RATING_INVALID` | 评分不在 1-5 范围          |
+| `REVIEW_ALREADY_EXISTS` | 订单已评价                 |
+| `ACTION_NOT_FOUND`      | 未知 action                |
+| `INTERNAL_ERROR`        | 未预期内部错误             |
 
 ---
 
@@ -238,14 +238,14 @@ order.getWorkerIncomeStats 读取当前师傅订单
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未在微信开发者工具中真实编译和预览阶段六页面 | 可能存在小程序运行时细节问题 | 部署 `review/order` 云函数后做一次微信端验证 | P1 |
-| 尚未创建真实 `reviews` 集合 | 微信端无法保存评价 | 微信云开发控制台创建集合 | P0 |
-| 尚未部署 `review` 云函数 | 微信端无法提交评价 | 微信开发者工具上传并部署云函数 | P0 |
-| 评价创建与订单完成不是事务 | 极端失败时可能出现评价写入但订单未完成 | 后续用事务或补偿逻辑强化 | P1 |
-| 收入统计不含提现、抽佣和结算状态 | 不适合真实经营 | 商业化前重做财务模型 | P1 |
-| 管理员订单管理尚未实现 | 管理端无法统一查看订单 | 阶段七处理 | P0 |
+| 问题                                           | 影响                                   | 后续处理建议                                 | 优先级 |
+| ---------------------------------------------- | -------------------------------------- | -------------------------------------------- | ------ |
+| 尚未在微信开发者工具中真实编译和预览阶段六页面 | 可能存在小程序运行时细节问题           | 部署 `review/order` 云函数后做一次微信端验证 | P1     |
+| 尚未创建真实 `reviews` 集合                    | 微信端无法保存评价                     | 微信云开发控制台创建集合                     | P0     |
+| 尚未部署 `review` 云函数                       | 微信端无法提交评价                     | 微信开发者工具上传并部署云函数               | P0     |
+| 评价创建与订单完成不是事务                     | 极端失败时可能出现评价写入但订单未完成 | 后续用事务或补偿逻辑强化                     | P1     |
+| 收入统计不含提现、抽佣和结算状态               | 不适合真实经营                         | 商业化前重做财务模型                         | P1     |
+| 管理员订单管理尚未实现                         | 管理端无法统一查看订单                 | 阶段七处理                                   | P0     |
 
 ---
 

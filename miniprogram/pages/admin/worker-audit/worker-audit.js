@@ -1,84 +1,84 @@
-const workerService = require('../../../services/worker.service')
-const { showError, showSuccess } = require('../../../utils/toast')
+const workerService = require("../../../services/worker.service");
+const { showError, showSuccess } = require("../../../utils/toast");
 
 Page({
   data: {
-    title: '师傅审核',
+    title: "师傅审核",
     workers: [],
     loading: true,
-    submittingId: ''
+    submittingId: "",
   },
 
   onShow() {
-    this.loadWorkerApplyList()
+    this.loadWorkerApplyList();
   },
 
   onPullDownRefresh() {
     this.loadWorkerApplyList().finally(() => {
-      wx.stopPullDownRefresh()
-    })
+      wx.stopPullDownRefresh();
+    });
   },
 
   async loadWorkerApplyList() {
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     try {
       const data = await workerService.getWorkerApplyList({
-        status: 'pending'
-      })
+        status: "pending",
+      });
       this.setData({
-        workers: data.workers || []
-      })
+        workers: data.workers || [],
+      });
     } catch (error) {
-      showError(error.message || '审核列表加载失败')
+      showError(error.message || "审核列表加载失败");
     } finally {
-      this.setData({ loading: false })
+      this.setData({ loading: false });
     }
   },
 
   async approveWorker(event) {
-    const workerId = event.currentTarget.dataset.id
-    this.setData({ submittingId: workerId })
+    const workerId = event.currentTarget.dataset.id;
+    this.setData({ submittingId: workerId });
     try {
-      await workerService.approveWorker({ workerId })
-      showSuccess('已通过')
-      this.loadWorkerApplyList()
+      await workerService.approveWorker({ workerId });
+      showSuccess("已通过");
+      this.loadWorkerApplyList();
     } catch (error) {
-      showError(error.message || '审核失败')
+      showError(error.message || "审核失败");
     } finally {
-      this.setData({ submittingId: '' })
+      this.setData({ submittingId: "" });
     }
   },
 
   goWorkerDetail(event) {
-    const workerId = event.currentTarget.dataset.id
-    if (!workerId) return
+    const workerId = event.currentTarget.dataset.id;
+    if (!workerId) return;
     wx.navigateTo({
-      url: `/pages/worker-detail/worker-detail?workerId=${workerId}&mode=admin`
-    })
+      url: `/pages/worker-detail/worker-detail?workerId=${workerId}&mode=admin`,
+    });
   },
 
   rejectWorker(event) {
-    const workerId = event.currentTarget.dataset.id
+    const workerId = event.currentTarget.dataset.id;
     wx.showModal({
-      title: '拒绝申请',
-      content: '确认拒绝该师傅入驻申请吗？',
-      confirmColor: '#c66b2d',
+      title: "拒绝申请",
+      content: "确认拒绝该师傅入驻申请吗？",
+      confirmColor: "#c66b2d",
       success: async (res) => {
-        if (!res.confirm) return
-        this.setData({ submittingId: workerId })
+        if (!res.confirm) return;
+        this.setData({ submittingId: workerId });
         try {
           await workerService.rejectWorker({
             workerId,
-            reason: '暂未通过审核'
-          })
-          showSuccess('已拒绝')
-          this.loadWorkerApplyList()
+            reason: "暂未通过审核",
+          });
+          showSuccess("已拒绝");
+          this.loadWorkerApplyList();
         } catch (error) {
-          showError(error.message || '审核失败')
+          showError(error.message || "审核失败");
         } finally {
-          this.setData({ submittingId: '' })
+          this.setData({ submittingId: "" });
         }
-      }
-    })
-  }
-})
+      },
+    });
+  },
+});

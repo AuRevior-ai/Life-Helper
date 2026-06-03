@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看订单快照，并进行 MVP 阶段的人工状态调整</view>
+    <view class="page-subtitle"
+      >查看订单快照，并进行 MVP 阶段的人工状态调整</view
+    >
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
@@ -14,21 +16,52 @@
       </view>
       <view class="detail-line">订单号：{{ order.order_no || order._id }}</view>
       <view class="detail-line">金额：{{ order.priceText }}</view>
-      <view class="detail-line">联系人：{{ order.contact_name }} {{ order.contact_phone }}</view>
+      <view class="detail-line"
+        >联系人：{{ order.contact_name }} {{ order.contact_phone }}</view
+      >
       <view class="detail-line">服务地址：{{ order.full_address }}</view>
       <view class="detail-line">预约时间：{{ order.appointment_time }}</view>
-      <view wx:if="{{ order.worker_id }}" class="detail-line">师傅：{{ order.worker_id }}</view>
-      <view wx:if="{{ order.finish_remark }}" class="detail-line">完工说明：{{ order.finish_remark }}</view>
-      <view wx:if="{{ order.finish_images && order.finish_images.length }}" class="finish-images">
-        <image wx:for="{{ order.finish_images }}" wx:key="*this" class="finish-image" src="{{ item }}" mode="aspectFill"></image>
+      <view wx:if="{{ order.worker_id }}" class="detail-line"
+        >师傅：{{ order.worker_id }}</view
+      >
+      <view wx:if="{{ order.finish_remark }}" class="detail-line"
+        >完工说明：{{ order.finish_remark }}</view
+      >
+      <view
+        wx:if="{{ order.finish_images && order.finish_images.length }}"
+        class="finish-images"
+      >
+        <image
+          wx:for="{{ order.finish_images }}"
+          wx:key="*this"
+          class="finish-image"
+          src="{{ item }}"
+          mode="aspectFill"
+        ></image>
       </view>
     </view>
 
     <view class="panel status-panel">
       <view class="form-label">派单操作</view>
-      <button wx:if="{{ order.status === 'pending_accept' }}" class="primary-button" bindtap="goAssignWorker">指派师傅</button>
-      <button wx:if="{{ order.status === 'accepted' }}" class="ghost-button" loading="{{ submitting }}" disabled="{{ submitting }}" bindtap="unassignOrder">取消指派 / 回流</button>
-      <button class="ghost-button" bindtap="goDispatchLogs">查看派单日志</button>
+      <button
+        wx:if="{{ order.status === 'pending_accept' }}"
+        class="primary-button"
+        bindtap="goAssignWorker"
+      >
+        指派师傅
+      </button>
+      <button
+        wx:if="{{ order.status === 'accepted' }}"
+        class="ghost-button"
+        loading="{{ submitting }}"
+        disabled="{{ submitting }}"
+        bindtap="unassignOrder"
+      >
+        取消指派 / 回流
+      </button>
+      <button class="ghost-button" bindtap="goDispatchLogs">
+        查看派单日志
+      </button>
     </view>
 
     <view class="panel status-panel">
@@ -46,7 +79,9 @@
         loading="{{ submitting }}"
         disabled="{{ submitting }}"
         bindtap="submitStatus"
-      >保存状态</button>
+      >
+        保存状态
+      </button>
     </view>
   </block>
 </view>

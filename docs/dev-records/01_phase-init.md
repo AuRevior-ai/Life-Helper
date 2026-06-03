@@ -48,149 +48,149 @@
 
 ### 项目根目录
 
-| 文件路径 | 说明 |
-|---|---|
-| `.gitignore` | 忽略依赖、日志、环境变量、worktree 等本地文件 |
-| `README.md` | 项目说明、当前阶段、运行检查和微信开发者工具说明 |
-| `package.json` | Node 测试脚本和项目基础信息 |
-| `project.config.json` | 微信开发者工具项目配置 |
+| 文件路径              | 说明                                             |
+| --------------------- | ------------------------------------------------ |
+| `.gitignore`          | 忽略依赖、日志、环境变量、worktree 等本地文件    |
+| `README.md`           | 项目说明、当前阶段、运行检查和微信开发者工具说明 |
+| `package.json`        | Node 测试脚本和项目基础信息                      |
+| `project.config.json` | 微信开发者工具项目配置                           |
 
 ### 阶段设计、计划与测试
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/specs/2026-05-30-mvp-phase1-design.md` | 阶段一设计说明 |
-| `docs/superpowers/plans/2026-05-30-phase1-initialization.md` | 阶段一实施计划 |
-| `tests/phase1.scaffold.test.js` | 阶段一骨架验收测试 |
+| 文件路径                                                     | 说明               |
+| ------------------------------------------------------------ | ------------------ |
+| `docs/superpowers/specs/2026-05-30-mvp-phase1-design.md`     | 阶段一设计说明     |
+| `docs/superpowers/plans/2026-05-30-phase1-initialization.md` | 阶段一实施计划     |
+| `tests/phase1.scaffold.test.js`                              | 阶段一骨架验收测试 |
 
 ### 小程序入口
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/app.js` | 小程序入口，初始化云开发 |
-| `miniprogram/app.json` | 小程序路由、窗口样式、tabBar 配置 |
-| `miniprogram/app.wxss` | 全局基础样式 |
-| `miniprogram/sitemap.json` | 小程序页面索引规则 |
+| 文件路径                   | 说明                              |
+| -------------------------- | --------------------------------- |
+| `miniprogram/app.js`       | 小程序入口，初始化云开发          |
+| `miniprogram/app.json`     | 小程序路由、窗口样式、tabBar 配置 |
+| `miniprogram/app.wxss`     | 全局基础样式                      |
+| `miniprogram/sitemap.json` | 小程序页面索引规则                |
 
 ### 配置文件
 
-| 文件路径 | 说明 |
-|---|---|
+| 文件路径                          | 说明                               |
+| --------------------------------- | ---------------------------------- |
 | `miniprogram/config/constants.js` | 应用名、价格单位、集合名、云函数名 |
-| `miniprogram/config/roles.js` | 用户角色枚举和展示文案 |
-| `miniprogram/config/status.js` | 订单、支付、师傅审核、通用状态枚举 |
-| `miniprogram/config/index.js` | 配置统一导出入口 |
+| `miniprogram/config/roles.js`     | 用户角色枚举和展示文案             |
+| `miniprogram/config/status.js`    | 订单、支付、师傅审核、通用状态枚举 |
+| `miniprogram/config/index.js`     | 配置统一导出入口                   |
 
 ### 工具函数
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/utils/request.js` | 前端云函数调用封装和统一错误处理 |
-| `miniprogram/utils/auth.js` | 当前用户本地缓存和角色判断工具 |
-| `miniprogram/utils/format.js` | 金额、地址、状态文案格式化 |
-| `miniprogram/utils/validator.js` | 必填字段、手机号、地址表单校验 |
-| `miniprogram/utils/date.js` | 日期格式化和当前时间工具 |
-| `miniprogram/utils/toast.js` | toast、loading 统一封装 |
+| 文件路径                         | 说明                             |
+| -------------------------------- | -------------------------------- |
+| `miniprogram/utils/request.js`   | 前端云函数调用封装和统一错误处理 |
+| `miniprogram/utils/auth.js`      | 当前用户本地缓存和角色判断工具   |
+| `miniprogram/utils/format.js`    | 金额、地址、状态文案格式化       |
+| `miniprogram/utils/validator.js` | 必填字段、手机号、地址表单校验   |
+| `miniprogram/utils/date.js`      | 日期格式化和当前时间工具         |
+| `miniprogram/utils/toast.js`     | toast、loading 统一封装          |
 
 ### 前端服务调用层
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/services/_base.service.js` | 根据云函数名和 action 创建服务方法 |
-| `miniprogram/services/login.service.js` | 登录相关前端调用封装 |
-| `miniprogram/services/user.service.js` | 用户相关前端调用封装 |
-| `miniprogram/services/service.service.js` | 分类与服务相关前端调用封装 |
-| `miniprogram/services/address.service.js` | 地址相关前端调用封装 |
-| `miniprogram/services/order.service.js` | 订单相关前端调用封装 |
-| `miniprogram/services/worker.service.js` | 师傅相关前端调用封装 |
-| `miniprogram/services/review.service.js` | 评价相关前端调用封装 |
-| `miniprogram/services/admin.service.js` | 管理端统计和列表相关前端调用封装 |
+| 文件路径                                  | 说明                               |
+| ----------------------------------------- | ---------------------------------- |
+| `miniprogram/services/_base.service.js`   | 根据云函数名和 action 创建服务方法 |
+| `miniprogram/services/login.service.js`   | 登录相关前端调用封装               |
+| `miniprogram/services/user.service.js`    | 用户相关前端调用封装               |
+| `miniprogram/services/service.service.js` | 分类与服务相关前端调用封装         |
+| `miniprogram/services/address.service.js` | 地址相关前端调用封装               |
+| `miniprogram/services/order.service.js`   | 订单相关前端调用封装               |
+| `miniprogram/services/worker.service.js`  | 师傅相关前端调用封装               |
+| `miniprogram/services/review.service.js`  | 评价相关前端调用封装               |
+| `miniprogram/services/admin.service.js`   | 管理端统计和列表相关前端调用封装   |
 
 ### 基础组件
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/components/empty-state/*` | 空状态组件 |
+| 文件路径                                | 说明         |
+| --------------------------------------- | ------------ |
+| `miniprogram/components/empty-state/*`  | 空状态组件   |
 | `miniprogram/components/loading-view/*` | 加载状态组件 |
-| `miniprogram/components/status-tag/*` | 状态标签组件 |
+| `miniprogram/components/status-tag/*`   | 状态标签组件 |
 | `miniprogram/components/service-card/*` | 服务卡片组件 |
-| `miniprogram/components/order-card/*` | 订单卡片组件 |
-| `miniprogram/components/worker-card/*` | 师傅卡片组件 |
+| `miniprogram/components/order-card/*`   | 订单卡片组件 |
+| `miniprogram/components/worker-card/*`  | 师傅卡片组件 |
 
 ### 用户端页面骨架
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/pages/index/*` | 首页页面骨架 |
-| `miniprogram/pages/service-list/*` | 服务列表页面骨架 |
-| `miniprogram/pages/service-detail/*` | 服务详情页面骨架 |
-| `miniprogram/pages/order-submit/*` | 提交订单页面骨架 |
-| `miniprogram/pages/order-list/*` | 用户订单列表页面骨架 |
-| `miniprogram/pages/order-detail/*` | 用户订单详情页面骨架 |
-| `miniprogram/pages/review/*` | 用户评价页面骨架 |
-| `miniprogram/pages/address-list/*` | 地址列表页面骨架 |
-| `miniprogram/pages/address-edit/*` | 地址编辑页面骨架 |
-| `miniprogram/pages/profile/*` | 我的页面骨架 |
+| 文件路径                             | 说明                 |
+| ------------------------------------ | -------------------- |
+| `miniprogram/pages/index/*`          | 首页页面骨架         |
+| `miniprogram/pages/service-list/*`   | 服务列表页面骨架     |
+| `miniprogram/pages/service-detail/*` | 服务详情页面骨架     |
+| `miniprogram/pages/order-submit/*`   | 提交订单页面骨架     |
+| `miniprogram/pages/order-list/*`     | 用户订单列表页面骨架 |
+| `miniprogram/pages/order-detail/*`   | 用户订单详情页面骨架 |
+| `miniprogram/pages/review/*`         | 用户评价页面骨架     |
+| `miniprogram/pages/address-list/*`   | 地址列表页面骨架     |
+| `miniprogram/pages/address-edit/*`   | 地址编辑页面骨架     |
+| `miniprogram/pages/profile/*`        | 我的页面骨架         |
 
 ### 师傅端页面骨架
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/pages/worker/apply/*` | 师傅入驻申请页面骨架 |
+| 文件路径                                  | 说明                 |
+| ----------------------------------------- | -------------------- |
+| `miniprogram/pages/worker/apply/*`        | 师傅入驻申请页面骨架 |
 | `miniprogram/pages/worker/audit-status/*` | 师傅审核状态页面骨架 |
-| `miniprogram/pages/worker/order-hall/*` | 接单大厅页面骨架 |
-| `miniprogram/pages/worker/order-list/*` | 师傅订单列表页面骨架 |
+| `miniprogram/pages/worker/order-hall/*`   | 接单大厅页面骨架     |
+| `miniprogram/pages/worker/order-list/*`   | 师傅订单列表页面骨架 |
 | `miniprogram/pages/worker/order-detail/*` | 师傅订单详情页面骨架 |
-| `miniprogram/pages/worker/income/*` | 师傅收入统计页面骨架 |
-| `miniprogram/pages/worker/profile/*` | 师傅个人中心页面骨架 |
+| `miniprogram/pages/worker/income/*`       | 师傅收入统计页面骨架 |
+| `miniprogram/pages/worker/profile/*`      | 师傅个人中心页面骨架 |
 
 ### 管理员端页面骨架
 
-| 文件路径 | 说明 |
-|---|---|
-| `miniprogram/pages/admin/dashboard/*` | 管理首页页面骨架 |
-| `miniprogram/pages/admin/category-list/*` | 分类管理页面骨架 |
-| `miniprogram/pages/admin/category-edit/*` | 分类编辑页面骨架 |
-| `miniprogram/pages/admin/service-list/*` | 服务管理页面骨架 |
-| `miniprogram/pages/admin/service-edit/*` | 服务编辑页面骨架 |
-| `miniprogram/pages/admin/worker-audit/*` | 师傅审核页面骨架 |
-| `miniprogram/pages/admin/order-list/*` | 管理员订单列表页面骨架 |
-| `miniprogram/pages/admin/order-detail/*` | 管理员订单详情页面骨架 |
-| `miniprogram/pages/admin/user-list/*` | 用户管理页面骨架 |
+| 文件路径                                  | 说明                   |
+| ----------------------------------------- | ---------------------- |
+| `miniprogram/pages/admin/dashboard/*`     | 管理首页页面骨架       |
+| `miniprogram/pages/admin/category-list/*` | 分类管理页面骨架       |
+| `miniprogram/pages/admin/category-edit/*` | 分类编辑页面骨架       |
+| `miniprogram/pages/admin/service-list/*`  | 服务管理页面骨架       |
+| `miniprogram/pages/admin/service-edit/*`  | 服务编辑页面骨架       |
+| `miniprogram/pages/admin/worker-audit/*`  | 师傅审核页面骨架       |
+| `miniprogram/pages/admin/order-list/*`    | 管理员订单列表页面骨架 |
+| `miniprogram/pages/admin/order-detail/*`  | 管理员订单详情页面骨架 |
+| `miniprogram/pages/admin/user-list/*`     | 用户管理页面骨架       |
 
 ### 云函数占位目录
 
-| 文件路径 | 说明 |
-|---|---|
-| `cloudfunctions/login/index.js` | 登录云函数占位入口 |
-| `cloudfunctions/login/package.json` | 登录云函数依赖配置 |
-| `cloudfunctions/user/index.js` | 用户云函数占位入口 |
-| `cloudfunctions/user/package.json` | 用户云函数依赖配置 |
-| `cloudfunctions/service/index.js` | 服务云函数占位入口 |
-| `cloudfunctions/service/package.json` | 服务云函数依赖配置 |
-| `cloudfunctions/address/index.js` | 地址云函数占位入口 |
-| `cloudfunctions/address/package.json` | 地址云函数依赖配置 |
-| `cloudfunctions/order/index.js` | 订单云函数占位入口 |
-| `cloudfunctions/order/package.json` | 订单云函数依赖配置 |
-| `cloudfunctions/worker/index.js` | 师傅云函数占位入口 |
-| `cloudfunctions/worker/package.json` | 师傅云函数依赖配置 |
-| `cloudfunctions/review/index.js` | 评价云函数占位入口 |
-| `cloudfunctions/review/package.json` | 评价云函数依赖配置 |
-| `cloudfunctions/admin/index.js` | 管理员云函数占位入口 |
-| `cloudfunctions/admin/package.json` | 管理员云函数依赖配置 |
+| 文件路径                              | 说明                 |
+| ------------------------------------- | -------------------- |
+| `cloudfunctions/login/index.js`       | 登录云函数占位入口   |
+| `cloudfunctions/login/package.json`   | 登录云函数依赖配置   |
+| `cloudfunctions/user/index.js`        | 用户云函数占位入口   |
+| `cloudfunctions/user/package.json`    | 用户云函数依赖配置   |
+| `cloudfunctions/service/index.js`     | 服务云函数占位入口   |
+| `cloudfunctions/service/package.json` | 服务云函数依赖配置   |
+| `cloudfunctions/address/index.js`     | 地址云函数占位入口   |
+| `cloudfunctions/address/package.json` | 地址云函数依赖配置   |
+| `cloudfunctions/order/index.js`       | 订单云函数占位入口   |
+| `cloudfunctions/order/package.json`   | 订单云函数依赖配置   |
+| `cloudfunctions/worker/index.js`      | 师傅云函数占位入口   |
+| `cloudfunctions/worker/package.json`  | 师傅云函数依赖配置   |
+| `cloudfunctions/review/index.js`      | 评价云函数占位入口   |
+| `cloudfunctions/review/package.json`  | 评价云函数依赖配置   |
+| `cloudfunctions/admin/index.js`       | 管理员云函数占位入口 |
+| `cloudfunctions/admin/package.json`   | 管理员云函数依赖配置 |
 
 ### 阶段记录文件
 
-| 文件路径 | 说明 |
-|---|---|
+| 文件路径                            | 说明                 |
+| ----------------------------------- | -------------------- |
 | `docs/dev-records/01_phase-init.md` | 本阶段开发记录与复盘 |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
+| 文件路径                    | 修改内容                                                     |
+| --------------------------- | ------------------------------------------------------------ |
 | `docs/dev-records/index.md` | 更新阶段 1 状态为已完成，切换下一阶段为阶段 2 登录与用户体系 |
 
 ---
@@ -198,8 +198,8 @@
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -233,16 +233,16 @@
 
 本阶段新增 8 个云函数目录，但均为占位入口，尚未实现真实业务逻辑。
 
-| 云函数 | 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|---|
-| `login` | 登录与用户初始化占位 | `action` | 统一失败响应 | 后续所有用户可调用 |
-| `user` | 用户信息占位 | `action` | 统一失败响应 | 后续按用户归属或管理员校验 |
-| `service` | 服务分类与项目占位 | `action` | 统一失败响应 | 后续读取公开，写入管理员 |
-| `address` | 地址管理占位 | `action` | 统一失败响应 | 后续仅当前用户 |
-| `order` | 订单流转占位 | `action` | 统一失败响应 | 后续按角色、状态、归属校验 |
-| `worker` | 师傅入驻和审核占位 | `action` | 统一失败响应 | 后续用户、师傅、管理员分权 |
-| `review` | 评价占位 | `action` | 统一失败响应 | 后续当前用户或公开读取 |
-| `admin` | 管理端统计占位 | `action` | 统一失败响应 | 后续仅管理员 |
+| 云函数    | 功能                 | 入参     | 出参         | 权限要求                   |
+| --------- | -------------------- | -------- | ------------ | -------------------------- |
+| `login`   | 登录与用户初始化占位 | `action` | 统一失败响应 | 后续所有用户可调用         |
+| `user`    | 用户信息占位         | `action` | 统一失败响应 | 后续按用户归属或管理员校验 |
+| `service` | 服务分类与项目占位   | `action` | 统一失败响应 | 后续读取公开，写入管理员   |
+| `address` | 地址管理占位         | `action` | 统一失败响应 | 后续仅当前用户             |
+| `order`   | 订单流转占位         | `action` | 统一失败响应 | 后续按角色、状态、归属校验 |
+| `worker`  | 师傅入驻和审核占位   | `action` | 统一失败响应 | 后续用户、师傅、管理员分权 |
+| `review`  | 评价占位             | `action` | 统一失败响应 | 后续当前用户或公开读取     |
+| `admin`   | 管理端统计占位       | `action` | 统一失败响应 | 后续仅管理员               |
 
 占位返回格式：
 
@@ -393,14 +393,14 @@ npm test
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 云函数目前只有占位入口，没有真实业务逻辑 | 主流程无法运行 | 阶段 2 起逐步实现登录、用户、服务、订单等云函数 | P0 |
-| 未配置真实微信云开发环境 ID | 无法部署云函数和真实数据库 | 阶段 2 开始前在微信开发者工具中确认云环境 | P1 |
-| 未在微信开发者工具中做真实编译预览 | 可能存在小程序运行时细节问题 | 阶段 2 开始时打开项目并修正编译问题 | P1 |
-| 页面当前只有占位展示 | 无法完成真实用户操作 | 各业务阶段按页面逐步补功能 | P0 |
-| 管理员初始化方式仍为手动改库 | 后续管理端入口依赖人工配置 | 阶段 2 记录操作方式，阶段 7 再考虑优化 | P1 |
-| 当前仓库尚无首次提交 | 不影响开发，但不利于版本回溯 | 阶段记录补齐后建议提交初始版本 | P1 |
+| 问题                                     | 影响                         | 后续处理建议                                    | 优先级 |
+| ---------------------------------------- | ---------------------------- | ----------------------------------------------- | ------ |
+| 云函数目前只有占位入口，没有真实业务逻辑 | 主流程无法运行               | 阶段 2 起逐步实现登录、用户、服务、订单等云函数 | P0     |
+| 未配置真实微信云开发环境 ID              | 无法部署云函数和真实数据库   | 阶段 2 开始前在微信开发者工具中确认云环境       | P1     |
+| 未在微信开发者工具中做真实编译预览       | 可能存在小程序运行时细节问题 | 阶段 2 开始时打开项目并修正编译问题             | P1     |
+| 页面当前只有占位展示                     | 无法完成真实用户操作         | 各业务阶段按页面逐步补功能                      | P0     |
+| 管理员初始化方式仍为手动改库             | 后续管理端入口依赖人工配置   | 阶段 2 记录操作方式，阶段 7 再考虑优化          | P1     |
+| 当前仓库尚无首次提交                     | 不影响开发，但不利于版本回溯 | 阶段记录补齐后建议提交初始版本                  | P1     |
 
 ---
 

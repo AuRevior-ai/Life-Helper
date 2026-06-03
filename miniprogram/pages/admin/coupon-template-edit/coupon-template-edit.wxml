@@ -7,26 +7,57 @@
   <view class="panel form-panel">
     <view class="form-item">
       <text class="form-label">名称</text>
-      <input value="{{ form.name }}" data-field="name" bindinput="handleInput" placeholder="例如满100减10" />
+      <input
+        value="{{ form.name }}"
+        data-field="name"
+        bindinput="handleInput"
+        placeholder="例如满100减10"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">优惠金额</text>
-      <input type="number" value="{{ form.amount }}" data-field="amount" bindinput="handleInput" />
+      <input
+        type="number"
+        value="{{ form.amount }}"
+        data-field="amount"
+        bindinput="handleInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">满减门槛</text>
-      <input type="number" value="{{ form.threshold_amount }}" data-field="threshold_amount" bindinput="handleInput" />
+      <input
+        type="number"
+        value="{{ form.threshold_amount }}"
+        data-field="threshold_amount"
+        bindinput="handleInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">总量</text>
-      <input type="number" value="{{ form.total_quantity }}" data-field="total_quantity" bindinput="handleInput" />
+      <input
+        type="number"
+        value="{{ form.total_quantity }}"
+        data-field="total_quantity"
+        bindinput="handleInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">单人限制</text>
-      <input type="number" value="{{ form.per_user_limit }}" data-field="per_user_limit" bindinput="handleInput" />
+      <input
+        type="number"
+        value="{{ form.per_user_limit }}"
+        data-field="per_user_limit"
+        bindinput="handleInput"
+      />
     </view>
   </view>
 
-  <button class="primary-button" loading="{{ submitting }}" disabled="{{ submitting }}" bindtap="submitForm">保存</button>
+  <button
+    class="primary-button"
+    loading="{{ submitting }}"
+    disabled="{{ submitting }}"
+    bindtap="submitForm"
+  >
+    保存
+  </button>
 </view>
-

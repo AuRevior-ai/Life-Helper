@@ -17,18 +17,18 @@
 
 ## 3. 修改文件清单
 
-| 文件 | 修改原因 |
-| --- | --- |
-| `cloudfunctions/payment/handler.js` | `queryPaymentStatus` 增加订单归属权限校验 |
-| `cloudfunctions/user/handler.js` | `claimInitialAdmin` 增加初始化保护 |
-| `cloudfunctions/user/index.js` | 注入管理员初始化环境变量配置 |
-| `tests/phase13.wechat-pay-lite.test.js` | 增加支付状态查询权限测试 |
-| `tests/mvp.stabilization.test.js` | 增加管理员初始化保护测试 |
-| `README.md` | 更新当前状态、测试数量、真实支付边界和管理员初始化说明 |
-| `docs/wechat-mvp-verification.md` | 更新真机验证、管理员初始化和试运营验收项 |
-| `docs/release-package-checklist.md` | 增加管理员初始化环境变量和敏感信息检查 |
-| `docs/dev-records/index.md` | 增加本次修复收口状态与遗留问题 |
-| `docs/dev-records/stage-fix-report.md` | 本报告 |
+| 文件                                    | 修改原因                                               |
+| --------------------------------------- | ------------------------------------------------------ |
+| `cloudfunctions/payment/handler.js`     | `queryPaymentStatus` 增加订单归属权限校验              |
+| `cloudfunctions/user/handler.js`        | `claimInitialAdmin` 增加初始化保护                     |
+| `cloudfunctions/user/index.js`          | 注入管理员初始化环境变量配置                           |
+| `tests/phase13.wechat-pay-lite.test.js` | 增加支付状态查询权限测试                               |
+| `tests/mvp.stabilization.test.js`       | 增加管理员初始化保护测试                               |
+| `README.md`                             | 更新当前状态、测试数量、真实支付边界和管理员初始化说明 |
+| `docs/wechat-mvp-verification.md`       | 更新真机验证、管理员初始化和试运营验收项               |
+| `docs/release-package-checklist.md`     | 增加管理员初始化环境变量和敏感信息检查                 |
+| `docs/dev-records/index.md`             | 增加本次修复收口状态与遗留问题                         |
+| `docs/dev-records/stage-fix-report.md`  | 本报告                                                 |
 
 ## 4. 问题原因分析与修复方案
 
@@ -129,24 +129,24 @@ fail 0
 
 请在云开发控制台按真实查询情况配置索引。建议如下：
 
-| 集合 | 建议索引 | 用途 |
-| --- | --- | --- |
-| `users` | `openid` | 登录、鉴权、管理员判断 |
-| `users` | `role` | 查找是否已有管理员 |
-| `orders` | `user_id + updated_at` | 用户订单列表 |
-| `orders` | `worker_id + updated_at` | 师傅订单列表 |
-| `orders` | `status + updated_at` | 接单大厅、管理员筛选 |
-| `orders` | `out_trade_no` | 支付回调定位订单 |
-| `orders` | `service_area_id + status` | 区域派单 |
-| `workers` | `user_id` | 师傅身份查询 |
-| `workers` | `audit_status + status` | 管理员审核、可派单师傅筛选 |
-| `workers` | `online_status + audit_status` | 接单状态过滤 |
-| `messages` | `user_id + is_read + created_at` | 消息中心和未读统计 |
-| `payment_logs` | `order_id + created_at` | 支付问题排查 |
-| `refund_logs` | `order_id + created_at` | 退款问题排查 |
-| `after_sales` | `order_id + status` | 售后详情和重复售后拦截 |
-| `service_areas` | `status + sort` | 地址和师傅服务区域选择 |
-| `dispatch_logs` | `order_id + created_at` | 派单日志查询 |
+| 集合            | 建议索引                         | 用途                       |
+| --------------- | -------------------------------- | -------------------------- |
+| `users`         | `openid`                         | 登录、鉴权、管理员判断     |
+| `users`         | `role`                           | 查找是否已有管理员         |
+| `orders`        | `user_id + updated_at`           | 用户订单列表               |
+| `orders`        | `worker_id + updated_at`         | 师傅订单列表               |
+| `orders`        | `status + updated_at`            | 接单大厅、管理员筛选       |
+| `orders`        | `out_trade_no`                   | 支付回调定位订单           |
+| `orders`        | `service_area_id + status`       | 区域派单                   |
+| `workers`       | `user_id`                        | 师傅身份查询               |
+| `workers`       | `audit_status + status`          | 管理员审核、可派单师傅筛选 |
+| `workers`       | `online_status + audit_status`   | 接单状态过滤               |
+| `messages`      | `user_id + is_read + created_at` | 消息中心和未读统计         |
+| `payment_logs`  | `order_id + created_at`          | 支付问题排查               |
+| `refund_logs`   | `order_id + created_at`          | 退款问题排查               |
+| `after_sales`   | `order_id + status`              | 售后详情和重复售后拦截     |
+| `service_areas` | `status + sort`                  | 地址和师傅服务区域选择     |
+| `dispatch_logs` | `order_id + created_at`          | 派单日志查询               |
 
 ## 10. 分页与全量读取风险
 

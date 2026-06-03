@@ -1,5 +1,5 @@
 module.exports = {
-  ...require('./constants'),
-  ...require('./roles'),
-  ...require('./status')
-}
+  ...require("./constants"),
+  ...require("./roles"),
+  ...require("./status"),
+};

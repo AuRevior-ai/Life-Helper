@@ -7,5 +7,9 @@
       <view class="muted">师傅收益 {{ item.incomeText }}</view>
     </view>
   </view>
-  <empty-state wx:else title="暂无打赏" description="用户打赏后会展示在这里"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无打赏"
+    description="用户打赏后会展示在这里"
+  ></empty-state>
 </view>

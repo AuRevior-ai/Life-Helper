@@ -30,39 +30,39 @@
 
 ## 4. 新增文件
 
-| 文件 | 作用 |
-| --- | --- |
-| `cloudfunctions/area/*` | 服务区域云函数 |
-| `cloudfunctions/dispatch/*` | 派单云函数 |
+| 文件                                             | 作用                   |
+| ------------------------------------------------ | ---------------------- |
+| `cloudfunctions/area/*`                          | 服务区域云函数         |
+| `cloudfunctions/dispatch/*`                      | 派单云函数             |
 | `cloudfunctions/address/area-read-repository.js` | 地址云函数读取服务区域 |
-| `cloudfunctions/order/dispatch-repository.js` | 订单云函数写派单日志 |
-| `cloudfunctions/worker/area-read-repository.js` | 师傅云函数读取服务区域 |
-| `miniprogram/services/area.service.js` | 小程序区域服务 |
-| `miniprogram/services/dispatch.service.js` | 小程序派单服务 |
-| `miniprogram/pages/admin/area-list/*` | 管理员区域列表 |
-| `miniprogram/pages/admin/area-edit/*` | 管理员区域编辑 |
-| `miniprogram/pages/admin/assign-worker/*` | 管理员指派师傅 |
-| `miniprogram/pages/admin/dispatch-logs/*` | 派单日志 |
-| `tests/phase15.service-area-dispatch.test.js` | 阶段 15 测试 |
+| `cloudfunctions/order/dispatch-repository.js`    | 订单云函数写派单日志   |
+| `cloudfunctions/worker/area-read-repository.js`  | 师傅云函数读取服务区域 |
+| `miniprogram/services/area.service.js`           | 小程序区域服务         |
+| `miniprogram/services/dispatch.service.js`       | 小程序派单服务         |
+| `miniprogram/pages/admin/area-list/*`            | 管理员区域列表         |
+| `miniprogram/pages/admin/area-edit/*`            | 管理员区域编辑         |
+| `miniprogram/pages/admin/assign-worker/*`        | 管理员指派师傅         |
+| `miniprogram/pages/admin/dispatch-logs/*`        | 派单日志               |
+| `tests/phase15.service-area-dispatch.test.js`    | 阶段 15 测试           |
 
 ## 5. 修改文件
 
-| 文件 | 修改原因 |
-| --- | --- |
-| `miniprogram/config/constants.js` | 新增区域、派单云函数和集合常量 |
-| `miniprogram/config/status.js` | 新增区域状态、师傅接单状态和派单动作常量 |
-| `cloudfunctions/address/handler.js` | 保存结构化地址并校验启用区域 |
-| `cloudfunctions/order/handler.js` | 保存区域快照，接单写派单日志 |
-| `cloudfunctions/worker/handler.js` | 服务小区、接单状态和大厅过滤 |
-| `miniprogram/app.json` | 注册管理员区域和派单页面 |
-| `miniprogram/pages/address-edit/*` | 地址选择服务小区 |
-| `miniprogram/pages/worker/apply/*` | 入驻选择服务小区 |
-| `miniprogram/pages/worker/profile/*` | 展示和切换接单状态 |
-| `miniprogram/pages/worker/order-hall/*` | 展示接单状态 |
-| `miniprogram/pages/admin/dashboard/*` | 增加区域和派单日志入口 |
-| `miniprogram/pages/admin/order-detail/*` | 增加指派、回流和日志入口 |
-| `README.md` | 更新阶段说明 |
-| `docs/dev-records/index.md` | 更新阶段索引 |
+| 文件                                     | 修改原因                                 |
+| ---------------------------------------- | ---------------------------------------- |
+| `miniprogram/config/constants.js`        | 新增区域、派单云函数和集合常量           |
+| `miniprogram/config/status.js`           | 新增区域状态、师傅接单状态和派单动作常量 |
+| `cloudfunctions/address/handler.js`      | 保存结构化地址并校验启用区域             |
+| `cloudfunctions/order/handler.js`        | 保存区域快照，接单写派单日志             |
+| `cloudfunctions/worker/handler.js`       | 服务小区、接单状态和大厅过滤             |
+| `miniprogram/app.json`                   | 注册管理员区域和派单页面                 |
+| `miniprogram/pages/address-edit/*`       | 地址选择服务小区                         |
+| `miniprogram/pages/worker/apply/*`       | 入驻选择服务小区                         |
+| `miniprogram/pages/worker/profile/*`     | 展示和切换接单状态                       |
+| `miniprogram/pages/worker/order-hall/*`  | 展示接单状态                             |
+| `miniprogram/pages/admin/dashboard/*`    | 增加区域和派单日志入口                   |
+| `miniprogram/pages/admin/order-detail/*` | 增加指派、回流和日志入口                 |
+| `README.md`                              | 更新阶段说明                             |
+| `docs/dev-records/index.md`              | 更新阶段索引                             |
 
 ## 6. 数据库变化
 

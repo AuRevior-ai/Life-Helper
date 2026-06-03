@@ -1,11 +1,31 @@
 {
   "collection": "merchant_onboarding_logs",
   "description": "阶段 20 入驻资质、保证金、风控和管理员复核操作日志。",
-  "requiredFields": ["_id", "merchant_id", "provider_type", "event_type", "operator_role", "operator_openid", "created_at"],
-  "serverOnlyFields": ["event_type", "before_status", "after_status", "operator_role", "operator_openid", "remark", "created_at"],
+  "requiredFields": [
+    "_id",
+    "merchant_id",
+    "provider_type",
+    "event_type",
+    "operator_role",
+    "operator_openid",
+    "created_at"
+  ],
+  "serverOnlyFields": [
+    "event_type",
+    "before_status",
+    "after_status",
+    "operator_role",
+    "operator_openid",
+    "remark",
+    "created_at"
+  ],
   "clientWritableFields": [],
   "statusFields": ["before_status", "after_status"],
   "relationFields": ["merchant_id", "provider_id", "provider_type"],
-  "indexHints": ["merchant_id + created_at", "event_type + created_at", "operator_openid + created_at"],
+  "indexHints": [
+    "merchant_id + created_at",
+    "event_type + created_at",
+    "operator_openid + created_at"
+  ],
   "compatibilityNotes": "用于 mock 入驻闭环审计，不代表真实支付、真实认证或真实风控审计。"
 }

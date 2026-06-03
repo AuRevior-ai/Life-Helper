@@ -4,7 +4,12 @@
   </view>
   <view class="panel">
     <view class="section-title">接单状态</view>
-    <picker mode="selector" range="{{ statusLabels }}" value="{{ selectedStatusIndex }}" bindchange="onOnlineStatusChange">
+    <picker
+      mode="selector"
+      range="{{ statusLabels }}"
+      value="{{ selectedStatusIndex }}"
+      bindchange="onOnlineStatusChange"
+    >
       <view class="form-input">{{ onlineStatusText }}</view>
     </picker>
     <view class="muted-text">暂停接单不会影响已有订单</view>

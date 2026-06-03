@@ -9,11 +9,7 @@
   <loading-view wx:if="{{ loading }}" text="正在加载地址"></loading-view>
 
   <block wx:elif="{{ addresses.length }}">
-    <view
-      wx:for="{{ addresses }}"
-      wx:key="_id"
-      class="address-card panel"
-    >
+    <view wx:for="{{ addresses }}" wx:key="_id" class="address-card panel">
       <view class="address-card__top">
         <view>
           <text class="address-card__name">{{ item.contact_name }}</text>
@@ -30,17 +26,23 @@
           class="text-button"
           data-id="{{ item._id }}"
           catchtap="handleSetDefault"
-        >设为默认</button>
+        >
+          设为默认
+        </button>
         <button
           class="text-button"
           data-id="{{ item._id }}"
           catchtap="goEditAddress"
-        >编辑</button>
+        >
+          编辑
+        </button>
         <button
           class="text-button danger"
           data-id="{{ item._id }}"
           catchtap="handleDeleteAddress"
-        >删除</button>
+        >
+          删除
+        </button>
       </view>
     </view>
   </block>

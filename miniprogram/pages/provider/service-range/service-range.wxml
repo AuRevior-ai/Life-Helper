@@ -1,13 +1,45 @@
 <view class="page">
   <view class="panel">
     <text class="title">服务范围</text>
-    <text class="hint">支持半径模式和行政区模式。半径模式缺少经纬度时会降级为行政区/旧小区匹配。</text>
-    <input value="{{form.service_range_mode}}" data-field="service_range_mode" bindinput="onInput" placeholder="admin_area / radius" />
-    <input value="{{form.base_latitude}}" data-field="base_latitude" bindinput="onInput" placeholder="服务点纬度" />
-    <input value="{{form.base_longitude}}" data-field="base_longitude" bindinput="onInput" placeholder="服务点经度" />
-    <input value="{{form.base_address}}" data-field="base_address" bindinput="onInput" placeholder="服务点地址" />
-    <input value="{{form.service_radius_km}}" data-field="service_radius_km" bindinput="onInput" placeholder="服务半径 km" />
-    <input value="{{form.service_communities}}" data-field="service_communities" bindinput="onInput" placeholder="服务小区，多个用顿号分隔" />
+    <text class="hint"
+      >支持半径模式和行政区模式。半径模式缺少经纬度时会降级为行政区/旧小区匹配。</text
+    >
+    <input
+      value="{{form.service_range_mode}}"
+      data-field="service_range_mode"
+      bindinput="onInput"
+      placeholder="admin_area / radius"
+    />
+    <input
+      value="{{form.base_latitude}}"
+      data-field="base_latitude"
+      bindinput="onInput"
+      placeholder="服务点纬度"
+    />
+    <input
+      value="{{form.base_longitude}}"
+      data-field="base_longitude"
+      bindinput="onInput"
+      placeholder="服务点经度"
+    />
+    <input
+      value="{{form.base_address}}"
+      data-field="base_address"
+      bindinput="onInput"
+      placeholder="服务点地址"
+    />
+    <input
+      value="{{form.service_radius_km}}"
+      data-field="service_radius_km"
+      bindinput="onInput"
+      placeholder="服务半径 km"
+    />
+    <input
+      value="{{form.service_communities}}"
+      data-field="service_communities"
+      bindinput="onInput"
+      placeholder="服务小区，多个用顿号分隔"
+    />
     <button bindtap="openPickLocation">地图选点</button>
     <button class="primary" bindtap="submit">保存服务范围</button>
   </view>

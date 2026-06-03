@@ -27,24 +27,24 @@
 
 ## 4. 新增文件
 
-| 文件 | 说明 |
-|---|---|
-| `tests/phase22b.order-center-ui.test.js` | 订单中心 UI 与业务保护测试 |
-| `docs/dev-records/22b_order-center-ui.md` | 阶段 22B 开发报告 |
+| 文件                                      | 说明                       |
+| ----------------------------------------- | -------------------------- |
+| `tests/phase22b.order-center-ui.test.js`  | 订单中心 UI 与业务保护测试 |
+| `docs/dev-records/22b_order-center-ui.md` | 阶段 22B 开发报告          |
 
 ## 5. 修改文件
 
-| 文件 | 说明 |
-|---|---|
-| `miniprogram/pages/order-list/order-list.js` | 保留加载逻辑，新增横向 tab 切换和已有订单操作入口 |
-| `miniprogram/pages/order-list/order-list.wxml` | 重构订单中心页面结构 |
-| `miniprogram/pages/order-list/order-list.wxss` | 重写订单中心页面视觉样式 |
-| `miniprogram/components/order-card/order-card.js` | 增加用户端展示字段、状态 tone 和操作按钮配置 |
-| `miniprogram/components/order-card/order-card.wxml` | 增加订单中心高密度卡片变体 |
-| `miniprogram/components/order-card/order-card.wxss` | 增加订单中心卡片视觉样式并保留默认样式 |
-| `miniprogram/components/order-card/order-card.json` | 引入 `status-tag` 展示组件 |
-| `miniprogram/components/status-tag/status-tag.wxss` | 增强订单状态标签色值 |
-| `docs/dev-records/index.md` | 更新阶段索引 |
+| 文件                                                | 说明                                              |
+| --------------------------------------------------- | ------------------------------------------------- |
+| `miniprogram/pages/order-list/order-list.js`        | 保留加载逻辑，新增横向 tab 切换和已有订单操作入口 |
+| `miniprogram/pages/order-list/order-list.wxml`      | 重构订单中心页面结构                              |
+| `miniprogram/pages/order-list/order-list.wxss`      | 重写订单中心页面视觉样式                          |
+| `miniprogram/components/order-card/order-card.js`   | 增加用户端展示字段、状态 tone 和操作按钮配置      |
+| `miniprogram/components/order-card/order-card.wxml` | 增加订单中心高密度卡片变体                        |
+| `miniprogram/components/order-card/order-card.wxss` | 增加订单中心卡片视觉样式并保留默认样式            |
+| `miniprogram/components/order-card/order-card.json` | 引入 `status-tag` 展示组件                        |
+| `miniprogram/components/status-tag/status-tag.wxss` | 增强订单状态标签色值                              |
+| `docs/dev-records/index.md`                         | 更新阶段索引                                      |
 
 ## 6. 订单中心新版结构说明
 

@@ -19,14 +19,18 @@
         <view class="order-price">{{ item.priceText }}</view>
       </view>
       <view class="order-address">{{ item.full_address }}</view>
-      <view class="order-contact">{{ item.contact_name }} {{ item.contact_phone }}</view>
+      <view class="order-contact"
+        >{{ item.contact_name }} {{ item.contact_phone }}</view
+      >
       <button
         class="primary-button"
         data-id="{{ item._id }}"
         loading="{{ submittingId === item._id }}"
         disabled="{{ submittingId === item._id }}"
         bindtap="acceptOrder"
-      >接单</button>
+      >
+        接单
+      </button>
     </view>
   </block>
 

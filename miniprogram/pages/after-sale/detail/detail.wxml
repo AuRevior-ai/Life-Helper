@@ -8,15 +8,33 @@
 
   <block wx:elif="{{ afterSale }}">
     <view class="panel detail-panel">
-      <view class="detail-row"><text>售后单号</text><text>{{ afterSale.after_sale_no }}</text></view>
-      <view class="detail-row"><text>类型</text><text>{{ typeText }}</text></view>
-      <view class="detail-row"><text>售后状态</text><text>{{ statusText }}</text></view>
-      <view class="detail-row"><text>退款状态</text><text>{{ refundStatusText }}</text></view>
-      <view class="detail-row"><text>退款金额</text><text>{{ amountText }}</text></view>
-      <view class="detail-row"><text>原因</text><text>{{ afterSale.reason }}</text></view>
-      <view wx:if="{{ afterSale.admin_remark }}" class="detail-row"><text>审核备注</text><text>{{ afterSale.admin_remark }}</text></view>
+      <view class="detail-row"
+        ><text>售后单号</text><text>{{ afterSale.after_sale_no }}</text></view
+      >
+      <view class="detail-row"
+        ><text>类型</text><text>{{ typeText }}</text></view
+      >
+      <view class="detail-row"
+        ><text>售后状态</text><text>{{ statusText }}</text></view
+      >
+      <view class="detail-row"
+        ><text>退款状态</text><text>{{ refundStatusText }}</text></view
+      >
+      <view class="detail-row"
+        ><text>退款金额</text><text>{{ amountText }}</text></view
+      >
+      <view class="detail-row"
+        ><text>原因</text><text>{{ afterSale.reason }}</text></view
+      >
+      <view wx:if="{{ afterSale.admin_remark }}" class="detail-row"
+        ><text>审核备注</text><text>{{ afterSale.admin_remark }}</text></view
+      >
     </view>
   </block>
 
-  <empty-state wx:else title="售后不存在" description="请返回订单详情重新查看"></empty-state>
+  <empty-state
+    wx:else
+    title="售后不存在"
+    description="请返回订单详情重新查看"
+  ></empty-state>
 </view>

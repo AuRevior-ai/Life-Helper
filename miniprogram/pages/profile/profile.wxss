@@ -8,7 +8,9 @@
   padding: 90rpx 40rpx 170rpx;
   background: #f8fafb;
   color: #152323;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 .mine-header {
@@ -279,7 +281,15 @@
   box-sizing: border-box;
   border: 4rpx solid currentColor;
   border-top: 0;
-  clip-path: polygon(0 35%, 25% 0, 50% 35%, 75% 0, 100% 35%, 90% 100%, 10% 100%);
+  clip-path: polygon(
+    0 35%,
+    25% 0,
+    50% 35%,
+    75% 0,
+    100% 35%,
+    90% 100%,
+    10% 100%
+  );
   content: "";
 }
 

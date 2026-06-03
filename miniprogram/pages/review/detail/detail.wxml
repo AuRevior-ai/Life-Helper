@@ -8,7 +8,9 @@
     <view class="review-card__header">
       <view>
         <view class="review-card__title">服务评价</view>
-        <view class="review-card__meta">{{ review.service_name || '本次服务' }}</view>
+        <view class="review-card__meta"
+          >{{ review.service_name || '本次服务' }}</view
+        >
       </view>
       <view class="rating-badge">
         <text class="rating-badge__score">{{ review.rating }}</text>
@@ -18,31 +20,52 @@
 
     <view class="content-section">
       <view class="section-label">评价内容</view>
-      <view class="section-body">{{ review.content || '用户未填写文字评价' }}</view>
+      <view class="section-body"
+        >{{ review.content || '用户未填写文字评价' }}</view
+      >
     </view>
 
-    <view wx:if="{{ review.tags && review.tags.length }}" class="content-section">
+    <view
+      wx:if="{{ review.tags && review.tags.length }}"
+      class="content-section"
+    >
       <view class="section-label">评价标签</view>
       <view class="tag-row">
-        <text wx:for="{{ review.tags }}" wx:key="*this" class="review-tag">{{ item }}</text>
+        <text wx:for="{{ review.tags }}" wx:key="*this" class="review-tag"
+          >{{ item }}</text
+        >
       </view>
     </view>
 
     <view class="content-section">
       <view class="section-label">追评</view>
-      <view class="section-body {{ review.followup_content ? '' : 'section-body--empty' }}">
+      <view
+        class="section-body {{ review.followup_content ? '' : 'section-body--empty' }}"
+      >
         {{ review.followup_content || '暂无追评' }}
       </view>
     </view>
 
     <view class="content-section content-section--last">
       <view class="section-label">师傅回复</view>
-      <view class="section-body {{ review.worker_reply_content ? '' : 'section-body--empty' }}">
+      <view
+        class="section-body {{ review.worker_reply_content ? '' : 'section-body--empty' }}"
+      >
         {{ review.worker_reply_content || '暂无回复' }}
       </view>
     </view>
 
-    <button wx:if="{{ !review.followup_content }}" class="primary-button review-action" bindtap="goFollowup">追加评价</button>
+    <button
+      wx:if="{{ !review.followup_content }}"
+      class="primary-button review-action"
+      bindtap="goFollowup"
+    >
+      追加评价
+    </button>
   </view>
-  <empty-state wx:else title="评价不存在" description="请返回订单详情重新查看"></empty-state>
+  <empty-state
+    wx:else
+    title="评价不存在"
+    description="请返回订单详情重新查看"
+  ></empty-state>
 </view>

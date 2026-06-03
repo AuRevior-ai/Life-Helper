@@ -1,7 +1,9 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">提交基础服务信息，管理员审核通过后即可接单</view>
+    <view class="page-subtitle"
+      >提交基础服务信息，管理员审核通过后即可接单</view
+    >
   </view>
 
   <view class="form-panel panel">
@@ -43,7 +45,9 @@
     <view class="form-item">
       <text class="form-label">服务区域</text>
       <picker mode="selector" range="{{ areaNames }}" bindchange="onAreaChange">
-        <view class="form-input">{{ form.service_area || '请选择服务小区' }}</view>
+        <view class="form-input"
+          >{{ form.service_area || '请选择服务小区' }}</view
+        >
       </picker>
     </view>
 
@@ -64,7 +68,9 @@
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="handleSubmit"
-  >提交审核</button>
+  >
+    提交审核
+  </button>
 
   <button class="ghost-button" bindtap="goAuditStatus">查看审核状态</button>
 </view>

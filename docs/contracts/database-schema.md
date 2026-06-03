@@ -17,14 +17,14 @@
 
 用途：登录用户、角色与账号状态。
 
-| 字段 | 类型 | 必填 | 写入来源 | 前端可传 | 用户可修改 | 关联 | 说明 |
-|---|---|---|---|---|---|---|---|
-| `_id` | string | 是 | 数据库 | 否 | 否 | 多集合 `user_id` | 待核实是否等于 openid |
-| `openid` | string | 是 | `login` 云函数 | 否 | 否 | 当前登录身份 | 权限基础 |
-| `nickname`/`avatar_url` | string | 否 | 登录/资料更新 | 是 | 是 | 展示 | 默认值兼容 |
-| `phone` | string | 否 | 用户资料/地址 | 是 | 是 | 地址/订单 | 格式校验待加强 |
-| `role` | string | 是 | 后端/管理员 | 否 | 否 | 权限矩阵 | `user`、`admin`、`worker` 等 |
-| `status` | string | 是 | 后端/管理员 | 否 | 否 | 权限矩阵 | `normal`/`disabled` |
+| 字段                    | 类型   | 必填 | 写入来源       | 前端可传 | 用户可修改 | 关联             | 说明                         |
+| ----------------------- | ------ | ---- | -------------- | -------- | ---------- | ---------------- | ---------------------------- |
+| `_id`                   | string | 是   | 数据库         | 否       | 否         | 多集合 `user_id` | 待核实是否等于 openid        |
+| `openid`                | string | 是   | `login` 云函数 | 否       | 否         | 当前登录身份     | 权限基础                     |
+| `nickname`/`avatar_url` | string | 否   | 登录/资料更新  | 是       | 是         | 展示             | 默认值兼容                   |
+| `phone`                 | string | 否   | 用户资料/地址  | 是       | 是         | 地址/订单        | 格式校验待加强               |
+| `role`                  | string | 是   | 后端/管理员    | 否       | 否         | 权限矩阵         | `user`、`admin`、`worker` 等 |
+| `status`                | string | 是   | 后端/管理员    | 否       | 否         | 权限矩阵         | `normal`/`disabled`          |
 
 索引建议：`openid` 唯一索引，`role + status` 普通索引。mock 差异：管理员初始化可由受环境变量保护的 `claimInitialAdmin` 完成。
 
@@ -32,21 +32,21 @@
 
 用途：订单主表，覆盖用户下单、mock 支付、师傅/商家接单、服务流转、售后与财务关联。
 
-| 字段 | 类型 | 必填 | 写入来源 | 前端可传 | 用户可修改 | 关联 | 说明 |
-|---|---|---|---|---|---|---|---|
-| `_id` | string | 是 | 数据库 | 否 | 否 | 各日志 | 主键 |
-| `order_no` | string | 是 | `order` | 否 | 否 | 财务/支付 | 后端生成 |
-| `user_id` | string | 是 | `env.openid` | 否 | 否 | `users` | 归属校验 |
-| `service_id`/`service_snapshot` | string/object | 是 | 前端选择 + 后端快照 | 是 | 否 | `services` | 价格以后端快照为准 |
-| `address_snapshot` | object | 是 | 地址集合快照 | 间接 | 否 | `addresses` | 下单时固化 |
-| `status` | string | 是 | 后端状态机 | 否 | 否 | 状态契约 | `ORDER_STATUS` |
-| `pay_status` | string | 是 | `order`/`payment` | 否 | 否 | 支付 | `PAY_STATUS` |
-| `amount`/`pay_amount`/`discount_amount` | number | 是 | 后端计算 | 否 | 否 | 财务/营销 | 字段名以当前代码为准，待继续核实 |
-| `worker_id` | string | 否 | 师傅接单/指派 | 否 | 否 | `workers` | 个人师傅订单 |
-| `provider_type` | string | 否 | 下单/服务方选择 | 是 | 否 | `service_providers` | `worker`/`merchant` |
-| `merchant_id` | string | 否 | 指定商家下单 | 是 | 否 | `merchants` | 商家订单归属 |
-| `after_sale_status`/`refund_status` | string | 否 | `refund` | 否 | 否 | 售后/退款 | mock 退款边界 |
-| `finish_images`/`finish_remark` | array/string | 否 | 师傅/商家完工 | 是 | 否 | 评价 | 云存储权限待真机核实 |
+| 字段                                    | 类型          | 必填 | 写入来源            | 前端可传 | 用户可修改 | 关联                | 说明                             |
+| --------------------------------------- | ------------- | ---- | ------------------- | -------- | ---------- | ------------------- | -------------------------------- |
+| `_id`                                   | string        | 是   | 数据库              | 否       | 否         | 各日志              | 主键                             |
+| `order_no`                              | string        | 是   | `order`             | 否       | 否         | 财务/支付           | 后端生成                         |
+| `user_id`                               | string        | 是   | `env.openid`        | 否       | 否         | `users`             | 归属校验                         |
+| `service_id`/`service_snapshot`         | string/object | 是   | 前端选择 + 后端快照 | 是       | 否         | `services`          | 价格以后端快照为准               |
+| `address_snapshot`                      | object        | 是   | 地址集合快照        | 间接     | 否         | `addresses`         | 下单时固化                       |
+| `status`                                | string        | 是   | 后端状态机          | 否       | 否         | 状态契约            | `ORDER_STATUS`                   |
+| `pay_status`                            | string        | 是   | `order`/`payment`   | 否       | 否         | 支付                | `PAY_STATUS`                     |
+| `amount`/`pay_amount`/`discount_amount` | number        | 是   | 后端计算            | 否       | 否         | 财务/营销           | 字段名以当前代码为准，待继续核实 |
+| `worker_id`                             | string        | 否   | 师傅接单/指派       | 否       | 否         | `workers`           | 个人师傅订单                     |
+| `provider_type`                         | string        | 否   | 下单/服务方选择     | 是       | 否         | `service_providers` | `worker`/`merchant`              |
+| `merchant_id`                           | string        | 否   | 指定商家下单        | 是       | 否         | `merchants`         | 商家订单归属                     |
+| `after_sale_status`/`refund_status`     | string        | 否   | `refund`            | 否       | 否         | 售后/退款           | mock 退款边界                    |
+| `finish_images`/`finish_remark`         | array/string  | 否   | 师傅/商家完工       | 是       | 否         | 评价                | 云存储权限待真机核实             |
 
 索引建议：`user_id + created_at`、`worker_id + status`、`merchant_id + status`、`status + pay_status`、`provider_type + merchant_id`。mock 差异：`mockPayOrder` 和 `payment` mock 模式会直接推进支付状态，无真实扣款。
 

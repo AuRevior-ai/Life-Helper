@@ -1,12 +1,41 @@
 <view class="page-shell">
   <view class="page-header"><view class="page-title">{{ title }}</view></view>
   <view wx:if="{{ review }}" class="panel">
-    <view class="info-row"><text>评分</text><text>{{ review.rating }} 分</text></view>
-    <view class="info-row"><text>评价</text><text>{{ review.content }}</text></view>
-    <view class="info-row"><text>追评</text><text>{{ review.followup_content || '暂无' }}</text></view>
-    <textarea class="form-textarea" placeholder="回复评价" bindinput="onReplyInput"></textarea>
-    <button class="primary-button" bindtap="submitReply" loading="{{ submitting }}" disabled="{{ submitting }}">回复评价</button>
-    <textarea class="form-textarea" placeholder="差评申诉理由" bindinput="onAppealInput"></textarea>
-    <button class="ghost-button" bindtap="submitAppeal" loading="{{ submitting }}" disabled="{{ submitting }}">提交申诉</button>
+    <view class="info-row"
+      ><text>评分</text><text>{{ review.rating }} 分</text></view
+    >
+    <view class="info-row"
+      ><text>评价</text><text>{{ review.content }}</text></view
+    >
+    <view class="info-row"
+      ><text>追评</text
+      ><text>{{ review.followup_content || '暂无' }}</text></view
+    >
+    <textarea
+      class="form-textarea"
+      placeholder="回复评价"
+      bindinput="onReplyInput"
+    ></textarea>
+    <button
+      class="primary-button"
+      bindtap="submitReply"
+      loading="{{ submitting }}"
+      disabled="{{ submitting }}"
+    >
+      回复评价
+    </button>
+    <textarea
+      class="form-textarea"
+      placeholder="差评申诉理由"
+      bindinput="onAppealInput"
+    ></textarea>
+    <button
+      class="ghost-button"
+      bindtap="submitAppeal"
+      loading="{{ submitting }}"
+      disabled="{{ submitting }}"
+    >
+      提交申诉
+    </button>
   </view>
 </view>

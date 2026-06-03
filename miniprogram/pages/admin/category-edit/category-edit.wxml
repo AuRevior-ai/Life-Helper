@@ -1,31 +1,63 @@
 <view class="page-shell">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">维护服务分类名称、状态和排序，用于首页与服务列表展示</view>
+    <view class="page-subtitle"
+      >维护服务分类名称、状态和排序，用于首页与服务列表展示</view
+    >
   </view>
 
   <view class="panel form-panel">
     <view class="form-item">
       <text class="form-label">分类名称</text>
-      <input class="form-input" value="{{ name }}" data-field="name" placeholder="例如：家政保洁" bindinput="onInput" />
+      <input
+        class="form-input"
+        value="{{ name }}"
+        data-field="name"
+        placeholder="例如：家政保洁"
+        bindinput="onInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">图标文字</text>
-      <input class="form-input" value="{{ icon }}" data-field="icon" placeholder="例如：洁" bindinput="onInput" />
+      <input
+        class="form-input"
+        value="{{ icon }}"
+        data-field="icon"
+        placeholder="例如：洁"
+        bindinput="onInput"
+      />
     </view>
     <view class="form-item">
       <text class="form-label">分类描述</text>
-      <textarea class="form-textarea" value="{{ description }}" data-field="description" placeholder="填写分类说明" bindinput="onInput"></textarea>
+      <textarea
+        class="form-textarea"
+        value="{{ description }}"
+        data-field="description"
+        placeholder="填写分类说明"
+        bindinput="onInput"
+      ></textarea>
     </view>
     <view class="form-item">
       <text class="form-label">状态</text>
-      <picker mode="selector" range="{{ statusOptions }}" value="{{ statusIndex }}" bindchange="onStatusChange">
+      <picker
+        mode="selector"
+        range="{{ statusOptions }}"
+        value="{{ statusIndex }}"
+        bindchange="onStatusChange"
+      >
         <view class="picker-value">{{ statusOptions[statusIndex] }}</view>
       </picker>
     </view>
     <view class="form-item">
       <text class="form-label">排序</text>
-      <input class="form-input" type="number" value="{{ sort }}" data-field="sort" placeholder="数字越小越靠前" bindinput="onInput" />
+      <input
+        class="form-input"
+        type="number"
+        value="{{ sort }}"
+        data-field="sort"
+        placeholder="数字越小越靠前"
+        bindinput="onInput"
+      />
     </view>
   </view>
 
@@ -34,5 +66,7 @@
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="saveCategory"
-  >保存分类</button>
+  >
+    保存分类
+  </button>
 </view>

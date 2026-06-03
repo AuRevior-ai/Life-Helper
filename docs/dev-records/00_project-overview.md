@@ -35,26 +35,26 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
+| 文件路径                                  | 说明                                                    |
+| ----------------------------------------- | ------------------------------------------------------- |
 | `docs/dev-records/00_project-overview.md` | 项目 MVP 总览，记录范围、技术栈、角色、状态机和阶段规划 |
-| `docs/dev-records/index.md` | 阶段记录索引，记录整体进度、阶段文件和遗留问题总表 |
+| `docs/dev-records/index.md`               | 阶段记录索引，记录整体进度、阶段文件和遗留问题总表      |
 
 ---
 
 ## 5. 修改文件
 
 | 文件路径 | 修改内容 |
-|---|---|
-| 无 | 无 |
+| -------- | -------- |
+| 无       | 无       |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -74,122 +74,122 @@
 
 ### users 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 用户记录 ID |
-| `openid` | string | 微信用户 openid |
-| `nickname` | string | 用户昵称 |
-| `avatar` | string | 用户头像 |
-| `phone` | string | 用户手机号 |
-| `role` | string | 用户角色：user / worker / admin |
-| `status` | string | 用户状态：normal / disabled |
-| `created_at` | date | 创建时间 |
-| `updated_at` | date | 更新时间 |
+| 字段         | 类型   | 说明                            |
+| ------------ | ------ | ------------------------------- |
+| `_id`        | string | 用户记录 ID                     |
+| `openid`     | string | 微信用户 openid                 |
+| `nickname`   | string | 用户昵称                        |
+| `avatar`     | string | 用户头像                        |
+| `phone`      | string | 用户手机号                      |
+| `role`       | string | 用户角色：user / worker / admin |
+| `status`     | string | 用户状态：normal / disabled     |
+| `created_at` | date   | 创建时间                        |
+| `updated_at` | date   | 更新时间                        |
 
 ### service_categories 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 分类 ID |
-| `name` | string | 分类名称 |
-| `icon` | string | 分类图标 |
-| `sort` | number | 排序值 |
-| `status` | string | 分类状态：enabled / disabled |
-| `created_at` | date | 创建时间 |
-| `updated_at` | date | 更新时间 |
+| 字段         | 类型   | 说明                         |
+| ------------ | ------ | ---------------------------- |
+| `_id`        | string | 分类 ID                      |
+| `name`       | string | 分类名称                     |
+| `icon`       | string | 分类图标                     |
+| `sort`       | number | 排序值                       |
+| `status`     | string | 分类状态：enabled / disabled |
+| `created_at` | date   | 创建时间                     |
+| `updated_at` | date   | 更新时间                     |
 
 ### services 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 服务 ID |
-| `category_id` | string | 所属分类 ID |
-| `category_name` | string | 所属分类名称快照 |
-| `name` | string | 服务名称 |
-| `price` | number | 服务价格，单位：分 |
-| `duration` | string | 服务时长 |
-| `cover_image` | string | 服务封面 |
-| `description` | string | 服务介绍 |
-| `status` | string | 服务状态：on / off |
-| `created_at` | date | 创建时间 |
-| `updated_at` | date | 更新时间 |
+| 字段            | 类型   | 说明               |
+| --------------- | ------ | ------------------ |
+| `_id`           | string | 服务 ID            |
+| `category_id`   | string | 所属分类 ID        |
+| `category_name` | string | 所属分类名称快照   |
+| `name`          | string | 服务名称           |
+| `price`         | number | 服务价格，单位：分 |
+| `duration`      | string | 服务时长           |
+| `cover_image`   | string | 服务封面           |
+| `description`   | string | 服务介绍           |
+| `status`        | string | 服务状态：on / off |
+| `created_at`    | date   | 创建时间           |
+| `updated_at`    | date   | 更新时间           |
 
 ### addresses 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 地址 ID |
-| `user_id` | string | 所属用户 ID |
-| `contact_name` | string | 联系人 |
-| `phone` | string | 联系电话 |
-| `city` | string | 城市 |
-| `community` | string | 小区 |
-| `detail_address` | string | 详细地址 |
-| `is_default` | boolean | 是否默认地址 |
-| `created_at` | date | 创建时间 |
-| `updated_at` | date | 更新时间 |
+| 字段             | 类型    | 说明         |
+| ---------------- | ------- | ------------ |
+| `_id`            | string  | 地址 ID      |
+| `user_id`        | string  | 所属用户 ID  |
+| `contact_name`   | string  | 联系人       |
+| `phone`          | string  | 联系电话     |
+| `city`           | string  | 城市         |
+| `community`      | string  | 小区         |
+| `detail_address` | string  | 详细地址     |
+| `is_default`     | boolean | 是否默认地址 |
+| `created_at`     | date    | 创建时间     |
+| `updated_at`     | date    | 更新时间     |
 
 ### workers 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 师傅记录 ID |
-| `user_id` | string | 关联用户 ID |
-| `real_name` | string | 师傅姓名 |
-| `phone` | string | 联系电话 |
-| `avatar` | string | 头像 |
-| `service_category_ids` | array | 可服务分类 ID 列表 |
-| `service_communities` | array | 可服务小区列表 |
-| `intro` | string | 个人简介 |
-| `audit_status` | string | 审核状态：pending / approved / rejected |
-| `status` | string | 账号状态：normal / disabled |
-| `reject_reason` | string | 拒绝原因 |
-| `created_at` | date | 创建时间 |
-| `updated_at` | date | 更新时间 |
+| 字段                   | 类型   | 说明                                    |
+| ---------------------- | ------ | --------------------------------------- |
+| `_id`                  | string | 师傅记录 ID                             |
+| `user_id`              | string | 关联用户 ID                             |
+| `real_name`            | string | 师傅姓名                                |
+| `phone`                | string | 联系电话                                |
+| `avatar`               | string | 头像                                    |
+| `service_category_ids` | array  | 可服务分类 ID 列表                      |
+| `service_communities`  | array  | 可服务小区列表                          |
+| `intro`                | string | 个人简介                                |
+| `audit_status`         | string | 审核状态：pending / approved / rejected |
+| `status`               | string | 账号状态：normal / disabled             |
+| `reject_reason`        | string | 拒绝原因                                |
+| `created_at`           | date   | 创建时间                                |
+| `updated_at`           | date   | 更新时间                                |
 
 ### orders 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 订单 ID |
-| `order_no` | string | 订单编号 |
-| `user_id` | string | 下单用户 ID |
-| `worker_id` | string | 接单师傅 ID |
-| `service_id` | string | 服务 ID |
-| `service_name` | string | 服务名称快照 |
-| `category_id` | string | 服务分类 ID |
-| `category_name` | string | 服务分类名称快照 |
-| `price` | number | 订单金额，单位：分 |
-| `contact_name` | string | 联系人 |
-| `contact_phone` | string | 联系电话 |
-| `city` | string | 城市 |
-| `community` | string | 小区 |
-| `detail_address` | string | 详细地址 |
-| `full_address` | string | 完整地址 |
-| `appointment_time` | string | 预约时间 |
-| `remark` | string | 用户备注 |
-| `status` | string | 订单状态 |
-| `pay_status` | string | 支付状态 |
-| `created_at` | date | 创建时间 |
-| `paid_at` | date | 模拟支付时间 |
-| `accepted_at` | date | 接单时间 |
-| `started_at` | date | 开始服务时间 |
-| `finished_at` | date | 师傅完成时间 |
-| `completed_at` | date | 订单完成时间 |
-| `canceled_at` | date | 取消时间 |
-| `updated_at` | date | 更新时间 |
+| 字段               | 类型   | 说明               |
+| ------------------ | ------ | ------------------ |
+| `_id`              | string | 订单 ID            |
+| `order_no`         | string | 订单编号           |
+| `user_id`          | string | 下单用户 ID        |
+| `worker_id`        | string | 接单师傅 ID        |
+| `service_id`       | string | 服务 ID            |
+| `service_name`     | string | 服务名称快照       |
+| `category_id`      | string | 服务分类 ID        |
+| `category_name`    | string | 服务分类名称快照   |
+| `price`            | number | 订单金额，单位：分 |
+| `contact_name`     | string | 联系人             |
+| `contact_phone`    | string | 联系电话           |
+| `city`             | string | 城市               |
+| `community`        | string | 小区               |
+| `detail_address`   | string | 详细地址           |
+| `full_address`     | string | 完整地址           |
+| `appointment_time` | string | 预约时间           |
+| `remark`           | string | 用户备注           |
+| `status`           | string | 订单状态           |
+| `pay_status`       | string | 支付状态           |
+| `created_at`       | date   | 创建时间           |
+| `paid_at`          | date   | 模拟支付时间       |
+| `accepted_at`      | date   | 接单时间           |
+| `started_at`       | date   | 开始服务时间       |
+| `finished_at`      | date   | 师傅完成时间       |
+| `completed_at`     | date   | 订单完成时间       |
+| `canceled_at`      | date   | 取消时间           |
+| `updated_at`       | date   | 更新时间           |
 
 ### reviews 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 评价 ID |
-| `order_id` | string | 关联订单 ID |
-| `user_id` | string | 评价用户 ID |
-| `worker_id` | string | 被评价师傅 ID |
-| `rating` | number | 评分：1-5 |
-| `content` | string | 评价内容 |
-| `created_at` | date | 评价时间 |
+| 字段         | 类型   | 说明          |
+| ------------ | ------ | ------------- |
+| `_id`        | string | 评价 ID       |
+| `order_id`   | string | 关联订单 ID   |
+| `user_id`    | string | 评价用户 ID   |
+| `worker_id`  | string | 被评价师傅 ID |
+| `rating`     | number | 评分：1-5     |
+| `content`    | string | 评价内容      |
+| `created_at` | date   | 评价时间      |
 
 ### 数据库权限说明
 
@@ -201,16 +201,16 @@
 
 本阶段未实现业务接口，仅记录计划云函数边界。
 
-| 云函数 | 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|---|
-| `login` | 用户登录与初始化 | `action` | `userInfo` | 所有用户可调用 |
-| `user` | 用户信息获取与更新 | `action`, `payload` | `data` | 当前用户或管理员 |
-| `service` | 分类与服务项目管理 | `action`, `payload` | `data` | 读取公开，写入管理员 |
-| `address` | 地址管理 | `action`, `payload` | `data` | 当前用户 |
-| `order` | 订单创建、支付、接单、状态流转 | `action`, `payload` | `data` | 按角色和订单归属校验 |
-| `worker` | 师傅入驻、审核、接单大厅 | `action`, `payload` | `data` | 用户、师傅或管理员 |
-| `review` | 评价创建与查询 | `action`, `payload` | `data` | 当前用户或公开读取 |
-| `admin` | 管理端统计和列表 | `action`, `payload` | `data` | 管理员 |
+| 云函数    | 功能                           | 入参                | 出参       | 权限要求             |
+| --------- | ------------------------------ | ------------------- | ---------- | -------------------- |
+| `login`   | 用户登录与初始化               | `action`            | `userInfo` | 所有用户可调用       |
+| `user`    | 用户信息获取与更新             | `action`, `payload` | `data`     | 当前用户或管理员     |
+| `service` | 分类与服务项目管理             | `action`, `payload` | `data`     | 读取公开，写入管理员 |
+| `address` | 地址管理                       | `action`, `payload` | `data`     | 当前用户             |
+| `order`   | 订单创建、支付、接单、状态流转 | `action`, `payload` | `data`     | 按角色和订单归属校验 |
+| `worker`  | 师傅入驻、审核、接单大厅       | `action`, `payload` | `data`     | 用户、师傅或管理员   |
+| `review`  | 评价创建与查询                 | `action`, `payload` | `data`     | 当前用户或公开读取   |
+| `admin`   | 管理端统计和列表               | `action`, `payload` | `data`     | 管理员               |
 
 ---
 
@@ -280,22 +280,22 @@ canceled
 
 状态枚举：
 
-| 枚举 | 值 | 中文含义 |
-|---|---|---|
-| `PENDING_PAY` | `pending_pay` | 待付款 |
-| `PENDING_ACCEPT` | `pending_accept` | 待接单 |
-| `ACCEPTED` | `accepted` | 已接单 |
-| `SERVING` | `serving` | 服务中 |
-| `PENDING_REVIEW` | `pending_review` | 待评价 |
-| `COMPLETED` | `completed` | 已完成 |
-| `CANCELED` | `canceled` | 已取消 |
+| 枚举             | 值               | 中文含义 |
+| ---------------- | ---------------- | -------- |
+| `PENDING_PAY`    | `pending_pay`    | 待付款   |
+| `PENDING_ACCEPT` | `pending_accept` | 待接单   |
+| `ACCEPTED`       | `accepted`       | 已接单   |
+| `SERVING`        | `serving`        | 服务中   |
+| `PENDING_REVIEW` | `pending_review` | 待评价   |
+| `COMPLETED`      | `completed`      | 已完成   |
+| `CANCELED`       | `canceled`       | 已取消   |
 
 支付状态：
 
-| 枚举 | 值 | 中文含义 |
-|---|---|---|
-| `UNPAID` | `unpaid` | 未支付 |
-| `PAID` | `paid` | 已支付 |
+| 枚举     | 值       | 中文含义 |
+| -------- | -------- | -------- |
+| `UNPAID` | `unpaid` | 未支付   |
+| `PAID`   | `paid`   | 已支付   |
 
 ---
 
@@ -355,12 +355,12 @@ canceled
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未配置真实微信云开发环境 ID | 无法直接部署真实云函数和数据库 | 阶段 2 开始前在微信开发者工具中创建云环境并确认配置方式 | P1 |
-| 管理员初始化方式暂时依赖手动改库 | 不影响 MVP，但不够自动化 | 阶段 2 文档化手动改库步骤，阶段 7 再优化 | P1 |
-| 阶段 1 代码骨架已完成但阶段记录尚未补齐 | 阶段记录制度不完整 | 下一步优先补 `01_phase-init.md` | P1 |
-| 云函数占位入口尚未实现真实业务 | P0 主流程尚不能运行 | 从阶段 2 起按模块逐步实现 | P0 |
+| 问题                                    | 影响                           | 后续处理建议                                            | 优先级 |
+| --------------------------------------- | ------------------------------ | ------------------------------------------------------- | ------ |
+| 尚未配置真实微信云开发环境 ID           | 无法直接部署真实云函数和数据库 | 阶段 2 开始前在微信开发者工具中创建云环境并确认配置方式 | P1     |
+| 管理员初始化方式暂时依赖手动改库        | 不影响 MVP，但不够自动化       | 阶段 2 文档化手动改库步骤，阶段 7 再优化                | P1     |
+| 阶段 1 代码骨架已完成但阶段记录尚未补齐 | 阶段记录制度不完整             | 下一步优先补 `01_phase-init.md`                         | P1     |
+| 云函数占位入口尚未实现真实业务          | P0 主流程尚不能运行            | 从阶段 2 起按模块逐步实现                               | P0     |
 
 ---
 

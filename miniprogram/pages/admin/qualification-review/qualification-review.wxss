@@ -1,4 +1,18 @@
-.page { padding: 32rpx; background: #f6f8f5; min-height: 100vh; }
-.item { padding: 24rpx; margin-bottom: 20rpx; background: #ffffff; border-radius: 8rpx; }
-text { display: block; margin-bottom: 12rpx; }
-button { margin-top: 12rpx; }
+.page {
+  padding: 32rpx;
+  background: #f6f8f5;
+  min-height: 100vh;
+}
+.item {
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  background: #ffffff;
+  border-radius: 8rpx;
+}
+text {
+  display: block;
+  margin-bottom: 12rpx;
+}
+button {
+  margin-top: 12rpx;
+}

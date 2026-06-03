@@ -1,4 +1,8 @@
-<view wx:if="{{ variant === 'center' }}" class="order-card order-card--center" bindtap="onTap">
+<view
+  wx:if="{{ variant === 'center' }}"
+  class="order-card order-card--center"
+  bindtap="onTap"
+>
   <view class="order-card__media">
     <image
       wx:if="{{ order.image || order.cover_image || order.service_image }}"
@@ -10,13 +14,20 @@
   </view>
 
   <view class="order-card__main">
-    <view class="order-card__name">{{ order.service_name || order.serviceName || '服务订单' }}</view>
+    <view class="order-card__name"
+      >{{ order.service_name || order.serviceName || '服务订单' }}</view
+    >
     <view class="order-card__meta">
       <view class="order-card__meta-icon order-card__meta-icon--time"></view>
-      <text>预约时间：{{ order.appointment_time || order.appointmentTime || '时间待确认' }}</text>
+      <text
+        >预约时间：{{ order.appointment_time || order.appointmentTime ||
+        '时间待确认' }}</text
+      >
     </view>
     <view class="order-card__meta">
-      <view class="order-card__meta-icon order-card__meta-icon--location"></view>
+      <view
+        class="order-card__meta-icon order-card__meta-icon--location"
+      ></view>
       <text>服务地址：{{ displayAddress }}</text>
     </view>
   </view>
@@ -33,7 +44,9 @@
       class="order-card__action order-card__action--{{ item.style }}"
       data-action="{{ item.type }}"
       catchtap="onActionTap"
-    >{{ item.label }}</button>
+    >
+      {{ item.label }}
+    </button>
   </view>
 </view>
 

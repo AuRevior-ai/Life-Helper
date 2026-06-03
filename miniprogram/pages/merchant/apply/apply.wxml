@@ -1,7 +1,27 @@
 <view class="page">
-  <input placeholder="店铺名称" value="{{form.storeName}}" bindinput="onInput" data-field="storeName" />
-  <input placeholder="联系人" value="{{form.contactName}}" bindinput="onInput" data-field="contactName" />
-  <input placeholder="联系电话" value="{{form.contactPhone}}" bindinput="onInput" data-field="contactPhone" />
-  <textarea placeholder="店铺简介" value="{{form.storeIntro}}" bindinput="onInput" data-field="storeIntro" />
+  <input
+    placeholder="店铺名称"
+    value="{{form.storeName}}"
+    bindinput="onInput"
+    data-field="storeName"
+  />
+  <input
+    placeholder="联系人"
+    value="{{form.contactName}}"
+    bindinput="onInput"
+    data-field="contactName"
+  />
+  <input
+    placeholder="联系电话"
+    value="{{form.contactPhone}}"
+    bindinput="onInput"
+    data-field="contactPhone"
+  />
+  <textarea
+    placeholder="店铺简介"
+    value="{{form.storeIntro}}"
+    bindinput="onInput"
+    data-field="storeIntro"
+  />
   <button bindtap="submit">提交入驻</button>
 </view>

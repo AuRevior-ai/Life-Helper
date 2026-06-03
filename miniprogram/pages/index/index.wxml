@@ -16,12 +16,22 @@
   </view>
 
   <view class="home-banner-card">
-    <image class="home-banner-bg" src="/assets/home/用户端_首页_广告栏背景板.png" mode="aspectFill"></image>
+    <image
+      class="home-banner-bg"
+      src="/assets/home/用户端_首页_广告栏背景板.png"
+      mode="aspectFill"
+    ></image>
     <view class="home-banner-copy">
       <view class="home-banner-title">社区便民服务</view>
-      <view class="home-banner-subtitle">保洁、维修、宠物服务，一键预约上门</view>
+      <view class="home-banner-subtitle"
+        >保洁、维修、宠物服务，一键预约上门</view
+      >
       <view class="home-banner-badges">
-        <view class="home-banner-badge" wx:for="{{ bannerBadges }}" wx:key="*this">
+        <view
+          class="home-banner-badge"
+          wx:for="{{ bannerBadges }}"
+          wx:key="*this"
+        >
           <view class="home-badge-icon"></view>
           <text>{{ item }}</text>
         </view>
@@ -40,7 +50,9 @@
     <view class="home-section-card home-category-card">
       <view class="home-section-head">
         <text class="home-section-title">服务分类</text>
-        <view class="home-section-more" bindtap="goServiceList">查看更多 <text>></text></view>
+        <view class="home-section-more" bindtap="goServiceList"
+          >查看更多 <text>></text></view
+        >
       </view>
 
       <view class="home-category-grid">
@@ -52,7 +64,11 @@
           bindtap="goServiceList"
         >
           <view class="home-category-icon home-category-icon--{{ item.tone }}">
-            <image class="home-category-image" src="{{ item.iconPath }}" mode="aspectFit"></image>
+            <image
+              class="home-category-image"
+              src="{{ item.iconPath }}"
+              mode="aspectFit"
+            ></image>
           </view>
           <view class="home-category-name">{{ item.name }}</view>
         </view>
@@ -63,7 +79,9 @@
     <view class="home-section-card home-common-card">
       <view class="home-section-head">
         <text class="home-section-title">常用服务</text>
-        <view class="home-section-more" bindtap="goServiceList">查看更多 <text>></text></view>
+        <view class="home-section-more" bindtap="goServiceList"
+          >查看更多 <text>></text></view
+        >
       </view>
 
       <view class="home-common-list">
@@ -75,7 +93,11 @@
           bindtap="goServiceDetail"
         >
           <view class="home-service-cover">
-            <image class="home-service-cover-image" src="{{ item.coverPath }}" mode="aspectFill"></image>
+            <image
+              class="home-service-cover-image"
+              src="{{ item.coverPath }}"
+              mode="aspectFill"
+            ></image>
           </view>
           <view class="home-service-info">
             <view class="home-service-title">{{ item.title }}</view>
@@ -87,9 +109,16 @@
           </view>
           <view class="home-service-action">
             <view class="home-service-price">
-              <text class="home-price-main">¥99</text><text class="home-price-suffix">起</text>
+              <text class="home-price-main">¥99</text
+              ><text class="home-price-suffix">起</text>
             </view>
-            <button class="home-book-button" data-id="{{ item._id }}" catchtap="goServiceDetail">立即预约</button>
+            <button
+              class="home-book-button"
+              data-id="{{ item._id }}"
+              catchtap="goServiceDetail"
+            >
+              立即预约
+            </button>
           </view>
         </view>
       </view>

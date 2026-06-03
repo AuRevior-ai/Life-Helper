@@ -1,6 +1,10 @@
 <view class="page">
   <view class="panel">
-    <input placeholder="输入商家 ID" value="{{merchantId}}" bindinput="onInput" />
+    <input
+      placeholder="输入商家 ID"
+      value="{{merchantId}}"
+      bindinput="onInput"
+    />
     <button data-level="LOW" bindtap="setRisk">低风险</button>
     <button data-level="HIGH" bindtap="setRisk">高风险复核</button>
     <button data-level="BLOCKED" bindtap="setRisk">限制入驻</button>

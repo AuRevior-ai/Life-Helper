@@ -49,44 +49,44 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase4-address-order.md` | 阶段四实施计划 |
-| `tests/phase4.address-order.test.js` | 地址、订单和页面接入测试 |
-| `cloudfunctions/address/handler.js` | 地址云函数业务逻辑 |
-| `cloudfunctions/address/address-repository.js` | 地址集合读写封装 |
-| `cloudfunctions/order/handler.js` | 订单云函数业务逻辑 |
-| `cloudfunctions/order/order-repository.js` | 订单集合读写和地址只读封装 |
-| `cloudfunctions/order/service-data.js` | 下单用服务快照种子数据 |
-| `docs/dev-records/04_phase-address-order.md` | 本阶段开发记录与复盘 |
+| 文件路径                                                    | 说明                       |
+| ----------------------------------------------------------- | -------------------------- |
+| `docs/superpowers/plans/2026-05-30-phase4-address-order.md` | 阶段四实施计划             |
+| `tests/phase4.address-order.test.js`                        | 地址、订单和页面接入测试   |
+| `cloudfunctions/address/handler.js`                         | 地址云函数业务逻辑         |
+| `cloudfunctions/address/address-repository.js`              | 地址集合读写封装           |
+| `cloudfunctions/order/handler.js`                           | 订单云函数业务逻辑         |
+| `cloudfunctions/order/order-repository.js`                  | 订单集合读写和地址只读封装 |
+| `cloudfunctions/order/service-data.js`                      | 下单用服务快照种子数据     |
+| `docs/dev-records/04_phase-address-order.md`                | 本阶段开发记录与复盘       |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `cloudfunctions/address/index.js` | 从占位入口改为调用 `handleAddress` |
-| `cloudfunctions/order/index.js` | 从占位入口改为调用 `handleOrder` |
-| `miniprogram/app.wxss` | 增加阶段四复用的按钮、表单、标签和标题样式 |
-| `miniprogram/pages/address-list/*` | 地址管理页接入真实数据与交互 |
-| `miniprogram/pages/address-edit/*` | 地址表单页接入新增和编辑 |
-| `miniprogram/pages/order-submit/*` | 提交订单页接入服务、地址和订单创建 |
-| `miniprogram/pages/order-list/*` | 我的订单页接入订单列表 |
-| `miniprogram/pages/order-detail/*` | 订单详情页接入详情、模拟支付和取消 |
-| `miniprogram/pages/profile/profile.js` | 增加订单、地址、师傅、管理员入口跳转 |
-| `miniprogram/pages/profile/profile.wxml` | 菜单项绑定跳转事件 |
-| `miniprogram/pages/service-detail/service-detail.js` | “立即预约”跳转提交订单页 |
-| `docs/dev-records/index.md` | 更新阶段四完成状态、P0 完成情况和遗留问题 |
-| `README.md` | 补充阶段四说明和验证步骤 |
+| 文件路径                                             | 修改内容                                   |
+| ---------------------------------------------------- | ------------------------------------------ |
+| `cloudfunctions/address/index.js`                    | 从占位入口改为调用 `handleAddress`         |
+| `cloudfunctions/order/index.js`                      | 从占位入口改为调用 `handleOrder`           |
+| `miniprogram/app.wxss`                               | 增加阶段四复用的按钮、表单、标签和标题样式 |
+| `miniprogram/pages/address-list/*`                   | 地址管理页接入真实数据与交互               |
+| `miniprogram/pages/address-edit/*`                   | 地址表单页接入新增和编辑                   |
+| `miniprogram/pages/order-submit/*`                   | 提交订单页接入服务、地址和订单创建         |
+| `miniprogram/pages/order-list/*`                     | 我的订单页接入订单列表                     |
+| `miniprogram/pages/order-detail/*`                   | 订单详情页接入详情、模拟支付和取消         |
+| `miniprogram/pages/profile/profile.js`               | 增加订单、地址、师傅、管理员入口跳转       |
+| `miniprogram/pages/profile/profile.wxml`             | 菜单项绑定跳转事件                         |
+| `miniprogram/pages/service-detail/service-detail.js` | “立即预约”跳转提交订单页                   |
+| `docs/dev-records/index.md`                          | 更新阶段四完成状态、P0 完成情况和遗留问题  |
+| `README.md`                                          | 补充阶段四说明和验证步骤                   |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -94,52 +94,52 @@
 
 本阶段开始使用两个真实云数据库集合：
 
-| 集合 | 作用 | 当前写入方式 |
-|---|---|---|
-| `addresses` | 保存用户服务地址 | `address` 云函数 |
-| `orders` | 保存用户订单和状态流转 | `order` 云函数 |
+| 集合        | 作用                   | 当前写入方式     |
+| ----------- | ---------------------- | ---------------- |
+| `addresses` | 保存用户服务地址       | `address` 云函数 |
+| `orders`    | 保存用户订单和状态流转 | `order` 云函数   |
 
 ### `addresses` 主要字段
 
-| 字段 | 说明 |
-|---|---|
-| `_id` | 云数据库文档 ID |
-| `user_id` | 当前阶段使用用户 openid |
-| `contact_name` | 联系人 |
-| `phone` | 手机号 |
-| `city` | 城市 |
-| `community` | 小区 |
-| `detail_address` | 详细地址 |
-| `is_default` | 是否默认地址 |
-| `created_at` | 创建时间 |
-| `updated_at` | 更新时间 |
+| 字段             | 说明                    |
+| ---------------- | ----------------------- |
+| `_id`            | 云数据库文档 ID         |
+| `user_id`        | 当前阶段使用用户 openid |
+| `contact_name`   | 联系人                  |
+| `phone`          | 手机号                  |
+| `city`           | 城市                    |
+| `community`      | 小区                    |
+| `detail_address` | 详细地址                |
+| `is_default`     | 是否默认地址            |
+| `created_at`     | 创建时间                |
+| `updated_at`     | 更新时间                |
 
 ### `orders` 主要字段
 
-| 字段 | 说明 |
-|---|---|
-| `_id` | 云数据库文档 ID |
-| `order_no` | 订单号 |
-| `user_id` | 当前阶段使用用户 openid |
-| `worker_id` | 师傅 ID，阶段四为空 |
-| `service_id` | 服务 ID |
-| `service_name` | 服务名称快照 |
-| `service_duration` | 服务时长快照 |
-| `category_id` | 分类 ID 快照 |
-| `category_name` | 分类名称快照 |
-| `price` | 订单金额，单位分 |
-| `address_id` | 地址 ID |
-| `contact_name` | 联系人快照 |
-| `contact_phone` | 联系电话快照 |
-| `city` / `community` / `detail_address` / `full_address` | 地址快照 |
-| `appointment_time` | 预约时间文本 |
-| `remark` | 用户备注 |
-| `status` | 订单状态 |
-| `pay_status` | 支付状态 |
-| `paid_at` | 模拟支付时间 |
-| `canceled_at` | 取消时间 |
-| `created_at` | 创建时间 |
-| `updated_at` | 更新时间 |
+| 字段                                                     | 说明                    |
+| -------------------------------------------------------- | ----------------------- |
+| `_id`                                                    | 云数据库文档 ID         |
+| `order_no`                                               | 订单号                  |
+| `user_id`                                                | 当前阶段使用用户 openid |
+| `worker_id`                                              | 师傅 ID，阶段四为空     |
+| `service_id`                                             | 服务 ID                 |
+| `service_name`                                           | 服务名称快照            |
+| `service_duration`                                       | 服务时长快照            |
+| `category_id`                                            | 分类 ID 快照            |
+| `category_name`                                          | 分类名称快照            |
+| `price`                                                  | 订单金额，单位分        |
+| `address_id`                                             | 地址 ID                 |
+| `contact_name`                                           | 联系人快照              |
+| `contact_phone`                                          | 联系电话快照            |
+| `city` / `community` / `detail_address` / `full_address` | 地址快照                |
+| `appointment_time`                                       | 预约时间文本            |
+| `remark`                                                 | 用户备注                |
+| `status`                                                 | 订单状态                |
+| `pay_status`                                             | 支付状态                |
+| `paid_at`                                                | 模拟支付时间            |
+| `canceled_at`                                            | 取消时间                |
+| `created_at`                                             | 创建时间                |
+| `updated_at`                                             | 更新时间                |
 
 ### 数据库权限说明
 
@@ -151,42 +151,42 @@
 
 ### `address`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `getAddressList` | 无 | `{ addresses }` | 当前登录用户 |
-| `createAddress` | `contact_name`, `phone`, `city`, `community`, `detail_address`, `is_default` | `{ address }` | 当前登录用户 |
-| `updateAddress` | `addressId` 和地址字段 | `{ address }` | 地址所属用户 |
-| `deleteAddress` | `addressId` | `{ addressId }` | 地址所属用户 |
-| `setDefaultAddress` | `addressId` | `{ address }` | 地址所属用户 |
+| 功能                | 入参                                                                         | 出参            | 权限要求     |
+| ------------------- | ---------------------------------------------------------------------------- | --------------- | ------------ |
+| `getAddressList`    | 无                                                                           | `{ addresses }` | 当前登录用户 |
+| `createAddress`     | `contact_name`, `phone`, `city`, `community`, `detail_address`, `is_default` | `{ address }`   | 当前登录用户 |
+| `updateAddress`     | `addressId` 和地址字段                                                       | `{ address }`   | 地址所属用户 |
+| `deleteAddress`     | `addressId`                                                                  | `{ addressId }` | 地址所属用户 |
+| `setDefaultAddress` | `addressId`                                                                  | `{ address }`   | 地址所属用户 |
 
 ### `order`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `createOrder` | `serviceId`, `addressId`, `appointment_time`, `remark` | `{ order }` | 当前登录用户 |
-| `mockPayOrder` | `orderId` | `{ order }` | 订单所属用户 |
-| `getUserOrderList` | 可选 `status` | `{ orders }` | 当前登录用户 |
-| `getOrderDetail` | `orderId` | `{ order }` | 订单所属用户 |
-| `cancelOrder` | `orderId` | `{ order }` | 订单所属用户 |
+| 功能               | 入参                                                   | 出参         | 权限要求     |
+| ------------------ | ------------------------------------------------------ | ------------ | ------------ |
+| `createOrder`      | `serviceId`, `addressId`, `appointment_time`, `remark` | `{ order }`  | 当前登录用户 |
+| `mockPayOrder`     | `orderId`                                              | `{ order }`  | 订单所属用户 |
+| `getUserOrderList` | 可选 `status`                                          | `{ orders }` | 当前登录用户 |
+| `getOrderDetail`   | `orderId`                                              | `{ order }`  | 订单所属用户 |
+| `cancelOrder`      | `orderId`                                              | `{ order }`  | 订单所属用户 |
 
 ### 统一错误码
 
-| 错误码 | 说明 |
-|---|---|
-| `OPENID_MISSING` | 无法获取当前用户 openid |
-| `ADDRESS_REQUIRED` | 地址字段不完整 |
-| `ADDRESS_PHONE_INVALID` | 手机号格式不正确 |
-| `ADDRESS_ID_MISSING` | 缺少地址 ID |
-| `ADDRESS_NOT_FOUND` | 地址不存在 |
-| `SERVICE_ID_MISSING` | 缺少服务 ID |
-| `SERVICE_NOT_FOUND` | 服务不存在或已下架 |
-| `APPOINTMENT_TIME_MISSING` | 缺少预约时间 |
-| `ORDER_ID_MISSING` | 缺少订单 ID |
-| `ORDER_NOT_FOUND` | 订单不存在 |
-| `ORDER_STATUS_INVALID` | 当前订单状态不能执行该操作 |
-| `PERMISSION_DENIED` | 无权操作目标资源 |
-| `ACTION_NOT_FOUND` | 未知 action |
-| `INTERNAL_ERROR` | 未预期内部错误 |
+| 错误码                     | 说明                       |
+| -------------------------- | -------------------------- |
+| `OPENID_MISSING`           | 无法获取当前用户 openid    |
+| `ADDRESS_REQUIRED`         | 地址字段不完整             |
+| `ADDRESS_PHONE_INVALID`    | 手机号格式不正确           |
+| `ADDRESS_ID_MISSING`       | 缺少地址 ID                |
+| `ADDRESS_NOT_FOUND`        | 地址不存在                 |
+| `SERVICE_ID_MISSING`       | 缺少服务 ID                |
+| `SERVICE_NOT_FOUND`        | 服务不存在或已下架         |
+| `APPOINTMENT_TIME_MISSING` | 缺少预约时间               |
+| `ORDER_ID_MISSING`         | 缺少订单 ID                |
+| `ORDER_NOT_FOUND`          | 订单不存在                 |
+| `ORDER_STATUS_INVALID`     | 当前订单状态不能执行该操作 |
+| `PERMISSION_DENIED`        | 无权操作目标资源           |
+| `ACTION_NOT_FOUND`         | 未知 action                |
+| `INTERNAL_ERROR`           | 未预期内部错误             |
 
 ---
 
@@ -302,15 +302,15 @@
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未在微信开发者工具中真实编译和预览阶段四页面 | 可能存在小程序运行时细节问题 | 部署 `address/order` 云函数后做一次微信端验证 | P1 |
-| 尚未创建真实 `addresses` 和 `orders` 集合 | 微信端无法保存地址和订单 | 微信云开发控制台创建集合 | P0 |
-| 尚未部署 `address` 和 `order` 云函数 | 微信端无法调用阶段四接口 | 微信开发者工具上传并部署云函数 | P0 |
-| 地址和订单当前使用 openid 作为 `user_id` | 与后续内部用户 ID 体系可能需要兼容 | 阶段七或优化阶段评估是否迁移 | P2 |
-| 订单云函数有一份服务快照种子数据 | 与服务浏览种子数据可能产生重复维护 | 阶段七服务管理数据库化时统一来源 | P1 |
-| 取消已模拟支付订单不会走退款 | 不适合真实支付场景 | 接入真实支付前重做支付和退款流 | P1 |
-| 订单列表未分页 | 数据多时列表可能变慢 | 优化阶段加入分页 | P2 |
+| 问题                                           | 影响                               | 后续处理建议                                  | 优先级 |
+| ---------------------------------------------- | ---------------------------------- | --------------------------------------------- | ------ |
+| 尚未在微信开发者工具中真实编译和预览阶段四页面 | 可能存在小程序运行时细节问题       | 部署 `address/order` 云函数后做一次微信端验证 | P1     |
+| 尚未创建真实 `addresses` 和 `orders` 集合      | 微信端无法保存地址和订单           | 微信云开发控制台创建集合                      | P0     |
+| 尚未部署 `address` 和 `order` 云函数           | 微信端无法调用阶段四接口           | 微信开发者工具上传并部署云函数                | P0     |
+| 地址和订单当前使用 openid 作为 `user_id`       | 与后续内部用户 ID 体系可能需要兼容 | 阶段七或优化阶段评估是否迁移                  | P2     |
+| 订单云函数有一份服务快照种子数据               | 与服务浏览种子数据可能产生重复维护 | 阶段七服务管理数据库化时统一来源              | P1     |
+| 取消已模拟支付订单不会走退款                   | 不适合真实支付场景                 | 接入真实支付前重做支付和退款流                | P1     |
+| 订单列表未分页                                 | 数据多时列表可能变慢               | 优化阶段加入分页                              | P2     |
 
 ---
 

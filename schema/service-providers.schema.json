@@ -1,12 +1,44 @@
 {
   "collection": "service_providers",
   "description": "统一服务方索引，兼容个人师傅与商家门店。",
-  "requiredFields": ["_id", "provider_id", "provider_type", "name", "status", "created_at", "updated_at"],
-  "optionalFields": ["user_id", "merchant_id", "worker_id", "service_area", "service_categories", "rating", "sales_count", "online_status"],
-  "serverOnlyFields": ["provider_id", "provider_type", "status", "rating", "sales_count", "created_at", "updated_at"],
+  "requiredFields": [
+    "_id",
+    "provider_id",
+    "provider_type",
+    "name",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
+  "optionalFields": [
+    "user_id",
+    "merchant_id",
+    "worker_id",
+    "service_area",
+    "service_categories",
+    "rating",
+    "sales_count",
+    "online_status"
+  ],
+  "serverOnlyFields": [
+    "provider_id",
+    "provider_type",
+    "status",
+    "rating",
+    "sales_count",
+    "created_at",
+    "updated_at"
+  ],
   "clientWritableFields": ["name", "service_area", "service_categories"],
   "statusFields": ["provider_type", "status", "online_status"],
   "relationFields": ["provider_id", "user_id", "merchant_id", "worker_id"],
-  "indexHints": ["provider_type + status", "provider_id unique", "status + service_categories"],
-  "compatibilityNotes": ["service_providers is an index/compatibility collection; source-of-truth details still live in workers or merchants.", "字段完整性需真实云环境回填验证。"]
+  "indexHints": [
+    "provider_type + status",
+    "provider_id unique",
+    "status + service_categories"
+  ],
+  "compatibilityNotes": [
+    "service_providers is an index/compatibility collection; source-of-truth details still live in workers or merchants.",
+    "字段完整性需真实云环境回填验证。"
+  ]
 }

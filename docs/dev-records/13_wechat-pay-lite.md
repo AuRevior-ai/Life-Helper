@@ -27,36 +27,36 @@
 
 ## 4. 新增文件
 
-| 文件 | 作用 |
-| --- | --- |
-| `cloudfunctions/payment/index.js` | 支付云函数入口 |
-| `cloudfunctions/payment/handler.js` | 支付业务逻辑 |
-| `cloudfunctions/payment/order-repository.js` | 支付云函数订单读写 |
-| `cloudfunctions/payment/payment-repository.js` | 支付日志写入 |
-| `cloudfunctions/payment/message-repository.js` | 支付成功消息写入 |
-| `cloudfunctions/payment/wechat-pay-client.js` | 微信支付客户端占位封装 |
-| `cloudfunctions/payment/config.example.js` | 云函数支付配置示例 |
-| `miniprogram/config/payment.js` | 小程序支付模式配置 |
-| `miniprogram/services/payment.service.js` | 小程序支付服务调用 |
-| `miniprogram/pages/pay-result/*` | 支付结果页 |
-| `docs/wechat-pay-setup.md` | 微信支付接入说明 |
-| `docs/wechat-pay-config.example.md` | 支付配置示例 |
-| `tests/phase13.wechat-pay-lite.test.js` | 阶段 13 测试 |
+| 文件                                           | 作用                   |
+| ---------------------------------------------- | ---------------------- |
+| `cloudfunctions/payment/index.js`              | 支付云函数入口         |
+| `cloudfunctions/payment/handler.js`            | 支付业务逻辑           |
+| `cloudfunctions/payment/order-repository.js`   | 支付云函数订单读写     |
+| `cloudfunctions/payment/payment-repository.js` | 支付日志写入           |
+| `cloudfunctions/payment/message-repository.js` | 支付成功消息写入       |
+| `cloudfunctions/payment/wechat-pay-client.js`  | 微信支付客户端占位封装 |
+| `cloudfunctions/payment/config.example.js`     | 云函数支付配置示例     |
+| `miniprogram/config/payment.js`                | 小程序支付模式配置     |
+| `miniprogram/services/payment.service.js`      | 小程序支付服务调用     |
+| `miniprogram/pages/pay-result/*`               | 支付结果页             |
+| `docs/wechat-pay-setup.md`                     | 微信支付接入说明       |
+| `docs/wechat-pay-config.example.md`            | 支付配置示例           |
+| `tests/phase13.wechat-pay-lite.test.js`        | 阶段 13 测试           |
 
 ## 5. 修改文件
 
-| 文件 | 修改原因 |
-| --- | --- |
-| `miniprogram/app.json` | 注册支付结果页 |
-| `miniprogram/config/constants.js` | 新增 `PAYMENT` 云函数和 `PAYMENT_LOGS` 集合 |
-| `miniprogram/config/status.js` | 扩展支付状态 |
-| `miniprogram/pages/order-detail/order-detail.js` | 接入统一支付入口 |
-| `miniprogram/pages/order-detail/order-detail.wxml` | 支付按钮调用新入口 |
-| `cloudfunctions/order/handler.js` | 创建订单时补齐支付字段 |
-| `docs/dev-records/index.md` | 更新阶段索引 |
-| `docs/wechat-mvp-verification.md` | 更新集合和云函数清单 |
-| `docs/release-package-checklist.md` | 增加支付敏感信息检查 |
-| `README.md` | 更新当前阶段说明 |
+| 文件                                               | 修改原因                                    |
+| -------------------------------------------------- | ------------------------------------------- |
+| `miniprogram/app.json`                             | 注册支付结果页                              |
+| `miniprogram/config/constants.js`                  | 新增 `PAYMENT` 云函数和 `PAYMENT_LOGS` 集合 |
+| `miniprogram/config/status.js`                     | 扩展支付状态                                |
+| `miniprogram/pages/order-detail/order-detail.js`   | 接入统一支付入口                            |
+| `miniprogram/pages/order-detail/order-detail.wxml` | 支付按钮调用新入口                          |
+| `cloudfunctions/order/handler.js`                  | 创建订单时补齐支付字段                      |
+| `docs/dev-records/index.md`                        | 更新阶段索引                                |
+| `docs/wechat-mvp-verification.md`                  | 更新集合和云函数清单                        |
+| `docs/release-package-checklist.md`                | 增加支付敏感信息检查                        |
+| `README.md`                                        | 更新当前阶段说明                            |
 
 ## 6. 数据库变化
 

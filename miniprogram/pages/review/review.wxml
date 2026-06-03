@@ -34,5 +34,7 @@
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="handleSubmit"
-  >提交评价</button>
+  >
+    提交评价
+  </button>
 </view>

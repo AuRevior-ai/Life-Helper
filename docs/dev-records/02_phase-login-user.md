@@ -50,40 +50,40 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase2-login-user.md` | 阶段二实施计划 |
-| `tests/phase2.login-user.test.js` | 登录、用户角色、资料更新、管理员权限和前端登录状态测试 |
-| `docs/wechat-login-runbook.md` | 微信开发者工具登录跑通手册 |
-| `cloudfunctions/login/handler.js` | 登录云函数业务逻辑，处理首次登录、重复登录和授权资料写入 |
-| `cloudfunctions/login/user-repository.js` | 登录云函数的 `users` 集合访问封装 |
-| `cloudfunctions/user/handler.js` | 用户云函数业务逻辑，处理用户信息、角色和禁用 |
-| `cloudfunctions/user/user-repository.js` | 用户云函数的 `users` 集合访问封装 |
-| `docs/dev-records/02_phase-login-user.md` | 本阶段开发记录与复盘 |
+| 文件路径                                                 | 说明                                                     |
+| -------------------------------------------------------- | -------------------------------------------------------- |
+| `docs/superpowers/plans/2026-05-30-phase2-login-user.md` | 阶段二实施计划                                           |
+| `tests/phase2.login-user.test.js`                        | 登录、用户角色、资料更新、管理员权限和前端登录状态测试   |
+| `docs/wechat-login-runbook.md`                           | 微信开发者工具登录跑通手册                               |
+| `cloudfunctions/login/handler.js`                        | 登录云函数业务逻辑，处理首次登录、重复登录和授权资料写入 |
+| `cloudfunctions/login/user-repository.js`                | 登录云函数的 `users` 集合访问封装                        |
+| `cloudfunctions/user/handler.js`                         | 用户云函数业务逻辑，处理用户信息、角色和禁用             |
+| `cloudfunctions/user/user-repository.js`                 | 用户云函数的 `users` 集合访问封装                        |
+| `docs/dev-records/02_phase-login-user.md`                | 本阶段开发记录与复盘                                     |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `cloudfunctions/login/index.js` | 从占位入口改为调用 `handleLogin`，接入 openid 和用户仓储 |
-| `cloudfunctions/user/index.js` | 从占位入口改为调用 `handleUser`，接入 openid 和用户仓储 |
-| `miniprogram/app.js` | 小程序启动时读取本地缓存用户 |
-| `miniprogram/utils/auth.js` | 增加登录状态判断、角色文案读取和当前用户缓存能力 |
-| `miniprogram/pages/profile/profile.js` | 接入授权登录、退出、用户信息展示和角色入口状态 |
-| `miniprogram/pages/profile/profile.wxml` | 增加授权登录按钮、用户信息区、师傅入口和管理员入口 |
-| `miniprogram/pages/profile/profile.wxss` | 增加“我的”页面样式 |
-| `docs/dev-records/index.md` | 更新阶段二完成状态、P0 完成情况和遗留问题 |
-| `README.md` | 补充阶段二说明和登录验证提示 |
+| 文件路径                                 | 修改内容                                                 |
+| ---------------------------------------- | -------------------------------------------------------- |
+| `cloudfunctions/login/index.js`          | 从占位入口改为调用 `handleLogin`，接入 openid 和用户仓储 |
+| `cloudfunctions/user/index.js`           | 从占位入口改为调用 `handleUser`，接入 openid 和用户仓储  |
+| `miniprogram/app.js`                     | 小程序启动时读取本地缓存用户                             |
+| `miniprogram/utils/auth.js`              | 增加登录状态判断、角色文案读取和当前用户缓存能力         |
+| `miniprogram/pages/profile/profile.js`   | 接入授权登录、退出、用户信息展示和角色入口状态           |
+| `miniprogram/pages/profile/profile.wxml` | 增加授权登录按钮、用户信息区、师傅入口和管理员入口       |
+| `miniprogram/pages/profile/profile.wxss` | 增加“我的”页面样式                                       |
+| `docs/dev-records/index.md`              | 更新阶段二完成状态、P0 完成情况和遗留问题                |
+| `README.md`                              | 补充阶段二说明和登录验证提示                             |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -97,17 +97,17 @@
 
 ### users 字段说明
 
-| 字段 | 类型 | 说明 |
-|---|---|---|
-| `_id` | string | 用户记录 ID，由云数据库生成 |
-| `openid` | string | 微信用户 openid |
-| `nickname` | string | 用户昵称，默认 `社区用户` |
-| `avatar` | string | 用户头像，第一版默认空字符串 |
-| `phone` | string | 用户手机号，第一版默认空字符串 |
-| `role` | string | 用户角色：user / worker / admin |
-| `status` | string | 用户状态：normal / disabled |
-| `created_at` | date | 创建时间 |
-| `updated_at` | date | 更新时间 |
+| 字段         | 类型   | 说明                            |
+| ------------ | ------ | ------------------------------- |
+| `_id`        | string | 用户记录 ID，由云数据库生成     |
+| `openid`     | string | 微信用户 openid                 |
+| `nickname`   | string | 用户昵称，默认 `社区用户`       |
+| `avatar`     | string | 用户头像，第一版默认空字符串    |
+| `phone`      | string | 用户手机号，第一版默认空字符串  |
+| `role`       | string | 用户角色：user / worker / admin |
+| `status`     | string | 用户状态：normal / disabled     |
+| `created_at` | date   | 创建时间                        |
+| `updated_at` | date   | 更新时间                        |
 
 ### 数据库权限说明
 
@@ -127,26 +127,26 @@
 
 ## 8. 云函数 / 接口变化
 
-| 云函数 | 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|---|
-| `login` | 用户登录与初始化 | `action: loginOrRegister` | `{ user, isNewUser }` | 所有用户可调用 |
-| `user` | 获取当前用户 | `action: getCurrentUser` | `{ user }` | 当前登录用户 |
-| `user` | 更新当前用户资料 | `action: updateUserInfo`, `nickname/avatar/phone` | `{ user }` | 当前登录用户 |
-| `user` | 管理员修改用户角色 | `action: updateUserRole`, `userId`, `role` | `{ user }` | 管理员 |
-| `user` | 管理员禁用用户 | `action: disableUser`, `userId` | `{ user }` | 管理员 |
+| 云函数  | 功能               | 入参                                              | 出参                  | 权限要求       |
+| ------- | ------------------ | ------------------------------------------------- | --------------------- | -------------- |
+| `login` | 用户登录与初始化   | `action: loginOrRegister`                         | `{ user, isNewUser }` | 所有用户可调用 |
+| `user`  | 获取当前用户       | `action: getCurrentUser`                          | `{ user }`            | 当前登录用户   |
+| `user`  | 更新当前用户资料   | `action: updateUserInfo`, `nickname/avatar/phone` | `{ user }`            | 当前登录用户   |
+| `user`  | 管理员修改用户角色 | `action: updateUserRole`, `userId`, `role`        | `{ user }`            | 管理员         |
+| `user`  | 管理员禁用用户     | `action: disableUser`, `userId`                   | `{ user }`            | 管理员         |
 
 ### 统一错误码
 
-| 错误码 | 说明 |
-|---|---|
-| `OPENID_MISSING` | 无法获取 openid |
-| `USER_NOT_FOUND` | 用户不存在 |
-| `USER_DISABLED` | 用户已被禁用 |
-| `PERMISSION_DENIED` | 当前操作无权限 |
-| `USER_ID_MISSING` | 缺少用户 ID |
-| `USER_ROLE_INVALID` | 用户角色不合法 |
-| `ACTION_NOT_FOUND` | 未知 action |
-| `INTERNAL_ERROR` | 未预期内部错误 |
+| 错误码              | 说明            |
+| ------------------- | --------------- |
+| `OPENID_MISSING`    | 无法获取 openid |
+| `USER_NOT_FOUND`    | 用户不存在      |
+| `USER_DISABLED`     | 用户已被禁用    |
+| `PERMISSION_DENIED` | 当前操作无权限  |
+| `USER_ID_MISSING`   | 缺少用户 ID     |
+| `USER_ROLE_INVALID` | 用户角色不合法  |
+| `ACTION_NOT_FOUND`  | 未知 action     |
+| `INTERNAL_ERROR`    | 未预期内部错误  |
 
 ---
 
@@ -292,13 +292,13 @@ login 云函数通过 cloud.getWXContext 获取 openid
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未在微信开发者工具中真实编译和预览 | 可能存在小程序环境细节问题 | 阶段 3 前打开微信开发者工具验证 | P1 |
-| 尚未创建真实 `users` 集合 | 云函数部署后需要集合存在才能运行 | 在云开发控制台创建 `users` 集合 | P0 |
-| 尚未配置真实云开发环境 ID | 部署和调试依赖实际环境 | 继续使用动态当前环境，在开发者工具中选择真实云环境 | P1 |
-| 管理员初始化依赖手动改库 | 不够自动化，但不阻塞 MVP | 阶段 7 再考虑更正式方案 | P1 |
-| `service/address/order/worker/review/admin` 云函数仍是占位 | 后续业务主流程尚不能运行 | 从阶段 3 起按模块逐步实现 | P0 |
+| 问题                                                       | 影响                             | 后续处理建议                                       | 优先级 |
+| ---------------------------------------------------------- | -------------------------------- | -------------------------------------------------- | ------ |
+| 尚未在微信开发者工具中真实编译和预览                       | 可能存在小程序环境细节问题       | 阶段 3 前打开微信开发者工具验证                    | P1     |
+| 尚未创建真实 `users` 集合                                  | 云函数部署后需要集合存在才能运行 | 在云开发控制台创建 `users` 集合                    | P0     |
+| 尚未配置真实云开发环境 ID                                  | 部署和调试依赖实际环境           | 继续使用动态当前环境，在开发者工具中选择真实云环境 | P1     |
+| 管理员初始化依赖手动改库                                   | 不够自动化，但不阻塞 MVP         | 阶段 7 再考虑更正式方案                            | P1     |
+| `service/address/order/worker/review/admin` 云函数仍是占位 | 后续业务主流程尚不能运行         | 从阶段 3 起按模块逐步实现                          | P0     |
 
 ---
 

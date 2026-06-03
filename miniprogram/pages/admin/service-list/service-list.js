@@ -1,93 +1,93 @@
-const serviceService = require('../../../services/service.service')
-const { formatPrice } = require('../../../utils/format')
-const { showError, showSuccess } = require('../../../utils/toast')
+const serviceService = require("../../../services/service.service");
+const { formatPrice } = require("../../../utils/format");
+const { showError, showSuccess } = require("../../../utils/toast");
 
 function mapService(service) {
   return {
     ...service,
     priceText: formatPrice(service.price),
-    statusText: service.status === 'off' ? '已下架' : '上架中',
-    nextStatus: service.status === 'off' ? 'on' : 'off',
-    nextStatusText: service.status === 'off' ? '上架' : '下架'
-  }
+    statusText: service.status === "off" ? "已下架" : "上架中",
+    nextStatus: service.status === "off" ? "on" : "off",
+    nextStatusText: service.status === "off" ? "上架" : "下架",
+  };
 }
 
 Page({
   data: {
-    title: '服务管理',
+    title: "服务管理",
     services: [],
     loading: true,
-    submittingId: '',
-    seeding: false
+    submittingId: "",
+    seeding: false,
   },
 
   onShow() {
-    this.loadServices()
+    this.loadServices();
   },
 
   onPullDownRefresh() {
     this.loadServices().finally(() => {
-      wx.stopPullDownRefresh()
-    })
+      wx.stopPullDownRefresh();
+    });
   },
 
   async loadServices() {
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     try {
       const data = await serviceService.getServiceList({
-        includeOff: true
-      })
+        includeOff: true,
+      });
       this.setData({
-        services: (data.services || []).map(mapService)
-      })
+        services: (data.services || []).map(mapService),
+      });
     } catch (error) {
-      showError(error.message || '服务加载失败')
+      showError(error.message || "服务加载失败");
     } finally {
-      this.setData({ loading: false })
+      this.setData({ loading: false });
     }
   },
 
   async seedServiceData() {
-    this.setData({ seeding: true })
+    this.setData({ seeding: true });
     try {
-      await serviceService.seedServiceData()
-      showSuccess('同步完成')
-      await this.loadServices()
+      await serviceService.seedServiceData();
+      showSuccess("同步完成");
+      await this.loadServices();
     } catch (error) {
-      showError(error.message || '同步失败')
+      showError(error.message || "同步失败");
     } finally {
-      this.setData({ seeding: false })
+      this.setData({ seeding: false });
     }
   },
 
   async updateServiceStatus(event) {
-    const serviceId = event.currentTarget.dataset.id
-    const status = event.currentTarget.dataset.status
-    this.setData({ submittingId: serviceId })
+    const serviceId = event.currentTarget.dataset.id;
+    const status = event.currentTarget.dataset.status;
+    this.setData({ submittingId: serviceId });
     try {
       await serviceService.updateServiceStatus({
         serviceId,
-        status
-      })
-      showSuccess('状态已更新')
-      await this.loadServices()
+        status,
+      });
+      showSuccess("状态已更新");
+      await this.loadServices();
     } catch (error) {
-      showError(error.message || '状态更新失败')
+      showError(error.message || "状态更新失败");
     } finally {
-      this.setData({ submittingId: '' })
+      this.setData({ submittingId: "" });
     }
   },
 
   goCreateService() {
     wx.navigateTo({
-      url: '/pages/admin/service-edit/service-edit'
-    })
+      url: "/pages/admin/service-edit/service-edit",
+    });
   },
 
   goEditService(event) {
-    const serviceId = event.currentTarget.dataset.id
+    const serviceId = event.currentTarget.dataset.id;
     wx.navigateTo({
-      url: `/pages/admin/service-edit/service-edit?serviceId=${serviceId}`
-    })
-  }
-})
+      url: `/pages/admin/service-edit/service-edit?serviceId=${serviceId}`,
+    });
+  },
+});

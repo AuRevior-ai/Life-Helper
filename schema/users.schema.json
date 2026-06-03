@@ -1,12 +1,43 @@
 {
   "collection": "users",
   "description": "用户账号与角色资料集合，包含普通用户、师傅、商家、管理员等角色基础状态。",
-  "requiredFields": ["_id", "openid", "role", "status", "created_at", "updated_at"],
-  "optionalFields": ["nickname", "avatar", "phone", "roles", "current_role", "last_login_at", "disabled_at", "worker_id", "merchant_id"],
-  "serverOnlyFields": ["openid", "role", "roles", "status", "worker_id", "merchant_id", "created_at", "updated_at", "last_login_at", "disabled_at"],
+  "requiredFields": [
+    "_id",
+    "openid",
+    "role",
+    "status",
+    "created_at",
+    "updated_at"
+  ],
+  "optionalFields": [
+    "nickname",
+    "avatar",
+    "phone",
+    "roles",
+    "current_role",
+    "last_login_at",
+    "disabled_at",
+    "worker_id",
+    "merchant_id"
+  ],
+  "serverOnlyFields": [
+    "openid",
+    "role",
+    "roles",
+    "status",
+    "worker_id",
+    "merchant_id",
+    "created_at",
+    "updated_at",
+    "last_login_at",
+    "disabled_at"
+  ],
   "clientWritableFields": ["nickname", "avatar", "phone", "current_role"],
   "statusFields": ["status", "role", "current_role"],
   "relationFields": ["openid", "worker_id", "merchant_id"],
   "indexHints": ["openid unique", "role + status", "phone"],
-  "compatibilityNotes": ["role remains the primary legacy role field; roles/current_role are compatibility fields for multi-role UI.", "管理员初始化仍受环境变量保护，不应由公开客户端任意写入。"]
+  "compatibilityNotes": [
+    "role remains the primary legacy role field; roles/current_role are compatibility fields for multi-role UI.",
+    "管理员初始化仍受环境变量保护，不应由公开客户端任意写入。"
+  ]
 }

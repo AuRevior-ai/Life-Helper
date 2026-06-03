@@ -41,42 +41,42 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase7-admin.md` | 阶段七实施计划 |
-| `tests/phase7.admin.test.js` | 管理端、服务目录数据库化和页面接入测试 |
-| `cloudfunctions/admin/handler.js` | 管理员云函数业务逻辑 |
-| `cloudfunctions/admin/repositories.js` | 管理员云函数集合读写封装 |
-| `cloudfunctions/service/repositories.js` | 服务分类、服务和用户只读仓储 |
-| `docs/dev-records/07_phase-admin.md` | 本阶段开发记录与复盘 |
+| 文件路径                                            | 说明                                   |
+| --------------------------------------------------- | -------------------------------------- |
+| `docs/superpowers/plans/2026-05-30-phase7-admin.md` | 阶段七实施计划                         |
+| `tests/phase7.admin.test.js`                        | 管理端、服务目录数据库化和页面接入测试 |
+| `cloudfunctions/admin/handler.js`                   | 管理员云函数业务逻辑                   |
+| `cloudfunctions/admin/repositories.js`              | 管理员云函数集合读写封装               |
+| `cloudfunctions/service/repositories.js`            | 服务分类、服务和用户只读仓储           |
+| `docs/dev-records/07_phase-admin.md`                | 本阶段开发记录与复盘                   |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `cloudfunctions/admin/index.js` | 从占位入口改为注入真实仓储并调用 `handleAdmin` |
-| `cloudfunctions/service/handler.js` | 增加服务数据同步、管理端上下架、数据库优先读取 |
-| `cloudfunctions/service/index.js` | 注入 `users`、`service_categories`、`services` 仓储 |
-| `miniprogram/services/admin.service.js` | 增加订单详情、订单状态更新、禁用用户等管理 API |
-| `miniprogram/services/service.service.js` | 增加 `seedServiceData` |
-| `miniprogram/pages/admin/dashboard/*` | 管理首页接入统计看板和管理入口 |
-| `miniprogram/pages/admin/order-list/*` | 管理员订单列表 |
-| `miniprogram/pages/admin/order-detail/*` | 管理员订单详情和手动状态调整 |
-| `miniprogram/pages/admin/user-list/*` | 管理员用户列表和禁用用户 |
-| `miniprogram/pages/admin/service-list/*` | 服务列表、同步种子、上下架 |
-| `miniprogram/pages/admin/category-list/*` | 分类列表和同步种子入口 |
-| `docs/dev-records/index.md` | 更新阶段七状态、P0 完成情况和遗留问题 |
-| `README.md` | 补充阶段七说明和验证步骤 |
+| 文件路径                                  | 修改内容                                            |
+| ----------------------------------------- | --------------------------------------------------- |
+| `cloudfunctions/admin/index.js`           | 从占位入口改为注入真实仓储并调用 `handleAdmin`      |
+| `cloudfunctions/service/handler.js`       | 增加服务数据同步、管理端上下架、数据库优先读取      |
+| `cloudfunctions/service/index.js`         | 注入 `users`、`service_categories`、`services` 仓储 |
+| `miniprogram/services/admin.service.js`   | 增加订单详情、订单状态更新、禁用用户等管理 API      |
+| `miniprogram/services/service.service.js` | 增加 `seedServiceData`                              |
+| `miniprogram/pages/admin/dashboard/*`     | 管理首页接入统计看板和管理入口                      |
+| `miniprogram/pages/admin/order-list/*`    | 管理员订单列表                                      |
+| `miniprogram/pages/admin/order-detail/*`  | 管理员订单详情和手动状态调整                        |
+| `miniprogram/pages/admin/user-list/*`     | 管理员用户列表和禁用用户                            |
+| `miniprogram/pages/admin/service-list/*`  | 服务列表、同步种子、上下架                          |
+| `miniprogram/pages/admin/category-list/*` | 分类列表和同步种子入口                              |
+| `docs/dev-records/index.md`               | 更新阶段七状态、P0 完成情况和遗留问题               |
+| `README.md`                               | 补充阶段七说明和验证步骤                            |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -84,17 +84,17 @@
 
 本阶段新增两个服务目录集合：
 
-| 集合 | 作用 | 当前写入方式 |
-|---|---|---|
+| 集合                 | 作用         | 当前写入方式                                            |
+| -------------------- | ------------ | ------------------------------------------------------- |
 | `service_categories` | 保存服务分类 | 管理员调用 `service.seedServiceData` 或后续分类管理写入 |
-| `services` | 保存服务项目 | 管理员调用 `service.seedServiceData` 或后续服务管理写入 |
+| `services`           | 保存服务项目 | 管理员调用 `service.seedServiceData` 或后续服务管理写入 |
 
 ### 主要字段
 
-| 集合 | 字段 | 说明 |
-|---|---|---|
-| `service_categories` | `_id`, `name`, `icon`, `status`, `sort` | 分类标识、名称、状态与排序 |
-| `services` | `_id`, `category_id`, `category_name`, `name`, `price`, `status`, `recommended`, `sort` | 服务标识、分类、价格、状态、推荐与排序 |
+| 集合                 | 字段                                                                                    | 说明                                   |
+| -------------------- | --------------------------------------------------------------------------------------- | -------------------------------------- |
+| `service_categories` | `_id`, `name`, `icon`, `status`, `sort`                                                 | 分类标识、名称、状态与排序             |
+| `services`           | `_id`, `category_id`, `category_name`, `name`, `price`, `status`, `recommended`, `sort` | 服务标识、分类、价格、状态、推荐与排序 |
 
 ---
 
@@ -102,26 +102,26 @@
 
 ### `admin`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `getDashboard` | 无 | `{ stats }` | 管理员 |
-| `getAllUsers` | 无 | `{ users }` | 管理员 |
-| `disableUser` | `userId` | `{ user }` | 管理员 |
-| `getAllOrders` | 无 | `{ orders }` | 管理员 |
-| `getOrderDetail` | `orderId` | `{ order }` | 管理员 |
-| `adminUpdateOrderStatus` | `orderId`, `status` | `{ order }` | 管理员 |
-| `getOrderStats` | 无 | `{ total, status_counts }` | 管理员 |
-| `getServiceStats` | 无 | `{ category_count, service_count, on_service_count }` | 管理员 |
+| 功能                     | 入参                | 出参                                                  | 权限要求 |
+| ------------------------ | ------------------- | ----------------------------------------------------- | -------- |
+| `getDashboard`           | 无                  | `{ stats }`                                           | 管理员   |
+| `getAllUsers`            | 无                  | `{ users }`                                           | 管理员   |
+| `disableUser`            | `userId`            | `{ user }`                                            | 管理员   |
+| `getAllOrders`           | 无                  | `{ orders }`                                          | 管理员   |
+| `getOrderDetail`         | `orderId`           | `{ order }`                                           | 管理员   |
+| `adminUpdateOrderStatus` | `orderId`, `status` | `{ order }`                                           | 管理员   |
+| `getOrderStats`          | 无                  | `{ total, status_counts }`                            | 管理员   |
+| `getServiceStats`        | 无                  | `{ category_count, service_count, on_service_count }` | 管理员   |
 
 ### `service`
 
-| 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|
-| `seedServiceData` | 无 | `{ category_count, service_count }` | 管理员 |
-| `getCategoryList` | 可选 `includeDisabled` | `{ categories }` | 无 |
-| `getServiceList` | 可选 `categoryId`, `recommended`, `includeOff` | `{ services }` | 无 |
-| `getServiceDetail` | `serviceId` | `{ service }` | 无 |
-| `updateServiceStatus` | `serviceId`, `status` | `{ service }` | 管理员 |
+| 功能                  | 入参                                           | 出参                                | 权限要求 |
+| --------------------- | ---------------------------------------------- | ----------------------------------- | -------- |
+| `seedServiceData`     | 无                                             | `{ category_count, service_count }` | 管理员   |
+| `getCategoryList`     | 可选 `includeDisabled`                         | `{ categories }`                    | 无       |
+| `getServiceList`      | 可选 `categoryId`, `recommended`, `includeOff` | `{ services }`                      | 无       |
+| `getServiceDetail`    | `serviceId`                                    | `{ service }`                       | 无       |
+| `updateServiceStatus` | `serviceId`, `status`                          | `{ service }`                       | 管理员   |
 
 ---
 
@@ -209,14 +209,14 @@ service.seedServiceData 校验管理员权限
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 尚未在微信开发者工具中真实编译和预览阶段七页面 | 可能存在小程序运行时细节问题 | 八阶段结束后统一做真实微信验证 | P1 |
-| 尚未创建真实 `service_categories` 和 `services` 集合 | 服务目录无法持久化管理 | 微信端验证前创建集合并点击同步种子服务 | P0 |
-| 尚未部署 `admin` 云函数 | 管理首页、订单和用户管理无法使用 | 微信端验证前上传并部署 | P0 |
-| 管理员初始化仍依赖手动修改 `users.role` | 无自助管理员创建流程 | 微信端验证时手动设置首个管理员，优化阶段再设计初始化脚本 | P1 |
-| 管理员订单状态调整缺少操作日志 | 不适合真实审计 | 后续增加 `admin_logs` 或订单状态变更记录 | P1 |
-| 订单云函数仍保留阶段性服务快照种子数据 | 数据源存在重复维护 | 后续让下单读取 `services` 集合中的服务快照 | P1 |
+| 问题                                                 | 影响                             | 后续处理建议                                             | 优先级 |
+| ---------------------------------------------------- | -------------------------------- | -------------------------------------------------------- | ------ |
+| 尚未在微信开发者工具中真实编译和预览阶段七页面       | 可能存在小程序运行时细节问题     | 八阶段结束后统一做真实微信验证                           | P1     |
+| 尚未创建真实 `service_categories` 和 `services` 集合 | 服务目录无法持久化管理           | 微信端验证前创建集合并点击同步种子服务                   | P0     |
+| 尚未部署 `admin` 云函数                              | 管理首页、订单和用户管理无法使用 | 微信端验证前上传并部署                                   | P0     |
+| 管理员初始化仍依赖手动修改 `users.role`              | 无自助管理员创建流程             | 微信端验证时手动设置首个管理员，优化阶段再设计初始化脚本 | P1     |
+| 管理员订单状态调整缺少操作日志                       | 不适合真实审计                   | 后续增加 `admin_logs` 或订单状态变更记录                 | P1     |
+| 订单云函数仍保留阶段性服务快照种子数据               | 数据源存在重复维护               | 后续让下单读取 `services` 集合中的服务快照               | P1     |
 
 ---
 

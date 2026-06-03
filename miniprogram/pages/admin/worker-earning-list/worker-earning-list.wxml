@@ -18,12 +18,18 @@
         <view class="card-title">{{ item.service_name || item.order_no }}</view>
         <view class="card-amount">{{ item.earningText }}</view>
       </view>
-      <view class="card-line">状态：{{ item.statusText }}　平台服务费：{{ item.commissionText }}</view>
+      <view class="card-line"
+        >状态：{{ item.statusText }}　平台服务费：{{ item.commissionText
+        }}</view
+      >
       <view class="card-line">订单：{{ item.order_no || item.order_id }}</view>
       <view class="card-line">师傅：{{ item.worker_id }}</view>
     </view>
   </block>
 
-  <empty-state wx:else title="暂无师傅收益" description="订单完成并生成财务后会显示在这里"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无师傅收益"
+    description="订单完成并生成财务后会显示在这里"
+  ></empty-state>
 </view>
-

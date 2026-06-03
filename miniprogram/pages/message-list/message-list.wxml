@@ -6,7 +6,10 @@
 
   <button class="ghost-button" bindtap="markAllRead">全部已读</button>
 
-  <loading-view wx:if="{{ loading && !messages.length }}" text="正在加载消息"></loading-view>
+  <loading-view
+    wx:if="{{ loading && !messages.length }}"
+    text="正在加载消息"
+  ></loading-view>
 
   <view wx:elif="{{ messages.length }}" class="message-list">
     <view

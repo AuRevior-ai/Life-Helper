@@ -33,37 +33,37 @@
 
 ## 4. 新增文件
 
-| 文件 | 作用 |
-|---|---|
-| `cloudfunctions/promotion/handler.js` | 会员、优惠券与促销 action |
-| `cloudfunctions/promotion/promotion-calculator.js` | 后端金额计算 |
-| `cloudfunctions/promotion/repositories.js` | 云数据库仓储 |
-| `cloudfunctions/promotion/index.js` | 云函数入口 |
-| `cloudfunctions/promotion/package.json` | 云函数依赖 |
-| `miniprogram/services/promotion.service.js` | 前端 promotion 调用 |
-| `miniprogram/pages/member/center/*` | 用户会员中心 |
-| `miniprogram/pages/coupon/list/*` | 我的优惠券 |
-| `miniprogram/pages/coupon/receive/*` | 领券中心 |
-| `miniprogram/pages/admin/member-plan-list/*` | 管理员会员方案 |
-| `miniprogram/pages/admin/coupon-template-list/*` | 管理员优惠券模板 |
-| `miniprogram/pages/admin/coupon-template-edit/*` | 管理员优惠券编辑 |
-| `tests/phase17.member-coupon.test.js` | 阶段 17 自动化测试 |
+| 文件                                               | 作用                      |
+| -------------------------------------------------- | ------------------------- |
+| `cloudfunctions/promotion/handler.js`              | 会员、优惠券与促销 action |
+| `cloudfunctions/promotion/promotion-calculator.js` | 后端金额计算              |
+| `cloudfunctions/promotion/repositories.js`         | 云数据库仓储              |
+| `cloudfunctions/promotion/index.js`                | 云函数入口                |
+| `cloudfunctions/promotion/package.json`            | 云函数依赖                |
+| `miniprogram/services/promotion.service.js`        | 前端 promotion 调用       |
+| `miniprogram/pages/member/center/*`                | 用户会员中心              |
+| `miniprogram/pages/coupon/list/*`                  | 我的优惠券                |
+| `miniprogram/pages/coupon/receive/*`               | 领券中心                  |
+| `miniprogram/pages/admin/member-plan-list/*`       | 管理员会员方案            |
+| `miniprogram/pages/admin/coupon-template-list/*`   | 管理员优惠券模板          |
+| `miniprogram/pages/admin/coupon-template-edit/*`   | 管理员优惠券编辑          |
+| `tests/phase17.member-coupon.test.js`              | 阶段 17 自动化测试        |
 
 ## 5. 修改文件
 
-| 文件 | 修改原因 |
-|---|---|
-| `cloudfunctions/order/handler.js` | 接入促销计算、优惠券锁定、核销与释放 |
-| `cloudfunctions/order/index.js` | 通过 `cloud.callFunction` 调用 promotion |
-| `miniprogram/config/constants.js` | 新增云函数与集合常量 |
-| `miniprogram/config/status.js` | 新增会员与优惠券状态 |
-| `miniprogram/app.json` | 注册新增页面 |
-| `miniprogram/pages/profile/*` | 增加会员中心和我的优惠券入口 |
-| `miniprogram/pages/order-submit/*` | 展示优惠券选择和价格明细 |
-| `miniprogram/pages/order-detail/*` | 展示订单营销快照 |
-| `miniprogram/pages/admin/dashboard/*` | 增加会员和优惠券管理入口 |
-| `README.md` | 更新阶段能力说明 |
-| `docs/dev-records/index.md` | 更新阶段索引和遗留问题 |
+| 文件                                  | 修改原因                                 |
+| ------------------------------------- | ---------------------------------------- |
+| `cloudfunctions/order/handler.js`     | 接入促销计算、优惠券锁定、核销与释放     |
+| `cloudfunctions/order/index.js`       | 通过 `cloud.callFunction` 调用 promotion |
+| `miniprogram/config/constants.js`     | 新增云函数与集合常量                     |
+| `miniprogram/config/status.js`        | 新增会员与优惠券状态                     |
+| `miniprogram/app.json`                | 注册新增页面                             |
+| `miniprogram/pages/profile/*`         | 增加会员中心和我的优惠券入口             |
+| `miniprogram/pages/order-submit/*`    | 展示优惠券选择和价格明细                 |
+| `miniprogram/pages/order-detail/*`    | 展示订单营销快照                         |
+| `miniprogram/pages/admin/dashboard/*` | 增加会员和优惠券管理入口                 |
+| `README.md`                           | 更新阶段能力说明                         |
+| `docs/dev-records/index.md`           | 更新阶段索引和遗留问题                   |
 
 ## 6. 数据库变化
 

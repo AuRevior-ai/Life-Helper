@@ -21,10 +21,16 @@
         <view class="card-amount">{{ item.amountText }}</view>
       </view>
       <view class="card-line">{{ item.typeText }} · {{ item.statusText }}</view>
-      <view class="card-line">已领 {{ item.received_quantity || 0 }} / 已用 {{ item.used_quantity || 0 }}</view>
+      <view class="card-line"
+        >已领 {{ item.received_quantity || 0 }} / 已用 {{ item.used_quantity ||
+        0 }}</view
+      >
     </view>
   </block>
 
-  <empty-state wx:else title="暂无优惠券模板" description="新增后用户可在领券中心领取"></empty-state>
+  <empty-state
+    wx:else
+    title="暂无优惠券模板"
+    description="新增后用户可在领券中心领取"
+  ></empty-state>
 </view>
-

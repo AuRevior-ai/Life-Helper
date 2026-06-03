@@ -1,2 +1,7 @@
-.panel { padding: 24rpx; }
-.form-textarea { margin-top: 20rpx; min-height: 160rpx; }
+.panel {
+  padding: 24rpx;
+}
+.form-textarea {
+  margin-top: 20rpx;
+  min-height: 160rpx;
+}

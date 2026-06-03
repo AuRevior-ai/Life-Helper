@@ -2,11 +2,11 @@ Component({
   properties: {
     text: {
       type: String,
-      value: ''
+      value: "",
     },
     tone: {
       type: String,
-      value: 'default'
-    }
-  }
-})
+      value: "default",
+    },
+  },
+});

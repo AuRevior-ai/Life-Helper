@@ -8,7 +8,9 @@
     <view wx:for="{{ logs }}" wx:key="_id" class="panel">
       <view class="section-title">{{ item.action }}</view>
       <view class="muted-text">订单：{{ item.order_no || item.order_id }}</view>
-      <view class="muted-text">从 {{ item.from_status }} 到 {{ item.to_status }}</view>
+      <view class="muted-text"
+        >从 {{ item.from_status }} 到 {{ item.to_status }}</view
+      >
       <view class="muted-text">原因：{{ item.reason }}</view>
     </view>
   </block>

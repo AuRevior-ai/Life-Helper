@@ -17,14 +17,28 @@
     </view>
     <view wx:if="{{ hasMerchant }}" class="info-row">
       <text>联系人</text>
-      <text>{{ merchant.contact_name || '未填写' }} {{ merchant.contact_phone || '' }}</text>
+      <text
+        >{{ merchant.contact_name || '未填写' }} {{ merchant.contact_phone || ''
+        }}</text
+      >
     </view>
-    <view wx:if="{{ merchant && merchant.reject_reason }}" class="info-row info-row--address">
+    <view
+      wx:if="{{ merchant && merchant.reject_reason }}"
+      class="info-row info-row--address"
+    >
       <text>拒绝原因</text>
       <text>{{ merchant.reject_reason }}</text>
     </view>
 
-    <button wx:if="{{ canEnterProfile }}" class="primary-button" bindtap="goProfile">进入商家工作台</button>
-    <button wx:if="{{ canApply }}" class="primary-button" bindtap="goApply">申请商家入驻</button>
+    <button
+      wx:if="{{ canEnterProfile }}"
+      class="primary-button"
+      bindtap="goProfile"
+    >
+      进入商家工作台
+    </button>
+    <button wx:if="{{ canApply }}" class="primary-button" bindtap="goApply">
+      申请商家入驻
+    </button>
   </view>
 </view>

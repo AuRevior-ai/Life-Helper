@@ -1,6 +1,27 @@
-.page { padding: 24rpx; }
-.header { padding: 28rpx 0; }
-.title { display: block; font-size: 36rpx; font-weight: 600; }
-.intro { display: block; margin-top: 12rpx; color: #64716d; }
-.service { display: flex; justify-content: space-between; padding: 24rpx; margin-bottom: 16rpx; background: #fff; border-radius: 8rpx; }
-.price { color: #1f7a68; }
+.page {
+  padding: 24rpx;
+}
+.header {
+  padding: 28rpx 0;
+}
+.title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+}
+.intro {
+  display: block;
+  margin-top: 12rpx;
+  color: #64716d;
+}
+.service {
+  display: flex;
+  justify-content: space-between;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  background: #fff;
+  border-radius: 8rpx;
+}
+.price {
+  color: #1f7a68;
+}

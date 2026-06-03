@@ -10,8 +10,12 @@
       loading="{{ seeding }}"
       disabled="{{ seeding }}"
       bindtap="seedServiceData"
-    >同步种子服务</button>
-    <button class="ghost-button compact" bindtap="goCreateService">新增服务</button>
+    >
+      同步种子服务
+    </button>
+    <button class="ghost-button compact" bindtap="goCreateService">
+      新增服务
+    </button>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
@@ -21,11 +25,17 @@
       <view class="card-top">
         <view>
           <view class="service-name">{{ item.name }}</view>
-          <view class="service-meta">{{ item.category_name }} · {{ item.priceText }}</view>
+          <view class="service-meta"
+            >{{ item.category_name }} · {{ item.priceText }}</view
+          >
         </view>
-        <view class="status-tag {{ item.status === 'off' ? 'off' : '' }}">{{ item.statusText }}</view>
+        <view class="status-tag {{ item.status === 'off' ? 'off' : '' }}"
+          >{{ item.statusText }}</view
+        >
       </view>
-      <view wx:if="{{ item.description }}" class="service-desc">{{ item.description }}</view>
+      <view wx:if="{{ item.description }}" class="service-desc"
+        >{{ item.description }}</view
+      >
       <button
         class="text-button"
         data-id="{{ item._id }}"
@@ -33,12 +43,16 @@
         loading="{{ submittingId === item._id }}"
         disabled="{{ submittingId === item._id }}"
         bindtap="updateServiceStatus"
-      >{{ item.nextStatusText }}</button>
+      >
+        {{ item.nextStatusText }}
+      </button>
       <button
         class="text-button"
         data-id="{{ item._id }}"
         bindtap="goEditService"
-      >编辑服务</button>
+      >
+        编辑服务
+      </button>
     </view>
   </view>
 

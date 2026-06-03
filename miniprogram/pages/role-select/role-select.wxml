@@ -1,49 +1,66 @@
 <view class="page-shell role-select-page">
   <view class="page-header">
     <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">当前账号：{{ displayName }} · {{ roleText }}</view>
+    <view class="page-subtitle"
+      >当前账号：{{ displayName }} · {{ roleText }}</view
+    >
   </view>
 
   <view class="role-grid">
     <view class="identity-card user panel" bindtap="enterUserRole">
       <view class="identity-card__label">居民服务</view>
       <view class="identity-card__title">普通用户端</view>
-      <view class="identity-card__desc">预约服务、管理地址、查看订单进度和评价服务。</view>
+      <view class="identity-card__desc"
+        >预约服务、管理地址、查看订单进度和评价服务。</view
+      >
       <view class="identity-card__action">进入首页</view>
     </view>
 
     <view class="identity-card worker panel" bindtap="enterWorkerRole">
       <view class="identity-card__label">接单服务</view>
       <view class="identity-card__title">个人师傅端</view>
-      <view class="identity-card__desc">申请师傅入驻、查看审核状态，审核通过后进入接单大厅。</view>
+      <view class="identity-card__desc"
+        >申请师傅入驻、查看审核状态，审核通过后进入接单大厅。</view
+      >
       <view class="identity-card__action">进入工作台</view>
     </view>
 
     <view class="identity-card worker panel" bindtap="enterMerchantRole">
       <view class="identity-card__label">店铺服务</view>
       <view class="identity-card__title">商家端</view>
-      <view class="identity-card__desc">申请商家入驻、配置店铺服务，审核通过后处理商家订单。</view>
+      <view class="identity-card__desc"
+        >申请商家入驻、配置店铺服务，审核通过后处理商家订单。</view
+      >
       <view class="identity-card__action">进入商家端</view>
     </view>
 
     <view class="identity-card admin panel" bindtap="enterAdminRole">
       <view class="identity-card__label">平台运营</view>
       <view class="identity-card__title">管理员端</view>
-      <view class="identity-card__desc">管理分类、服务、订单、用户和师傅审核。</view>
+      <view class="identity-card__desc"
+        >管理分类、服务、订单、用户和师傅审核。</view
+      >
       <view class="identity-card__action">进入管理台</view>
     </view>
 
-    <view class="identity-card disabled panel" bindtap="enterCommunityPartnerRole">
+    <view
+      class="identity-card disabled panel"
+      bindtap="enterCommunityPartnerRole"
+    >
       <view class="identity-card__label">即将开放</view>
       <view class="identity-card__title">小区合伙人端</view>
-      <view class="identity-card__desc">后续用于小区服务运营、推广和本地协作。</view>
+      <view class="identity-card__desc"
+        >后续用于小区服务运营、推广和本地协作。</view
+      >
       <view class="identity-card__action muted">即将开放</view>
     </view>
 
     <view class="identity-card disabled panel" bindtap="enterCityPartnerRole">
       <view class="identity-card__label">即将开放</view>
       <view class="identity-card__title">城市合伙人端</view>
-      <view class="identity-card__desc">后续用于城市级服务网络、商家和小区管理。</view>
+      <view class="identity-card__desc"
+        >后续用于城市级服务网络、商家和小区管理。</view
+      >
       <view class="identity-card__action muted">即将开放</view>
     </view>
   </view>

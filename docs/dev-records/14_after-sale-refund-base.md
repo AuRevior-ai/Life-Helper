@@ -29,48 +29,48 @@
 
 ## 4. 新增文件
 
-| 文件 | 作用 |
-| --- | --- |
-| `cloudfunctions/refund/index.js` | 退款云函数入口 |
-| `cloudfunctions/refund/handler.js` | 售后与退款业务逻辑 |
-| `cloudfunctions/refund/order-repository.js` | 订单读写封装 |
-| `cloudfunctions/refund/after-sale-repository.js` | 售后单读写封装 |
-| `cloudfunctions/refund/refund-repository.js` | 退款日志写入 |
-| `cloudfunctions/refund/message-repository.js` | 售后与退款消息写入 |
-| `cloudfunctions/refund/user-repository.js` | 管理员身份校验 |
-| `cloudfunctions/refund/refund-adapter.js` | 真实退款适配器占位 |
-| `cloudfunctions/refund/package.json` | 云函数依赖声明 |
-| `miniprogram/services/refund.service.js` | 小程序退款服务调用层 |
-| `miniprogram/pages/after-sale/apply/*` | 用户售后申请页 |
-| `miniprogram/pages/after-sale/detail/*` | 用户售后详情页 |
-| `miniprogram/pages/admin/after-sale-list/*` | 管理员售后列表页 |
-| `miniprogram/pages/admin/after-sale-detail/*` | 管理员售后详情页 |
-| `docs/superpowers/plans/2026-05-31-after-sale-refund-base.md` | 本阶段执行计划 |
-| `tests/phase14.after-sale-refund.test.js` | 阶段 14 测试 |
+| 文件                                                          | 作用                 |
+| ------------------------------------------------------------- | -------------------- |
+| `cloudfunctions/refund/index.js`                              | 退款云函数入口       |
+| `cloudfunctions/refund/handler.js`                            | 售后与退款业务逻辑   |
+| `cloudfunctions/refund/order-repository.js`                   | 订单读写封装         |
+| `cloudfunctions/refund/after-sale-repository.js`              | 售后单读写封装       |
+| `cloudfunctions/refund/refund-repository.js`                  | 退款日志写入         |
+| `cloudfunctions/refund/message-repository.js`                 | 售后与退款消息写入   |
+| `cloudfunctions/refund/user-repository.js`                    | 管理员身份校验       |
+| `cloudfunctions/refund/refund-adapter.js`                     | 真实退款适配器占位   |
+| `cloudfunctions/refund/package.json`                          | 云函数依赖声明       |
+| `miniprogram/services/refund.service.js`                      | 小程序退款服务调用层 |
+| `miniprogram/pages/after-sale/apply/*`                        | 用户售后申请页       |
+| `miniprogram/pages/after-sale/detail/*`                       | 用户售后详情页       |
+| `miniprogram/pages/admin/after-sale-list/*`                   | 管理员售后列表页     |
+| `miniprogram/pages/admin/after-sale-detail/*`                 | 管理员售后详情页     |
+| `docs/superpowers/plans/2026-05-31-after-sale-refund-base.md` | 本阶段执行计划       |
+| `tests/phase14.after-sale-refund.test.js`                     | 阶段 14 测试         |
 
 ## 5. 修改文件
 
-| 文件 | 修改原因 |
-| --- | --- |
-| `miniprogram/config/constants.js` | 新增 `REFUND` 云函数、`after_sales` 和 `refund_logs` 集合 |
-| `miniprogram/config/status.js` | 新增售后、退款状态和消息类型 |
-| `cloudfunctions/order/handler.js` | 创建订单时补齐售后与退款默认字段 |
-| `miniprogram/pages/order-detail/order-detail.js` | 增加售后状态、退款状态和页面跳转 |
-| `miniprogram/pages/order-detail/order-detail.wxml` | 展示售后信息和售后入口 |
-| `miniprogram/pages/admin/dashboard/dashboard.js` | 增加售后管理入口跳转 |
-| `miniprogram/pages/admin/dashboard/dashboard.wxml` | 增加售后管理入口 |
-| `miniprogram/app.json` | 注册售后相关页面 |
-| `tests/phase1.scaffold.test.js` | 同步新增页面路由断言 |
-| `README.md` | 更新阶段说明和能力边界 |
-| `docs/release-package-checklist.md` | 增加退款日志和敏感数据检查 |
+| 文件                                               | 修改原因                                                  |
+| -------------------------------------------------- | --------------------------------------------------------- |
+| `miniprogram/config/constants.js`                  | 新增 `REFUND` 云函数、`after_sales` 和 `refund_logs` 集合 |
+| `miniprogram/config/status.js`                     | 新增售后、退款状态和消息类型                              |
+| `cloudfunctions/order/handler.js`                  | 创建订单时补齐售后与退款默认字段                          |
+| `miniprogram/pages/order-detail/order-detail.js`   | 增加售后状态、退款状态和页面跳转                          |
+| `miniprogram/pages/order-detail/order-detail.wxml` | 展示售后信息和售后入口                                    |
+| `miniprogram/pages/admin/dashboard/dashboard.js`   | 增加售后管理入口跳转                                      |
+| `miniprogram/pages/admin/dashboard/dashboard.wxml` | 增加售后管理入口                                          |
+| `miniprogram/app.json`                             | 注册售后相关页面                                          |
+| `tests/phase1.scaffold.test.js`                    | 同步新增页面路由断言                                      |
+| `README.md`                                        | 更新阶段说明和能力边界                                    |
+| `docs/release-package-checklist.md`                | 增加退款日志和敏感数据检查                                |
 
 ## 6. 数据库变化
 
 新增集合：
 
-| 集合 | 用途 |
-| --- | --- |
-| `after_sales` | 保存用户售后申请、审核结果和退款关联信息 |
+| 集合          | 用途                                         |
+| ------------- | -------------------------------------------- |
+| `after_sales` | 保存用户售后申请、审核结果和退款关联信息     |
 | `refund_logs` | 保存模拟退款、重复退款拦截和后续真实退款日志 |
 
 `orders` 新增兼容字段：`after_sale_status`、`refund_status`、`refund_amount`、`refunded_at`、`after_sale_id`、`refund_no`。

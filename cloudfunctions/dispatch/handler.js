@@ -1,215 +1,273 @@
-const { success, fail, serviceError } = require('./_shared/response')
-const { getPayload } = require('./_shared/payload')
-const { getNow } = require('./_shared/time')
-const { matchProviderServiceRange } = require('./_shared/lbs-utils')
+const { success, fail, serviceError } = require("./_shared/response");
+const { getPayload } = require("./_shared/payload");
+const { getNow } = require("./_shared/time");
+const { matchProviderServiceRange } = require("./_shared/lbs-utils");
 
-const USER_ROLE = Object.freeze({ ADMIN: 'admin' })
-const USER_STATUS = Object.freeze({ NORMAL: 'normal', DISABLED: 'disabled' })
+const USER_ROLE = Object.freeze({ ADMIN: "admin" });
+const USER_STATUS = Object.freeze({ NORMAL: "normal", DISABLED: "disabled" });
 const ORDER_STATUS = Object.freeze({
-  PENDING_ACCEPT: 'pending_accept',
-  ACCEPTED: 'accepted'
-})
-const WORKER_STATUS = Object.freeze({ ENABLED: 'enabled' })
-const WORKER_ONLINE_STATUS = Object.freeze({ AVAILABLE: 'available' })
+  PENDING_ACCEPT: "pending_accept",
+  ACCEPTED: "accepted",
+});
+const WORKER_STATUS = Object.freeze({ ENABLED: "enabled" });
+const WORKER_ONLINE_STATUS = Object.freeze({ AVAILABLE: "available" });
 
 function trimText(value) {
-  return `${value || ''}`.trim()
+  return `${value || ""}`.trim();
 }
 
 function isMissingCollectionError(error = {}) {
-  return error.errCode === -502005 ||
+  return (
+    error.errCode === -502005 ||
     error.code === -502005 ||
-    /-502005|database collection not|collection .*not/i.test(error.message || '')
+    /-502005|database collection not|collection .*not/i.test(
+      error.message || "",
+    )
+  );
 }
 
 function splitKeywords(value) {
   return trimText(value)
     .split(/[,，、\s]+/)
     .map((item) => item.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 }
 
 function hasTextMatch(left, right) {
-  const leftItems = splitKeywords(left)
-  const rightItems = splitKeywords(right)
-  if (!leftItems.length || !rightItems.length) return false
+  const leftItems = splitKeywords(left);
+  const rightItems = splitKeywords(right);
+  if (!leftItems.length || !rightItems.length) return false;
   return leftItems.some((leftItem) =>
-    rightItems.some((rightItem) => leftItem === rightItem || leftItem.includes(rightItem) || rightItem.includes(leftItem))
-  )
+    rightItems.some(
+      (rightItem) =>
+        leftItem === rightItem ||
+        leftItem.includes(rightItem) ||
+        rightItem.includes(leftItem),
+    ),
+  );
 }
 
 function workerMatchesCategory(worker, order) {
-  return hasTextMatch(worker.service_category || worker.serviceCategory, order.category_name || order.category_id)
+  return hasTextMatch(
+    worker.service_category || worker.serviceCategory,
+    order.category_name || order.category_id,
+  );
 }
 
 function workerMatchesArea(worker, order) {
-  return matchProviderServiceRange(buildOrderAddressForLbs(order), worker).matched
+  return matchProviderServiceRange(buildOrderAddressForLbs(order), worker)
+    .matched;
 }
 
 function buildOrderAddressForLbs(order = {}) {
   return {
-    city: order.city || (order.address_snapshot && order.address_snapshot.city) || '',
-    district: order.district || (order.address_snapshot && order.address_snapshot.district) || '',
-    street: order.street || (order.address_snapshot && order.address_snapshot.street) || '',
-    community: order.community || (order.address_snapshot && order.address_snapshot.community) || '',
-    latitude: order.latitude ?? (order.address_snapshot && order.address_snapshot.latitude) ?? null,
-    longitude: order.longitude ?? (order.address_snapshot && order.address_snapshot.longitude) ?? null,
-    adcode: order.adcode || (order.address_snapshot && order.address_snapshot.adcode) || '',
-    full_address: order.full_address || (order.address_snapshot && order.address_snapshot.full_address) || ''
-  }
+    city:
+      order.city ||
+      (order.address_snapshot && order.address_snapshot.city) ||
+      "",
+    district:
+      order.district ||
+      (order.address_snapshot && order.address_snapshot.district) ||
+      "",
+    street:
+      order.street ||
+      (order.address_snapshot && order.address_snapshot.street) ||
+      "",
+    community:
+      order.community ||
+      (order.address_snapshot && order.address_snapshot.community) ||
+      "",
+    latitude:
+      order.latitude ??
+      (order.address_snapshot && order.address_snapshot.latitude) ??
+      null,
+    longitude:
+      order.longitude ??
+      (order.address_snapshot && order.address_snapshot.longitude) ??
+      null,
+    adcode:
+      order.adcode ||
+      (order.address_snapshot && order.address_snapshot.adcode) ||
+      "",
+    full_address:
+      order.full_address ||
+      (order.address_snapshot && order.address_snapshot.full_address) ||
+      "",
+  };
 }
 
 function isWorkerAssignable(worker, order) {
   return Boolean(
     worker &&
-    worker.audit_status === 'approved' &&
+    worker.audit_status === "approved" &&
     (!worker.status || worker.status === WORKER_STATUS.ENABLED) &&
-    (!worker.online_status || worker.online_status === WORKER_ONLINE_STATUS.AVAILABLE) &&
+    (!worker.online_status ||
+      worker.online_status === WORKER_ONLINE_STATUS.AVAILABLE) &&
     workerMatchesCategory(worker, order) &&
-    workerMatchesArea(worker, order)
-  )
+    workerMatchesArea(worker, order),
+  );
 }
 
 function requireOpenid(env) {
-  if (!env.openid) throw serviceError('OPENID_MISSING', '无法获取用户 openid')
-  return env.openid
+  if (!env.openid) throw serviceError("OPENID_MISSING", "无法获取用户 openid");
+  return env.openid;
 }
 
 async function requireAdmin(env) {
-  const user = await env.users.findByOpenid(requireOpenid(env))
+  const user = await env.users.findByOpenid(requireOpenid(env));
   if (!user || user.status === USER_STATUS.DISABLED) {
-    throw serviceError('USER_NOT_FOUND', '管理员用户不存在或已禁用')
+    throw serviceError("USER_NOT_FOUND", "管理员用户不存在或已禁用");
   }
   if (user.role !== USER_ROLE.ADMIN) {
-    throw serviceError('PERMISSION_DENIED', '当前操作需要管理员权限')
+    throw serviceError("PERMISSION_DENIED", "当前操作需要管理员权限");
   }
-  return user
+  return user;
 }
 
 async function requireOrder(orderId, env) {
-  if (!orderId) throw serviceError('ORDER_ID_MISSING', '缺少订单 ID')
-  const order = await env.orders.findById(orderId)
-  if (!order) throw serviceError('ORDER_NOT_FOUND', '订单不存在')
-  return order
+  if (!orderId) throw serviceError("ORDER_ID_MISSING", "缺少订单 ID");
+  const order = await env.orders.findById(orderId);
+  if (!order) throw serviceError("ORDER_NOT_FOUND", "订单不存在");
+  return order;
 }
 
 async function createMessage(env, data) {
-  if (!env.messages || !env.messages.create) return null
+  if (!env.messages || !env.messages.create) return null;
   try {
     return await env.messages.create({
-      related_type: 'order',
+      related_type: "order",
       is_read: false,
-      ...data
-    })
+      ...data,
+    });
   } catch (error) {
-    return null
+    return null;
   }
 }
 
 async function getAssignableWorkers(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
-  const order = await requireOrder(payload.orderId, env)
-  const workers = await env.workers.findAll()
+  await requireAdmin(env);
+  const payload = getPayload(event);
+  const order = await requireOrder(payload.orderId, env);
+  const workers = await env.workers.findAll();
   return success({
     workers: workers
       .filter((worker) => isWorkerAssignable(worker, order))
       .map((worker) => ({
         ...worker,
-        lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), worker)
-      }))
-  })
+        lbs_match: matchProviderServiceRange(
+          buildOrderAddressForLbs(order),
+          worker,
+        ),
+      })),
+  });
 }
 
 function providerMatchesCategory(provider = {}, order = {}) {
-  const categoryId = trimText(order.category_id)
-  const categoryName = trimText(order.category_name || order.service_category)
-  const providerCategoryIds = Array.isArray(provider.service_category_ids) ? provider.service_category_ids.map((item) => trimText(item)) : []
-  if (categoryId && providerCategoryIds.length) return providerCategoryIds.includes(categoryId)
-  if (categoryName && provider.service_category) return hasTextMatch(provider.service_category, categoryName)
-  return true
+  const categoryId = trimText(order.category_id);
+  const categoryName = trimText(order.category_name || order.service_category);
+  const providerCategoryIds = Array.isArray(provider.service_category_ids)
+    ? provider.service_category_ids.map((item) => trimText(item))
+    : [];
+  if (categoryId && providerCategoryIds.length)
+    return providerCategoryIds.includes(categoryId);
+  if (categoryName && provider.service_category)
+    return hasTextMatch(provider.service_category, categoryName);
+  return true;
 }
 
 function isServiceProviderAssignable(provider, order) {
   return Boolean(
     provider &&
-    provider.audit_status === 'approved' &&
-    (!provider.status || provider.status === 'normal' || provider.status === 'enabled') &&
-    (!provider.online_status || provider.online_status === WORKER_ONLINE_STATUS.AVAILABLE) &&
+    provider.audit_status === "approved" &&
+    (!provider.status ||
+      provider.status === "normal" ||
+      provider.status === "enabled") &&
+    (!provider.online_status ||
+      provider.online_status === WORKER_ONLINE_STATUS.AVAILABLE) &&
     providerMatchesCategory(provider, order) &&
-    matchProviderServiceRange(buildOrderAddressForLbs(order), provider).matched
-  )
+    matchProviderServiceRange(buildOrderAddressForLbs(order), provider).matched,
+  );
 }
 
 async function getAssignableProviders(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
-  const order = await requireOrder(payload.orderId, env)
+  await requireAdmin(env);
+  const payload = getPayload(event);
+  const order = await requireOrder(payload.orderId, env);
   const workers = (await env.workers.findAll())
     .filter((worker) => isWorkerAssignable(worker, order))
     .map((worker) => ({
       ...worker,
-      provider_type: 'worker',
+      provider_type: "worker",
       provider_id: worker.user_id || worker._id,
-      display_name: worker.name || worker.display_name || '',
-      lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), worker)
-    }))
-  const serviceProviders = env.serviceProviders && env.serviceProviders.findAll
-    ? (await env.serviceProviders.findAll())
-      .filter((provider) => isServiceProviderAssignable(provider, order))
-      .map((provider) => ({
-        ...provider,
-        lbs_match: matchProviderServiceRange(buildOrderAddressForLbs(order), provider)
-      }))
-    : []
-  return success({ providers: [...workers, ...serviceProviders] })
+      display_name: worker.name || worker.display_name || "",
+      lbs_match: matchProviderServiceRange(
+        buildOrderAddressForLbs(order),
+        worker,
+      ),
+    }));
+  const serviceProviders =
+    env.serviceProviders && env.serviceProviders.findAll
+      ? (await env.serviceProviders.findAll())
+          .filter((provider) => isServiceProviderAssignable(provider, order))
+          .map((provider) => ({
+            ...provider,
+            lbs_match: matchProviderServiceRange(
+              buildOrderAddressForLbs(order),
+              provider,
+            ),
+          }))
+      : [];
+  return success({ providers: [...workers, ...serviceProviders] });
 }
 
 async function adminAssignOrder(event, env) {
-  const admin = await requireAdmin(env)
-  const payload = getPayload(event)
-  const order = await requireOrder(payload.orderId, env)
+  const admin = await requireAdmin(env);
+  const payload = getPayload(event);
+  const order = await requireOrder(payload.orderId, env);
   if (order.status !== ORDER_STATUS.PENDING_ACCEPT) {
-    throw serviceError('ORDER_STATUS_INVALID', '只能指派待接单订单')
+    throw serviceError("ORDER_STATUS_INVALID", "只能指派待接单订单");
   }
   if (order.worker_id) {
-    throw serviceError('ORDER_ALREADY_ACCEPTED', '该订单已被其他师傅接走')
+    throw serviceError("ORDER_ALREADY_ACCEPTED", "该订单已被其他师傅接走");
   }
   if (!payload.workerId) {
-    throw serviceError('WORKER_ID_MISSING', '缺少师傅 ID')
+    throw serviceError("WORKER_ID_MISSING", "缺少师傅 ID");
   }
-  const worker = await env.workers.findById(payload.workerId)
+  const worker = await env.workers.findById(payload.workerId);
   if (!isWorkerAssignable(worker, order)) {
-    throw serviceError('WORKER_NOT_ASSIGNABLE', '师傅不符合派单条件')
+    throw serviceError("WORKER_NOT_ASSIGNABLE", "师傅不符合派单条件");
   }
 
-  const now = getNow(env)
+  const now = getNow(env);
   const updateData = {
     status: ORDER_STATUS.ACCEPTED,
     accepted_at: now,
-    updated_at: now
-  }
+    updated_at: now,
+  };
   const updatedOrder = env.orders.acceptPendingOrder
     ? await env.orders.acceptPendingOrder(order._id, worker.user_id, updateData)
-    : await env.orders.updateById(order._id, { ...updateData, worker_id: worker.user_id })
+    : await env.orders.updateById(order._id, {
+        ...updateData,
+        worker_id: worker.user_id,
+      });
   if (!updatedOrder) {
-    throw serviceError('ORDER_ALREADY_ACCEPTED', '该订单已被其他师傅接走')
+    throw serviceError("ORDER_ALREADY_ACCEPTED", "该订单已被其他师傅接走");
   }
 
-  const reason = trimText(payload.reason) || '管理员人工派单'
+  const reason = trimText(payload.reason) || "管理员人工派单";
   await env.dispatchLogs.create({
     order_id: order._id,
-    order_no: order.order_no || '',
-    action: 'admin_assign',
+    order_no: order.order_no || "",
+    action: "admin_assign",
     operator_id: admin.openid || requireOpenid(env),
-    operator_role: 'admin',
-    from_worker_id: order.worker_id || '',
+    operator_role: "admin",
+    from_worker_id: order.worker_id || "",
     to_worker_id: worker.user_id,
     from_status: order.status,
     to_status: ORDER_STATUS.ACCEPTED,
     reason,
-    created_at: now
-  })
+    created_at: now,
+  });
   if (env.adminOperationLogs && env.adminOperationLogs.create) {
     await env.adminOperationLogs.create({
       admin_id: admin.openid || requireOpenid(env),
@@ -218,65 +276,68 @@ async function adminAssignOrder(event, env) {
       to_status: ORDER_STATUS.ACCEPTED,
       reason,
       force: false,
-      created_at: now
-    })
+      created_at: now,
+    });
   }
   await createMessage(env, {
     user_id: order.user_id,
-    role: 'user',
-    title: '订单已指派师傅',
-    content: '平台已为你的订单指派师傅',
-    type: 'order_accepted',
+    role: "user",
+    title: "订单已指派师傅",
+    content: "平台已为你的订单指派师傅",
+    type: "order_accepted",
     related_id: order._id,
     created_at: now,
-    updated_at: now
-  })
+    updated_at: now,
+  });
   await createMessage(env, {
     user_id: worker.user_id,
-    role: 'worker',
-    title: '收到指派订单',
-    content: '管理员为你指派了新订单',
-    type: 'order_accepted',
+    role: "worker",
+    title: "收到指派订单",
+    content: "管理员为你指派了新订单",
+    type: "order_accepted",
     related_id: order._id,
     created_at: now,
-    updated_at: now
-  })
+    updated_at: now,
+  });
 
-  return success({ order: updatedOrder })
+  return success({ order: updatedOrder });
 }
 
 async function adminUnassignOrder(event, env) {
-  const admin = await requireAdmin(env)
-  const payload = getPayload(event)
-  const reason = trimText(payload.reason)
+  const admin = await requireAdmin(env);
+  const payload = getPayload(event);
+  const reason = trimText(payload.reason);
   if (!reason) {
-    throw serviceError('DISPATCH_REASON_REQUIRED', '请填写取消指派原因')
+    throw serviceError("DISPATCH_REASON_REQUIRED", "请填写取消指派原因");
   }
-  const order = await requireOrder(payload.orderId, env)
+  const order = await requireOrder(payload.orderId, env);
   if (order.status !== ORDER_STATUS.ACCEPTED) {
-    throw serviceError('ORDER_STATUS_INVALID', '只有已接单且未开始服务的订单可以回流')
+    throw serviceError(
+      "ORDER_STATUS_INVALID",
+      "只有已接单且未开始服务的订单可以回流",
+    );
   }
-  const now = getNow(env)
-  const fromWorkerId = order.worker_id || ''
+  const now = getNow(env);
+  const fromWorkerId = order.worker_id || "";
   const updatedOrder = await env.orders.updateById(order._id, {
-    worker_id: '',
+    worker_id: "",
     status: ORDER_STATUS.PENDING_ACCEPT,
     accepted_at: null,
-    updated_at: now
-  })
+    updated_at: now,
+  });
   await env.dispatchLogs.create({
     order_id: order._id,
-    order_no: order.order_no || '',
-    action: 'admin_unassign',
+    order_no: order.order_no || "",
+    action: "admin_unassign",
     operator_id: admin.openid || requireOpenid(env),
-    operator_role: 'admin',
+    operator_role: "admin",
     from_worker_id: fromWorkerId,
-    to_worker_id: '',
+    to_worker_id: "",
     from_status: ORDER_STATUS.ACCEPTED,
     to_status: ORDER_STATUS.PENDING_ACCEPT,
     reason,
-    created_at: now
-  })
+    created_at: now,
+  });
   if (env.adminOperationLogs && env.adminOperationLogs.create) {
     await env.adminOperationLogs.create({
       admin_id: admin.openid || requireOpenid(env),
@@ -285,51 +346,52 @@ async function adminUnassignOrder(event, env) {
       to_status: ORDER_STATUS.PENDING_ACCEPT,
       reason,
       force: false,
-      created_at: now
-    })
+      created_at: now,
+    });
   }
   await createMessage(env, {
     user_id: order.user_id,
-    role: 'user',
-    title: '订单已回流接单大厅',
+    role: "user",
+    title: "订单已回流接单大厅",
     content: reason,
-    type: 'order_created',
+    type: "order_created",
     related_id: order._id,
     created_at: now,
-    updated_at: now
-  })
+    updated_at: now,
+  });
   if (fromWorkerId) {
     await createMessage(env, {
       user_id: fromWorkerId,
-      role: 'worker',
-      title: '订单指派已取消',
+      role: "worker",
+      title: "订单指派已取消",
       content: reason,
-      type: 'system',
+      type: "system",
       related_id: order._id,
       created_at: now,
-      updated_at: now
-    })
+      updated_at: now,
+    });
   }
-  return success({ order: updatedOrder })
+  return success({ order: updatedOrder });
 }
 
 async function getDispatchLogs(event, env) {
-  await requireAdmin(env)
-  const payload = getPayload(event)
+  await requireAdmin(env);
+  const payload = getPayload(event);
   try {
-    const logs = payload.orderId && env.dispatchLogs.findByOrderId
-      ? await env.dispatchLogs.findByOrderId(payload.orderId)
-      : await env.dispatchLogs.findAll()
-    return success({ logs })
+    const logs =
+      payload.orderId && env.dispatchLogs.findByOrderId
+        ? await env.dispatchLogs.findByOrderId(payload.orderId)
+        : await env.dispatchLogs.findAll();
+    return success({ logs });
   } catch (error) {
     if (isMissingCollectionError(error)) {
       return success({
         logs: [],
         collection_missing: true,
-        collection_name: 'dispatch_logs'
-      })
+        collection_name: "dispatch_logs",
+      });
     }
-    throw error
+    throw error;
   }
 }
 
@@ -338,16 +400,19 @@ const actions = Object.freeze({
   getAssignableProviders,
   adminAssignOrder,
   adminUnassignOrder,
-  getDispatchLogs
-})
+  getDispatchLogs,
+});
 
 async function handleDispatch(event = {}, env) {
-  const action = actions[event.action]
-  if (!action) return fail('ACTION_NOT_FOUND', '未知派单操作')
+  const action = actions[event.action];
+  if (!action) return fail("ACTION_NOT_FOUND", "未知派单操作");
   try {
-    return await action(event, env)
+    return await action(event, env);
   } catch (error) {
-    return fail(error.errorCode || 'INTERNAL_ERROR', error.message || '派单操作失败')
+    return fail(
+      error.errorCode || "INTERNAL_ERROR",
+      error.message || "派单操作失败",
+    );
   }
 }
 
@@ -358,5 +423,5 @@ module.exports = {
   adminAssignOrder,
   adminUnassignOrder,
   getDispatchLogs,
-  isWorkerAssignable
-}
+  isWorkerAssignable,
+};

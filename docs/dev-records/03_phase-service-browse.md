@@ -46,43 +46,43 @@
 
 ## 4. 新增文件
 
-| 文件路径 | 说明 |
-|---|---|
-| `docs/superpowers/plans/2026-05-30-phase3-service-browse.md` | 阶段三实施计划 |
-| `tests/phase3.service-browse.test.js` | 服务分类、服务列表、服务详情和页面接入测试 |
-| `cloudfunctions/service/seed-data.js` | MVP 服务分类和服务项目种子数据 |
-| `cloudfunctions/service/handler.js` | 服务浏览云函数业务逻辑 |
-| `docs/dev-records/03_phase-service-browse.md` | 本阶段开发记录与复盘 |
+| 文件路径                                                     | 说明                                       |
+| ------------------------------------------------------------ | ------------------------------------------ |
+| `docs/superpowers/plans/2026-05-30-phase3-service-browse.md` | 阶段三实施计划                             |
+| `tests/phase3.service-browse.test.js`                        | 服务分类、服务列表、服务详情和页面接入测试 |
+| `cloudfunctions/service/seed-data.js`                        | MVP 服务分类和服务项目种子数据             |
+| `cloudfunctions/service/handler.js`                          | 服务浏览云函数业务逻辑                     |
+| `docs/dev-records/03_phase-service-browse.md`                | 本阶段开发记录与复盘                       |
 
 ---
 
 ## 5. 修改文件
 
-| 文件路径 | 修改内容 |
-|---|---|
-| `cloudfunctions/service/index.js` | 从占位入口改为调用 `handleService` |
-| `miniprogram/pages/index/index.js` | 首页接入分类和推荐服务读取 |
-| `miniprogram/pages/index/index.json` | 注册首页需要的基础组件 |
-| `miniprogram/pages/index/index.wxml` | 增加静态 Banner、服务分类和推荐服务展示 |
-| `miniprogram/pages/index/index.wxss` | 增加首页服务浏览样式 |
-| `miniprogram/pages/service-list/service-list.js` | 接入分类筛选和服务列表读取 |
-| `miniprogram/pages/service-list/service-list.json` | 注册组件并开启下拉刷新 |
-| `miniprogram/pages/service-list/service-list.wxml` | 增加分类 tab、服务卡片和空状态 |
-| `miniprogram/pages/service-list/service-list.wxss` | 增加服务列表样式 |
-| `miniprogram/pages/service-detail/service-detail.js` | 接入服务详情读取和预约占位提示 |
-| `miniprogram/pages/service-detail/service-detail.json` | 注册加载和空状态组件 |
-| `miniprogram/pages/service-detail/service-detail.wxml` | 增加服务详情、服务流程和立即预约按钮 |
-| `miniprogram/pages/service-detail/service-detail.wxss` | 增加服务详情页样式 |
-| `docs/dev-records/index.md` | 更新阶段三完成状态、P0 完成情况和遗留问题 |
-| `README.md` | 补充阶段三说明和服务浏览验证步骤 |
+| 文件路径                                               | 修改内容                                  |
+| ------------------------------------------------------ | ----------------------------------------- |
+| `cloudfunctions/service/index.js`                      | 从占位入口改为调用 `handleService`        |
+| `miniprogram/pages/index/index.js`                     | 首页接入分类和推荐服务读取                |
+| `miniprogram/pages/index/index.json`                   | 注册首页需要的基础组件                    |
+| `miniprogram/pages/index/index.wxml`                   | 增加静态 Banner、服务分类和推荐服务展示   |
+| `miniprogram/pages/index/index.wxss`                   | 增加首页服务浏览样式                      |
+| `miniprogram/pages/service-list/service-list.js`       | 接入分类筛选和服务列表读取                |
+| `miniprogram/pages/service-list/service-list.json`     | 注册组件并开启下拉刷新                    |
+| `miniprogram/pages/service-list/service-list.wxml`     | 增加分类 tab、服务卡片和空状态            |
+| `miniprogram/pages/service-list/service-list.wxss`     | 增加服务列表样式                          |
+| `miniprogram/pages/service-detail/service-detail.js`   | 接入服务详情读取和预约占位提示            |
+| `miniprogram/pages/service-detail/service-detail.json` | 注册加载和空状态组件                      |
+| `miniprogram/pages/service-detail/service-detail.wxml` | 增加服务详情、服务流程和立即预约按钮      |
+| `miniprogram/pages/service-detail/service-detail.wxss` | 增加服务详情页样式                        |
+| `docs/dev-records/index.md`                            | 更新阶段三完成状态、P0 完成情况和遗留问题 |
+| `README.md`                                            | 补充阶段三说明和服务浏览验证步骤          |
 
 ---
 
 ## 6. 删除或废弃文件
 
 | 文件路径 | 删除 / 废弃原因 |
-|---|---|
-| 无 | 无 |
+| -------- | --------------- |
+| 无       | 无              |
 
 ---
 
@@ -97,23 +97,23 @@
 
 ### 当前种子分类
 
-| 分类 ID | 名称 | 状态 | 说明 |
-|---|---|---|---|
-| `cat_housekeeping` | 家政保洁 | enabled | 日常保洁、深度清洁 |
-| `cat_repair` | 维修服务 | enabled | 水电、门锁等常见维修 |
-| `cat_pet` | 宠物服务 | enabled | 遛宠、喂养、基础照看 |
+| 分类 ID            | 名称     | 状态    | 说明                 |
+| ------------------ | -------- | ------- | -------------------- |
+| `cat_housekeeping` | 家政保洁 | enabled | 日常保洁、深度清洁   |
+| `cat_repair`       | 维修服务 | enabled | 水电、门锁等常见维修 |
+| `cat_pet`          | 宠物服务 | enabled | 遛宠、喂养、基础照看 |
 
 ### 当前种子服务
 
-| 服务 ID | 分类 | 名称 | 价格（分） | 状态 | 推荐 |
-|---|---|---|---|---|---|
-| `svc_home_daily_clean` | 家政保洁 | 日常保洁 | 9900 | on | 是 |
-| `svc_home_deep_clean` | 家政保洁 | 深度保洁 | 19900 | on | 否 |
-| `svc_repair_water` | 维修服务 | 水电检修 | 6900 | on | 是 |
-| `svc_repair_lock` | 维修服务 | 门锁维修 | 8900 | on | 否 |
-| `svc_pet_walk` | 宠物服务 | 宠物遛弯 | 3900 | on | 是 |
-| `svc_pet_feed` | 宠物服务 | 上门喂养 | 4900 | on | 否 |
-| `svc_pet_bath_future` | 宠物服务 | 宠物洗护 | 0 | off | 否 |
+| 服务 ID                | 分类     | 名称     | 价格（分） | 状态 | 推荐 |
+| ---------------------- | -------- | -------- | ---------- | ---- | ---- |
+| `svc_home_daily_clean` | 家政保洁 | 日常保洁 | 9900       | on   | 是   |
+| `svc_home_deep_clean`  | 家政保洁 | 深度保洁 | 19900      | on   | 否   |
+| `svc_repair_water`     | 维修服务 | 水电检修 | 6900       | on   | 是   |
+| `svc_repair_lock`      | 维修服务 | 门锁维修 | 8900       | on   | 否   |
+| `svc_pet_walk`         | 宠物服务 | 宠物遛弯 | 3900       | on   | 是   |
+| `svc_pet_feed`         | 宠物服务 | 上门喂养 | 4900       | on   | 否   |
+| `svc_pet_bath_future`  | 宠物服务 | 宠物洗护 | 0          | off  | 否   |
 
 ### 数据库权限说明
 
@@ -123,20 +123,20 @@
 
 ## 8. 云函数 / 接口变化
 
-| 云函数 | 功能 | 入参 | 出参 | 权限要求 |
-|---|---|---|---|---|
-| `service` | 获取服务分类 | `action: getCategoryList` | `{ categories }` | 公开读取 |
-| `service` | 获取服务列表 | `action: getServiceList`, `categoryId`, `recommended` | `{ services }` | 公开读取 |
-| `service` | 获取服务详情 | `action: getServiceDetail`, `serviceId` | `{ service }` | 公开读取 |
+| 云函数    | 功能         | 入参                                                  | 出参             | 权限要求 |
+| --------- | ------------ | ----------------------------------------------------- | ---------------- | -------- |
+| `service` | 获取服务分类 | `action: getCategoryList`                             | `{ categories }` | 公开读取 |
+| `service` | 获取服务列表 | `action: getServiceList`, `categoryId`, `recommended` | `{ services }`   | 公开读取 |
+| `service` | 获取服务详情 | `action: getServiceDetail`, `serviceId`               | `{ service }`    | 公开读取 |
 
 ### 统一错误码
 
-| 错误码 | 说明 |
-|---|---|
-| `SERVICE_ID_MISSING` | 缺少服务 ID |
-| `SERVICE_NOT_FOUND` | 服务不存在或已下架 |
-| `ACTION_NOT_FOUND` | 未知 action |
-| `INTERNAL_ERROR` | 未预期内部错误 |
+| 错误码               | 说明               |
+| -------------------- | ------------------ |
+| `SERVICE_ID_MISSING` | 缺少服务 ID        |
+| `SERVICE_NOT_FOUND`  | 服务不存在或已下架 |
+| `ACTION_NOT_FOUND`   | 未知 action        |
+| `INTERNAL_ERROR`     | 未预期内部错误     |
 
 ---
 
@@ -248,13 +248,13 @@
 
 ## 11. 已知问题与遗留事项
 
-| 问题 | 影响 | 后续处理建议 | 优先级 |
-|---|---|---|---|
-| 服务数据仍为代码内置种子数据 | 无法在后台动态维护服务 | 阶段七实现管理员服务管理并迁移到数据库 | P1 |
-| 尚未在微信开发者工具中真实编译和预览 | 可能存在小程序运行时细节问题 | 阶段四前做一次开发者工具验证 | P1 |
-| `address/order/worker/review/admin` 云函数仍是占位 | 下单、师傅、评价和管理流程尚不能运行 | 后续阶段逐步实现 | P0 |
-| “立即预约”按钮未进入下单页 | 用户尚不能创建订单 | 阶段四接入提交订单页 | P0 |
-| 服务搜索和评价展示未实现 | 不影响 MVP 主流程启动 | P2 阶段再做 | P2 |
+| 问题                                               | 影响                                 | 后续处理建议                           | 优先级 |
+| -------------------------------------------------- | ------------------------------------ | -------------------------------------- | ------ |
+| 服务数据仍为代码内置种子数据                       | 无法在后台动态维护服务               | 阶段七实现管理员服务管理并迁移到数据库 | P1     |
+| 尚未在微信开发者工具中真实编译和预览               | 可能存在小程序运行时细节问题         | 阶段四前做一次开发者工具验证           | P1     |
+| `address/order/worker/review/admin` 云函数仍是占位 | 下单、师傅、评价和管理流程尚不能运行 | 后续阶段逐步实现                       | P0     |
+| “立即预约”按钮未进入下单页                         | 用户尚不能创建订单                   | 阶段四接入提交订单页                   | P0     |
+| 服务搜索和评价展示未实现                           | 不影响 MVP 主流程启动                | P2 阶段再做                            | P2     |
 
 ---
 

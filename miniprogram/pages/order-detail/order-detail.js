@@ -1,69 +1,74 @@
-const orderService = require('../../services/order.service')
-const paymentService = require('../../services/payment.service')
-const reviewService = require('../../services/review.service')
-const { isWechatPayMode } = require('../../config/payment')
+const orderService = require("../../services/order.service");
+const paymentService = require("../../services/payment.service");
+const reviewService = require("../../services/review.service");
+const { isWechatPayMode } = require("../../config/payment");
 const {
   AFTER_SALE_STATUS_TEXT,
-  REFUND_STATUS_TEXT
-} = require('../../config/status')
+  REFUND_STATUS_TEXT,
+} = require("../../config/status");
 const {
   formatOrderStatus,
   formatPayStatus,
-  formatPrice
-} = require('../../utils/format')
-const { hideLoading, showError, showLoading, showSuccess } = require('../../utils/toast')
+  formatPrice,
+} = require("../../utils/format");
+const {
+  hideLoading,
+  showError,
+  showLoading,
+  showSuccess,
+} = require("../../utils/toast");
 
 Page({
   data: {
-    title: '订单详情',
-    orderId: '',
+    title: "订单详情",
+    orderId: "",
     order: null,
-    priceText: '¥0.00',
-    originalAmountText: '¥0.00',
-    memberDiscountText: '-¥0.00',
-    couponDiscountText: '-¥0.00',
-    payableAmountText: '¥0.00',
-    statusText: '',
-    payStatusText: '',
-    afterSaleStatusText: '',
-    refundStatusText: '',
+    priceText: "¥0.00",
+    originalAmountText: "¥0.00",
+    memberDiscountText: "-¥0.00",
+    couponDiscountText: "-¥0.00",
+    payableAmountText: "¥0.00",
+    statusText: "",
+    payStatusText: "",
+    afterSaleStatusText: "",
+    refundStatusText: "",
     canPay: false,
     canCancel: false,
     canReview: false,
     canViewReview: false,
-    reviewId: '',
+    reviewId: "",
     canTip: false,
     canApplyAfterSale: false,
     canViewAfterSale: false,
     loading: true,
-    submitting: false
+    submitting: false,
   },
 
   onLoad(options = {}) {
     this.setData({
-      orderId: options.orderId || ''
-    })
-    this.loadOrderDetail()
+      orderId: options.orderId || "",
+    });
+    this.loadOrderDetail();
   },
 
   async loadOrderDetail() {
     if (!this.data.orderId) {
-      this.setData({ loading: false })
-      showError('缺少订单 ID')
-      return
+      this.setData({ loading: false });
+      showError("缺少订单 ID");
+      return;
     }
 
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     try {
       const data = await orderService.getOrderDetail({
-        orderId: this.data.orderId
-      })
-      this.applyOrder(data.order)
-      await this.loadOrderReview(data.order)
+        orderId: this.data.orderId,
+      });
+      this.applyOrder(data.order);
+      await this.loadOrderReview(data.order);
     } catch (error) {
-      showError(error.message || '订单加载失败')
+      showError(error.message || "订单加载失败");
     } finally {
-      this.setData({ loading: false })
+      this.setData({ loading: false });
     }
   },
 
@@ -74,77 +79,87 @@ Page({
       originalAmountText: formatPrice(order.original_amount || order.price),
       memberDiscountText: `-${formatPrice(order.member_discount_amount || 0)}`,
       couponDiscountText: `-${formatPrice(order.coupon_discount_amount || 0)}`,
-      payableAmountText: formatPrice(order.payable_amount || order.pay_amount || order.price),
+      payableAmountText: formatPrice(
+        order.payable_amount || order.pay_amount || order.price,
+      ),
       statusText: formatOrderStatus(order.status),
       payStatusText: formatPayStatus(order.pay_status),
-      afterSaleStatusText: AFTER_SALE_STATUS_TEXT[order.after_sale_status || 'none'] || '无售后',
-      refundStatusText: REFUND_STATUS_TEXT[order.refund_status || 'none'] || '未退款',
-      canPay: order.status === 'pending_pay' && order.pay_status === 'unpaid',
-      canCancel: ['pending_pay', 'pending_accept'].includes(order.status),
-      canReview: order.status === 'pending_review',
+      afterSaleStatusText:
+        AFTER_SALE_STATUS_TEXT[order.after_sale_status || "none"] || "无售后",
+      refundStatusText:
+        REFUND_STATUS_TEXT[order.refund_status || "none"] || "未退款",
+      canPay: order.status === "pending_pay" && order.pay_status === "unpaid",
+      canCancel: ["pending_pay", "pending_accept"].includes(order.status),
+      canReview: order.status === "pending_review",
       canViewReview: false,
-      reviewId: '',
+      reviewId: "",
       canTip:
-        order.status === 'completed' &&
-        order.pay_status === 'paid' &&
+        order.status === "completed" &&
+        order.pay_status === "paid" &&
         order.worker_id &&
-        (!order.refund_status || order.refund_status === 'none') &&
-        (!order.after_sale_status || order.after_sale_status === 'none'),
+        (!order.refund_status || order.refund_status === "none") &&
+        (!order.after_sale_status || order.after_sale_status === "none"),
       canApplyAfterSale:
-        ['pending_accept', 'accepted', 'serving', 'pending_review', 'completed'].includes(order.status) &&
-        order.pay_status === 'paid' &&
-        (!order.after_sale_status || order.after_sale_status === 'none'),
-      canViewAfterSale: Boolean(order.after_sale_id)
-    })
+        [
+          "pending_accept",
+          "accepted",
+          "serving",
+          "pending_review",
+          "completed",
+        ].includes(order.status) &&
+        order.pay_status === "paid" &&
+        (!order.after_sale_status || order.after_sale_status === "none"),
+      canViewAfterSale: Boolean(order.after_sale_id),
+    });
   },
 
   async loadOrderReview(order) {
-    if (!order || order.status !== 'completed') {
-      return
+    if (!order || order.status !== "completed") {
+      return;
     }
 
     try {
       const data = await reviewService.getOrderReview({
-        orderId: this.data.orderId
-      })
-      const review = data.review
+        orderId: this.data.orderId,
+      });
+      const review = data.review;
       if (review && review._id) {
         this.setData({
           canViewReview: true,
-          reviewId: review._id
-        })
+          reviewId: review._id,
+        });
       }
     } catch (error) {
       this.setData({
         canViewReview: false,
-        reviewId: ''
-      })
+        reviewId: "",
+      });
     }
   },
 
   async handlePay() {
     if (isWechatPayMode()) {
-      await this.handleWechatPay()
-      return
+      await this.handleWechatPay();
+      return;
     }
 
-    await this.handleMockPay()
+    await this.handleMockPay();
   },
 
   async handleMockPay() {
-    this.setData({ submitting: true })
-    showLoading('支付中')
+    this.setData({ submitting: true });
+    showLoading("支付中");
     try {
       const data = await orderService.mockPayOrder({
-        orderId: this.data.orderId
-      })
-      this.applyOrder(data.order)
-      showSuccess('模拟支付成功')
+        orderId: this.data.orderId,
+      });
+      this.applyOrder(data.order);
+      showSuccess("模拟支付成功");
     } catch (error) {
-      showError(error.message || '支付失败')
+      showError(error.message || "支付失败");
     } finally {
-      hideLoading()
-      this.setData({ submitting: false })
+      hideLoading();
+      this.setData({ submitting: false });
     }
   },
 
@@ -153,93 +168,93 @@ Page({
       wx.requestPayment({
         ...payParams,
         success: resolve,
-        fail: reject
-      })
-    })
+        fail: reject,
+      });
+    });
   },
 
   async handleWechatPay() {
-    this.setData({ submitting: true })
-    showLoading('支付中')
+    this.setData({ submitting: true });
+    showLoading("支付中");
     try {
       const data = await paymentService.createPayment({
-        orderId: this.data.orderId
-      })
-      await this.requestPayment(data.payParams)
+        orderId: this.data.orderId,
+      });
+      await this.requestPayment(data.payParams);
       wx.redirectTo({
-        url: `/pages/pay-result/pay-result?orderId=${this.data.orderId}`
-      })
+        url: `/pages/pay-result/pay-result?orderId=${this.data.orderId}`,
+      });
     } catch (error) {
-      showError(error.message || '支付失败')
+      showError(error.message || "支付失败");
     } finally {
-      hideLoading()
-      this.setData({ submitting: false })
+      hideLoading();
+      this.setData({ submitting: false });
     }
   },
 
   handleCancelOrder() {
     wx.showModal({
-      title: '取消订单',
-      content: '确认取消这个订单吗？',
-      confirmColor: '#c66b2d',
+      title: "取消订单",
+      content: "确认取消这个订单吗？",
+      confirmColor: "#c66b2d",
       success: async (res) => {
-        if (!res.confirm) return
-        this.setData({ submitting: true })
+        if (!res.confirm) return;
+        this.setData({ submitting: true });
         try {
           const data = await orderService.cancelOrder({
-            orderId: this.data.orderId
-          })
-          this.applyOrder(data.order)
-          showSuccess('订单已取消')
+            orderId: this.data.orderId,
+          });
+          this.applyOrder(data.order);
+          showSuccess("订单已取消");
         } catch (error) {
-          showError(error.message || '取消失败')
+          showError(error.message || "取消失败");
         } finally {
-          this.setData({ submitting: false })
+          this.setData({ submitting: false });
         }
-      }
-    })
+      },
+    });
   },
 
   goReview() {
     wx.navigateTo({
-      url: `/pages/review/review?orderId=${this.data.orderId}`
-    })
+      url: `/pages/review/review?orderId=${this.data.orderId}`,
+    });
   },
 
   goReviewDetail() {
     if (!this.data.reviewId) {
-      showError('评价信息暂未生成，请稍后刷新')
-      return
+      showError("评价信息暂未生成，请稍后刷新");
+      return;
     }
     wx.navigateTo({
-      url: `/pages/review/detail/detail?reviewId=${this.data.reviewId}`
-    })
+      url: `/pages/review/detail/detail?reviewId=${this.data.reviewId}`,
+    });
   },
 
   goTip() {
     wx.navigateTo({
-      url: `/pages/tip/create/create?orderId=${this.data.orderId}`
-    })
+      url: `/pages/tip/create/create?orderId=${this.data.orderId}`,
+    });
   },
 
   goAfterSaleApply() {
     wx.navigateTo({
-      url: `/pages/after-sale/apply/apply?orderId=${this.data.orderId}`
-    })
+      url: `/pages/after-sale/apply/apply?orderId=${this.data.orderId}`,
+    });
   },
 
   goAfterSaleDetail() {
     wx.navigateTo({
-      url: `/pages/after-sale/detail/detail?afterSaleId=${this.data.order.after_sale_id}`
-    })
+      url: `/pages/after-sale/detail/detail?afterSaleId=${this.data.order.after_sale_id}`,
+    });
   },
 
   goWorkerDetail() {
     if (!this.data.order.worker_id) {
-      return
+      return;
     }
     wx.navigateTo({
-      url: `/pages/worker-detail/worker-detail?workerId=${this.data.order.worker_id}`
-    })
-  }
-})
+      url: `/pages/worker-detail/worker-detail?workerId=${this.data.order.worker_id}`,
+    });
+  },
+});

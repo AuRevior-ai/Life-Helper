@@ -1,4 +1,19 @@
-.page { padding: 24rpx; }
-.title, text { display: block; margin-bottom: 16rpx; }
-textarea { box-sizing: border-box; width: 100%; margin: 16rpx 0; padding: 20rpx; background: #fff; border-radius: 8rpx; }
-button { margin-bottom: 16rpx; }
+.page {
+  padding: 24rpx;
+}
+.title,
+text {
+  display: block;
+  margin-bottom: 16rpx;
+}
+textarea {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 16rpx 0;
+  padding: 20rpx;
+  background: #fff;
+  border-radius: 8rpx;
+}
+button {
+  margin-bottom: 16rpx;
+}
