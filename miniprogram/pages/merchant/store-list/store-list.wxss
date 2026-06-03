@@ -1,20 +1,49 @@
-.page {
-  padding: 24rpx;
+@import "../../../styles/ui-kit.wxss";
+
+.store-card {
+  display: flex;
+  margin-bottom: 18rpx;
+  align-items: center;
+  gap: 22rpx;
 }
-.item {
-  padding: 24rpx;
-  margin-bottom: 16rpx;
-  background: #fff;
-  border-radius: 8rpx;
+
+.store-avatar {
+  width: 104rpx;
+  height: 104rpx;
+  flex: 0 0 104rpx;
+  border-radius: 24rpx;
 }
-.title {
+
+.store-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.store-title {
   display: block;
-  font-weight: 600;
-  color: #1f2d2a;
+  overflow: hidden;
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.meta {
+
+.store-meta {
   display: block;
-  margin-top: 8rpx;
-  color: #64716d;
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 10rpx;
+  color: #6b7280;
   font-size: 24rpx;
+  line-height: 34rpx;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.store-arrow {
+  color: #9ca3af;
+  font-size: 42rpx;
+  line-height: 1;
 }

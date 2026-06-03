@@ -1,15 +1,19 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
+<view class="review-followup-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">补充服务体验，帮助其他邻居参考</view>
   </view>
-  <textarea
-    class="form-textarea"
-    value="{{ content }}"
-    placeholder="填写追加评价"
-    bindinput="onInput"
-  ></textarea>
+  <view class="ui-card form-card">
+    <view class="form-label">追评内容</view>
+    <textarea
+      class="form-textarea"
+      value="{{ content }}"
+      placeholder="填写追加评价"
+      bindinput="onInput"
+    ></textarea>
+  </view>
   <button
-    class="primary-button"
+    class="ui-primary-button submit-button"
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="submit"

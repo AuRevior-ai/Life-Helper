@@ -1,3 +1,32 @@
+@import "../../../styles/ui-kit.wxss";
+
+.form-card {
+  padding: 30rpx;
+}
+
+.form-label {
+  margin-bottom: 16rpx;
+  color: #111827;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
 .form-textarea {
-  min-height: 220rpx;
+  width: 100%;
+  min-height: 260rpx;
+  padding: 22rpx;
+  border-radius: 20rpx;
+  box-sizing: border-box;
+  background: #f7f8fa;
+  color: #111827;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.submit-button {
+  width: 100%;
+  height: 84rpx;
+  margin-top: 34rpx;
+  font-size: 28rpx;
+  line-height: 84rpx;
 }

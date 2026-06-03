@@ -1,27 +1,84 @@
-.page {
-  padding: 24rpx;
-}
-.header {
-  padding: 28rpx 0;
-}
-.title {
-  display: block;
-  font-size: 36rpx;
-  font-weight: 600;
-}
-.intro {
-  display: block;
-  margin-top: 12rpx;
-  color: #64716d;
-}
-.service {
+@import "../../../styles/ui-kit.wxss";
+
+.store-header {
   display: flex;
-  justify-content: space-between;
-  padding: 24rpx;
-  margin-bottom: 16rpx;
-  background: #fff;
-  border-radius: 8rpx;
+  align-items: center;
+  gap: 22rpx;
 }
-.price {
-  color: #1f7a68;
+
+.store-cover {
+  width: 128rpx;
+  height: 128rpx;
+  flex: 0 0 128rpx;
+  border-radius: 28rpx;
+}
+
+.store-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.store-title {
+  display: block;
+  overflow: hidden;
+  color: #111827;
+  font-size: 34rpx;
+  font-weight: 900;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-intro {
+  display: block;
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 12rpx;
+  color: #6b7280;
+  font-size: 25rpx;
+  line-height: 36rpx;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.service-head {
+  margin-top: 30rpx;
+  margin-bottom: 18rpx;
+}
+
+.service-card {
+  display: flex;
+  margin-bottom: 18rpx;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.service-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.service-title {
+  display: block;
+  overflow: hidden;
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.service-meta {
+  display: block;
+  margin-top: 10rpx;
+  color: #9ca3af;
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+.service-price {
+  flex: 0 0 auto;
+  font-size: 30rpx;
 }

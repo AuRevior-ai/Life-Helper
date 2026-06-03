@@ -1,16 +1,39 @@
-<view class="page">
-  <view class="header">
-    <text class="title">{{merchant.store_name}}</text>
-    <text class="intro">{{merchant.store_intro}}</text>
-  </view>
-  <view
-    wx:for="{{services}}"
-    wx:key="_id"
-    class="service"
-    bindtap="goOrder"
-    data-id="{{item._id}}"
-  >
-    <text>{{item.service_name}}</text>
-    <text class="price">¥{{item.priceText}}</text>
-  </view>
+<view class="store-detail-page ui-page ui-page--dense">
+  <loading-view wx:if="{{ loading }}" text="正在加载店铺"></loading-view>
+
+  <block wx:else>
+    <view class="store-header ui-card">
+      <view class="store-cover ui-media-placeholder"></view>
+      <view class="store-info">
+        <text class="store-title">{{merchant.store_name || '店铺主页'}}</text>
+        <text class="store-intro">{{merchant.store_intro || '商家暂未填写简介'}}</text>
+      </view>
+    </view>
+
+    <view class="ui-section-head service-head">
+      <text class="ui-section-title">商家服务</text>
+    </view>
+
+    <block wx:if="{{services.length}}">
+      <view
+        wx:for="{{services}}"
+        wx:key="_id"
+        class="service-card ui-card"
+        bindtap="goOrder"
+        data-id="{{item._id}}"
+      >
+        <view class="service-main">
+          <text class="service-title">{{item.service_name}}</text>
+          <text class="service-meta">点击预约该商家服务</text>
+        </view>
+        <text class="service-price ui-price">¥{{item.priceText}}</text>
+      </view>
+    </block>
+
+    <empty-state
+      wx:else
+      title="暂无服务"
+      description="商家发布服务后会展示在这里"
+    ></empty-state>
+  </block>
 </view>

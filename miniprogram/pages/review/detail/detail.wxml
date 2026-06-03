@@ -1,10 +1,10 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">评价隐藏会保留历史记录</view>
+<view class="review-detail-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">{{ title }}</view>
+    <view class="ui-subtitle">评价隐藏会保留历史记录</view>
   </view>
   <loading-view wx:if="{{ loading }}" text="正在加载评价"></loading-view>
-  <view wx:elif="{{ review }}" class="review-card panel">
+  <view wx:elif="{{ review }}" class="review-card ui-card">
     <view class="review-card__header">
       <view>
         <view class="review-card__title">服务评价</view>
@@ -57,8 +57,8 @@
 
     <button
       wx:if="{{ !review.followup_content }}"
-      class="primary-button review-action"
-      bindtap="goFollowup"
+        class="ui-primary-button review-action"
+        bindtap="goFollowup"
     >
       追加评价
     </button>

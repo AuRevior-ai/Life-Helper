@@ -1,12 +1,31 @@
-<view class="page">
-  <view
-    wx:for="{{stores}}"
-    wx:key="_id"
-    class="item"
-    bindtap="goDetail"
-    data-id="{{item._id}}"
-  >
-    <text class="title">{{item.store_name}}</text>
-    <text class="meta">{{item.service_communities}}</text>
+<view class="store-list-page ui-page ui-page--dense">
+  <view class="ui-header">
+    <view class="ui-title">附近商家</view>
+    <view class="ui-subtitle">查看已审核商家和服务范围</view>
   </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载商家"></loading-view>
+
+  <block wx:elif="{{stores.length}}">
+    <view
+      wx:for="{{stores}}"
+      wx:key="_id"
+      class="store-card ui-card"
+      bindtap="goDetail"
+      data-id="{{item._id}}"
+    >
+      <view class="store-avatar ui-media-placeholder"></view>
+      <view class="store-main">
+        <text class="store-title">{{item.store_name}}</text>
+        <text class="store-meta">{{item.service_communities || '服务范围待商家补充'}}</text>
+      </view>
+      <text class="store-arrow">›</text>
+    </view>
+  </block>
+
+  <empty-state
+    wx:else
+    title="暂无商家"
+    description="附近商家上线后会展示在这里"
+  ></empty-state>
 </view>

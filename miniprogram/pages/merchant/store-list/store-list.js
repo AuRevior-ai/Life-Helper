@@ -4,6 +4,7 @@ const { showError } = require("../../../utils/toast");
 Page({
   data: {
     stores: [],
+    loading: true,
   },
 
   onLoad() {
@@ -16,6 +17,8 @@ Page({
       this.setData({ stores: data.list || [] });
     } catch (error) {
       showError(error.message || "商家列表加载失败");
+    } finally {
+      this.setData({ loading: false });
     }
   },
 

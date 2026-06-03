@@ -7,6 +7,7 @@ Page({
     merchantId: "",
     merchant: {},
     services: [],
+    loading: true,
   },
 
   onLoad(options = {}) {
@@ -26,6 +27,8 @@ Page({
       this.setData({ merchant: data.merchant || {}, services });
     } catch (error) {
       showError(error.message || "商家详情加载失败");
+    } finally {
+      this.setData({ loading: false });
     }
   },
 
