@@ -91,22 +91,18 @@ test("release risk scanner blocks sensitive delivery files", () => {
 });
 
 test("README AppID guidance follows current config without hardcoding a historical AppID in tests", () => {
-  const projectConfig = readJson("project.config.json");
   const exampleConfig = readJson("project.config.example.json");
   const readme = read("README.md");
 
-  assert.ok(
-    projectConfig.appid,
-    "project.config.json should define the current appid strategy",
-  );
   assert.equal(exampleConfig.appid, "touristappid");
   assert.match(readme, /project\.config\.example\.json/);
   assert.match(readme, /touristappid/);
   assert.match(readme, /真实小程序 AppID/);
+  assert.match(readme, /复制 `project\.config\.example\.json` 为 `project\.config\.json`/);
   assert.match(readme, /公开交付/);
   assert.doesNotMatch(
     readme,
-    new RegExp(`当前 \`appid\` 使用 \`${projectConfig.appid}\``),
+    /当前 `appid` 使用 `wx[a-f0-9]{16,}`/i,
   );
 });
 

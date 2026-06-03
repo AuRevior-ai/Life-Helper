@@ -155,17 +155,20 @@ test("shared sync check script is wired into package scripts and passes on curre
   assert.match(result.stdout, /共享工具一致性检查通过/);
 });
 
-test("README and dev-record index document phase 21.5 as the pre-UI gate", () => {
+test("README and dev-record index document the current 22B/22C UI handoff", () => {
   const readme = read("README.md");
   const index = read("docs/dev-records/index.md");
 
-  assert.match(readme, /当前最新阶段为阶段 21/);
-  assert.match(readme, /阶段 21\.5/);
-  assert.match(readme, /阶段 22 UI/);
+  assert.match(readme, /当前最新阶段为阶段 22B/);
+  assert.match(readme, /下一阶段为阶段 22C/);
+  assert.match(readme, /project\.config\.example\.json/);
 
   assert.match(index, /21_5_pre-ui-engineering-hardening\.md/);
   assert.match(index, /UI 重构前工程结构体检与收口/);
-  assert.match(index, /阶段 22：UI视觉重构与交互体验统一 V1/);
+  assert.match(index, /22b_order-center-ui\.md/);
+  assert.match(index, /22c-pre-maintenance\.md/);
+  assert.match(index, /阶段 22C：核心用户端页面 UI 同步与交互体验统一/);
+  assert.match(index, /getStatusView\(type, status\)/);
 });
 
 test("mock money, qualification, deposit, insurance, and risk pages show explicit no-real-world-effect warnings", () => {
