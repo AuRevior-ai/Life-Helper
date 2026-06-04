@@ -19,25 +19,35 @@ function createMessages(records = []) {
   };
 }
 
-test("profile page hides user-only entries when active identity is worker and exposes worker/merchant entries", () => {
+test("profile page hides user-only entries by active identity and exposes worker/merchant entries separately", () => {
   const profileJs = read("miniprogram/pages/profile/profile.js");
   const profileWxml = read("miniprogram/pages/profile/profile.wxml");
 
   assert.match(profileJs, /getCurrentIdentityRole/);
   assert.match(profileJs, /isWorkerIdentity/);
+  assert.match(profileJs, /isMerchantIdentity/);
   assert.match(profileJs, /goWorkerCenter/);
   assert.match(profileJs, /goMerchantApply/);
+  assert.match(profileJs, /goMerchantCenter/);
+  assert.match(profileJs, /goMerchantOrders/);
   assert.match(profileWxml, /wx:if="{{ isUserIdentity }}"/);
   assert.match(profileWxml, /wx:if="{{ isWorkerIdentity }}"/);
+  assert.match(profileWxml, /wx:if="{{ isMerchantIdentity }}"/);
   assert.match(profileWxml, /师傅工作台/);
-  assert.match(profileWxml, /商家入驻/);
+  assert.match(profileWxml, /商家工作台/);
+  assert.match(profileWxml, /商家订单/);
+  assert.match(profileWxml, /商家入驻审核/);
 });
 
 test("role selection separates worker and merchant entry points", () => {
+  const { USER_ROLE, USER_ROLE_TEXT } = require("../miniprogram/config/roles");
   const roleJs = read("miniprogram/pages/role-select/role-select.js");
   const roleWxml = read("miniprogram/pages/role-select/role-select.wxml");
 
+  assert.equal(USER_ROLE.MERCHANT, "merchant");
+  assert.equal(USER_ROLE_TEXT[USER_ROLE.MERCHANT], "商家");
   assert.match(roleJs, /enterMerchantRole/);
+  assert.match(roleJs, /setCurrentIdentityRole\(USER_ROLE\.MERCHANT\)/);
   assert.match(roleJs, /\/pages\/merchant\/audit-status\/audit-status/);
   assert.match(roleWxml, /个人师傅端/);
   assert.match(roleWxml, /商家端/);
@@ -47,6 +57,8 @@ test("message list requests current identity role and backend filters messages b
   const messageListJs = read("miniprogram/pages/message-list/message-list.js");
   assert.match(messageListJs, /getCurrentIdentityRole/);
   assert.match(messageListJs, /role: getCurrentIdentityRole\(\)/);
+  assert.match(messageListJs, /\/pages\/merchant\/order-detail\/order-detail/);
+  assert.match(messageListJs, /\/pages\/merchant\/audit-status\/audit-status/);
 
   const { handleMessage } = require("../cloudfunctions/message/handler");
   const userResult = await handleMessage(
@@ -112,6 +124,44 @@ test("message list requests current identity role and backend filters messages b
     ["msg_worker", "msg_common"],
   );
   assert.equal(workerResult.data.unread_count, 2);
+
+  const roleScopedMessages = [
+    { _id: "msg_user", user_id: "openid_same", role: "user", is_read: false },
+    {
+      _id: "msg_worker",
+      user_id: "openid_same",
+      role: "worker",
+      is_read: false,
+    },
+    {
+      _id: "msg_merchant",
+      user_id: "openid_same",
+      role: "merchant",
+      related_type: "order",
+      related_id: "merchant_order_1",
+      is_read: false,
+    },
+    {
+      _id: "msg_admin",
+      user_id: "openid_same",
+      role: "admin",
+      is_read: false,
+    },
+  ];
+  for (const role of ["user", "worker", "merchant", "admin"]) {
+    const result = await handleMessage(
+      { action: "getMessageList", role },
+      {
+        openid: "openid_same",
+        messages: createMessages(roleScopedMessages),
+      },
+    );
+    assert.equal(result.success, true);
+    assert.deepEqual(
+      result.data.list.map((message) => message.role),
+      [role],
+    );
+  }
 });
 
 test("worker profile has direct review operation entry", () => {

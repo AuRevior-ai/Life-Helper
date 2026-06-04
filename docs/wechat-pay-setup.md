@@ -63,7 +63,11 @@ CURRENT_PAY_MODE = PAY_MODE.MOCK;
 
 微信支付成功必须以后端回调或主动查询结果为准。前端 `wx.requestPayment success` 只代表用户完成了支付动作，不直接修改订单状态。
 
-如果当前云开发环境暂未配置 HTTP 回调地址，本阶段先保留 `handlePayNotify` 的业务处理结构，并通过测试模拟回调数据验证：
+如果当前云开发环境暂未配置 HTTP 回调地址，本阶段先保留 `handlePayNotify` 的业务处理结构，但它当前只用于测试支付回调后的业务结构，不是生产真实资金回调入口。默认 `PAY_MODE=mock` 会拒绝生产式 notify；`PAY_MODE=wechat` 如果没有真实回调验签器也会拒绝处理 notify。测试模拟 notify 必须显式注入 `env.notifyVerifier` 或 `env.allowMockNotify === true`，避免无验签路径被误认为生产可用。
+
+真实上线前必须完成 JSAPI 下单、请求签名、前端支付参数签名、支付回调验签、退款、退款回调和对账流程。前端 `wx.requestPayment success` 只代表用户完成了支付动作，不直接修改订单支付状态。
+
+当前测试结构只验证：
 
 1. 根据 `out_trade_no` 查找订单。
 2. 校验金额一致。

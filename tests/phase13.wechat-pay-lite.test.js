@@ -224,7 +224,7 @@ test("payment create uses backend amount and rejects disabled real pay mode", as
   assert.equal(enabledResult.data.amount, 8800);
 });
 
-test("payment notify marks order paid once and creates one user message", async () => {
+test("payment notify requires explicit verification before marking order paid once", async () => {
   const { handlePayment } = require("../cloudfunctions/payment/handler");
   const orders = createMemoryOrders([
     {
@@ -237,11 +237,25 @@ test("payment notify marks order paid once and creates one user message", async 
       pay_amount: 6600,
       price: 6600,
     },
+    {
+      _id: "order_2",
+      order_no: "OD201",
+      user_id: "openid_user",
+      out_trade_no: "OD201",
+      status: "pending_pay",
+      pay_status: "paying",
+      pay_amount: 6600,
+      price: 6600,
+    },
   ]);
   const paymentLogs = createMemoryLogs();
   const messages = createMemoryMessages();
   const env = {
     now: fixedNow,
+    payMode: "wechat",
+    async notifyVerifier(notify) {
+      return notify.out_trade_no === "OD200" || notify.out_trade_no === "OD201";
+    },
     orders,
     paymentLogs,
     messages,
@@ -252,6 +266,42 @@ test("payment notify marks order paid once and creates one user message", async 
     trade_state: "SUCCESS",
     amount: { payer_total: 6600 },
   };
+
+  const mockRejectResult = await handlePayment(
+    {
+      action: "handlePayNotify",
+      notify: notifyPayload,
+    },
+    {
+      now: fixedNow,
+      payMode: "mock",
+      orders,
+      paymentLogs,
+      messages,
+    },
+  );
+  assert.equal(mockRejectResult.success, false);
+  assert.equal(mockRejectResult.errorCode, "PAY_NOTIFY_UNVERIFIED");
+  assert.equal(orders.records[0].pay_status, "paying");
+  assert.equal(messages.records.length, 0);
+
+  const missingVerifierResult = await handlePayment(
+    {
+      action: "handlePayNotify",
+      notify: notifyPayload,
+    },
+    {
+      now: fixedNow,
+      payMode: "wechat",
+      orders,
+      paymentLogs,
+      messages,
+    },
+  );
+  assert.equal(missingVerifierResult.success, false);
+  assert.equal(missingVerifierResult.errorCode, "PAY_NOTIFY_UNVERIFIED");
+  assert.equal(orders.records[0].pay_status, "paying");
+  assert.equal(messages.records.length, 0);
 
   const firstResult = await handlePayment(
     {
@@ -281,6 +331,22 @@ test("payment notify marks order paid once and creates one user message", async 
     paymentLogs.records.some((log) => log.type === "duplicate_notify"),
     true,
   );
+
+  const mismatchResult = await handlePayment(
+    {
+      action: "handlePayNotify",
+      notify: {
+        out_trade_no: "OD201",
+        transaction_id: "4200000002",
+        trade_state: "SUCCESS",
+        amount: { payer_total: 1 },
+      },
+    },
+    env,
+  );
+  assert.equal(mismatchResult.success, false);
+  assert.equal(mismatchResult.errorCode, "PAY_AMOUNT_MISMATCH");
+  assert.equal(orders.records[1].pay_status, "paying");
 });
 
 test("payment status query is limited to current user order ownership", async () => {

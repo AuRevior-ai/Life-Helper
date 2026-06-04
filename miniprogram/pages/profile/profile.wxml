@@ -142,12 +142,34 @@
     </view>
 
     <view
-      wx:if="{{ isWorkerIdentity }}"
+      wx:if="{{ isMerchantIdentity }}"
+      class="menu-row worker-menu-row"
+      bindtap="goMerchantCenter"
+    >
+      <view class="menu-icon menu-icon--board"></view>
+      <text class="menu-label">商家工作台</text>
+      <text class="menu-hint">店铺服务与资料</text>
+      <text class="menu-arrow">›</text>
+    </view>
+
+    <view
+      wx:if="{{ isMerchantIdentity }}"
+      class="menu-row worker-menu-row"
+      bindtap="goMerchantOrders"
+    >
+      <view class="menu-icon menu-icon--order"></view>
+      <text class="menu-label">商家订单</text>
+      <text class="menu-hint">处理店铺订单</text>
+      <text class="menu-arrow">›</text>
+    </view>
+
+    <view
+      wx:if="{{ isMerchantIdentity }}"
       class="menu-row worker-menu-row"
       bindtap="goMerchantApply"
     >
-      <view class="menu-icon menu-icon--board"></view>
-      <text class="menu-label">商家入驻</text>
+      <view class="menu-icon menu-icon--user"></view>
+      <text class="menu-label">商家入驻审核</text>
       <text class="menu-hint">申请或查看店铺审核</text>
       <text class="menu-arrow">›</text>
     </view>

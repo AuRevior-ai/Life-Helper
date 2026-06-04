@@ -1,5 +1,6 @@
 const messageService = require("../../services/message.service");
 const { MESSAGE_TYPE_TEXT } = require("../../config/status");
+const { USER_ROLE } = require("../../config/roles");
 const { getCurrentIdentityRole } = require("../../utils/auth");
 const { showError, showSuccess } = require("../../utils/toast");
 
@@ -70,11 +71,27 @@ Page({
       return "";
     }
 
-    const isWorkerMessage = message.role === "worker";
-    const page = isWorkerMessage
-      ? "/pages/worker/order-detail/order-detail"
-      : "/pages/order-detail/order-detail";
+    const pageMap = {
+      [USER_ROLE.WORKER]: "/pages/worker/order-detail/order-detail",
+      [USER_ROLE.MERCHANT]: "/pages/merchant/order-detail/order-detail",
+      [USER_ROLE.USER]: "/pages/order-detail/order-detail",
+    };
+    const page = pageMap[message.role] || "/pages/order-detail/order-detail";
     return `${page}?orderId=${orderId}`;
+  },
+
+  getMerchantDetailUrl(message) {
+    const merchantId = message.related_id || message.merchant_id;
+    if (message.related_type !== "merchant") {
+      return "";
+    }
+
+    const query = merchantId ? `?merchantId=${merchantId}` : "";
+    return `/pages/merchant/audit-status/audit-status${query}`;
+  },
+
+  getMessageDetailUrl(message) {
+    return this.getOrderDetailUrl(message) || this.getMerchantDetailUrl(message);
   },
 
   async handleMessageTap(event) {
@@ -83,7 +100,7 @@ Page({
     const message = this.data.messages[index] || {};
     try {
       await this.markMessageRead(messageId);
-      const url = this.getOrderDetailUrl(message);
+      const url = this.getMessageDetailUrl(message);
       if (url) {
         wx.navigateTo({ url });
         return;

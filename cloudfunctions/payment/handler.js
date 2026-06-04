@@ -167,6 +167,24 @@ function getNotifyAmount(notify = {}) {
   return Number(notify.amount || 0);
 }
 
+async function verifyPayNotify(event = {}, env = {}, notify = {}) {
+  if (typeof env.notifyVerifier === "function") {
+    const verifyResult = await env.notifyVerifier(notify, event, env);
+    if (verifyResult) return true;
+  }
+
+  if (env.allowMockNotify === true) {
+    return true;
+  }
+
+  const payMode = getPayMode(env);
+  const message =
+    payMode === PAY_MODE.WECHAT
+      ? "支付回调未配置验签器，不能处理真实微信支付通知"
+      : "mock 模式默认拒绝生产式支付通知";
+  throw serviceError("PAY_NOTIFY_UNVERIFIED", message);
+}
+
 async function safeCreatePaySuccessMessage(env, order, now) {
   if (!env.messages || !env.messages.create) {
     return null;
@@ -189,6 +207,8 @@ async function safeCreatePaySuccessMessage(env, order, now) {
 async function handlePayNotify(event = {}, env = {}) {
   const notify = normalizeNotify(getPayload(event));
   const now = getNow(env);
+  await verifyPayNotify(event, env, notify);
+
   await writePaymentLog(env, {
     out_trade_no: notify.out_trade_no,
     transaction_id: notify.transaction_id,

@@ -80,7 +80,7 @@ Page({
   enterMerchantRole() {
     if (!this.requireLogin()) return;
 
-    const user = setCurrentIdentityRole(USER_ROLE.WORKER);
+    const user = setCurrentIdentityRole(USER_ROLE.MERCHANT);
     if (user) {
       getApp().globalData.currentUser = user;
       this.setData({

@@ -95,9 +95,12 @@
 
 ## 8. 云函数 / 接口变化
 
-无。
+原 22C3 UI 重构阶段无云函数接口变化。
 
-本阶段不修改云函数接口，不新增 action，不改变 `worker`、`order`、`user` 等云函数的参数结构和返回结构。
+本轮工程收口补充了两个边界修复，但不新增 action、不改变订单状态机、不改变金额单位：
+
+- `message` 云函数继续保持按 `role` 筛选消息，本轮补充 merchant 消息隔离测试。
+- `payment.handlePayNotify` 增加无验签保护，默认 mock 模式和未配置验签器的 wechat 模式均拒绝处理 notify；仅测试结构验证可显式注入 `env.notifyVerifier` 或 `env.allowMockNotify === true`。
 
 ## 9. Services 变化
 
@@ -133,19 +136,26 @@
 - 不修改云函数接口。
 - 不修改数据库结构。
 
+当前支付、退款、打赏、会员、保证金、资质、保险、风控和财务流水仍为 mock 或内部模拟：只支持 mock 支付、mock 退款、mock 打赏、mock 会员、mock 保证金、mock 资质认证、mock 保险信息、mock 入驻风控和内部模拟财务流水。当前无真实扣款、无真实退款、无真实分账、无真实提现、无真实身份证认证、无真实营业执照认证、无真实 OCR、无真实保险核验、无真实保证金支付、无真实保证金退款、无真实合规风控。`PAY_MODE=wechat` 当前仍是占位入口，真实微信支付尚未实现，必须 fail-fast。
+
 ## 12. 测试记录
 
-本阶段代码提交前已运行：
+原阶段代码提交前已运行：
 
 ```bash
 npm test
 ```
 
-结果：
+本轮工程收口更新后记录最终复测结果：
 
 | 命令 | 结果 |
 | ---- | ---- |
-| `npm test` | 通过，252/252 |
+| `npm test` | 通过，256/256 |
+| `npm run check:shared-sync` | 通过 |
+| `npm run check:cloudfunction-deps` | 通过 |
+| `npm run check:release-risk -- <clean-candidate>` | 通过 |
+
+本轮同时发现并修复了中文资源名在 Git 状态中显示为 `#Uxxxx` 的文件名编码问题。修复后 `git status --short` 不再出现中文文件 deleted 与 `#U...` untracked 配对问题，首页 banner 图片和师傅默认头像文件均保持真实存在，路径与代码/测试一致。
 
 对应提交：
 

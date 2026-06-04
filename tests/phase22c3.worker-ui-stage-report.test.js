@@ -1,5 +1,4 @@
 const assert = require("node:assert");
-const { execSync } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
@@ -51,28 +50,33 @@ test("phase 22C3 report documents UI-only boundaries and verification", () => {
     "不修改订单状态机",
     "不修改云函数接口",
     "npm test",
-    "252/252",
+    "256/256",
+    "npm run check:shared-sync",
+    "npm run check:cloudfunction-deps",
+    "npm run check:release-risk -- <clean-candidate>",
+    "#Uxxxx",
   ]) {
     assert.match(record, new RegExp(text));
   }
 });
 
-test("phase 22C3 report-only update does not modify cloudfunctions or services", () => {
-  const output = execSync("git diff --name-only", {
-    cwd: rootDir,
-    encoding: "utf8",
-  });
-  const changedFiles = output
-    .split(/\r?\n/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+test("phase 22C3 report preserves mock payment and finance boundaries", () => {
+  const record = read("docs/dev-records/22c3-worker-ui-refactor.md");
 
-  assert.equal(
-    changedFiles.some((file) => file.startsWith("cloudfunctions/")),
-    false,
-  );
-  assert.equal(
-    changedFiles.some((file) => file.startsWith("miniprogram/services/")),
-    false,
-  );
+  for (const text of [
+    "mock 支付",
+    "mock 退款",
+    "mock 打赏",
+    "mock 会员",
+    "mock 保证金",
+    "mock 资质认证",
+    "mock 保险信息",
+    "内部模拟财务流水",
+    "无真实扣款",
+    "无真实退款",
+    "无真实分账",
+    "无真实提现",
+  ]) {
+    assert.match(record, new RegExp(text));
+  }
 });

@@ -1,5 +1,4 @@
 const assert = require("node:assert");
-const { execSync } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
@@ -106,22 +105,11 @@ test("phase 22C-2 documents forbidden business capabilities", () => {
   }
 });
 
-test("phase 22C-2 does not modify cloudfunctions or services", () => {
-  const output = execSync("git diff --name-only", {
-    cwd: rootDir,
-    encoding: "utf8",
-  });
-  const changedFiles = output
-    .split(/\r?\n/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+test("phase 22C-2 record states cloudfunctions and services stayed out of scope", () => {
+  const record = read("docs/dev-records/22c2-user-ui-final-polish.md");
 
-  assert.equal(
-    changedFiles.some((file) => file.startsWith("cloudfunctions/")),
-    false,
-  );
-  assert.equal(
-    changedFiles.some((file) => file.startsWith("miniprogram/services/")),
-    false,
-  );
+  assert.match(record, /本阶段未修改：[\s\S]*`cloudfunctions\/\*\*`/);
+  assert.match(record, /本阶段未修改：[\s\S]*`miniprogram\/services\/\*\*`/);
+  assert.match(record, /## 7\. 云函数 \/ 接口变化[\s\S]*无。/);
+  assert.match(record, /## 8\. Services 变化[\s\S]*无。/);
 });

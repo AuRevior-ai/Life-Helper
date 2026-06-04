@@ -47,6 +47,7 @@ Page({
     statusText: "未登录",
     isUserIdentity: false,
     isWorkerIdentity: false,
+    isMerchantIdentity: false,
     isAdminIdentity: false,
   },
 
@@ -93,6 +94,7 @@ Page({
       statusText,
       isUserIdentity: !isLoggedIn || activeRole === USER_ROLE.USER,
       isWorkerIdentity: activeRole === USER_ROLE.WORKER,
+      isMerchantIdentity: activeRole === USER_ROLE.MERCHANT,
       isAdminIdentity: activeRole === USER_ROLE.ADMIN,
     });
   },
@@ -208,6 +210,18 @@ Page({
   goMerchantApply() {
     wx.navigateTo({
       url: "/pages/merchant/audit-status/audit-status",
+    });
+  },
+
+  goMerchantCenter() {
+    wx.navigateTo({
+      url: "/pages/merchant/profile/profile",
+    });
+  },
+
+  goMerchantOrders() {
+    wx.navigateTo({
+      url: "/pages/merchant/order-list/order-list",
     });
   },
 
