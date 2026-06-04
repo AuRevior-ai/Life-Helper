@@ -1,7 +1,14 @@
 @import "../../styles/ui-kit.wxss";
 
+.message-page {
+  overflow-x: hidden;
+  padding-top: calc(116rpx + env(safe-area-inset-top));
+  padding-bottom: calc(172rpx + env(safe-area-inset-bottom));
+}
+
 .message-header {
   display: flex;
+  min-width: 0;
   align-items: flex-start;
   justify-content: space-between;
   gap: 20rpx;
@@ -27,10 +34,14 @@
 }
 
 .message-title {
+  flex: 1;
   min-width: 0;
+  overflow: hidden;
   color: #111827;
   font-size: 30rpx;
   font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .message-type {

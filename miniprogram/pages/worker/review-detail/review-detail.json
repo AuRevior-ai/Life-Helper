@@ -1,4 +1,5 @@
 {
+  "navigationStyle": "custom",
   "navigationBarTitleText": "评价详情",
   "usingComponents": {
     "empty-state": "/components/empty-state/empty-state",

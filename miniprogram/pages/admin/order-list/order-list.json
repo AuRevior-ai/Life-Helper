@@ -1,7 +1,9 @@
 {
-  "navigationBarTitleText": "订单管理",
+  "navigationBarTitleText": "订单",
+  "navigationStyle": "custom",
   "enablePullDownRefresh": true,
   "usingComponents": {
+    "admin-tab-bar": "/components/admin-tab-bar/index",
     "empty-state": "/components/empty-state/empty-state",
     "loading-view": "/components/loading-view/loading-view"
   }

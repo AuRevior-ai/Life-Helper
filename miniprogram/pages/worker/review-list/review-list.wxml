@@ -1,7 +1,7 @@
-<view class="review-list-page">
-  <view class="review-header">
-    <view class="review-title">{{ title }}</view>
-    <view class="review-subtitle">查看用户评价、回复状态和待处理反馈</view>
+<view class="review-list-page worker-subpage">
+  <view class="review-header worker-subpage-header">
+    <view class="review-title worker-subpage-title">{{ title }}</view>
+    <view class="review-subtitle worker-subpage-subtitle">查看用户评价、回复状态和待处理反馈</view>
   </view>
 
   <loading-view

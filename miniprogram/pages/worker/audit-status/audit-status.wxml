@@ -1,7 +1,7 @@
-<view class="audit-page">
-  <view class="audit-header">
-    <view class="audit-title">审核状态</view>
-    <view class="audit-subtitle">选择个人师傅端后先确认人工审核状态</view>
+<view class="audit-page worker-subpage">
+  <view class="audit-header worker-subpage-header">
+    <view class="audit-title worker-subpage-title">审核状态</view>
+    <view class="audit-subtitle worker-subpage-subtitle">选择个人师傅端后先确认人工审核状态</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载审核状态"></loading-view>

@@ -1,7 +1,7 @@
-<view class="income-page">
-  <view class="income-header">
-    <view class="income-title">我的收益</view>
-    <view class="income-subtitle">收益概览和收益明细来自内部模拟流水，不代表真实提现或清结算</view>
+<view class="income-page worker-subpage">
+  <view class="income-header worker-subpage-header">
+    <view class="income-title worker-subpage-title">我的收益</view>
+    <view class="income-subtitle worker-subpage-subtitle">收益概览和收益明细来自内部模拟流水，不代表真实提现或清结算</view>
   </view>
 
   <loading-view

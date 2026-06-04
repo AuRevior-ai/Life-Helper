@@ -1,5 +1,6 @@
 const tipService = require("../../../services/tip.service");
 const { formatPrice } = require("../../../utils/format");
+const { formatDateTime } = require("../../../utils/date");
 const { showError } = require("../../../utils/toast");
 
 function mapTip(tip) {
@@ -7,6 +8,8 @@ function mapTip(tip) {
     ...tip,
     amountText: formatPrice(tip.amount),
     incomeText: formatPrice(tip.worker_tip_income || 0),
+    timeText: formatDateTime(tip.created_at || tip.updated_at) || "时间待确认",
+    statusText: tip.status === "paid" ? "已记录" : "内部模拟",
   };
 }
 

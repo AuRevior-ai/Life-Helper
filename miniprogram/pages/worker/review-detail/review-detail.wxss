@@ -1,7 +1,11 @@
+@import "../../../styles/worker-subpage.wxss";
+
 .review-detail-page {
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 88rpx 34rpx 54rpx;
+  overflow-x: hidden;
+  padding: calc(116rpx + env(safe-area-inset-top)) 36rpx
+    calc(172rpx + env(safe-area-inset-bottom));
   background: #f8faf9;
   color: #111827;
   font-family:
@@ -10,7 +14,7 @@
 }
 
 .review-detail-header {
-  margin-bottom: 28rpx;
+  margin-bottom: 30rpx;
 }
 
 .review-detail-title {

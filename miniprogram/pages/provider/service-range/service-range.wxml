@@ -1,7 +1,7 @@
-<view class="service-range-page">
-  <view class="range-header">
-    <view class="range-title">服务范围</view>
-    <view class="range-subtitle">配置个人师傅接单范围，便于接单大厅和订单匹配展示</view>
+<view class="service-range-page worker-subpage">
+  <view class="range-header worker-subpage-header">
+    <view class="range-title worker-subpage-title">服务范围</view>
+    <view class="range-subtitle worker-subpage-subtitle">配置个人师傅接单范围，便于接单大厅和订单匹配展示</view>
   </view>
 
   <view class="service-range-mode-card">

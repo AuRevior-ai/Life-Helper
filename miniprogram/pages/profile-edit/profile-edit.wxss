@@ -1,5 +1,11 @@
 @import "../../styles/ui-kit.wxss";
 
+.profile-edit-page {
+  overflow-x: hidden;
+  padding-top: calc(116rpx + env(safe-area-inset-top));
+  padding-bottom: calc(172rpx + env(safe-area-inset-bottom));
+}
+
 .form-panel {
   margin-top: 0;
 }

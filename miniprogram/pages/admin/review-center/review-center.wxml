@@ -1,0 +1,163 @@
+<view class="admin-page review-center-page">
+  <view class="admin-header">
+    <view class="admin-title">审核</view>
+    <view class="admin-subtitle">处理师傅、商家与资质事项</view>
+  </view>
+
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载审核数据"></loading-view>
+  </view>
+
+  <view class="admin-kpi-grid">
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-green">师</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">师傅待审</view>
+        <view class="admin-kpi-value admin-kpi-value--green">{{ stats.pendingWorkerCount }}</view>
+      </view>
+    </view>
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-green">商</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">商家待审</view>
+        <view class="admin-kpi-value admin-kpi-value--green">{{ stats.pendingMerchantCount }}</view>
+      </view>
+    </view>
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-blue">证</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">资质待审</view>
+        <view class="admin-kpi-value admin-kpi-value--blue">{{ stats.pendingQualificationCount }}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card review-list-card">
+    <view class="admin-section-title">待审核</view>
+    <view class="admin-list">
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/worker-audit/worker-audit"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-green">师</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">师傅入驻审核</view>
+          <view class="admin-row-desc">审核师傅入驻申请与信息</view>
+        </view>
+        <view class="admin-badge admin-tone-green">{{ stats.pendingWorkerCount }}</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/merchant-list/merchant-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-green">店</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">商家入驻审核</view>
+          <view class="admin-row-desc">审核商家入驻申请与信息</view>
+        </view>
+        <view class="admin-badge admin-tone-green">{{ stats.pendingMerchantCount }}</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/qualification-review/qualification-review"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-blue">盾</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">资质审核</view>
+          <view class="admin-row-desc">审核各类资质认证与证件</view>
+        </view>
+        <view class="admin-badge admin-tone-blue">{{ stats.pendingQualificationCount }}</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/deposit-review/deposit-review"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-orange">保</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">保证金处理</view>
+          <view class="admin-row-desc">保证金缴纳、退还与异常处理</view>
+        </view>
+        <view class="admin-badge admin-tone-orange">0</view>
+        <view class="admin-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card review-list-card">
+    <view class="admin-section-title">风险与申诉</view>
+    <view class="admin-list">
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/risk-control/risk-control"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-orange">险</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">风险商家</view>
+          <view class="admin-row-desc">处理风险商家与异常行为</view>
+        </view>
+        <view class="admin-badge admin-tone-orange">0</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/review-appeal-list/review-appeal-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-green">诉</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">评价申诉</view>
+          <view class="admin-row-desc">处理用户评价申诉</view>
+        </view>
+        <view class="admin-badge admin-tone-green">0</view>
+        <view class="admin-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card review-quick-card">
+    <view class="admin-quick-grid">
+      <view
+        class="admin-quick-item"
+        data-url="/pages/admin/worker-audit/worker-audit"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-green">师</view>
+        <text class="admin-quick-label">师傅审核</text>
+      </view>
+      <view
+        class="admin-quick-item"
+        data-url="/pages/admin/merchant-list/merchant-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-green">商</view>
+        <text class="admin-quick-label">商家列表</text>
+      </view>
+      <view
+        class="admin-quick-item"
+        data-url="/pages/admin/qualification-review/qualification-review"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-blue">证</view>
+        <text class="admin-quick-label">资质审核</text>
+      </view>
+      <view
+        class="admin-quick-item"
+        data-url="/pages/admin/risk-control/risk-control"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-blue">控</view>
+        <text class="admin-quick-label">风控</text>
+      </view>
+    </view>
+  </view>
+
+  <admin-tab-bar active="review"></admin-tab-bar>
+</view>

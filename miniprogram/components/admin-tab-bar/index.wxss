@@ -1,0 +1,149 @@
+.admin-tabbar {
+  position: fixed;
+  z-index: 90;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  min-height: calc(132rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  align-items: center;
+  padding: 12rpx 0 env(safe-area-inset-bottom);
+  border-top: 0;
+  border-radius: 36rpx 36rpx 0 0;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 -14rpx 42rpx rgba(17, 24, 39, 0.1);
+}
+
+.admin-tabbar__item {
+  display: flex;
+  width: 20%;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  color: #7b8794;
+  font-size: 23rpx;
+  line-height: 30rpx;
+}
+
+.admin-tabbar__item--active {
+  color: #16a34a;
+}
+
+.admin-tabbar__icon {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+  box-sizing: border-box;
+  color: inherit;
+}
+
+.admin-tabbar__icon--home {
+  border: 5rpx solid currentColor;
+  border-top: 0;
+  border-radius: 6rpx 6rpx 10rpx 10rpx;
+  transform: translateY(10rpx);
+}
+
+.admin-tabbar__icon--home::before {
+  position: absolute;
+  top: -18rpx;
+  left: 4rpx;
+  width: 30rpx;
+  height: 30rpx;
+  border-top: 5rpx solid currentColor;
+  border-left: 5rpx solid currentColor;
+  content: "";
+  transform: rotate(45deg);
+}
+
+.admin-tabbar__icon--order,
+.admin-tabbar__icon--review {
+  border: 5rpx solid currentColor;
+  border-radius: 10rpx;
+}
+
+.admin-tabbar__icon--order::before {
+  position: absolute;
+  top: -11rpx;
+  left: 12rpx;
+  width: 18rpx;
+  height: 13rpx;
+  box-sizing: border-box;
+  border: 5rpx solid currentColor;
+  border-radius: 10rpx;
+  background: #ffffff;
+  content: "";
+}
+
+.admin-tabbar__icon--order::after {
+  position: absolute;
+  top: 15rpx;
+  left: 10rpx;
+  width: 22rpx;
+  height: 5rpx;
+  border-radius: 999rpx;
+  background: currentColor;
+  box-shadow: 0 13rpx 0 currentColor;
+  content: "";
+}
+
+.admin-tabbar__icon--review::before {
+  position: absolute;
+  top: 11rpx;
+  left: 12rpx;
+  width: 20rpx;
+  height: 12rpx;
+  border-bottom: 5rpx solid currentColor;
+  border-left: 5rpx solid currentColor;
+  content: "";
+  transform: rotate(-45deg);
+}
+
+.admin-tabbar__icon--operation {
+  border: 5rpx solid currentColor;
+  border-radius: 50%;
+}
+
+.admin-tabbar__icon--operation::before {
+  position: absolute;
+  right: -5rpx;
+  bottom: -5rpx;
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 0 0 24rpx;
+  background: currentColor;
+  content: "";
+}
+
+.admin-tabbar__icon--profile::before {
+  position: absolute;
+  top: 3rpx;
+  left: 15rpx;
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.admin-tabbar__icon--profile::after {
+  position: absolute;
+  bottom: 2rpx;
+  left: 7rpx;
+  width: 34rpx;
+  height: 24rpx;
+  border-radius: 24rpx 24rpx 8rpx 8rpx;
+  background: currentColor;
+  content: "";
+}
+
+.admin-tabbar__text {
+  max-width: 112rpx;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

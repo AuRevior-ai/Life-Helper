@@ -1,7 +1,7 @@
-<view class="worker-apply-page">
-  <view class="apply-header">
-    <view class="apply-title">{{ title }}</view>
-    <view class="apply-subtitle">提交基础资料和服务范围，管理员人工审核通过后即可接单</view>
+<view class="worker-apply-page worker-subpage">
+  <view class="apply-header worker-subpage-header">
+    <view class="apply-title worker-subpage-title">{{ title }}</view>
+    <view class="apply-subtitle worker-subpage-subtitle">提交基础资料和服务范围，管理员人工审核通过后即可接单</view>
   </view>
 
   <view class="apply-boundary-card">

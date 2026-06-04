@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "审核",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "admin-tab-bar": "/components/admin-tab-bar/index",
+    "loading-view": "/components/loading-view/loading-view"
+  }
+}

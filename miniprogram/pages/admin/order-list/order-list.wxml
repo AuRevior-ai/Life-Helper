@@ -1,68 +1,134 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看平台订单，并进入详情手动调整状态</view>
+<view class="admin-page admin-order-page">
+  <view class="admin-header">
+    <view class="admin-title">订单</view>
+    <view class="admin-subtitle">查看履约进度与处理售后</view>
   </view>
 
-  <view class="filter-panel panel">
-    <view class="filter-row">
-      <text>状态</text>
-      <picker
-        mode="selector"
-        range="{{ statusLabels }}"
-        value="{{ selectedStatusIndex }}"
-        bindchange="onStatusChange"
-      >
-        <view class="picker-value"
-          >{{ statusLabels[selectedStatusIndex] }}</view
-        >
-      </picker>
-    </view>
-    <view class="filter-row">
-      <text>分类 ID</text>
-      <input
-        class="filter-input"
-        value="{{ categoryId }}"
-        placeholder="可选"
-        bindinput="onCategoryInput"
-      />
-    </view>
-    <view class="filter-row">
-      <text>关键词</text>
-      <input
-        class="filter-input"
-        value="{{ keyword }}"
-        placeholder="订单号/服务/联系人"
-        bindinput="onKeywordInput"
-      />
-    </view>
-    <button class="ghost-button" bindtap="applyFilters">筛选</button>
-  </view>
-
-  <loading-view
-    wx:if="{{ loading && !orders.length }}"
-    text="正在加载订单"
-  ></loading-view>
-
-  <view wx:elif="{{ orders.length }}" class="order-list">
-    <view
-      wx:for="{{ orders }}"
-      wx:key="_id"
-      class="order-card panel"
-      data-id="{{ item._id }}"
-      bindtap="goDetail"
-    >
-      <view class="card-top">
-        <view class="service-name"
-          >{{ item.service_name || item.serviceName }}</view
-        >
-        <view class="status-tag">{{ item.statusText }}</view>
+  <view class="admin-kpi-grid">
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-green">接</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">待接单</view>
+        <view class="admin-kpi-value">{{ kpis.pendingAccept }}</view>
       </view>
-      <view class="order-line">订单号：{{ item.order_no || item._id }}</view>
-      <view class="order-line"
-        >用户：{{ item.contact_name || item.user_id }}</view
-      >
-      <view class="order-line">金额：{{ item.priceText }}</view>
+    </view>
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-orange">服</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">服务中</view>
+        <view class="admin-kpi-value">{{ kpis.serving }}</view>
+      </view>
+    </view>
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-blue">售</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">售后中</view>
+        <view class="admin-kpi-value">{{ kpis.afterSale }}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-status-tabs">
+    <view
+      class="order-status-tab {{ activeStatus === 'all' ? 'order-status-tab--active' : '' }}"
+      data-key="all"
+      bindtap="onStatusTabTap"
+    >
+      <text class="order-status-tab-label">全部</text>
+    </view>
+    <view
+      class="order-status-tab {{ activeStatus === 'pending' ? 'order-status-tab--active' : '' }}"
+      data-key="pending"
+      bindtap="onStatusTabTap"
+    >
+      <text class="order-status-tab-label">待接单</text>
+    </view>
+    <view
+      class="order-status-tab {{ activeStatus === 'serving' ? 'order-status-tab--active' : '' }}"
+      data-key="serving"
+      bindtap="onStatusTabTap"
+    >
+      <text class="order-status-tab-label">服务中</text>
+    </view>
+    <view
+      class="order-status-tab {{ activeStatus === 'afterSale' ? 'order-status-tab--active' : '' }}"
+      data-key="afterSale"
+      bindtap="onStatusTabTap"
+    >
+      <text class="order-status-tab-label">售后中</text>
+    </view>
+  </view>
+
+  <view class="order-filter-card">
+    <view class="order-filter-pill" bindtap="onFilterTap">
+      <text>今天</text>
+      <text class="order-filter-arrow">⌄</text>
+    </view>
+    <view class="order-filter-pill" bindtap="onFilterTap">
+      <text>服务区域</text>
+      <text class="order-filter-arrow">⌄</text>
+    </view>
+    <view class="order-filter-pill" bindtap="onFilterTap">
+      <text>支付状态</text>
+      <text class="order-filter-arrow">⌄</text>
+    </view>
+  </view>
+
+  <view wx:if="{{ loading && !displayOrders.length }}" class="admin-loading-wrap">
+    <loading-view text="正在加载订单"></loading-view>
+  </view>
+
+  <view wx:elif="{{ displayOrders.length }}" class="order-card-list">
+    <view
+      wx:for="{{ displayOrders }}"
+      wx:key="id"
+      class="admin-order-card"
+    >
+      <view class="order-card-main">
+        <view class="order-visual {{ item.visualTone }}">{{ item.visualText }}</view>
+        <view class="order-copy">
+          <view class="order-title">{{ item.serviceName }}</view>
+          <view class="order-meta">
+            <text class="order-meta-icon">人</text>
+            <text class="order-meta-text">{{ item.contactName }}　{{ item.maskedPhone }}</text>
+          </view>
+          <view class="order-meta">
+            <text class="order-meta-icon">位</text>
+            <text class="order-meta-text">{{ item.shortAddress }}</text>
+          </view>
+        </view>
+        <view class="order-side">
+          <view class="order-status-badge {{ item.statusTone }}">
+            {{ item.statusText }}
+          </view>
+          <view class="order-amount-label">金额</view>
+          <view class="order-amount">{{ item.amountText }}</view>
+        </view>
+      </view>
+      <view class="order-actions">
+        <button
+          class="admin-outline-button"
+          data-id="{{ item.id }}"
+          bindtap="goDetail"
+        >
+          查看详情
+        </button>
+        <button
+          wx:if="{{ !item.isAfterSale }}"
+          class="admin-action-button"
+          data-id="{{ item.id }}"
+          bindtap="goAssignWorker"
+        >
+          指派师傅
+        </button>
+        <button
+          wx:else
+          class="admin-action-button"
+          bindtap="goAfterSaleList"
+        >
+          售后详情
+        </button>
+      </view>
     </view>
   </view>
 
@@ -71,4 +137,24 @@
     title="暂无订单"
     description="用户下单后会显示在这里"
   ></empty-state>
+
+  <view class="admin-section-card order-shortcut-card">
+    <view class="order-shortcut" bindtap="goDispatchLogs">
+      <view class="admin-row-icon admin-tone-green">派</view>
+      <text>指派记录</text>
+      <view class="admin-arrow">›</view>
+    </view>
+    <view class="order-shortcut" bindtap="goAfterSaleList">
+      <view class="admin-row-icon admin-tone-orange">售</view>
+      <text>售后列表</text>
+      <view class="admin-arrow">›</view>
+    </view>
+    <view class="order-shortcut" bindtap="goFinanceList">
+      <view class="admin-row-icon admin-tone-blue">财</view>
+      <text>财务明细</text>
+      <view class="admin-arrow">›</view>
+    </view>
+  </view>
+
+  <admin-tab-bar active="order"></admin-tab-bar>
 </view>

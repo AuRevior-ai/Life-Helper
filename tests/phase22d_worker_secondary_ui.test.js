@@ -13,6 +13,33 @@ function exists(relativePath) {
   return fs.existsSync(path.join(rootDir, relativePath));
 }
 
+const workerSecondaryPages = [
+  "miniprogram/pages/worker/order-detail/order-detail",
+  "miniprogram/pages/worker/income/income",
+  "miniprogram/pages/worker/review-list/review-list",
+  "miniprogram/pages/worker/review-detail/review-detail",
+  "miniprogram/pages/worker/apply/apply",
+  "miniprogram/pages/worker/audit-status/audit-status",
+  "miniprogram/pages/provider/service-range/service-range",
+  "miniprogram/pages/worker/tip-list/tip-list",
+];
+
+test("worker secondary pages use custom navigation and the shared subpage shell", () => {
+  assert.equal(exists("miniprogram/styles/worker-subpage.wxss"), true);
+
+  for (const page of workerSecondaryPages) {
+    const json = JSON.parse(read(`${page}.json`));
+    const wxml = read(`${page}.wxml`);
+    const wxss = read(`${page}.wxss`);
+
+    assert.equal(json.navigationStyle, "custom", `${page} should hide the default nav`);
+    assert.match(wxml, /worker-subpage/, `${page} should use the shared subpage shell`);
+    assert.match(wxml, /worker-subpage-header/, `${page} should use a custom content header`);
+    assert.match(wxss, /worker-subpage\.wxss/, `${page} should import shared worker subpage styles`);
+    assert.match(wxss, /overflow-x:\s*hidden/, `${page} should block horizontal overflow`);
+  }
+});
+
 test("phase 22D worker secondary routes are registered from the real app.json", () => {
   const app = JSON.parse(read("miniprogram/app.json"));
 
@@ -25,6 +52,7 @@ test("phase 22D worker secondary routes are registered from the real app.json", 
     "pages/worker/audit-status/audit-status",
     "pages/provider/service-range/service-range",
     "pages/message-list/message-list",
+    "pages/worker/tip-list/tip-list",
   ]) {
     assert.ok(app.pages.includes(route), `${route} should be registered`);
   }
@@ -206,21 +234,45 @@ test("worker profile related secondary pages keep manual audit and service range
   assert.match(profileWxml, /data-url="\/pages\/worker\/income\/income"/);
 });
 
+test("worker tip list is migrated from the legacy shell into worker secondary cards", () => {
+  const js = read("miniprogram/pages/worker/tip-list/tip-list.js");
+  const wxml = read("miniprogram/pages/worker/tip-list/tip-list.wxml");
+  const wxss = read("miniprogram/pages/worker/tip-list/tip-list.wxss");
+
+  for (const text of ["打赏记录", "师傅收益", "内部模拟", "收到用户打赏后会展示在这里"]) {
+    assert.match(wxml, new RegExp(text), `tip list should include ${text}`);
+  }
+  assert.match(wxml, /tip-list-page/);
+  assert.match(wxml, /tip-card/);
+  assert.match(wxml, /tip-amount/);
+  assert.match(js, /getWorkerTipList/);
+  assert.doesNotMatch(wxml, /page-shell|panel/);
+  assert.match(wxss, /border-radius:\s*28rpx/);
+  assert.match(wxss, /#16a34a/);
+});
+
 test("phase 22D docs record scope, validation, and mock boundaries", () => {
   assert.equal(exists("docs/dev-records/22d-worker-secondary-ui.md"), true);
+  assert.equal(exists("docs/ui-refactor-worker-subpages.md"), true);
 
   const phase = read("docs/PHASE_CURRENT.md");
   const status = read("docs/PROJECT_STATUS.md");
   const record = read("docs/dev-records/22d-worker-secondary-ui.md");
+  const subpageRecord = read("docs/ui-refactor-worker-subpages.md");
 
-  assert.match(phase, /阶段 22D：师傅端次级页面 UI 收口/);
+  assert.match(phase, /阶段 23A：管理员端一级导航与工作台 UI 重构/);
   assert.match(phase, /mock\/真实能力边界/);
   assert.match(phase, /npm run check:cloudfunction-deps/);
-  assert.match(status, /阶段 22D/);
+  assert.match(status, /阶段 22D 已完成师傅端次级页面 UI 收口/);
   assert.doesNotMatch(status, /C:\\\\Users\\\\/);
   assert.match(record, /阶段目标/);
   assert.match(record, /页面清单/);
   assert.match(record, /数据库变化\s*\n\s*无/);
   assert.match(record, /云函数变化\s*\n\s*无/);
   assert.match(record, /内部模拟/);
+  assert.match(subpageRecord, /师傅端二级页 UI 复刻/);
+  assert.match(subpageRecord, /订单详情/);
+  assert.match(subpageRecord, /打赏记录/);
+  assert.match(subpageRecord, /业务逻辑变化\s*\n\s*无/);
+  assert.match(subpageRecord, /375px、390px、414px/);
 });

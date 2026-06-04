@@ -1,4 +1,6 @@
 {
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "打赏记录",
   "usingComponents": {
     "loading-view": "../../../components/loading-view/loading-view",
     "empty-state": "../../../components/empty-state/empty-state"

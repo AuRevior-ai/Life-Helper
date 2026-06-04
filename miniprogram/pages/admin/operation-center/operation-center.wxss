@@ -1,0 +1,253 @@
+@import "../../../styles/admin-theme.wxss";
+
+.operation-center-page,
+.operation-center-page view,
+.operation-center-page text,
+.operation-center-page loading-view,
+.operation-center-page admin-tab-bar {
+  box-sizing: border-box;
+}
+
+.operation-center-page {
+  overflow-x: hidden;
+  padding: calc(112rpx + env(safe-area-inset-top)) 40rpx
+    calc(230rpx + env(safe-area-inset-bottom));
+  background: #f7f9fa;
+}
+
+.operation-center-page .admin-header {
+  margin-bottom: 38rpx;
+}
+
+.operation-center-page .admin-title {
+  font-size: 54rpx;
+  line-height: 64rpx;
+  letter-spacing: 0;
+}
+
+.operation-center-page .admin-subtitle {
+  margin-top: 16rpx;
+  font-size: 29rpx;
+  line-height: 42rpx;
+}
+
+.operation-center-page .admin-kpi-grid {
+  gap: 24rpx;
+  margin-top: 0;
+}
+
+.operation-center-page .admin-kpi-card {
+  display: grid;
+  min-width: 0;
+  min-height: 132rpx;
+  grid-template-columns: 66rpx minmax(0, 1fr);
+  align-items: center;
+  column-gap: 18rpx;
+  padding: 22rpx 18rpx;
+  border-radius: 28rpx;
+}
+
+.operation-center-page .admin-kpi-icon {
+  width: 66rpx;
+  height: 66rpx;
+  font-size: 28rpx;
+}
+
+.admin-kpi-copy {
+  min-width: 0;
+}
+
+.operation-center-page .admin-kpi-label {
+  overflow: hidden;
+  margin-top: 0;
+  color: #566274;
+  font-size: 27rpx;
+  line-height: 36rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operation-center-page .admin-kpi-value {
+  margin-top: 6rpx;
+  font-size: 42rpx;
+  line-height: 48rpx;
+}
+
+.admin-kpi-value--green {
+  color: #16a34a;
+}
+
+.admin-kpi-value--orange {
+  color: #f08a12;
+}
+
+.admin-kpi-value--blue {
+  color: #2f7be7;
+}
+
+.operation-center-page .admin-section-card {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 28rpx;
+  padding: 32rpx 28rpx;
+  border-radius: 32rpx;
+}
+
+.operation-center-page .admin-section-title {
+  font-size: 31rpx;
+  line-height: 42rpx;
+}
+
+.operation-manage-card {
+  padding-bottom: 28rpx;
+}
+
+.operation-center-page .admin-feature-grid {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18rpx 0;
+  margin-top: 30rpx;
+  border: 0;
+}
+
+.operation-center-page .admin-feature-item {
+  display: flex;
+  min-width: 0;
+  min-height: 148rpx;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+  color: #111827;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.operation-center-page .admin-feature-icon {
+  width: 76rpx;
+  height: 76rpx;
+  margin: 0 0 18rpx;
+  font-size: 30rpx;
+}
+
+.operation-center-page .admin-feature-label {
+  width: 100%;
+  max-width: 100%;
+  color: #111827;
+  font-size: 26rpx;
+  font-weight: 700;
+  line-height: 36rpx;
+  text-align: center;
+}
+
+.operation-list-card {
+  padding-bottom: 18rpx;
+}
+
+.operation-center-page .admin-list {
+  margin-top: 18rpx;
+}
+
+.operation-center-page .admin-list-row {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 118rpx;
+  align-items: center;
+  gap: 22rpx;
+  border-bottom: 0;
+  background: #ffffff;
+}
+
+.operation-center-page .admin-list-row:not(:last-child) .admin-row-main {
+  border-bottom: 1rpx solid #edf0f2;
+}
+
+.operation-center-page .admin-list-button {
+  padding: 0;
+}
+
+.operation-center-page .admin-row-icon {
+  width: 66rpx;
+  height: 66rpx;
+  font-size: 28rpx;
+}
+
+.operation-center-page .admin-row-main {
+  display: flex;
+  min-width: 0;
+  min-height: 118rpx;
+  flex: 1;
+  align-items: center;
+}
+
+.operation-center-page .admin-row-title {
+  overflow: hidden;
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 42rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operation-center-page .admin-arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: #8a95a6;
+  font-size: 42rpx;
+}
+
+.operation-tip-card {
+  margin-bottom: 0;
+  padding-bottom: 18rpx;
+}
+
+.operation-tips {
+  margin-top: 18rpx;
+}
+
+.operation-tip {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 96rpx;
+  align-items: center;
+  gap: 18rpx;
+  background: #ffffff;
+  color: #344054;
+  font-size: 26rpx;
+  line-height: 36rpx;
+  text-align: left;
+}
+
+.operation-tip:not(:last-child) .operation-tip-text {
+  border-bottom: 1rpx solid #edf0f2;
+}
+
+.operation-dot {
+  width: 14rpx;
+  height: 14rpx;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.operation-tip-text {
+  display: flex;
+  min-width: 0;
+  min-height: 96rpx;
+  flex: 1;
+  align-items: center;
+  overflow: hidden;
+  color: #344054;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

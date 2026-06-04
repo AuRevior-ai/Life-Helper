@@ -1,0 +1,164 @@
+<view class="admin-page operation-center-page">
+  <view class="admin-header">
+    <view class="admin-title">运营</view>
+    <view class="admin-subtitle">管理服务、区域与平台内容</view>
+  </view>
+
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载运营数据"></loading-view>
+  </view>
+
+  <view class="admin-kpi-grid">
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-green">服</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">服务数</view>
+        <view class="admin-kpi-value admin-kpi-value--green">{{ stats.serviceCount }}</view>
+      </view>
+    </view>
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-orange">区</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">区域数</view>
+        <view class="admin-kpi-value admin-kpi-value--orange">{{ stats.areaCount }}</view>
+      </view>
+    </view>
+    <view class="admin-kpi-card">
+      <view class="admin-kpi-icon admin-tone-blue">评</view>
+      <view class="admin-kpi-copy">
+        <view class="admin-kpi-label">今日评价</view>
+        <view class="admin-kpi-value admin-kpi-value--blue">{{ stats.todayReviewCount }}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card operation-manage-card">
+    <view class="admin-section-title">运营管理</view>
+    <view class="admin-feature-grid">
+      <view
+        class="admin-feature-item"
+        data-url="/pages/admin/category-list/category-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-green">类</view>
+        <text class="admin-feature-label">服务分类</text>
+      </view>
+      <view
+        class="admin-feature-item"
+        data-url="/pages/admin/service-list/service-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-green">服</view>
+        <text class="admin-feature-label">服务管理</text>
+      </view>
+      <view
+        class="admin-feature-item"
+        data-url="/pages/admin/area-list/area-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-orange">区</view>
+        <text class="admin-feature-label">区域配置</text>
+      </view>
+      <view
+        class="admin-feature-item"
+        data-url="/pages/admin/member-plan-list/member-plan-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-purple">会</view>
+        <text class="admin-feature-label">会员方案</text>
+      </view>
+      <view
+        class="admin-feature-item"
+        data-url="/pages/admin/coupon-template-list/coupon-template-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-green">券</view>
+        <text class="admin-feature-label">优惠券</text>
+      </view>
+      <view
+        class="admin-feature-item"
+        data-url="/pages/admin/user-list/user-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-feature-icon admin-tone-blue">用</view>
+        <text class="admin-feature-label">用户管理</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card operation-list-card">
+    <view class="admin-section-title">内容与财务</view>
+    <view class="admin-list">
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/review-list/review-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-green">评</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">评价管理</view>
+        </view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/tip-log-list/tip-log-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-orange">赏</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">打赏记录</view>
+        </view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/finance-log-list/finance-log-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-blue">流</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">财务流水</view>
+        </view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="admin-list-button admin-list-row"
+        data-url="/pages/admin/worker-earning-list/worker-earning-list"
+        bindtap="goEntry"
+      >
+        <view class="admin-row-icon admin-tone-purple">收</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">师傅收益</view>
+        </view>
+        <view class="admin-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card operation-tip-card">
+    <view class="admin-section-title">今日提示</view>
+    <view class="operation-tips">
+      <view
+        class="operation-tip"
+        data-url="/pages/admin/review-list/review-list"
+        bindtap="goEntry"
+      >
+        <text class="operation-dot"></text>
+        <text class="operation-tip-text">有 {{ stats.todayReviewCount }} 条新评价待处理</text>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view
+        class="operation-tip"
+        data-url="/pages/admin/coupon-template-list/coupon-template-list"
+        bindtap="goEntry"
+      >
+        <text class="operation-dot"></text>
+        <text class="operation-tip-text">有 0 张优惠券即将过期</text>
+        <view class="admin-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <admin-tab-bar active="operation"></admin-tab-bar>
+</view>

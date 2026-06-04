@@ -1,0 +1,244 @@
+@import "../../../styles/admin-theme.wxss";
+
+.admin-profile-page,
+.admin-profile-page view,
+.admin-profile-page text,
+.admin-profile-page image,
+.admin-profile-page button,
+.admin-profile-page admin-tab-bar {
+  box-sizing: border-box;
+}
+
+.admin-profile-page {
+  overflow-x: hidden;
+  padding: calc(112rpx + env(safe-area-inset-top)) 40rpx
+    calc(230rpx + env(safe-area-inset-bottom));
+  background: #f7f9fa;
+}
+
+.admin-profile-page .admin-header {
+  margin-bottom: 38rpx;
+}
+
+.admin-profile-page .admin-title {
+  font-size: 54rpx;
+  line-height: 64rpx;
+  letter-spacing: 0;
+}
+
+.admin-profile-page .admin-subtitle {
+  margin-top: 16rpx;
+  font-size: 29rpx;
+  line-height: 42rpx;
+}
+
+.admin-profile-card {
+  position: relative;
+  width: 100%;
+  min-height: 306rpx;
+  overflow: hidden;
+  border-radius: 34rpx;
+  background: linear-gradient(135deg, #f7fff7 0%, #eaf8e8 58%, #dff2e5 100%);
+  box-shadow: 0 16rpx 44rpx rgba(17, 24, 39, 0.07);
+}
+
+.profile-card-bg {
+  position: absolute;
+  right: -20rpx;
+  bottom: -8rpx;
+  width: 58%;
+  max-width: 390rpx;
+  opacity: 0.82;
+}
+
+.profile-card-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  min-height: 306rpx;
+  grid-template-columns: 132rpx minmax(0, 1fr);
+  align-items: center;
+  column-gap: 30rpx;
+  padding: 36rpx 34rpx;
+}
+
+.profile-avatar {
+  display: block;
+  width: 132rpx;
+  height: 132rpx;
+  flex-shrink: 0;
+  border: 8rpx solid rgba(255, 255, 255, 0.88);
+  border-radius: 50%;
+  background: #eaf8e8;
+  box-shadow: 0 14rpx 30rpx rgba(22, 163, 74, 0.14);
+}
+
+.profile-main {
+  position: relative;
+  z-index: 3;
+  min-width: 0;
+  max-width: 360rpx;
+}
+
+.profile-name {
+  overflow: hidden;
+  color: #111827;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 52rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-main .admin-pill {
+  margin-top: 16rpx;
+}
+
+.profile-line {
+  overflow: hidden;
+  margin-top: 12rpx;
+  color: #566274;
+  font-size: 25rpx;
+  line-height: 34rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-logout {
+  display: flex;
+  width: 430rpx;
+  max-width: 78%;
+  height: 76rpx;
+  margin: 34rpx auto 32rpx;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #16a34a;
+  border-radius: 16rpx;
+  background: #ffffff;
+  color: #16a34a;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 76rpx;
+}
+
+.profile-logout::after {
+  border: 0;
+}
+
+.admin-profile-page .admin-section-card {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  margin-top: 28rpx;
+  padding: 32rpx 28rpx;
+  border-radius: 32rpx;
+}
+
+.admin-profile-page .admin-section-title {
+  font-size: 31rpx;
+  line-height: 42rpx;
+}
+
+.profile-account-card {
+  padding-bottom: 18rpx;
+}
+
+.admin-profile-page .admin-list {
+  margin-top: 18rpx;
+}
+
+.profile-list-row {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  min-height: 112rpx;
+  align-items: center;
+  gap: 20rpx;
+  background: #ffffff;
+}
+
+.profile-list-row:not(:last-child) .admin-row-main,
+.profile-list-row:not(:last-child) .profile-row-hint {
+  border-bottom: 1rpx solid #edf0f2;
+}
+
+.admin-profile-page .admin-row-icon {
+  width: 62rpx;
+  height: 62rpx;
+  flex-shrink: 0;
+  font-size: 26rpx;
+}
+
+.admin-profile-page .admin-row-main {
+  display: flex;
+  min-width: 172rpx;
+  min-height: 112rpx;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.admin-profile-page .admin-row-title {
+  overflow: visible;
+  color: #111827;
+  font-size: 29rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+  white-space: nowrap;
+}
+
+.profile-row-hint {
+  display: flex;
+  min-width: 0;
+  min-height: 112rpx;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  color: #667085;
+  font-size: 25rpx;
+  line-height: 34rpx;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-profile-page .admin-arrow {
+  margin-left: 8rpx;
+  flex-shrink: 0;
+  color: #8a95a6;
+  font-size: 42rpx;
+}
+
+.profile-boundary-card {
+  margin-bottom: 0;
+}
+
+.boundary-tags {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14rpx;
+  margin-top: 24rpx;
+}
+
+.boundary-tags .admin-pill {
+  display: flex;
+  min-width: 0;
+  height: 48rpx;
+  padding: 0 12rpx;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 999rpx;
+  font-size: 23rpx;
+  line-height: 48rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.boundary-desc {
+  margin-top: 20rpx;
+  color: #667085;
+  font-size: 25rpx;
+  line-height: 38rpx;
+}

@@ -1,8 +1,111 @@
-.list-card {
-  padding: 24rpx;
-  margin-bottom: 16rpx;
+@import "../../../styles/worker-subpage.wxss";
+
+.tip-list-page {
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: calc(116rpx + env(safe-area-inset-top)) 36rpx
+    calc(172rpx + env(safe-area-inset-bottom));
+  background: #f8faf9;
+  color: #111827;
 }
-.muted {
-  color: #64716d;
+
+.tip-header {
+  margin-bottom: 30rpx;
+}
+
+.tip-boundary-card,
+.tip-card {
+  box-sizing: border-box;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 30rpx rgba(31, 41, 55, 0.07);
+}
+
+.tip-boundary-card {
+  padding: 24rpx 26rpx;
+  border: 1rpx solid #dff3df;
+  background: #f7fff6;
+  box-shadow: none;
+}
+
+.boundary-title {
+  color: #16a34a;
+  font-size: 28rpx;
+  font-weight: 900;
+  line-height: 38rpx;
+}
+
+.boundary-desc {
   margin-top: 8rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 36rpx;
+}
+
+.tip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 22rpx;
+}
+
+.tip-card {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22rpx;
+  padding: 28rpx;
+}
+
+.tip-card-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.tip-card-title {
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 40rpx;
+}
+
+.tip-time,
+.tip-income {
+  overflow: hidden;
+  margin-top: 10rpx;
+  color: #64748b;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tip-card-side {
+  flex: 0 0 170rpx;
+  min-width: 0;
+  text-align: right;
+}
+
+.tip-status {
+  display: inline-flex;
+  height: 40rpx;
+  align-items: center;
+  padding: 0 14rpx;
+  border-radius: 999rpx;
+  background: #eaf8e8;
+  color: #16a34a;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+  white-space: nowrap;
+}
+
+.tip-amount {
+  margin-top: 16rpx;
+  color: #16a34a;
+  font-size: 34rpx;
+  font-weight: 900;
+  line-height: 44rpx;
+  white-space: nowrap;
 }

@@ -1,12 +1,34 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
-  <loading-view wx:if="{{ loading }}" text="正在加载打赏"></loading-view>
-  <view wx:elif="{{ tips.length }}">
-    <view wx:for="{{ tips }}" wx:key="_id" class="panel list-card">
-      <view>打赏金额：{{ item.amountText }}</view>
-      <view class="muted">师傅收益：{{ item.incomeText }}</view>
+<view class="tip-list-page worker-subpage">
+  <view class="tip-header worker-subpage-header">
+    <view class="tip-title worker-subpage-title">{{ title }}</view>
+    <view class="tip-subtitle worker-subpage-subtitle">
+      查看用户打赏和师傅收益，当前仅展示内部模拟记录
     </view>
   </view>
+
+  <view class="tip-boundary-card">
+    <view class="boundary-title">内部模拟</view>
+    <view class="boundary-desc">
+      打赏记录仅用于展示和测试，不代表真实打赏支付、真实分账或提现到账。
+    </view>
+  </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载打赏"></loading-view>
+
+  <view wx:elif="{{ tips.length }}" class="tip-list">
+    <view wx:for="{{ tips }}" wx:key="_id" class="tip-card">
+      <view class="tip-card-main">
+        <view class="tip-card-title">打赏金额</view>
+        <view class="tip-time">{{ item.timeText }}</view>
+        <view class="tip-income">师傅收益：{{ item.incomeText }}</view>
+      </view>
+      <view class="tip-card-side">
+        <view class="tip-status">{{ item.statusText }}</view>
+        <view class="tip-amount">{{ item.amountText }}</view>
+      </view>
+    </view>
+  </view>
+
   <empty-state
     wx:else
     title="暂无打赏"

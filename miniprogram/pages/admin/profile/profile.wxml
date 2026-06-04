@@ -1,0 +1,89 @@
+<view class="admin-page admin-profile-page">
+  <view class="admin-header">
+    <view class="admin-title">我的</view>
+    <view class="admin-subtitle">查看管理员资料并切换管理身份</view>
+  </view>
+
+  <view class="admin-profile-card">
+    <image
+      class="profile-card-bg"
+      src="/assets/profile/profile-card-bg-placeholder.png"
+      mode="widthFix"
+    />
+    <view class="profile-card-content">
+      <image
+        class="profile-avatar"
+        src="/assets/admin/管理员端头像.png"
+        mode="aspectFill"
+      />
+      <view class="profile-main">
+        <view class="profile-name">{{ adminName }}</view>
+        <view class="admin-pill">管理员 · 正常</view>
+        <view class="profile-line">最后登录　{{ lastLoginText }}</view>
+        <view class="profile-line">超管账号　{{ maskedPhone }}</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="profile-logout" bindtap="handleLogout">退出登录</button>
+
+  <view class="admin-section-card profile-account-card">
+    <view class="admin-section-title">账号资料</view>
+    <view class="admin-list">
+      <view class="admin-list-button profile-list-row" bindtap="goRoleSelect">
+        <view class="admin-row-icon admin-tone-green">身</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">选择登录身份</view>
+        </view>
+        <view class="profile-row-hint">管理员身份</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view class="admin-list-button profile-list-row" bindtap="goProfileEdit">
+        <view class="admin-row-icon admin-tone-green">资</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">完善资料</view>
+        </view>
+        <view class="profile-row-hint">昵称和手机号</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view class="admin-list-button profile-list-row" bindtap="goMessageList">
+        <view class="admin-row-icon admin-tone-green">信</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">消息中心</view>
+        </view>
+        <view class="profile-row-hint">订单和审核提醒</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view class="admin-list-button profile-list-row" bindtap="goSystemStatus">
+        <view class="admin-row-icon admin-tone-green">态</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">系统状态</view>
+        </view>
+        <view class="profile-row-hint">系统健康与服务状态</view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view class="admin-list-button profile-list-row" bindtap="goUserHome">
+        <view class="admin-row-icon admin-tone-green">切</view>
+        <view class="admin-row-main">
+          <view class="admin-row-title">切换到用户端</view>
+        </view>
+        <view class="profile-row-hint">进入用户小程序端</view>
+        <view class="admin-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card profile-boundary-card">
+    <view class="admin-section-title">系统边界说明</view>
+    <view class="boundary-tags">
+      <text class="admin-pill">支付：mock</text>
+      <text class="admin-pill">退款：mock</text>
+      <text class="admin-pill">财务：内部模拟</text>
+    </view>
+    <view class="boundary-desc">
+      以上模块为模拟数据，仅用于演示与测试，不涉及真实交易与资金。
+    </view>
+  </view>
+
+  <admin-tab-bar active="profile"></admin-tab-bar>
+</view>
