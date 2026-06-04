@@ -4,7 +4,7 @@
 
 ## 当前阶段
 
-当前最新阶段为阶段 22C3：师傅端 UI 重构阶段报告已完成。师傅端 UI 重构已经完成了一大部分，接单大厅、我的订单、我的 三个师傅端一级页面和个人师傅端身份进入链路已完成主要收口；用户端 UI 重构阶段可以收束；后续可继续师傅端次级页面收尾，或进入商家端 / 管理端 UI 统一阶段。
+当前最新阶段为阶段 22C3：师傅端 UI 重构阶段报告已完成。师傅端 UI 重构已经完成了一大部分，接单大厅、我的订单、我的 三个师傅端一级页面和个人师傅端身份进入链路已完成主要收口；用户端 UI 重构阶段可以收束。22C3 后的工程维护收口已完成商家身份边界、消息边界、支付 notify 护栏和发布治理更新。当前实时状态以 [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md) 和 [docs/PHASE_CURRENT.md](docs/PHASE_CURRENT.md) 为准。
 
 当前已完成 MVP、阶段十九商家端与店铺主页基础版、阶段 19.6 工程维护、治理收尾与真实部署前结构增强、阶段 21 LBS 地图与服务区域增强 V2 基础版、阶段 22A 首页 UI 视觉重构、阶段 22B 用户端订单中心 UI 视觉重构、阶段 22C-0 UI 风格提取、阶段 22C-1 用户端核心页面 UI 重构、阶段 22C-2 用户端 UI 收口维护与验收记录和阶段 22C3 师傅端 UI 重构阶段报告：
 
@@ -107,6 +107,10 @@
 
 工程治理契约见：
 
+- [Agent 接手规则](AGENT.MD)
+- [当前工程状态](docs/PROJECT_STATUS.md)
+- [当前阶段边界](docs/PHASE_CURRENT.md)
+- [工程维护方案](工程维护方案.md)
 - [状态契约](docs/contracts/status-contract.md)
 - [数据库 Schema 契约](docs/contracts/database-schema.md)
 - [API Action 清单](docs/contracts/api-actions.md)
