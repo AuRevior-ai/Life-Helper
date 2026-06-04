@@ -1,29 +1,40 @@
-<view class="page-shell onboarding-page">
-  <view class="page-header">
-    <view class="page-title">准入进度</view>
-    <view class="page-subtitle"
-      >当前为模拟风控流程，不代表真实合规审核；仅用于查看资质、保证金和风控复核后的经营权限。</view
-    >
+<view class="merchant-page merchant-risk-page">
+  <view class="merchant-header merchant-subpage-header">
+    <button class="merchant-back-button" bindtap="goBack">返回</button>
+    <view class="merchant-title">风控状态</view>
+    <view class="merchant-subtitle">内部模拟与人工设置，不代表真实合规审核或自动风控</view>
   </view>
 
-  <view class="status-hero panel {{statusView.tone}}">
-    <view class="status-label">当前状态</view>
-    <view class="status-title">{{statusView.statusText}}</view>
-    <view class="status-summary">{{statusView.summary}}</view>
+  <view class="merchant-section-card merchant-boundary-card">
+    <view class="merchant-section-title">准入进度</view>
+    <view class="merchant-section-note">
+      当前为模拟风控流程，仅用于查看资质、保证金和平台复核后的经营权限，不代表真实合规审核；不会自动冻结资金或自动解除限制。
+    </view>
   </view>
 
-  <view class="panel status-grid">
-    <view class="status-row">
-      <text class="row-label">经营权限</text>
-      <text class="row-value">{{statusView.permissionText}}</text>
+  <view wx:if="{{loading}}" class="merchant-loading">正在加载风控状态</view>
+  <view wx:elif="{{errorText}}" class="merchant-error">{{errorText}}</view>
+
+  <block wx:else>
+    <view class="merchant-section-card merchant-risk-hero {{statusView.tone}}">
+      <view class="merchant-section-title">当前状态</view>
+      <view class="merchant-risk-title">{{statusView.statusText}}</view>
+      <view class="merchant-section-note">{{statusView.summary}}</view>
     </view>
-    <view class="status-row">
-      <text class="row-label">风险等级</text>
-      <text class="row-value">{{statusView.riskText}}</text>
+
+    <view class="merchant-section-card merchant-risk-grid">
+      <view class="merchant-detail-row">
+        <text class="merchant-detail-label">经营权限</text>
+        <text class="merchant-detail-value">{{statusView.permissionText}}</text>
+      </view>
+      <view class="merchant-detail-row">
+        <text class="merchant-detail-label">风险等级</text>
+        <text class="merchant-detail-value">{{statusView.riskText}}</text>
+      </view>
+      <view class="merchant-detail-row merchant-detail-row--stack">
+        <text class="merchant-detail-label">下一步</text>
+        <text class="merchant-detail-value">{{statusView.nextActionText}}</text>
+      </view>
     </view>
-    <view class="status-row">
-      <text class="row-label">下一步</text>
-      <text class="row-value">{{statusView.nextActionText}}</text>
-    </view>
-  </view>
+  </block>
 </view>

@@ -1,32 +1,57 @@
-<view class="page-shell service-edit-page">
-  <view class="page-header">
-    <view class="page-title">配置服务</view>
-    <view class="page-subtitle">绑定平台服务并设置商家展示价格</view>
+<view class="merchant-page page-shell merchant-subpage merchant-service-edit-page">
+  <view class="merchant-header merchant-subpage-header">
+    <button class="merchant-back-button" bindtap="goBack">返回</button>
+    <view class="merchant-title">配置服务</view>
+    <view class="merchant-subtitle">绑定平台服务并设置商家展示价格，服务创建仍走原有 service</view>
   </view>
 
-  <view class="panel form-panel">
-    <view class="form-item">
-      <text class="form-label">平台服务 ID</text>
+  <view class="merchant-section-card merchant-boundary-card">
+    <view class="merchant-section-title">服务调用边界</view>
+    <view class="merchant-section-note">
+      本页只维护商家服务展示字段，不新增自动审核、真实库存或智能定价；价格字段单位：分。
+    </view>
+  </view>
+
+  <view class="merchant-section-card merchant-form-card">
+    <view class="merchant-section-head">
+      <view class="merchant-section-title">服务信息</view>
+      <view class="merchant-section-note">保存后返回上一页</view>
+    </view>
+    <view class="merchant-form-item">
+      <text class="merchant-form-label form-label">平台服务 ID</text>
       <input
-        class="form-input service-input"
+        class="merchant-form-input form-input service-input"
         placeholder="输入平台服务 ID"
         value="{{form.serviceId}}"
         bindinput="onInput"
         data-field="serviceId"
       />
     </view>
-    <view class="form-item">
-      <text class="form-label">价格</text>
+    <view class="merchant-form-item">
+      <text class="merchant-form-label form-label">价格</text>
       <input
-        class="form-input service-input"
+        class="merchant-form-input form-input service-input"
         placeholder="单位：分，例如 9900"
         type="number"
         value="{{form.price}}"
         bindinput="onInput"
         data-field="price"
       />
+      <view class="merchant-field-note">只格式化展示提示，不改变金额单位。</view>
     </view>
   </view>
 
-  <button class="primary-button" bindtap="submit">保存服务</button>
+  <view wx:if="{{ errorText }}" class="merchant-error">{{ errorText }}</view>
+  <view class="merchant-empty merchant-form-hint">服务名称、分类、描述、上门说明和状态仍以后续接口返回或原有页面能力为准。</view>
+
+  <view class="merchant-sticky-actions">
+    <button
+      class="merchant-action-button merchant-submit-button"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="submit"
+    >
+      {{ submitting ? '保存中' : '保存服务' }}
+    </button>
+  </view>
 </view>

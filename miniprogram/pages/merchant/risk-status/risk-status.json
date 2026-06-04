@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "入驻状态"
+  "navigationBarTitleText": "风控状态",
+  "navigationStyle": "custom"
 }

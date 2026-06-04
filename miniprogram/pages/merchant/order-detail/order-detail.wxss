@@ -1,19 +1,166 @@
-.page {
-  padding: 24rpx;
+@import "/styles/merchant-theme.wxss";
+
+.merchant-order-detail-page {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
-.title,
-text {
+
+.merchant-subpage-header {
+  position: relative;
+}
+
+.merchant-back-button {
+  display: inline-flex;
+  min-width: 104rpx;
+  height: 52rpx;
+  margin: 0 0 22rpx;
+  padding: 0 22rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #d8e4df;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #1f7a68;
+  font-size: 24rpx;
+  font-weight: 800;
+  line-height: 52rpx;
+}
+
+.merchant-back-button::after {
+  border: 0;
+}
+
+.merchant-order-status-card {
+  border: 1rpx solid #dceee7;
+  background: #f8fffb;
+}
+
+.merchant-status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
+  margin-top: 26rpx;
+}
+
+.merchant-status-item {
+  min-width: 0;
+  padding: 22rpx;
+  border-radius: 22rpx;
+  background: #ffffff;
+}
+
+.merchant-status-label,
+.merchant-detail-label {
+  color: #63716b;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.merchant-status-value {
+  margin-top: 8rpx;
+  color: #17231f;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+}
+
+.merchant-boundary-note {
+  margin-top: 24rpx;
+}
+
+.merchant-detail-row {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #edf1ee;
+}
+
+.merchant-detail-row:last-child {
+  border-bottom: 0;
+}
+
+.merchant-detail-row--stack {
   display: block;
-  margin-bottom: 16rpx;
 }
-textarea {
+
+.merchant-detail-value {
+  flex: 1;
+  min-width: 0;
+  color: #17231f;
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 40rpx;
+  text-align: right;
+}
+
+.merchant-detail-row--stack .merchant-detail-value {
+  display: block;
+  margin-top: 10rpx;
+  text-align: left;
+}
+
+.merchant-amount-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin: 28rpx 0 12rpx;
+}
+
+.merchant-amount-value {
+  color: #c76f16;
+  font-size: 44rpx;
+  font-weight: 900;
+  line-height: 54rpx;
+}
+
+.merchant-action-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18rpx;
+  margin-top: 26rpx;
+}
+
+.merchant-order-button,
+.merchant-finish-button {
+  width: 100%;
+  min-width: 0;
+}
+
+.merchant-form-item {
+  margin-top: 26rpx;
+}
+
+.merchant-form-label {
+  display: block;
+  color: #17231f;
+  font-size: 27rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+}
+
+.merchant-form-input {
   box-sizing: border-box;
   width: 100%;
-  margin: 16rpx 0;
-  padding: 20rpx;
-  background: #fff;
-  border-radius: 8rpx;
+  min-height: 82rpx;
+  margin-top: 14rpx;
+  padding: 0 22rpx;
+  border-radius: 18rpx;
+  background: #f6f8f7;
+  color: #17231f;
+  font-size: 28rpx;
+  line-height: 82rpx;
 }
-button {
-  margin-bottom: 16rpx;
+
+.merchant-form-textarea {
+  min-height: 170rpx;
+  padding-top: 20rpx;
+  line-height: 38rpx;
+}
+
+.merchant-finish-button {
+  margin-top: 22rpx;
+  border-radius: 999rpx;
 }

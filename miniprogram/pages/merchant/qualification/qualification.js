@@ -12,6 +12,9 @@ Page({
       serviceCategories: ["家政保洁"],
       agreementChecked: true,
     },
+    loading: true,
+    errorText: "",
+    actionLoading: "",
   },
 
   onLoad() {
@@ -19,6 +22,7 @@ Page({
   },
 
   async loadQualification() {
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await qualificationService.getMyQualification();
       this.setData({
@@ -26,7 +30,10 @@ Page({
         qualificationStatus: data.qualification_status || "NOT_SUBMITTED",
       });
     } catch (error) {
+      this.setData({ errorText: error.message || "资质信息加载失败" });
       showError(error.message || "资质信息加载失败");
+    } finally {
+      this.setData({ loading: false });
     }
   },
 
@@ -37,22 +44,34 @@ Page({
   },
 
   async saveDraft() {
+    if (this.data.actionLoading) return;
+    this.setData({ actionLoading: "draft" });
     try {
       await qualificationService.saveQualificationDraft(this.data.form);
       showSuccess("资质草稿已保存");
       await this.loadQualification();
     } catch (error) {
       showError(error.message || "保存失败");
+    } finally {
+      this.setData({ actionLoading: "" });
     }
   },
 
   async submit() {
+    if (this.data.actionLoading) return;
+    this.setData({ actionLoading: "submit" });
     try {
       await qualificationService.submitQualification(this.data.form);
       showSuccess("资质已提交审核");
       await this.loadQualification();
     } catch (error) {
       showError(error.message || "提交失败");
+    } finally {
+      this.setData({ actionLoading: "" });
     }
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 });

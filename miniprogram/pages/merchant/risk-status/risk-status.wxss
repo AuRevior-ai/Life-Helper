@@ -1,62 +1,88 @@
-.onboarding-page {
-  color: #1f2d2a;
+@import "/styles/merchant-theme.wxss";
+
+.merchant-risk-page {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
-.status-hero {
-  margin-bottom: 22rpx;
+.merchant-subpage-header {
+  position: relative;
+}
+
+.merchant-back-button {
+  display: inline-flex;
+  min-width: 104rpx;
+  height: 52rpx;
+  margin: 0 0 22rpx;
+  padding: 0 22rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #d8e4df;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #1f7a68;
+  font-size: 24rpx;
+  font-weight: 800;
+  line-height: 52rpx;
+}
+
+.merchant-back-button::after {
+  border: 0;
+}
+
+.merchant-boundary-card {
+  border: 1rpx solid #f1dfb6;
+  background: #fffaf0;
+}
+
+.merchant-risk-hero {
   border-left: 8rpx solid #1f7a68;
 }
 
-.status-hero.warn {
+.merchant-risk-hero.warn {
   border-left-color: #b65230;
 }
 
-.status-label {
-  color: #64716d;
-  font-size: 24rpx;
+.merchant-risk-title {
+  margin: 14rpx 0 12rpx;
+  color: #17231f;
+  font-size: 42rpx;
+  font-weight: 900;
+  line-height: 52rpx;
 }
 
-.status-title {
-  margin-top: 10rpx;
-  color: #183832;
-  font-size: 38rpx;
-  font-weight: 800;
-  line-height: 1.25;
-}
-
-.status-summary {
-  margin-top: 12rpx;
-  color: #53625e;
-  font-size: 26rpx;
-  line-height: 1.6;
-}
-
-.status-grid {
-  padding-top: 8rpx;
-  padding-bottom: 8rpx;
-}
-
-.status-row {
+.merchant-detail-row {
   display: flex;
-  padding: 22rpx 0;
+  justify-content: space-between;
   gap: 24rpx;
-  border-bottom: 1rpx solid #edf2ef;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #edf1ee;
 }
 
-.status-row:last-child {
+.merchant-detail-row:last-child {
   border-bottom: 0;
 }
 
-.row-label {
-  width: 150rpx;
-  flex-shrink: 0;
-  color: #64716d;
-  font-size: 26rpx;
+.merchant-detail-row--stack {
+  display: block;
 }
 
-.row-value {
+.merchant-detail-label {
+  color: #63716b;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.merchant-detail-value {
   flex: 1;
-  color: #1f2d2a;
+  color: #17231f;
   font-size: 28rpx;
-  line-height: 1.5;
+  font-weight: 800;
+  line-height: 40rpx;
+  text-align: right;
+}
+
+.merchant-detail-row--stack .merchant-detail-value {
+  display: block;
+  margin-top: 10rpx;
+  text-align: left;
 }

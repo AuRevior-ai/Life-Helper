@@ -28,11 +28,14 @@ Page({
   data: {
     status: {},
     statusView: buildStatusView({}),
+    loading: true,
+    errorText: "",
   },
   onLoad() {
     this.loadStatus();
   },
   async loadStatus() {
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await qualificationService.getMyRiskStatus();
       this.setData({
@@ -40,7 +43,14 @@ Page({
         statusView: buildStatusView(data),
       });
     } catch (error) {
+      this.setData({ errorText: error.message || "风险状态加载失败" });
       showError(error.message || "风险状态加载失败");
+    } finally {
+      this.setData({ loading: false });
     }
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 });

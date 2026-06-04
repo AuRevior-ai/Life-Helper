@@ -4,31 +4,35 @@
 
 ## 阶段名称
 
-阶段 23B：商家端一级页面 UI 统一已完成
+阶段 23C：商家端二级页面 UI 收口已完成基础版
 
 ## 阶段状态
 
-本轮已完成阶段 23A 收口复核，并完成商家端一级导航与五个一级页面 UI 统一；阶段 23B 已通过验收、提交并推送到 GitHub。后续真机调试发现商家端页面相对 WXSS 引入路径在微信开发者工具中不可解析，已通过 `364b240` 修复为绝对路径引入。范围限定为展示层、页面注册既有项复用、结构保护测试和阶段文档。本阶段不修改云函数，不修改 services，不修改 schema，不修改订单状态机。阶段 23B 不是新业务能力阶段，不接入真实支付、真实退款、真实提现、真实分账、真实认证、OCR、保险核验或真实风控。
+阶段 23B 商家端一级页面 UI 统一已完成、已提交并推送；23B 文档状态已通过 `fa2b4a5 docs: sync phase 23B handoff status` 单独收口。
+
+23B checkpoint：阶段 23B：商家端一级页面 UI 统一；已验收、已提交并推送。阶段 23B 不修改云函数，不修改 services，不修改 schema，不修改订单状态机，并保留 mock/真实能力边界说明。
+
+阶段 23C 已按三批完成商家端二级页面基础收口：第一批商家入驻申请和服务编辑；第二批商家订单详情；第三批资质认证、保证金和风控状态。范围限定为展示层、结构保护测试和阶段文档；页面 JS 仅新增展示字段归一化、loading、error、按钮提交中状态和返回辅助，不改变提交参数、服务调用、金额单位、订单状态机或数据库语义。
+
+阶段 23C 不是新业务能力阶段，不接入真实支付、真实退款、提现、分账、真实认证、OCR、保险核验、真实保证金支付或真实风控。
 
 ## 本阶段目标
 
-1. 收口复核阶段 23A 管理员端一级 UI，清除没有真实接口支撑的运营趋势文案。
-2. 扩展管理员“我的”页系统边界说明，覆盖支付、退款、财务、资质、保证金、风控和保险。
-3. 新增商家端独立 5 栏底部导航：我的、订单、服务、收益、入驻。
-4. 统一商家端“我的 / 订单 / 服务 / 收益 / 入驻”五个一级页面的低密度入口体验。
-5. 保留商家端原有二级业务页面，不删除旧页面，不改变原有业务跳转。
-6. 新增结构保护测试，约束商家端一级 UI、禁用伪真实趋势文案和 mock/真实能力边界。
+1. 新增阶段 23C 商家端二级页面 UI 收口结构保护测试。
+2. 新增阶段 23C 阶段文档。
+3. 第一批收口 `pages/merchant/apply/apply` 和 `pages/merchant/service-edit/service-edit`。
+4. 第二批收口 `pages/merchant/order-detail/order-detail`。
+5. 第三批收口 `pages/merchant/qualification/qualification`、`pages/merchant/deposit/deposit` 和 `pages/merchant/risk-status/risk-status`。
+6. 保留既有 service 调用、订单状态机、mock/人工审核/内部模拟边界。
 
 ## 本阶段允许
 
-- 调整管理员端一级页面的中性展示文案和系统边界说明。
-- 调整商家端一级页面 WXML / WXSS 布局与视觉层级。
-- 少量修改商家端一级页面 JS 中的展示字段归一化、loading、empty 和跳转辅助。
-- 新增商家端共享展示样式 `miniprogram/styles/merchant-theme.wxss`。
-- 新增商家端独立底部导航组件 `miniprogram/components/merchant-tab-bar/`。
-- 更新商家端一级页面 JSON，引入商家端导航组件。
-- 新增或更新 UI 结构保护测试。
-- 更新 `README.md`、`docs/PROJECT_STATUS.md` 和阶段记录。
+- 调整本阶段六个商家端二级页面 WXML / WXSS 布局与视觉层级。
+- 少量修改页面 JS 中的展示字段归一化、loading、error、提交中状态和跳转辅助。
+- 使用 `/styles/merchant-theme.wxss` 绝对路径引入商家端统一主题。
+- 新增 `tests/phase23c_merchant_secondary_ui.test.js`。
+- 新增或更新 `docs/dev-records/23c-merchant-secondary-ui.md`。
+- 更新 `README.md`、`docs/PROJECT_STATUS.md`、`docs/PHASE_CURRENT.md` 和 `docs/dev-records/index.md`。
 
 ## 本阶段禁止
 
@@ -39,17 +43,29 @@
 - 修改金额单位。
 - 修改数据库字段语义。
 - 修改云函数 action 名称或返回结构。
+- 修改权限判断。
 - 修改支付、退款、财务、派单、商家、资质、保证金、风控核心逻辑。
 - 让前端直接决定支付成功、退款成功、订单完成、收益结算、财务流水生成、资质审核通过、保证金缴纳成功或风控解除。
 - 接入真实微信支付、真实微信退款、提现、分账、真实会员支付、真实打赏支付、真实保证金支付或退款。
 - 接入真实身份证认证、营业执照认证、OCR、保险核验或真实风控。
-- 新增自动派单或 AI 派单。
+- 新增自动派单、AI 派单、路径规划、实时轨迹或 ETA。
 - 将 mock、内部模拟或人工审核能力包装成真实上线能力。
 - 删除旧页面、删除已有测试或做全仓无关格式化。
 
+## 本轮页面清单
+
+| 页面 | 路径 | 本轮状态 |
+| ---- | ---- | -------- |
+| 商家入驻申请 | `pages/merchant/apply/apply` | 第一批已完成基础收口 |
+| 服务编辑 | `pages/merchant/service-edit/service-edit` | 第一批已完成基础收口 |
+| 订单详情 | `pages/merchant/order-detail/order-detail` | 第二批已完成基础收口 |
+| 资质认证 | `pages/merchant/qualification/qualification` | 第三批已完成基础收口 |
+| 保证金 | `pages/merchant/deposit/deposit` | 第三批已完成基础收口 |
+| 风控状态 | `pages/merchant/risk-status/risk-status` | 第三批已完成基础收口 |
+
 ## mock/真实能力边界
 
-当前支付、退款、打赏、会员、保证金、资质、保险、风控和财务流水仍然是 mock、人工审核或内部模拟阶段：
+当前支付、退款、打赏、会员、保证金、资质、保险、风控和财务流水仍然是 mock、人工审核、资料留档或内部模拟阶段：
 
 - 支付：只支持 mock 支付，真实微信支付未接入。
 - 退款：只支持 mock 退款，真实微信退款未接入。
@@ -62,12 +78,10 @@
 - 风控：仅为内部模拟/人工设置，无真实合规风控系统。
 - 地图/LBS：仅为基础地图选点和服务范围配置，无路径规划、实时轨迹、ETA、自动派单或 AI 派单。
 
-商家端“收益”“入驻”“我的”等一级页中的财务、资质、保证金、风控入口只代表聚合入口和内部展示，不代表真实资金、真实认证或自动化风控已经上线。
-
 ## 验收命令
 
 ```bash
-node --test tests/phase23a_admin_primary_ui.test.js
+node --test tests/phase23c_merchant_secondary_ui.test.js
 node --test tests/phase23b_merchant_primary_ui.test.js
 npm test
 npm run check:shared-sync
@@ -83,28 +97,25 @@ npm run check:release-risk -- <candidate-dir>
 
 ## 最近一次验收结果
 
-本轮最终验收已完成：
-
 | 命令 | 结果 |
 | ---- | ---- |
-| `node --test tests/phase23a_admin_primary_ui.test.js` | 通过，13/13 |
+| `node --test tests/phase23c_merchant_secondary_ui.test.js` | 通过，8/8 |
 | `node --test tests/phase23b_merchant_primary_ui.test.js` | 通过，8/8 |
-| `npm test` | 通过，285/285 |
+| `npm test` | 通过，293/293 |
 | `npm run check:shared-sync` | 通过 |
 | `npm run check:cloudfunction-deps` | 通过 |
 | `git diff --check` | 通过 |
 
-本轮未涉及交付包、发布清单、敏感文件或 clean candidate，未运行 `npm run check:release-risk -- <candidate-dir>`。
+本轮不涉及交付包、发布清单、敏感文件或 clean candidate，未运行 `npm run check:release-risk -- <candidate-dir>`。
 
 ## 回滚与降级策略
 
-- 本阶段仅修改展示层、页面 JSON、测试和文档；若页面出现问题，可优先回滚对应页面 WXML / WXSS / 展示字段归一化 JS。
-- 商家端一级页只作为入口和展示，不删除旧二级页面；如一级页不可用，可直接通过旧二级页面路径继续访问原功能。
+- 本阶段仅修改商家端二级页面展示层、少量展示辅助 JS、测试和文档；若页面出现问题，可优先回滚对应页面 WXML / WXSS / JSON / 展示辅助 JS。
 - 不改云函数、不改 services、不改状态枚举、不改数据库结构，因此无需数据迁移回滚。
-- 如财务、资质、保证金、风控或收益文案被误解为真实能力，应立即回退为 mock/内部模拟/人工审核表述。
+- 如入驻、服务、订单、资质、保证金、风控或收益文案被误解为真实能力，应立即回退为 mock/内部模拟/人工审核表述。
 
 ## 下一阶段建议
 
-1. 若继续 UI：可单独重构商家端二级页面或管理员端二级列表与详情页。
-2. 若继续商家端能力：优先做权限、分页、经营数据口径的后端专项评审，不在 UI 阶段顺手推进。
+1. 阶段 23C 已完成基础版，不建议继续扩大商家端二级页范围。
+2. 如继续 UI，建议转入管理员端二级页面，或基于真机反馈做局部视觉微调。
 3. 如进入真实支付、退款、提现、分账、认证或风控阶段，必须另起独立高风险阶段并补齐专项文档、验签、对账、回滚和人工验证方案。

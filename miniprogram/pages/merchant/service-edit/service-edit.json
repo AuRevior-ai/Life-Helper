@@ -1,3 +1,4 @@
 {
-  "navigationBarTitleText": "配置服务"
+  "navigationBarTitleText": "配置服务",
+  "navigationStyle": "custom"
 }

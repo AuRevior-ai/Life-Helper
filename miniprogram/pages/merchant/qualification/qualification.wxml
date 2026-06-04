@@ -1,32 +1,90 @@
-<view class="page">
-  <view class="warning"
-    >当前为模拟资质认证流程，不产生真实认证；请勿上传真实身份证、营业执照、保单等敏感材料。</view
-  >
-  <view class="panel">
-    <text class="title">资质认证</text>
-    <text>当前状态：{{qualificationStatus}}</text>
-    <text wx:if="{{qualification.reject_reason}}"
-      >驳回原因：{{qualification.reject_reason}}</text
-    >
-    <input
-      placeholder="主体类型 individual/business"
-      value="{{form.subjectType}}"
-      data-field="subjectType"
-      bindinput="onInput"
-    />
-    <input
-      placeholder="模拟姓名或法人姓名"
-      value="{{form.realNameMock}}"
-      data-field="realNameMock"
-      bindinput="onInput"
-    />
-    <input
-      placeholder="手机号"
-      value="{{form.phone}}"
-      data-field="phone"
-      bindinput="onInput"
-    />
-    <button bindtap="saveDraft">保存草稿</button>
-    <button class="primary" bindtap="submit">提交审核</button>
+<view class="merchant-page merchant-qualification-page">
+  <view class="merchant-header merchant-subpage-header">
+    <button class="merchant-back-button" bindtap="goBack">返回</button>
+    <view class="merchant-title">资质认证</view>
+    <view class="merchant-subtitle">资料留档与人工审核，不接入真实身份证认证、营业执照认证或 OCR</view>
   </view>
+
+  <view class="merchant-section-card merchant-boundary-card">
+    <view class="merchant-section-title">人工审核边界</view>
+    <view class="merchant-section-note">
+      当前为模拟资质认证流程，只用于平台内资料留档和人工审核，不产生真实认证；请勿上传真实身份证、营业执照、保单等敏感材料。
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="merchant-loading">正在加载资质信息</view>
+  <view wx:elif="{{errorText}}" class="merchant-error">{{errorText}}</view>
+
+  <block wx:else>
+    <view class="merchant-section-card merchant-status-card">
+      <view class="merchant-section-head">
+        <view>
+          <view class="merchant-section-title">审核状态</view>
+          <view class="merchant-section-note">当前状态：{{qualificationStatus}}</view>
+        </view>
+        <view class="merchant-pill">人工审核</view>
+      </view>
+      <view wx:if="{{qualification.reject_reason}}" class="merchant-section-note merchant-reject-note">
+        驳回原因：{{qualification.reject_reason}}
+      </view>
+    </view>
+
+    <view class="merchant-section-card merchant-form-card">
+      <view class="merchant-section-title">资料填写</view>
+      <view class="merchant-form-item">
+        <text class="merchant-form-label">主体类型</text>
+        <input
+          class="merchant-form-input"
+          placeholder="individual 或 business"
+          value="{{form.subjectType}}"
+          data-field="subjectType"
+          bindinput="onInput"
+        />
+      </view>
+      <view class="merchant-form-item">
+        <text class="merchant-form-label">模拟姓名或法人姓名</text>
+        <input
+          class="merchant-form-input"
+          placeholder="请填写模拟资料"
+          value="{{form.realNameMock}}"
+          data-field="realNameMock"
+          bindinput="onInput"
+        />
+      </view>
+      <view class="merchant-form-item">
+        <text class="merchant-form-label">手机号</text>
+        <input
+          class="merchant-form-input"
+          placeholder="用于人工审核联系"
+          type="number"
+          value="{{form.phone}}"
+          data-field="phone"
+          bindinput="onInput"
+        />
+      </view>
+    </view>
+
+    <view class="merchant-section-card merchant-action-card">
+      <view class="merchant-section-title">提交操作</view>
+      <view class="merchant-section-note">保存草稿和提交审核仍使用既有 qualification service。</view>
+      <view class="merchant-action-stack">
+        <button
+          class="merchant-outline-button merchant-action-wide"
+          loading="{{actionLoading === 'draft'}}"
+          disabled="{{!!actionLoading}}"
+          bindtap="saveDraft"
+        >
+          保存草稿
+        </button>
+        <button
+          class="merchant-action-button merchant-action-wide"
+          loading="{{actionLoading === 'submit'}}"
+          disabled="{{!!actionLoading}}"
+          bindtap="submit"
+        >
+          提交审核
+        </button>
+      </view>
+    </view>
+  </block>
 </view>

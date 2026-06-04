@@ -1,27 +1,83 @@
-<view class="page">
-  <input
-    placeholder="店铺名称"
-    value="{{form.storeName}}"
-    bindinput="onInput"
-    data-field="storeName"
-  />
-  <input
-    placeholder="联系人"
-    value="{{form.contactName}}"
-    bindinput="onInput"
-    data-field="contactName"
-  />
-  <input
-    placeholder="联系电话"
-    value="{{form.contactPhone}}"
-    bindinput="onInput"
-    data-field="contactPhone"
-  />
-  <textarea
-    placeholder="店铺简介"
-    value="{{form.storeIntro}}"
-    bindinput="onInput"
-    data-field="storeIntro"
-  />
-  <button bindtap="submit">提交入驻</button>
+<view class="merchant-page merchant-subpage merchant-apply-page">
+  <view class="merchant-header merchant-subpage-header">
+    <button class="merchant-back-button" bindtap="goBack">返回</button>
+    <view class="merchant-title">商家入驻申请</view>
+    <view class="merchant-subtitle">提交店铺资料，平台将进入人工审核与资料留档流程</view>
+  </view>
+
+  <view class="merchant-section-card merchant-boundary-card">
+    <view class="merchant-section-title">人工审核说明</view>
+    <view class="merchant-section-note">
+      本页仅提交商家入驻资料，平台后续人工审核与资料留档；不接入真实营业执照认证或 OCR。
+    </view>
+  </view>
+
+  <view class="merchant-section-card merchant-form-card">
+    <view class="merchant-section-head">
+      <view class="merchant-section-title">联系方式</view>
+      <view class="merchant-section-note">用于审核沟通</view>
+    </view>
+    <view class="merchant-form-item">
+      <text class="merchant-form-label">联系人</text>
+      <input
+        class="merchant-form-input"
+        placeholder="请输入联系人姓名"
+        value="{{form.contactName}}"
+        bindinput="onInput"
+        data-field="contactName"
+      />
+    </view>
+    <view class="merchant-form-item">
+      <text class="merchant-form-label">联系电话</text>
+      <input
+        class="merchant-form-input"
+        placeholder="请输入联系电话"
+        type="number"
+        value="{{form.contactPhone}}"
+        bindinput="onInput"
+        data-field="contactPhone"
+      />
+    </view>
+  </view>
+
+  <view class="merchant-section-card merchant-form-card">
+    <view class="merchant-section-head">
+      <view class="merchant-section-title">店铺资料</view>
+      <view class="merchant-section-note">展示给平台审核</view>
+    </view>
+    <view class="merchant-form-item">
+      <text class="merchant-form-label">店铺名称</text>
+      <input
+        class="merchant-form-input"
+        placeholder="请输入店铺名称"
+        value="{{form.storeName}}"
+        bindinput="onInput"
+        data-field="storeName"
+      />
+    </view>
+    <view class="merchant-form-item">
+      <text class="merchant-form-label">服务说明</text>
+      <textarea
+        class="merchant-form-input merchant-form-textarea"
+        placeholder="说明主要服务范围、可服务时间或经营特点"
+        value="{{form.storeIntro}}"
+        bindinput="onInput"
+        data-field="storeIntro"
+      />
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="merchant-error">{{ errorText }}</view>
+  <view class="merchant-empty merchant-form-hint">资料为空时仍按原流程提交，由服务端返回校验结果。</view>
+
+  <view class="merchant-sticky-actions">
+    <button
+      class="merchant-action-button merchant-submit-button"
+      loading="{{submitting}}"
+      disabled="{{submitting}}"
+      bindtap="submit"
+    >
+      {{ submitting ? '提交中' : '提交入驻' }}
+    </button>
+  </view>
 </view>

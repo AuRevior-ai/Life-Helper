@@ -40,11 +40,15 @@ Page({
     depositView: buildDepositView({}),
     canMockPay: true,
     canApplyRefund: false,
+    loading: true,
+    errorText: "",
+    actionLoading: "",
   },
   onLoad() {
     this.loadDeposit();
   },
   async loadDeposit() {
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await qualificationService.getMyDeposit();
       const deposit = data.deposit || {};
@@ -56,10 +60,15 @@ Page({
         canApplyRefund: depositView.canApplyRefund,
       });
     } catch (error) {
+      this.setData({ errorText: error.message || "保证金加载失败" });
       showError(error.message || "保证金加载失败");
+    } finally {
+      this.setData({ loading: false });
     }
   },
   async mockPay() {
+    if (this.data.actionLoading) return;
+    this.setData({ actionLoading: "mockPay" });
     try {
       await qualificationService.mockPayDeposit();
       showSuccess("模拟保证金已缴纳");
@@ -68,9 +77,13 @@ Page({
       }, 600);
     } catch (error) {
       showError(error.message || "模拟缴纳失败");
+    } finally {
+      this.setData({ actionLoading: "" });
     }
   },
   async applyRefund() {
+    if (this.data.actionLoading) return;
+    this.setData({ actionLoading: "refund" });
     try {
       await qualificationService.applyDepositRefund({
         reason: "商家申请模拟退还",
@@ -79,6 +92,12 @@ Page({
       await this.loadDeposit();
     } catch (error) {
       showError(error.message || "申请失败");
+    } finally {
+      this.setData({ actionLoading: "" });
     }
+  },
+
+  goBack() {
+    wx.navigateBack();
   },
 });

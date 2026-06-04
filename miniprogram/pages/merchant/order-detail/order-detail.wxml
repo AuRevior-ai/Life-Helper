@@ -1,12 +1,114 @@
-<view class="page">
-  <text class="title">{{order.service_name}}</text>
-  <text>状态：{{order.status}}</text>
-  <button bindtap="accept">接单</button>
-  <button bindtap="start">开始服务</button>
-  <textarea
-    placeholder="完工说明"
-    value="{{finishRemark}}"
-    bindinput="onRemarkInput"
-  />
-  <button bindtap="finish">完成服务</button>
+<view class="merchant-page merchant-order-detail-page">
+  <view class="merchant-header merchant-subpage-header">
+    <button class="merchant-back-button" bindtap="goBack">返回</button>
+    <view class="merchant-title">商家订单详情</view>
+    <view class="merchant-subtitle">查看履约信息并通过原有服务接口处理订单</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="merchant-loading">正在加载订单详情</view>
+  <view wx:elif="{{errorText}}" class="merchant-error">{{errorText}}</view>
+
+  <block wx:else>
+    <view class="merchant-section-card merchant-order-status-card">
+      <view class="merchant-section-head">
+        <view>
+          <view class="merchant-section-title">订单状态</view>
+          <view class="merchant-section-note">{{order.orderNo}}</view>
+        </view>
+        <view class="merchant-pill">{{order.statusText}}</view>
+      </view>
+      <view class="merchant-status-grid">
+        <view class="merchant-status-item">
+          <view class="merchant-status-label">支付状态</view>
+          <view class="merchant-status-value">{{order.payStatusText}}</view>
+        </view>
+        <view class="merchant-status-item">
+          <view class="merchant-status-label">预约时间</view>
+          <view class="merchant-status-value">{{order.appointmentText}}</view>
+        </view>
+      </view>
+      <view class="merchant-section-note merchant-boundary-note">
+        订单状态以后端流转为准，前端按钮仅触发原有商家订单接口。
+      </view>
+    </view>
+
+    <view class="merchant-section-card merchant-order-info-card">
+      <view class="merchant-section-title">服务信息</view>
+      <view class="merchant-detail-row">
+        <text class="merchant-detail-label">服务名称</text>
+        <text class="merchant-detail-value">{{order.serviceName}}</text>
+      </view>
+      <view class="merchant-detail-row">
+        <text class="merchant-detail-label">服务备注</text>
+        <text class="merchant-detail-value">{{order.remarkText}}</text>
+      </view>
+    </view>
+
+    <view class="merchant-section-card merchant-order-customer-card">
+      <view class="merchant-section-title">客户与地址</view>
+      <view class="merchant-detail-row">
+        <text class="merchant-detail-label">客户</text>
+        <text class="merchant-detail-value">{{order.customerText}}</text>
+      </view>
+      <view class="merchant-detail-row">
+        <text class="merchant-detail-label">联系电话</text>
+        <text class="merchant-detail-value">{{order.phoneText}}</text>
+      </view>
+      <view class="merchant-detail-row merchant-detail-row--stack">
+        <text class="merchant-detail-label">服务地址</text>
+        <text class="merchant-detail-value">{{order.addressText}}</text>
+      </view>
+    </view>
+
+    <view class="merchant-section-card merchant-order-amount-card">
+      <view class="merchant-section-title">金额信息</view>
+      <view class="merchant-amount-line">
+        <text class="merchant-detail-label">订单金额</text>
+        <text class="merchant-amount-value">{{order.amountText}}</text>
+      </view>
+      <view class="merchant-section-note">金额单位与后端返回保持一致，页面仅做格式化展示。</view>
+    </view>
+
+    <view class="merchant-section-card merchant-order-action-card">
+      <view class="merchant-section-title">订单操作</view>
+      <view class="merchant-section-note">
+        接单、开始服务和完成服务仍由既有 service 调用完成，后端校验状态是否允许流转。
+      </view>
+      <view class="merchant-action-stack">
+        <button
+          class="merchant-action-button merchant-order-button"
+          loading="{{actionLoading === 'accept'}}"
+          disabled="{{!!actionLoading}}"
+          bindtap="accept"
+        >
+          接单
+        </button>
+        <button
+          class="merchant-outline-button merchant-order-button"
+          loading="{{actionLoading === 'start'}}"
+          disabled="{{!!actionLoading}}"
+          bindtap="start"
+        >
+          开始服务
+        </button>
+      </view>
+      <view class="merchant-form-item merchant-finish-form">
+        <text class="merchant-form-label">完工说明</text>
+        <textarea
+          class="merchant-form-input merchant-form-textarea"
+          placeholder="填写本次服务完成情况"
+          value="{{finishRemark}}"
+          bindinput="onRemarkInput"
+        />
+      </view>
+      <button
+        class="merchant-action-button merchant-finish-button"
+        loading="{{actionLoading === 'finish'}}"
+        disabled="{{!!actionLoading}}"
+        bindtap="finish"
+      >
+        完成服务
+      </button>
+    </view>
+  </block>
 </view>

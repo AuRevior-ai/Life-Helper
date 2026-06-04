@@ -1,17 +1,96 @@
-.page {
-  padding: 24rpx;
+@import "/styles/merchant-theme.wxss";
+
+.merchant-subpage {
+  padding-bottom: calc(190rpx + env(safe-area-inset-bottom));
 }
-input,
-textarea {
-  box-sizing: border-box;
+
+.merchant-subpage-header {
+  position: relative;
+}
+
+.merchant-back-button {
+  display: inline-flex;
+  min-width: 104rpx;
+  height: 52rpx;
+  margin: 0 0 22rpx;
+  padding: 0 22rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #d8e4df;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #1f7a68;
+  font-size: 24rpx;
+  font-weight: 800;
+  line-height: 52rpx;
+}
+
+.merchant-back-button::after {
+  border: 0;
+}
+
+.merchant-boundary-card {
+  border: 1rpx solid #dceee7;
+  background: #f8fffb;
+}
+
+.merchant-form-card {
+  padding-bottom: 12rpx;
+}
+
+.merchant-form-item {
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid #edf1ee;
+}
+
+.merchant-form-item:last-child {
+  border-bottom: 0;
+}
+
+.merchant-form-label {
+  display: block;
+  color: #17231f;
+  font-size: 27rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+}
+
+.merchant-form-input {
   width: 100%;
-  margin-bottom: 16rpx;
-  padding: 20rpx;
-  background: #fff;
-  border-radius: 8rpx;
+  min-height: 82rpx;
+  margin-top: 14rpx;
+  padding: 0 22rpx;
+  border-radius: 18rpx;
+  background: #f6f8f7;
+  color: #17231f;
+  font-size: 28rpx;
+  line-height: 82rpx;
 }
-button {
-  margin-top: 24rpx;
-  background: #1f7a68;
-  color: #fff;
+
+.merchant-form-textarea {
+  min-height: 170rpx;
+  padding-top: 20rpx;
+  line-height: 38rpx;
+}
+
+.merchant-form-hint {
+  text-align: left;
+}
+
+.merchant-sticky-actions {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  padding: 22rpx 36rpx calc(22rpx + env(safe-area-inset-bottom));
+  background: rgba(245, 248, 246, 0.96);
+  box-shadow: 0 -12rpx 32rpx rgba(24, 44, 39, 0.06);
+}
+
+.merchant-submit-button {
+  width: 100%;
+  height: 82rpx;
+  border-radius: 999rpx;
+  line-height: 82rpx;
 }

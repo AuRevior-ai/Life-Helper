@@ -1,48 +1,72 @@
-.deposit-page {
-  color: #1f2d2a;
+@import "/styles/merchant-theme.wxss";
+
+.merchant-deposit-page {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
-.deposit-explain {
-  margin-bottom: 22rpx;
-  background: #fff8e8;
-  border-color: #f1dfb6;
+.merchant-subpage-header {
+  position: relative;
 }
 
-.explain-title {
-  color: #7a4a00;
-  font-size: 30rpx;
+.merchant-back-button {
+  display: inline-flex;
+  min-width: 104rpx;
+  height: 52rpx;
+  margin: 0 0 22rpx;
+  padding: 0 22rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #d8e4df;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #1f7a68;
+  font-size: 24rpx;
   font-weight: 800;
+  line-height: 52rpx;
 }
 
-.explain-text {
-  margin-top: 10rpx;
-  color: #7a4a00;
-  font-size: 26rpx;
-  line-height: 1.6;
+.merchant-back-button::after {
+  border: 0;
 }
 
-.status-line {
+.merchant-boundary-card {
+  border: 1rpx solid #f1dfb6;
+  background: #fffaf0;
+}
+
+.merchant-detail-row {
   display: flex;
   justify-content: space-between;
   gap: 24rpx;
-  padding: 18rpx 0;
-  border-bottom: 1rpx solid #edf2ef;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #edf1ee;
 }
 
-.status-label {
-  color: #64716d;
-  font-size: 26rpx;
+.merchant-detail-row:last-of-type {
+  border-bottom: 0;
 }
 
-.status-value {
-  color: #183832;
-  font-size: 28rpx;
-  font-weight: 700;
+.merchant-detail-label {
+  color: #63716b;
+  font-size: 24rpx;
+  line-height: 34rpx;
 }
 
-.status-note {
+.merchant-detail-value {
+  color: #17231f;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+  text-align: right;
+}
+
+.merchant-helper-text {
   margin-top: 18rpx;
-  color: #53625e;
-  font-size: 26rpx;
-  line-height: 1.6;
+}
+
+.merchant-action-wide {
+  width: 100%;
+  min-width: 0;
+  margin-top: 22rpx;
+  border-radius: 999rpx;
 }
