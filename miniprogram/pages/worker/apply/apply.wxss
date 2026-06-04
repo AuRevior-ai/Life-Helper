@@ -1,3 +1,149 @@
-.form-panel {
-  margin-top: 0;
+.worker-apply-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 88rpx 34rpx 54rpx;
+  background: #f8faf9;
+  color: #111827;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+.apply-header {
+  margin-bottom: 28rpx;
+}
+
+.apply-title {
+  color: #05070a;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 54rpx;
+}
+
+.apply-subtitle {
+  margin-top: 14rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.apply-boundary-card,
+.apply-form-card {
+  box-sizing: border-box;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 30rpx rgba(31, 41, 55, 0.07);
+}
+
+.apply-boundary-card {
+  padding: 24rpx 26rpx;
+  border: 1rpx solid #ffe1c2;
+  background: #fff9f3;
+  box-shadow: none;
+}
+
+.boundary-title {
+  color: #ff6a00;
+  font-size: 28rpx;
+  font-weight: 900;
+  line-height: 38rpx;
+}
+
+.boundary-desc {
+  margin-top: 8rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 36rpx;
+}
+
+.apply-form-card {
+  margin-top: 22rpx;
+  padding: 28rpx;
+}
+
+.section-title {
+  color: #111827;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 42rpx;
+}
+
+.form-item {
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #edf0f2;
+}
+
+.form-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 14rpx;
+  color: #374151;
+  font-size: 26rpx;
+  font-weight: 800;
+  line-height: 36rpx;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 20rpx;
+  background: #f7f8fa;
+  color: #111827;
+  font-size: 27rpx;
+}
+
+.form-input {
+  height: 78rpx;
+  padding: 0 22rpx;
+}
+
+.form-picker {
+  display: flex;
+  align-items: center;
+  color: #6b7280;
+}
+
+.form-textarea {
+  min-height: 160rpx;
+  padding: 20rpx 22rpx;
+  line-height: 38rpx;
+}
+
+.apply-primary-button,
+.apply-secondary-button {
+  display: flex;
+  width: 100%;
+  height: 76rpx;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  margin: 26rpx 0 0;
+  padding: 0 28rpx;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 76rpx;
+  white-space: nowrap;
+}
+
+.apply-primary-button {
+  border: 0;
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.apply-secondary-button {
+  border: 1rpx solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+}
+
+.apply-primary-button::after,
+.apply-secondary-button::after {
+  border: 0;
 }

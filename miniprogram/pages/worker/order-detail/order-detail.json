@@ -2,6 +2,7 @@
   "navigationBarTitleText": "师傅订单详情",
   "usingComponents": {
     "empty-state": "/components/empty-state/empty-state",
-    "loading-view": "/components/loading-view/loading-view"
+    "loading-view": "/components/loading-view/loading-view",
+    "status-tag": "/components/status-tag/status-tag"
   }
 }

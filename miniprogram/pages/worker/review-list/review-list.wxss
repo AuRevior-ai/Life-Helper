@@ -1,8 +1,178 @@
-.list-card {
-  padding: 24rpx;
-  margin-bottom: 16rpx;
+.review-list-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 88rpx 34rpx 54rpx;
+  background: #f8faf9;
+  color: #111827;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
 }
-.muted {
-  color: #64716d;
+
+.review-header {
+  margin-bottom: 28rpx;
+}
+
+.review-title {
+  color: #05070a;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 54rpx;
+}
+
+.review-subtitle {
+  margin-top: 14rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.review-summary-card,
+.review-card {
+  box-sizing: border-box;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 30rpx rgba(31, 41, 55, 0.07);
+}
+
+.review-summary-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28rpx;
+  padding: 32rpx;
+}
+
+.summary-label {
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.summary-score {
   margin-top: 8rpx;
+  color: #16a34a;
+  font-size: 54rpx;
+  font-weight: 900;
+  line-height: 64rpx;
+}
+
+.summary-metrics {
+  display: flex;
+  gap: 18rpx;
+}
+
+.summary-metric {
+  min-width: 118rpx;
+  box-sizing: border-box;
+  padding: 18rpx;
+  border-radius: 22rpx;
+  background: #f7f8fa;
+  text-align: center;
+}
+
+.summary-value {
+  margin-top: 6rpx;
+  color: #ff6a00;
+  font-size: 30rpx;
+  font-weight: 900;
+  line-height: 40rpx;
+}
+
+.section-head {
+  margin: 32rpx 0 18rpx;
+}
+
+.section-title {
+  color: #111827;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 42rpx;
+}
+
+.section-desc {
+  margin-top: 8rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.review-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.review-card {
+  padding: 26rpx;
+}
+
+.review-card-top,
+.review-card-bottom {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.review-service {
+  overflow: hidden;
+  min-width: 0;
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-rating {
+  flex: 0 0 auto;
+  color: #ff6a00;
+  font-size: 29rpx;
+  font-weight: 900;
+  line-height: 38rpx;
+}
+
+.review-meta {
+  overflow: hidden;
+  margin-top: 10rpx;
+  color: #6b7280;
+  font-size: 23rpx;
+  line-height: 32rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-content {
+  margin-top: 14rpx;
+  color: #374151;
+  font-size: 26rpx;
+  line-height: 40rpx;
+  word-break: break-all;
+}
+
+.review-card-bottom {
+  margin-top: 20rpx;
+}
+
+.reply-pill {
+  display: inline-flex;
+  height: 40rpx;
+  align-items: center;
+  padding: 0 14rpx;
+  border-radius: 999rpx;
+  background: #eaf8e8;
+  color: #16a34a;
+  font-size: 22rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+}
+
+.detail-link {
+  color: #16a34a;
+  font-size: 24rpx;
+  font-weight: 800;
+  line-height: 34rpx;
 }

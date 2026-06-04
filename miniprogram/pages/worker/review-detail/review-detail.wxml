@@ -1,41 +1,79 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
-  <view wx:if="{{ review }}" class="panel">
-    <view class="info-row"
-      ><text>评分</text><text>{{ review.rating }} 分</text></view
-    >
-    <view class="info-row"
-      ><text>评价</text><text>{{ review.content }}</text></view
-    >
-    <view class="info-row"
-      ><text>追评</text
-      ><text>{{ review.followup_content || '暂无' }}</text></view
-    >
-    <textarea
-      class="form-textarea"
-      placeholder="回复评价"
-      bindinput="onReplyInput"
-    ></textarea>
-    <button
-      class="primary-button"
-      bindtap="submitReply"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-    >
-      回复评价
-    </button>
-    <textarea
-      class="form-textarea"
-      placeholder="差评申诉理由"
-      bindinput="onAppealInput"
-    ></textarea>
-    <button
-      class="ghost-button"
-      bindtap="submitAppeal"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-    >
-      提交申诉
-    </button>
+<view class="review-detail-page">
+  <view class="review-detail-header">
+    <view class="review-detail-title">评价详情</view>
+    <view class="review-detail-subtitle">查看用户评价，按需回复或提交差评申诉</view>
   </view>
+
+  <loading-view
+    wx:if="{{ loading && !review }}"
+    text="正在加载评价"
+  ></loading-view>
+
+  <block wx:elif="{{ review }}">
+    <view class="review-overview-card">
+      <view class="overview-top">
+        <view>
+          <view class="section-kicker">用户评价</view>
+          <view class="overview-service">{{ review.serviceName }}</view>
+        </view>
+        <view class="overview-rating">{{ review.ratingText }}</view>
+      </view>
+      <view class="overview-meta">{{ review.userName }} · {{ review.timeText }}</view>
+      <view class="review-content-card">{{ review.contentText }}</view>
+      <view class="review-content-card">
+        <view class="content-label">追评</view>
+        <view>{{ review.followupText }}</view>
+      </view>
+      <button class="secondary-action" bindtap="goOrderDetail">
+        查看原订单
+      </button>
+    </view>
+
+    <view class="review-reply-card detail-card">
+      <view class="card-title">师傅回复</view>
+      <view class="current-reply">{{ review.replyText }}</view>
+      <textarea
+        class="form-textarea"
+        value="{{ replyContent }}"
+        placeholder="填写回复内容，向用户说明服务情况"
+        bindinput="onReplyInput"
+      ></textarea>
+      <button
+        class="primary-action"
+        bindtap="submitReply"
+        loading="{{ submitting }}"
+        disabled="{{ submitting }}"
+      >
+        回复评价
+      </button>
+    </view>
+
+    <view class="review-appeal-card detail-card">
+      <view class="card-title">差评申诉</view>
+      <view class="appeal-desc">
+        申诉由管理员人工审核，当前仅作展示和流程记录，不代表自动风控或自动处罚。
+      </view>
+      <view class="appeal-status">当前申诉状态：{{ review.appealStatusText }}</view>
+      <textarea
+        class="form-textarea"
+        value="{{ appealReason }}"
+        placeholder="请填写差评申诉理由"
+        bindinput="onAppealInput"
+      ></textarea>
+      <button
+        class="secondary-action"
+        bindtap="submitAppeal"
+        loading="{{ submitting }}"
+        disabled="{{ submitting }}"
+      >
+        提交申诉
+      </button>
+    </view>
+  </block>
+
+  <empty-state
+    wx:else
+    title="{{ errorText || '评价不存在' }}"
+    description="请返回评价列表重新查看"
+  ></empty-state>
 </view>

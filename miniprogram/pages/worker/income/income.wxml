@@ -1,60 +1,79 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">基于模拟支付与订单完成生成，提现暂未开放</view>
+<view class="income-page">
+  <view class="income-header">
+    <view class="income-title">我的收益</view>
+    <view class="income-subtitle">收益概览和收益明细来自内部模拟流水，不代表真实提现或清结算</view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载收入"></loading-view>
+  <loading-view
+    wx:if="{{ loading && !earnings.length }}"
+    text="正在加载收益"
+  ></loading-view>
 
   <block wx:else>
-    <view class="income-summary panel">
+    <view class="income-hero-card">
       <view>
-        <view class="summary-label">累计收入</view>
+        <view class="summary-label">累计收益（累计收入）</view>
         <view class="summary-value">{{ totalAmountText }}</view>
       </view>
-      <view>
+      <view class="summary-count-wrap">
         <view class="summary-label">收益笔数</view>
         <view class="summary-count">{{ totalCount }}</view>
       </view>
     </view>
 
-    <view class="status-grid">
-      <view class="status-item panel">
-        <view class="summary-label">冻结中</view>
+    <view class="income-stat-grid">
+      <view class="income-stat-card">
+        <view class="summary-label">本月收益</view>
+        <view class="status-amount">{{ monthAmountText }}</view>
+      </view>
+      <view class="income-stat-card">
+        <view class="summary-label">待结算</view>
         <view class="status-amount">{{ frozenAmountText }}</view>
       </view>
-      <view class="status-item panel">
+      <view class="income-stat-card">
         <view class="summary-label">可结算</view>
         <view class="status-amount">{{ settleableAmountText }}</view>
       </view>
-      <view class="status-item panel">
+      <view class="income-stat-card">
         <view class="summary-label">已结算</view>
         <view class="status-amount">{{ settledAmountText }}</view>
       </view>
-      <view class="status-item panel">
-        <view class="summary-label">已冲回</view>
-        <view class="status-amount">{{ reversedAmountText }}</view>
+    </view>
+
+    <view class="income-boundary-card">
+      <view class="boundary-title">内部模拟流水</view>
+      <view class="boundary-desc">
+        当前仅作展示和内部统计，无真实提现或真实财务清结算。
       </view>
     </view>
 
+    <view class="section-head">
+      <view class="section-title">收益明细</view>
+      <view class="section-desc">订单收益与 mock 打赏等记录按后端返回展示</view>
+    </view>
+
     <view wx:if="{{ earnings.length }}" class="income-list">
-      <view wx:for="{{ earnings }}" wx:key="_id" class="income-row panel">
-        <view>
-          <view class="income-name">{{ item.service_name }}</view>
-          <view class="income-time">{{ item.appointment_time }}</view>
-          <view class="income-time"
-            >状态：{{ item.statusText }}　平台服务费：{{ item.commissionText
-            }}</view
-          >
+      <view wx:for="{{ earnings }}" wx:key="_id" class="earning-card">
+        <view class="earning-main">
+          <view class="earning-title-row">
+            <view class="earning-name">{{ item.serviceName }}</view>
+            <view class="earning-status">{{ item.statusView.text }}</view>
+          </view>
+          <view class="earning-meta">{{ item.timeText }}</view>
+          <view class="earning-meta">订单：{{ item.orderNoText }}</view>
+          <view class="earning-meta">平台服务费：{{ item.commissionText }}</view>
         </view>
-        <view class="income-price">{{ item.workerEarningText }}</view>
+        <view class="earning-side">
+          <view class="earning-price">{{ item.workerEarningText }}</view>
+          <view class="earning-label">师傅收益</view>
+        </view>
       </view>
     </view>
 
     <empty-state
       wx:else
       title="暂无收入"
-      description="订单完成并评价后会计入收入"
+      description="订单完成并评价后会计入内部模拟收益"
     ></empty-state>
   </block>
 </view>

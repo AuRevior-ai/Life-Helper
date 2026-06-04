@@ -1,150 +1,187 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">按服务进度更新订单，完成后等待用户评价</view>
+<view class="worker-detail-page">
+  <view class="detail-header">
+    <view class="detail-title">师傅订单详情</view>
+    <view class="detail-subtitle">服务进度由订单状态决定，页面仅展示和触发已有操作</view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载订单"></loading-view>
+  <loading-view
+    wx:if="{{ loading && !order }}"
+    text="正在加载订单"
+  ></loading-view>
 
   <block wx:elif="{{ order }}">
-    <view class="detail-card panel">
-      <view class="detail-card__top">
-        <view>
-          <view class="order-name">{{ order.service_name }}</view>
-          <view class="order-no">订单号：{{ order.order_no }}</view>
+    <view class="detail-status-card">
+      <view class="status-card-main">
+        <view class="section-kicker">当前状态</view>
+        <view class="status-title-row">
+          <status-tag
+            text="{{ order.statusView.text }}"
+            tone="{{ order.statusView.tone }}"
+          ></status-tag>
+          <status-tag
+            text="{{ order.payStatusView.text }}"
+            tone="{{ order.payStatusView.tone }}"
+          ></status-tag>
         </view>
-        <view class="order-price">{{ priceText }}</view>
+        <view class="status-next">下一步：{{ order.nextStepText }}</view>
       </view>
-      <view class="status-grid">
-        <view>
-          <text class="meta-label">订单状态</text>
-          <text class="meta-value">{{ statusText }}</text>
-        </view>
-        <view>
-          <text class="meta-label">支付状态</text>
-          <text class="meta-value">{{ payStatusText }}</text>
-        </view>
+      <view class="status-time">
+        <view class="status-time-label">时间信息</view>
+        <view class="status-time-value">{{ order.timeText }}</view>
       </view>
     </view>
 
-    <view class="info-panel panel">
-      <view class="info-row">
-        <text>预约时间</text>
-        <text>{{ order.appointment_time }}</text>
+    <view class="detail-service-card detail-card">
+      <view class="card-head">
+        <view>
+          <view class="section-kicker">服务信息</view>
+          <view class="card-title">{{ order.serviceName }}</view>
+        </view>
+        <view class="amount-pill">{{ priceText }}</view>
       </view>
-      <view class="info-row">
+      <view class="detail-row">
+        <text>服务分类</text>
+        <text>{{ order.categoryText }}</text>
+      </view>
+      <view class="detail-row">
+        <text>服务时间</text>
+        <text>{{ order.appointmentText }}</text>
+      </view>
+      <view class="detail-row">
+        <text>订单编号</text>
+        <text>{{ order.orderNoText }}</text>
+      </view>
+    </view>
+
+    <view class="detail-customer-card detail-card">
+      <view class="card-title">用户与地址</view>
+      <view class="detail-row">
         <text>联系人</text>
-        <text>{{ order.contact_name }} {{ order.contact_phone }}</text>
+        <text>{{ order.contactName }}</text>
       </view>
-      <view class="info-row info-row--address">
+      <view class="detail-row">
+        <text>联系电话</text>
+        <text>{{ order.maskedPhone }}</text>
+      </view>
+      <view class="detail-row detail-row--top">
         <text>服务地址</text>
-        <text>{{ order.full_address }}</text>
+        <text>{{ order.addressText }}</text>
       </view>
-      <view wx:if="{{ order.remark }}" class="info-row info-row--address">
-        <text>备注</text>
-        <text>{{ order.remark }}</text>
+      <view class="detail-row">
+        <text>距离信息</text>
+        <text>{{ order.distanceText }}</text>
       </view>
-      <view
-        wx:if="{{ order.finish_remark }}"
-        class="info-row info-row--address"
-      >
-        <text>完工说明</text>
-        <text>{{ order.finish_remark }}</text>
-      </view>
-      <view
-        wx:if="{{ order.finish_images && order.finish_images.length }}"
-        class="finish-images"
-      >
-        <image
-          wx:for="{{ order.finish_images }}"
-          wx:key="*this"
-          class="finish-image"
-          src="{{ item }}"
-          mode="aspectFill"
-        ></image>
+      <view wx:if="{{ order.remark }}" class="detail-note">
+        <view class="detail-note-label">用户备注</view>
+        <view class="detail-note-content">{{ order.remark }}</view>
       </view>
     </view>
 
-    <view wx:if="{{ review }}" class="info-panel panel">
-      <view class="section-title">用户评价</view>
-      <view class="info-row">
+    <view class="detail-amount-card detail-card">
+      <view class="card-title">金额信息</view>
+      <view
+        wx:for="{{ order.amountRows }}"
+        wx:key="label"
+        class="detail-row"
+      >
+        <text>{{ item.label }}</text>
+        <text class="{{ item.highlight ? 'amount-value' : '' }}">{{ item.value }}</text>
+      </view>
+      <view class="amount-hint">仅展示后端返回金额，不改变收益计算和结算状态</view>
+    </view>
+
+    <view wx:if="{{ review }}" class="detail-card review-card">
+      <view class="card-title">用户评价</view>
+      <view class="detail-row">
         <text>评分</text>
         <text>{{ review.rating }} 分</text>
       </view>
-      <view class="info-row info-row--address">
-        <text>评价内容</text>
-        <text>{{ review.content || '暂无文字评价' }}</text>
+      <view class="detail-note">
+        <view class="detail-note-label">评价内容</view>
+        <view class="detail-note-content">{{ review.content || '暂无文字评价' }}</view>
       </view>
-      <view class="info-row info-row--address">
-        <text>追评内容</text>
-        <text>{{ review.followup_content || '暂无追评' }}</text>
+      <view class="detail-note">
+        <view class="detail-note-label">追评内容</view>
+        <view class="detail-note-content">{{ review.followup_content || '暂无追评' }}</view>
       </view>
-      <view class="info-row info-row--address">
-        <text>师傅回复</text>
-        <text>{{ review.worker_reply_content || '暂无回复' }}</text>
+      <view class="detail-note">
+        <view class="detail-note-label">师傅回复</view>
+        <view class="detail-note-content">{{ review.worker_reply_content || '暂无回复' }}</view>
       </view>
     </view>
 
-    <button
-      wx:if="{{ canStart }}"
-      class="primary-button"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-      bindtap="startService"
-    >
-      开始服务
-    </button>
+    <view class="detail-action-card detail-card">
+      <view class="card-title">操作区</view>
+      <view class="action-hint">
+        操作按当前已有订单状态展示，不新增状态流转。
+      </view>
 
-    <view wx:if="{{ canFinish }}" class="panel finish-panel">
-      <view class="form-item">
-        <text class="form-label">完工说明</text>
-        <textarea
-          class="form-textarea"
-          value="{{ finishRemark }}"
-          placeholder="请填写本次服务完成情况"
-          bindinput="handleFinishRemarkInput"
-        ></textarea>
-      </view>
-      <view class="finish-upload-row">
-        <button class="ghost-button" bindtap="chooseFinishImages">
-          选择完工图片
-        </button>
-        <text>{{ finishImages.length }}/3</text>
-      </view>
-      <view wx:if="{{ finishImages.length }}" class="finish-images">
-        <view
-          wx:for="{{ finishImages }}"
-          wx:key="*this"
-          class="finish-image-wrap"
-        >
-          <image
-            class="finish-image"
-            src="{{ item }}"
-            mode="aspectFill"
-          ></image>
-          <button
-            class="remove-image"
-            data-index="{{ index }}"
-            bindtap="removeFinishImage"
-          >
-            删除
-          </button>
-        </view>
-      </view>
       <button
-        class="primary-button"
+        wx:if="{{ canStart }}"
+        class="detail-primary-button"
         loading="{{ submitting }}"
         disabled="{{ submitting }}"
-        bindtap="finishService"
+        bindtap="startService"
       >
-        完成服务
+        开始服务
       </button>
+
+      <view wx:if="{{ canFinish }}" class="finish-panel">
+        <view class="form-item finish-form-item">
+          <text class="form-label">完工说明</text>
+          <textarea
+            class="form-textarea"
+            value="{{ finishRemark }}"
+            placeholder="请填写本次服务完成情况"
+            bindinput="handleFinishRemarkInput"
+          ></textarea>
+        </view>
+        <view class="finish-upload-row">
+          <button class="detail-secondary-button" bindtap="chooseFinishImages">
+            选择完工图片
+          </button>
+          <text>{{ finishImages.length }}/3</text>
+        </view>
+        <view wx:if="{{ finishImages.length }}" class="finish-images">
+          <view
+            wx:for="{{ finishImages }}"
+            wx:key="*this"
+            class="finish-image-wrap"
+          >
+            <image
+              class="finish-image"
+              src="{{ item }}"
+              mode="aspectFill"
+            ></image>
+            <button
+              class="remove-image"
+              data-index="{{ index }}"
+              bindtap="removeFinishImage"
+            >
+              删除
+            </button>
+          </view>
+        </view>
+        <button
+          class="detail-primary-button"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+          bindtap="finishService"
+        >
+          完成服务
+        </button>
+      </view>
+
+      <view wx:if="{{ !canStart && !canFinish }}" class="action-empty">
+        当前订单暂无可操作项
+      </view>
     </view>
   </block>
 
-  <empty-state
-    wx:else
-    title="订单不存在"
-    description="请返回师傅订单列表重新查看"
-  ></empty-state>
+  <view wx:else class="detail-empty">
+    <empty-state
+      title="{{ errorText || '订单不存在' }}"
+      description="请返回师傅订单列表重新查看"
+    ></empty-state>
+  </view>
 </view>

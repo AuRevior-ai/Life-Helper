@@ -1,57 +1,111 @@
-.status-panel {
+.audit-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 88rpx 34rpx 54rpx;
+  background: #f8faf9;
+  color: #111827;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+.audit-header {
+  margin-bottom: 28rpx;
+}
+
+.audit-title {
+  color: #05070a;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 54rpx;
+}
+
+.audit-subtitle {
+  margin-top: 14rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.audit-status-card,
+.audit-profile-card,
+.audit-empty-card {
+  box-sizing: border-box;
+  padding: 30rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 30rpx rgba(31, 41, 55, 0.07);
+}
+
+.audit-status-card {
   text-align: center;
 }
 
 .status-label {
-  color: #72807b;
+  color: #6b7280;
   font-size: 24rpx;
+  line-height: 34rpx;
 }
 
 .status-text {
   margin-top: 12rpx;
-  color: #1f7a68;
-  font-size: 42rpx;
-  font-weight: 800;
+  color: #16a34a;
+  font-size: 44rpx;
+  font-weight: 900;
+  line-height: 56rpx;
+}
+
+.status-boundary {
+  margin-top: 16rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 36rpx;
 }
 
 .status-reason {
   margin-top: 18rpx;
   color: #b65230;
   font-size: 25rpx;
+  line-height: 36rpx;
 }
 
 .status-tip {
   margin-top: 18rpx;
   font-size: 26rpx;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 38rpx;
 }
 
 .status-tip--approved {
-  color: #1f7a68;
+  color: #16a34a;
 }
 
 .status-tip--rejected {
   color: #b65230;
 }
 
-.worker-info {
+.audit-profile-card,
+.audit-empty-card {
   margin-top: 22rpx;
+}
+
+.card-title {
+  color: #111827;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 42rpx;
 }
 
 .info-row {
   display: flex;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 22rpx;
-  padding: 18rpx 0;
-  border-bottom: 1rpx solid #edf2ef;
-  color: #33433f;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #edf0f2;
   font-size: 26rpx;
-}
-
-.info-row:first-child {
-  padding-top: 0;
+  line-height: 38rpx;
 }
 
 .info-row:last-child {
@@ -60,9 +114,45 @@
 }
 
 .info-row text:first-child {
-  color: #72807b;
+  flex: 0 0 150rpx;
+  color: #6b7280;
 }
 
 .info-row text:last-child {
-  font-weight: 700;
+  min-width: 0;
+  flex: 1;
+  color: #111827;
+  font-weight: 800;
+  text-align: right;
+  word-break: break-all;
+}
+
+.empty-desc {
+  margin-top: 12rpx;
+  color: #6b7280;
+  font-size: 25rpx;
+  line-height: 38rpx;
+}
+
+.audit-primary-button {
+  display: flex;
+  width: 100%;
+  height: 76rpx;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  margin: 24rpx 0 0;
+  padding: 0 28rpx;
+  border: 0;
+  border-radius: 999rpx;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 76rpx;
+  white-space: nowrap;
+}
+
+.audit-primary-button::after {
+  border: 0;
 }

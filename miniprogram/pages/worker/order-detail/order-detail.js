@@ -5,12 +5,107 @@ const {
   formatPayStatus,
   formatPrice,
 } = require("../../../utils/format");
+const { getStatusView } = require("../../../utils/status-view");
 const {
   hideLoading,
   showError,
   showLoading,
   showSuccess,
 } = require("../../../utils/toast");
+
+function firstPresent(...values) {
+  return values.find((value) => value !== undefined && value !== null && value !== "");
+}
+
+function maskPhone(phone) {
+  const text = `${phone || ""}`;
+  if (text.length < 7) return text || "手机号待确认";
+  return `${text.slice(0, 3)}****${text.slice(-4)}`;
+}
+
+function formatDistance(order = {}) {
+  const distance = Number(
+    (order.lbs_match && order.lbs_match.distance_km) ||
+      order.distance_km ||
+      order.distanceKm,
+  );
+  if (!Number.isFinite(distance) || distance <= 0) return "距离待确认";
+  return `${distance.toFixed(1)}km`;
+}
+
+function getNextStepText(status) {
+  const stepMap = {
+    accepted: "可按约定时间上门，确认后点击开始服务",
+    serving: "服务中，完成后填写完工说明并提交",
+    pending_review: "已提交验收，等待用户评价",
+    completed: "订单已完成，可查看用户评价",
+    canceled: "订单已取消，无需继续处理",
+  };
+  return stepMap[status] || "请按订单状态继续处理";
+}
+
+function buildTimeText(order = {}) {
+  return firstPresent(
+    order.started_at && `开始：${order.started_at}`,
+    order.accepted_at && `接单：${order.accepted_at}`,
+    order.created_at && `创建：${order.created_at}`,
+    order.appointment_time && `预约：${order.appointment_time}`,
+    "时间待确认",
+  );
+}
+
+function buildAmountRows(order = {}) {
+  const rows = [
+    {
+      label: "订单金额",
+      value: formatPrice(firstPresent(order.pay_amount, order.payable_amount, order.price)),
+      highlight: true,
+    },
+  ];
+
+  if (order.discount_amount !== undefined && order.discount_amount !== null) {
+    rows.push({
+      label: "优惠信息",
+      value: formatPrice(order.discount_amount),
+      highlight: false,
+    });
+  }
+
+  if (order.worker_earning_amount !== undefined && order.worker_earning_amount !== null) {
+    rows.push({
+      label: "师傅预计收入",
+      value: formatPrice(order.worker_earning_amount),
+      highlight: true,
+    });
+  }
+
+  return rows;
+}
+
+function normalizeOrderForDetail(order = {}) {
+  const statusView = getStatusView("order", order.status);
+  const payStatusView = getStatusView("pay", order.pay_status);
+  return {
+    ...order,
+    serviceName: order.service_name || order.serviceName || "服务订单",
+    categoryText: order.category_name || order.service_category || "分类待确认",
+    appointmentText: order.appointment_time || order.appointmentTime || "服务时间待确认",
+    orderNoText: order.order_no || order.orderNo || "订单编号待生成",
+    contactName: order.contact_name || "用户",
+    maskedPhone: maskPhone(order.contact_phone),
+    addressText:
+      order.full_address ||
+      order.address ||
+      order.community ||
+      "服务地址待确认",
+    distanceText: formatDistance(order),
+    statusView,
+    payStatusView,
+    nextStepText: getNextStepText(order.status),
+    timeText: buildTimeText(order),
+    amountRows: buildAmountRows(order),
+  };
+}
 
 Page({
   data: {
@@ -26,6 +121,7 @@ Page({
     finishRemark: "",
     finishImages: [],
     loading: true,
+    errorText: "",
     submitting: false,
   },
 
@@ -38,12 +134,12 @@ Page({
 
   async loadOrderDetail() {
     if (!this.data.orderId) {
-      this.setData({ loading: false });
+      this.setData({ loading: false, errorText: "缺少订单 ID" });
       showError("缺少订单 ID");
       return;
     }
 
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await orderService.getOrderDetail({
         orderId: this.data.orderId,
@@ -52,6 +148,11 @@ Page({
       this.applyOrder(order);
       await this.loadOrderReview(order);
     } catch (error) {
+      this.setData({
+        order: null,
+        review: null,
+        errorText: error.message || "订单详情加载失败",
+      });
       showError(error.message || "订单详情加载失败");
     } finally {
       this.setData({ loading: false });
@@ -100,13 +201,17 @@ Page({
   },
 
   applyOrder(order) {
+    const sourceOrder = order || {};
+    const normalizedOrder = normalizeOrderForDetail(sourceOrder);
     this.setData({
-      order,
-      priceText: formatPrice(order.price),
-      statusText: formatOrderStatus(order.status),
-      payStatusText: formatPayStatus(order.pay_status),
-      canStart: order.status === "accepted",
-      canFinish: order.status === "serving",
+      order: normalizedOrder,
+      priceText: formatPrice(
+        firstPresent(sourceOrder.pay_amount, sourceOrder.payable_amount, sourceOrder.price),
+      ),
+      statusText: formatOrderStatus(sourceOrder.status),
+      payStatusText: formatPayStatus(sourceOrder.pay_status),
+      canStart: sourceOrder.status === "accepted",
+      canFinish: sourceOrder.status === "serving",
       review: null,
     });
   },

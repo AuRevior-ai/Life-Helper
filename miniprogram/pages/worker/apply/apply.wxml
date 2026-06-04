@@ -1,19 +1,25 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >提交基础服务信息，管理员审核通过后即可接单</view
-    >
+<view class="worker-apply-page">
+  <view class="apply-header">
+    <view class="apply-title">{{ title }}</view>
+    <view class="apply-subtitle">提交基础资料和服务范围，管理员人工审核通过后即可接单</view>
   </view>
 
-  <view class="form-panel panel">
+  <view class="apply-boundary-card">
+    <view class="boundary-title">人工审核</view>
+    <view class="boundary-desc">
+      当前仅作展示和资料留档，不接入真实身份证认证、营业执照认证、OCR、保险核验或真实风控。
+    </view>
+  </view>
+
+  <view class="apply-form-card">
+    <view class="section-title">基础资料</view>
     <view class="form-item">
       <text class="form-label">姓名</text>
       <input
         class="form-input"
         value="{{ form.name }}"
         data-field="name"
-        placeholder="请输入真实姓名"
+        placeholder="请输入姓名"
         bindinput="handleInput"
       />
     </view>
@@ -30,7 +36,10 @@
         bindinput="handleInput"
       />
     </view>
+  </view>
 
+  <view class="apply-form-card">
+    <view class="section-title">服务范围</view>
     <view class="form-item">
       <text class="form-label">服务分类</text>
       <input
@@ -45,7 +54,7 @@
     <view class="form-item">
       <text class="form-label">服务区域</text>
       <picker mode="selector" range="{{ areaNames }}" bindchange="onAreaChange">
-        <view class="form-input"
+        <view class="form-input form-picker"
           >{{ form.service_area || '请选择服务小区' }}</view
         >
       </picker>
@@ -64,7 +73,7 @@
   </view>
 
   <button
-    class="primary-button"
+    class="apply-primary-button"
     loading="{{ submitting }}"
     disabled="{{ submitting }}"
     bindtap="handleSubmit"
@@ -72,5 +81,7 @@
     提交审核
   </button>
 
-  <button class="ghost-button" bindtap="goAuditStatus">查看审核状态</button>
+  <button class="apply-secondary-button" bindtap="goAuditStatus">
+    查看审核状态
+  </button>
 </view>

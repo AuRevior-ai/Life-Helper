@@ -3,6 +3,10 @@ const { showError, showSuccess } = require("../../../utils/toast");
 
 Page({
   data: {
+    modeOptions: [
+      { value: "admin_area", label: "行政区服务范围" },
+      { value: "radius", label: "半径服务范围" },
+    ],
     form: {
       service_range_mode: "admin_area",
       base_latitude: "",
@@ -16,6 +20,14 @@ Page({
   onInput(event) {
     this.setData({
       [`form.${event.currentTarget.dataset.field}`]: event.detail.value,
+    });
+  },
+
+  onModeTap(event) {
+    const mode = event.currentTarget.dataset.mode;
+    if (!mode) return;
+    this.setData({
+      "form.service_range_mode": mode,
     });
   },
 

@@ -1,46 +1,91 @@
-<view class="page">
-  <view class="panel">
-    <text class="title">服务范围</text>
-    <text class="hint"
-      >支持半径模式和行政区模式。半径模式缺少经纬度时会降级为行政区/旧小区匹配。</text
-    >
-    <input
-      value="{{form.service_range_mode}}"
-      data-field="service_range_mode"
-      bindinput="onInput"
-      placeholder="admin_area / radius"
-    />
-    <input
-      value="{{form.base_latitude}}"
-      data-field="base_latitude"
-      bindinput="onInput"
-      placeholder="服务点纬度"
-    />
-    <input
-      value="{{form.base_longitude}}"
-      data-field="base_longitude"
-      bindinput="onInput"
-      placeholder="服务点经度"
-    />
-    <input
-      value="{{form.base_address}}"
-      data-field="base_address"
-      bindinput="onInput"
-      placeholder="服务点地址"
-    />
-    <input
-      value="{{form.service_radius_km}}"
-      data-field="service_radius_km"
-      bindinput="onInput"
-      placeholder="服务半径 km"
-    />
-    <input
-      value="{{form.service_communities}}"
-      data-field="service_communities"
-      bindinput="onInput"
-      placeholder="服务小区，多个用顿号分隔"
-    />
-    <button bindtap="openPickLocation">地图选点</button>
-    <button class="primary" bindtap="submit">保存服务范围</button>
+<view class="service-range-page">
+  <view class="range-header">
+    <view class="range-title">服务范围</view>
+    <view class="range-subtitle">配置个人师傅接单范围，便于接单大厅和订单匹配展示</view>
   </view>
+
+  <view class="service-range-mode-card">
+    <view class="card-title">接单范围配置</view>
+    <view class="mode-list">
+      <view
+        wx:for="{{ modeOptions }}"
+        wx:key="value"
+        class="mode-pill {{ form.service_range_mode === item.value ? 'mode-pill--active' : '' }}"
+        data-mode="{{ item.value }}"
+        bindtap="onModeTap"
+      >
+        {{ item.label }}
+      </view>
+    </view>
+    <view class="mode-hint">
+      行政区服务范围适合按小区匹配；半径服务范围需要服务点经纬度。
+    </view>
+  </view>
+
+  <view class="range-form-card">
+    <view class="form-item">
+      <text class="form-label">服务点纬度</text>
+      <input
+        class="form-input"
+        value="{{form.base_latitude}}"
+        data-field="base_latitude"
+        bindinput="onInput"
+        placeholder="服务点纬度"
+      />
+    </view>
+    <view class="form-item">
+      <text class="form-label">服务点经度</text>
+      <input
+        class="form-input"
+        value="{{form.base_longitude}}"
+        data-field="base_longitude"
+        bindinput="onInput"
+        placeholder="服务点经度"
+      />
+    </view>
+    <view class="form-item">
+      <text class="form-label">服务点地址</text>
+      <input
+        class="form-input"
+        value="{{form.base_address}}"
+        data-field="base_address"
+        bindinput="onInput"
+        placeholder="服务点地址"
+      />
+    </view>
+    <view class="form-item">
+      <text class="form-label">服务半径 km</text>
+      <input
+        class="form-input"
+        value="{{form.service_radius_km}}"
+        data-field="service_radius_km"
+        bindinput="onInput"
+        placeholder="服务半径 km"
+      />
+    </view>
+    <view class="form-item">
+      <text class="form-label">服务小区</text>
+      <textarea
+        class="form-textarea"
+        value="{{form.service_communities}}"
+        data-field="service_communities"
+        bindinput="onInput"
+        placeholder="服务小区，多个用顿号分隔"
+      ></textarea>
+    </view>
+  </view>
+
+  <view class="range-boundary-card">
+    <view class="boundary-title">当前仅保存服务范围配置</view>
+    <view class="boundary-desc">
+      不包含路径规划、实时轨迹或 ETA，也不包含自动派单能力。
+    </view>
+  </view>
+
+  <button class="range-secondary-button" bindtap="openPickLocation">
+    地图选点
+  </button>
+  <button class="range-primary-button" bindtap="submit">
+    保存服务范围
+  </button>
 </view>

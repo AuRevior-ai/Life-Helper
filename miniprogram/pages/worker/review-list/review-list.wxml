@@ -1,21 +1,62 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
-  <loading-view wx:if="{{ loading }}" text="正在加载评价"></loading-view>
-  <view wx:elif="{{ reviews.length }}">
-    <view
-      wx:for="{{ reviews }}"
-      wx:key="_id"
-      class="panel list-card"
-      data-id="{{ item._id }}"
-      bindtap="goDetail"
-    >
-      <view>{{ item.service_name }} · {{ item.rating }} 分</view>
-      <view class="muted">{{ item.content }}</view>
-    </view>
+<view class="review-list-page">
+  <view class="review-header">
+    <view class="review-title">{{ title }}</view>
+    <view class="review-subtitle">查看用户评价、回复状态和待处理反馈</view>
   </view>
-  <empty-state
-    wx:else
-    title="暂无评价"
-    description="完成订单后会展示用户评价"
-  ></empty-state>
+
+  <loading-view
+    wx:if="{{ loading && !reviews.length }}"
+    text="正在加载评价"
+  ></loading-view>
+
+  <block wx:else>
+    <view class="review-summary-card">
+      <view>
+        <view class="summary-label">评分概览</view>
+        <view class="summary-score">{{ ratingOverview.averageText }}</view>
+      </view>
+      <view class="summary-metrics">
+        <view class="summary-metric">
+          <view class="summary-label">评价数量</view>
+          <view class="summary-value">{{ ratingOverview.count }}</view>
+        </view>
+        <view class="summary-metric">
+          <view class="summary-label">好评率</view>
+          <view class="summary-value">{{ ratingOverview.goodRateText }}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-head">
+      <view class="section-title">评价列表</view>
+      <view class="section-desc">点击卡片查看详情、回复或提交差评申诉</view>
+    </view>
+
+    <view wx:if="{{ reviews.length }}" class="review-card-list">
+      <view
+        wx:for="{{ reviews }}"
+        wx:key="_id"
+        class="review-card"
+        data-id="{{ item._id }}"
+        bindtap="goDetail"
+      >
+        <view class="review-card-top">
+          <view class="review-service">{{ item.serviceName }}</view>
+          <view class="review-rating">{{ item.ratingText }}</view>
+        </view>
+        <view class="review-meta">{{ item.userName }} · {{ item.timeText }}</view>
+        <view class="review-content">{{ item.contentText }}</view>
+        <view class="review-card-bottom">
+          <view class="reply-pill">{{ item.replyStatusText }}</view>
+          <view class="detail-link">查看详情</view>
+        </view>
+      </view>
+    </view>
+
+    <empty-state
+      wx:else
+      title="暂无评价"
+      description="完成订单后会展示用户评价"
+    ></empty-state>
+  </block>
 </view>

@@ -1,15 +1,16 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">选择个人师傅端后先确认审核状态</view>
+<view class="audit-page">
+  <view class="audit-header">
+    <view class="audit-title">审核状态</view>
+    <view class="audit-subtitle">选择个人师傅端后先确认人工审核状态</view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载审核状态"></loading-view>
 
   <block wx:else>
-    <view class="status-panel panel">
+    <view class="audit-status-card">
       <view class="status-label">当前状态</view>
       <view class="status-text">{{ auditStatusText }}</view>
+      <view class="status-boundary">人工审核结果仅用于平台内接单资格展示</view>
       <view wx:if="{{ worker && worker.reject_reason }}" class="status-reason">
         {{ worker.reject_reason }}
       </view>
@@ -21,27 +22,28 @@
       </view>
     </view>
 
-    <view wx:if="{{ worker }}" class="worker-info panel">
+    <view wx:if="{{ worker }}" class="audit-profile-card">
+      <view class="card-title">资料概览</view>
       <view class="info-row">
         <text>姓名</text>
-        <text>{{ worker.name }}</text>
+        <text>{{ worker.name || '待完善' }}</text>
       </view>
       <view class="info-row">
         <text>服务分类</text>
-        <text>{{ worker.service_category }}</text>
+        <text>{{ worker.service_category || '待完善' }}</text>
       </view>
       <view class="info-row">
         <text>服务区域</text>
-        <text>{{ worker.service_area }}</text>
+        <text>{{ worker.service_area || '待完善' }}</text>
       </view>
     </view>
 
-    <button
-      wx:if="{{ isNotApplied }}"
-      class="primary-button"
-      bindtap="goApply"
-    >
-      重新提交申请
-    </button>
+    <view wx:if="{{ isNotApplied }}" class="audit-empty-card">
+      <view class="card-title">资料待完善</view>
+      <view class="empty-desc">提交基础资料后，管理员会进行人工审核。</view>
+      <button class="audit-primary-button" bindtap="goApply">
+        重新提交申请
+      </button>
+    </view>
   </block>
 </view>

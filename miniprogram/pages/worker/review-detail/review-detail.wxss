@@ -1,7 +1,170 @@
-.panel {
-  padding: 24rpx;
+.review-detail-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 88rpx 34rpx 54rpx;
+  background: #f8faf9;
+  color: #111827;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
 }
+
+.review-detail-header {
+  margin-bottom: 28rpx;
+}
+
+.review-detail-title {
+  color: #05070a;
+  font-size: 42rpx;
+  font-weight: 800;
+  line-height: 54rpx;
+}
+
+.review-detail-subtitle {
+  margin-top: 14rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.review-overview-card,
+.detail-card {
+  box-sizing: border-box;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 30rpx rgba(31, 41, 55, 0.07);
+}
+
+.review-overview-card {
+  padding: 30rpx;
+}
+
+.detail-card {
+  margin-top: 22rpx;
+  padding: 28rpx;
+}
+
+.overview-top {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 22rpx;
+}
+
+.section-kicker {
+  color: #16a34a;
+  font-size: 23rpx;
+  font-weight: 800;
+  line-height: 32rpx;
+}
+
+.overview-service,
+.card-title {
+  color: #111827;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 42rpx;
+}
+
+.overview-service {
+  margin-top: 8rpx;
+}
+
+.overview-rating {
+  flex: 0 0 auto;
+  color: #ff6a00;
+  font-size: 34rpx;
+  font-weight: 900;
+  line-height: 44rpx;
+}
+
+.overview-meta {
+  overflow: hidden;
+  margin-top: 12rpx;
+  color: #6b7280;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.review-content-card,
+.current-reply,
+.appeal-desc,
+.appeal-status {
+  margin-top: 18rpx;
+  padding: 18rpx;
+  border-radius: 20rpx;
+  background: #f7f8fa;
+  color: #374151;
+  font-size: 25rpx;
+  line-height: 38rpx;
+  word-break: break-all;
+}
+
+.content-label {
+  margin-bottom: 6rpx;
+  color: #6b7280;
+  font-size: 23rpx;
+  font-weight: 800;
+  line-height: 32rpx;
+}
+
+.appeal-desc {
+  background: #fff9f3;
+  color: #6b7280;
+}
+
+.appeal-status {
+  background: #eaf8e8;
+  color: #16a34a;
+  font-weight: 800;
+}
+
 .form-textarea {
-  margin-top: 20rpx;
+  width: 100%;
   min-height: 160rpx;
+  box-sizing: border-box;
+  margin-top: 20rpx;
+  padding: 20rpx;
+  border-radius: 20rpx;
+  background: #f7f8fa;
+  color: #111827;
+  font-size: 26rpx;
+  line-height: 38rpx;
+}
+
+.primary-action,
+.secondary-action {
+  display: flex;
+  width: 100%;
+  height: 72rpx;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  margin: 22rpx 0 0;
+  padding: 0 28rpx;
+  border-radius: 999rpx;
+  font-size: 27rpx;
+  font-weight: 800;
+  line-height: 72rpx;
+  white-space: nowrap;
+}
+
+.primary-action {
+  border: 0;
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.secondary-action {
+  border: 1rpx solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+}
+
+.primary-action::after,
+.secondary-action::after {
+  border: 0;
 }
