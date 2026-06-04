@@ -66,7 +66,7 @@ test("merchant primary pages use merchant theme and merchant tab bar", () => {
     assert.match(json, /merchant-tab-bar/);
     assert.match(wxml, /<merchant-tab-bar/);
     assert.match(wxml, new RegExp(`active="${active}"`));
-    assert.match(wxss, /merchant-theme\.wxss/);
+    assert.match(wxss, /@import\s+["']\/styles\/merchant-theme\.wxss["']/);
     assert.doesNotMatch(`${wxml}\n${wxss}`, /vConsole/);
   }
 });

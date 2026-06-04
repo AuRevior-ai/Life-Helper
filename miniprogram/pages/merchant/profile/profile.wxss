@@ -1,4 +1,4 @@
-@import "../../../styles/merchant-theme.wxss";
+@import "/styles/merchant-theme.wxss";
 
 .merchant-profile-hero {
   display: flex;

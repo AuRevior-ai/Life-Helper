@@ -1,4 +1,4 @@
-@import "../../../styles/merchant-theme.wxss";
+@import "/styles/merchant-theme.wxss";
 
 .merchant-income-notice {
   border: 2rpx solid rgba(31, 122, 104, 0.12);
