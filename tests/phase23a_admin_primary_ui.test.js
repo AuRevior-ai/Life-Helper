@@ -100,6 +100,8 @@ test("admin dashboard matches the approved low-density workbench structure", () 
     "今日订单",
     "待审核",
     "风险提醒",
+    "当前统计",
+    "数据待完善",
     "待办中心",
     "师傅审核",
     "商家审核",
@@ -118,6 +120,7 @@ test("admin dashboard matches the approved low-density workbench structure", () 
   assert.match(wxml, /admin-kpi-grid/);
   assert.match(wxml, /admin-section-card/);
   assert.match(wxml, /admin-quick-grid/);
+  assert.doesNotMatch(wxml, /较昨日|昨日|↑|↓|环比|同比/);
   assert.match(js, /getDashboard/);
   assert.match(js, /goEntry/);
   assert.match(wxss, /border-radius:\s*32rpx/);
@@ -287,11 +290,15 @@ test("admin profile keeps account, logout, identity switch, and mock boundaries 
     "消息中心",
     "系统状态",
     "切换到用户端",
-    "系统边界说明",
-    "支付：mock",
-    "退款：mock",
-    "财务：内部模拟",
-  ]) {
+      "系统边界说明",
+      "支付：mock",
+      "退款：mock",
+      "财务：内部模拟",
+      "资质：人工审核",
+      "保证金：mock",
+      "风控：内部模拟",
+      "保险：资料留档",
+    ]) {
     assert.match(wxml, new RegExp(text), `admin profile should include ${text}`);
   }
 
@@ -319,7 +326,7 @@ test("phase 23A UI avoids misleading real-capability wording", () => {
     "miniprogram/pages/admin/profile/profile.wxml",
   ];
   const forbidden =
-    /vConsole|真实到账|微信提现已开通|自动结算|真实认证已完成|OCR 已接入|自动风控已上线|AI 派单已上线/;
+    /vConsole|真实到账|微信提现已开通|自动结算已开通|自动结算已上线|真实认证已完成|OCR 已接入|自动风控已上线|AI 派单已上线|较昨日|昨日|↑|↓|环比|同比/;
 
   for (const file of uiFiles) {
     assert.doesNotMatch(read(file), forbidden, `${file} has forbidden wording`);
@@ -333,8 +340,9 @@ test("phase 23A docs record scope, validation, and mock boundaries", () => {
   const status = read("docs/PROJECT_STATUS.md");
   const record = read("docs/dev-records/23a-admin-primary-ui.md");
 
-  assert.match(phase, /阶段 23A：管理员端一级导航与工作台 UI 重构/);
-  assert.match(phase, /管理员端一级导航与五个一级页面/);
+  assert.match(record, /阶段 23A：管理员端一级导航与五个一级页面 UI 复刻/);
+  assert.match(record, /管理员端一级导航与五个一级页面/);
+  assert.match(phase, /阶段 23B|阶段 23A/);
   assert.match(phase, /mock\/真实能力边界/);
   assert.match(phase, /npm run check:cloudfunction-deps/);
   assert.match(status, /阶段 23A/);

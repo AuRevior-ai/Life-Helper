@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "商家审核"
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "merchant-tab-bar": "/components/merchant-tab-bar/index"
+  }
 }

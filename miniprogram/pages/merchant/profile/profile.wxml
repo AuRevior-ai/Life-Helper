@@ -1,9 +1,118 @@
-<view class="page">
-  <text class="title">{{merchant.store_name || '商家中心'}}</text>
-  <button bindtap="goServices">服务项目</button>
-  <button bindtap="goOrders">商家订单</button>
-  <button bindtap="goIncome">商家收益</button>
-  <button bindtap="goQualification">资质认证</button>
-  <button bindtap="goDeposit">保证金</button>
-  <button bindtap="goRiskStatus">入驻状态</button>
+<view class="merchant-page merchant-profile-page">
+  <view class="merchant-header">
+    <view class="merchant-title">我的</view>
+    <view class="merchant-subtitle">查看店铺资料与经营入口</view>
+  </view>
+
+  <view wx:if="{{ loading }}" class="merchant-loading">正在加载商家资料</view>
+
+  <view class="merchant-hero-card merchant-profile-hero">
+    <view class="merchant-profile-mark">店</view>
+    <view class="merchant-profile-main">
+      <view class="merchant-profile-name">{{ merchant.storeName }}</view>
+      <view class="merchant-pill">商家 · {{ merchant.statusText }}</view>
+      <view class="merchant-profile-line">{{ merchant.contactText }}</view>
+    </view>
+  </view>
+
+  <view class="merchant-section-card">
+    <view class="merchant-section-head">
+      <view class="merchant-section-title">经营概览</view>
+      <view class="merchant-section-note">当前统计</view>
+    </view>
+    <view class="merchant-kpi-grid">
+      <view class="merchant-kpi-card">
+        <view class="merchant-kpi-label">服务项目</view>
+        <view class="merchant-kpi-value">{{ merchant.serviceCountText }}</view>
+        <view class="merchant-kpi-desc">数据待完善</view>
+      </view>
+      <view class="merchant-kpi-card">
+        <view class="merchant-kpi-label">商家订单</view>
+        <view class="merchant-kpi-value">{{ merchant.orderCountText }}</view>
+        <view class="merchant-kpi-desc">当前统计</view>
+      </view>
+      <view class="merchant-kpi-card">
+        <view class="merchant-kpi-label">准入状态</view>
+        <view class="merchant-kpi-value">查看</view>
+        <view class="merchant-kpi-desc">人工审核</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="merchant-section-card">
+    <view class="merchant-section-title">常用入口</view>
+    <view class="merchant-list">
+      <button class="merchant-list-button" bindtap="goServices">
+        <view class="merchant-row-icon merchant-tone-green">服</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">服务项目</view>
+          <view class="merchant-row-desc">维护店铺可预约服务</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+      <button class="merchant-list-button" bindtap="goOrders">
+        <view class="merchant-row-icon merchant-tone-blue">单</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">商家订单</view>
+          <view class="merchant-row-desc">查看订单并进入详情处理</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+      <button class="merchant-list-button" bindtap="goIncome">
+        <view class="merchant-row-icon merchant-tone-orange">收</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">商家收益</view>
+          <view class="merchant-row-desc">查看内部模拟收益口径</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+      <button class="merchant-list-button" bindtap="goAuditStatus">
+        <view class="merchant-row-icon merchant-tone-purple">准</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">准入状态（入驻状态）</view>
+          <view class="merchant-row-desc">查看资质、保证金与风控状态</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+      <button class="merchant-list-button" bindtap="goQualification">
+        <view class="merchant-row-icon merchant-tone-purple">资</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">资质认证</view>
+          <view class="merchant-row-desc">资料留档与人工审核</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+      <button class="merchant-list-button" bindtap="goDeposit">
+        <view class="merchant-row-icon merchant-tone-orange">保</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">保证金</view>
+          <view class="merchant-row-desc">mock 保证金流程</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+      <button class="merchant-list-button" bindtap="goRiskStatus">
+        <view class="merchant-row-icon merchant-tone-blue">控</view>
+        <view class="merchant-row-main">
+          <view class="merchant-row-title">风控状态</view>
+          <view class="merchant-row-desc">内部模拟与人工设置</view>
+        </view>
+        <view class="merchant-arrow">›</view>
+      </button>
+    </view>
+  </view>
+
+  <view class="merchant-section-card">
+    <view class="merchant-section-title">系统边界说明</view>
+    <view class="merchant-boundary-tags">
+      <text class="merchant-pill">资质：人工审核</text>
+      <text class="merchant-pill">保证金：mock</text>
+      <text class="merchant-pill">风控：内部模拟</text>
+      <text class="merchant-pill">财务：内部模拟</text>
+    </view>
+    <view class="merchant-boundary-desc">
+      商家端当前是流程验证版，资质、保证金、保险、风控和收益均不代表真实认证、真实资金或真实合规系统。
+    </view>
+  </view>
+
+  <merchant-tab-bar active="profile"></merchant-tab-bar>
 </view>

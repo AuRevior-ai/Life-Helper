@@ -27,15 +27,16 @@ test("phase 22C3 worker UI stage report exists and captures completion scope", (
   assert.match(record, /师傅默认头像/);
 });
 
-test("README and dev-record index are synchronized to phase 22C3", () => {
+test("README and dev-record index keep phase 22C3 while current phase advances", () => {
   const readme = read("README.md");
   const index = read("docs/dev-records/index.md");
 
   assert.match(readme, /阶段 22C3：师傅端 UI 重构阶段报告/);
-  assert.match(readme, /师傅端 UI 重构已经完成了一大部分/);
+  assert.match(readme, /阶段 23B：商家端一级页面 UI 统一/);
   assert.match(index, /22c3-worker-ui-refactor\.md/);
   assert.match(index, /阶段 22C3：师傅端 UI 重构阶段报告/);
   assert.match(index, /接单大厅、我的订单、我的/);
+  assert.match(index, /23b-merchant-primary-ui\.md/);
 });
 
 test("phase 22C3 report documents UI-only boundaries and verification", () => {

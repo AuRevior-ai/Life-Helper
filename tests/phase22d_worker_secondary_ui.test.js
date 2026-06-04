@@ -260,7 +260,7 @@ test("phase 22D docs record scope, validation, and mock boundaries", () => {
   const record = read("docs/dev-records/22d-worker-secondary-ui.md");
   const subpageRecord = read("docs/ui-refactor-worker-subpages.md");
 
-  assert.match(phase, /阶段 23A：管理员端一级导航与工作台 UI 重构/);
+  assert.match(phase, /阶段 23B：商家端一级页面 UI 统一/);
   assert.match(phase, /mock\/真实能力边界/);
   assert.match(phase, /npm run check:cloudfunction-deps/);
   assert.match(status, /阶段 22D 已完成师傅端次级页面 UI 收口/);

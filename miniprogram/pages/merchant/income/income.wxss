@@ -1,4 +1,9 @@
-.page {
-  padding: 32rpx;
-  color: #1f2d2a;
+@import "../../../styles/merchant-theme.wxss";
+
+.merchant-income-notice {
+  border: 2rpx solid rgba(31, 122, 104, 0.12);
+}
+
+.merchant-income-page .merchant-kpi-grid {
+  margin-top: 28rpx;
 }

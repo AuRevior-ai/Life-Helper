@@ -1,11 +1,48 @@
-.page {
-  padding: 24rpx;
+@import "../../../styles/merchant-theme.wxss";
+
+.merchant-order-list {
+  margin-top: 0;
 }
-.item {
+
+.merchant-order-card {
+  margin-top: 24rpx;
+  padding: 28rpx;
+}
+
+.merchant-card-head {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 24rpx;
-  margin-bottom: 16rpx;
-  background: #fff;
-  border-radius: 8rpx;
+  gap: 18rpx;
+}
+
+.merchant-card-title {
+  flex: 1;
+  overflow: hidden;
+  color: #17231f;
+  font-size: 31rpx;
+  font-weight: 800;
+  line-height: 42rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merchant-card-line {
+  overflow: hidden;
+  margin-top: 14rpx;
+  color: #63716b;
+  font-size: 25rpx;
+  line-height: 36rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merchant-card-action {
+  display: flex;
+  margin-top: 20rpx;
+  align-items: center;
+  justify-content: flex-end;
+  color: #1f7a68;
+  font-size: 26rpx;
+  font-weight: 800;
 }

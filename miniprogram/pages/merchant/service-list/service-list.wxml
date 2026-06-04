@@ -1,7 +1,36 @@
-<view class="page">
-  <button bindtap="goCreate">新增服务</button>
-  <view wx:for="{{services}}" wx:key="_id" class="item">
-    <text>{{item.service_name}}</text>
-    <text>{{item.status}}</text>
+<view class="merchant-page merchant-service-page">
+  <view class="merchant-header">
+    <view class="merchant-title">服务</view>
+    <view class="merchant-subtitle">管理店铺可预约服务</view>
   </view>
+
+  <view class="merchant-section-card">
+    <view class="merchant-section-head">
+      <view>
+        <view class="merchant-section-title">当前服务</view>
+        <view class="merchant-section-note">新增、编辑和上下架仍在二级页处理</view>
+      </view>
+      <button class="merchant-action-button" bindtap="goCreate">新增服务</button>
+    </view>
+  </view>
+
+  <view wx:if="{{ loading }}" class="merchant-loading">正在加载服务</view>
+  <view wx:elif="{{ !displayServices.length }}" class="merchant-empty">暂无服务项目</view>
+
+  <view wx:else class="merchant-list merchant-service-list">
+    <view
+      wx:for="{{displayServices}}"
+      wx:key="id"
+      class="merchant-section-card merchant-service-card"
+    >
+      <view class="merchant-card-head">
+        <view class="merchant-card-title">{{ item.serviceName }}</view>
+        <view class="merchant-pill">{{ item.statusText }}</view>
+      </view>
+      <view class="merchant-card-line">价格：{{ item.priceText }}</view>
+      <view class="merchant-card-line">服务编辑请进入原有服务编辑页</view>
+    </view>
+  </view>
+
+  <merchant-tab-bar active="services"></merchant-tab-bar>
 </view>

@@ -1,0 +1,262 @@
+.merchant-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  padding: calc(96rpx + env(safe-area-inset-top)) 36rpx
+    calc(220rpx + env(safe-area-inset-bottom));
+  background: #f5f8f6;
+  color: #17231f;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+.merchant-page view,
+.merchant-page text,
+.merchant-page image,
+.merchant-page button,
+.merchant-page merchant-tab-bar {
+  box-sizing: border-box;
+}
+
+.merchant-header {
+  margin-bottom: 30rpx;
+}
+
+.merchant-title {
+  color: #17231f;
+  font-size: 48rpx;
+  font-weight: 800;
+  line-height: 60rpx;
+  letter-spacing: 0;
+}
+
+.merchant-subtitle {
+  margin-top: 14rpx;
+  color: #63716b;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.merchant-section-card,
+.merchant-hero-card,
+.merchant-kpi-card {
+  box-sizing: border-box;
+  border-radius: 30rpx;
+  background: #ffffff;
+  box-shadow: 0 16rpx 42rpx rgba(24, 44, 39, 0.06);
+}
+
+.merchant-section-card {
+  margin-top: 28rpx;
+  padding: 30rpx;
+}
+
+.merchant-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.merchant-section-title {
+  color: #17231f;
+  font-size: 32rpx;
+  font-weight: 800;
+  line-height: 42rpx;
+}
+
+.merchant-section-note {
+  color: #6a7772;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.merchant-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18rpx;
+  margin-top: 26rpx;
+}
+
+.merchant-kpi-card {
+  min-width: 0;
+  min-height: 150rpx;
+  padding: 24rpx 18rpx;
+}
+
+.merchant-kpi-label {
+  overflow: hidden;
+  color: #63716b;
+  font-size: 23rpx;
+  line-height: 32rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merchant-kpi-value {
+  margin-top: 8rpx;
+  color: #17231f;
+  font-size: 38rpx;
+  font-weight: 800;
+  line-height: 48rpx;
+}
+
+.merchant-kpi-desc {
+  overflow: hidden;
+  margin-top: 8rpx;
+  color: #7f8a85;
+  font-size: 22rpx;
+  line-height: 30rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merchant-list {
+  margin-top: 18rpx;
+}
+
+.merchant-list-button,
+.merchant-action-button,
+.merchant-outline-button {
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.merchant-list-button::after,
+.merchant-action-button::after,
+.merchant-outline-button::after {
+  border: 0;
+}
+
+.merchant-list-button {
+  display: flex;
+  width: 100%;
+  min-height: 112rpx;
+  align-items: center;
+  gap: 22rpx;
+}
+
+.merchant-list-button:not(:last-child) {
+  border-bottom: 1rpx solid #edf1ee;
+}
+
+.merchant-row-icon {
+  display: flex;
+  width: 66rpx;
+  height: 66rpx;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 27rpx;
+  font-weight: 800;
+}
+
+.merchant-tone-green {
+  background: #e7f5ef;
+  color: #1f7a68;
+}
+
+.merchant-tone-orange {
+  background: #fff1df;
+  color: #c76f16;
+}
+
+.merchant-tone-blue {
+  background: #e8f1ff;
+  color: #2f6fd7;
+}
+
+.merchant-tone-purple {
+  background: #f0eaff;
+  color: #7353d4;
+}
+
+.merchant-row-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.merchant-row-title {
+  overflow: hidden;
+  color: #17231f;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merchant-row-desc {
+  overflow: hidden;
+  margin-top: 6rpx;
+  color: #63716b;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.merchant-arrow {
+  flex-shrink: 0;
+  color: #9aa6a0;
+  font-size: 42rpx;
+  line-height: 1;
+}
+
+.merchant-pill {
+  display: inline-flex;
+  height: 42rpx;
+  padding: 0 18rpx;
+  align-items: center;
+  border-radius: 999rpx;
+  background: #e7f5ef;
+  color: #1f7a68;
+  font-size: 24rpx;
+  font-weight: 700;
+  line-height: 42rpx;
+  white-space: nowrap;
+}
+
+.merchant-empty,
+.merchant-loading,
+.merchant-error {
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border-radius: 24rpx;
+  background: #ffffff;
+  color: #63716b;
+  font-size: 26rpx;
+  line-height: 38rpx;
+  text-align: center;
+}
+
+.merchant-action-button,
+.merchant-outline-button {
+  display: flex;
+  min-width: 160rpx;
+  height: 68rpx;
+  padding: 0 26rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  line-height: 68rpx;
+  white-space: nowrap;
+}
+
+.merchant-action-button {
+  background: #1f7a68;
+  color: #ffffff;
+}
+
+.merchant-outline-button {
+  border: 2rpx solid #1f7a68;
+  background: #ffffff;
+  color: #1f7a68;
+}

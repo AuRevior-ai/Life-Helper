@@ -34,19 +34,19 @@
       <view class="admin-kpi-icon admin-tone-green">单</view>
       <view class="admin-kpi-label">今日订单</view>
       <view class="admin-kpi-value">{{ stats.orderCount }}</view>
-      <view class="admin-kpi-trend">较昨日 <text class="trend-up">↑ 18%</text></view>
+      <view class="admin-kpi-trend">当前统计</view>
     </view>
     <view class="admin-kpi-card">
       <view class="admin-kpi-icon admin-tone-orange">审</view>
       <view class="admin-kpi-label">待审核</view>
       <view class="admin-kpi-value">{{ stats.pendingWorkerCount }}</view>
-      <view class="admin-kpi-trend">较昨日 <text class="trend-up">↑ 12%</text></view>
+      <view class="admin-kpi-trend">今日概览</view>
     </view>
     <view class="admin-kpi-card">
       <view class="admin-kpi-icon admin-tone-blue">险</view>
       <view class="admin-kpi-label">风险提醒</view>
       <view class="admin-kpi-value">0</view>
-      <view class="admin-kpi-trend">较昨日 <text class="trend-down">↓ 25%</text></view>
+      <view class="admin-kpi-trend">数据待完善</view>
     </view>
   </view>
 

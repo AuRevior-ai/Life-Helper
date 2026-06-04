@@ -1,12 +1,53 @@
-<view class="page">
-  <view
-    wx:for="{{orders}}"
-    wx:key="_id"
-    class="item"
-    bindtap="goDetail"
-    data-id="{{item._id}}"
-  >
-    <text>{{item.service_name}}</text>
-    <text>{{item.status}}</text>
+<view class="merchant-page merchant-order-page">
+  <view class="merchant-header">
+    <view class="merchant-title">订单</view>
+    <view class="merchant-subtitle">查看商家订单与履约进度</view>
   </view>
+
+  <view class="merchant-section-card">
+    <view class="merchant-section-head">
+      <view class="merchant-section-title">全部订单</view>
+      <view class="merchant-section-note">当前统计</view>
+    </view>
+    <view class="merchant-kpi-grid">
+      <view class="merchant-kpi-card">
+        <view class="merchant-kpi-label">订单数量</view>
+        <view class="merchant-kpi-value">{{ displayOrders.length }}</view>
+        <view class="merchant-kpi-desc">数据待完善</view>
+      </view>
+      <view class="merchant-kpi-card">
+        <view class="merchant-kpi-label">履约状态</view>
+        <view class="merchant-kpi-value">查看</view>
+        <view class="merchant-kpi-desc">以后端为准</view>
+      </view>
+      <view class="merchant-kpi-card">
+        <view class="merchant-kpi-label">售后</view>
+        <view class="merchant-kpi-value">详情</view>
+        <view class="merchant-kpi-desc">二级页处理</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{ loading }}" class="merchant-loading">正在加载订单</view>
+  <view wx:elif="{{ !displayOrders.length }}" class="merchant-empty">暂无商家订单</view>
+
+  <view wx:else class="merchant-list merchant-order-list">
+    <view
+      wx:for="{{displayOrders}}"
+      wx:key="id"
+      class="merchant-section-card merchant-order-card"
+      bindtap="goDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="merchant-card-head">
+        <view class="merchant-card-title">{{ item.serviceName }}</view>
+        <view class="merchant-pill">{{ item.statusText }}</view>
+      </view>
+      <view class="merchant-card-line">客户：{{ item.customerText }}</view>
+      <view class="merchant-card-line">金额：{{ item.amountText }}</view>
+      <view class="merchant-card-action">查看详情 <text class="merchant-arrow">›</text></view>
+    </view>
+  </view>
+
+  <merchant-tab-bar active="orders"></merchant-tab-bar>
 </view>

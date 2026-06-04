@@ -1,3 +1,34 @@
-<view class="page">
-  <text>商家收益当前复用服务方收益流水，真实提现待后续阶段接入。</text>
+<view class="merchant-page merchant-income-page">
+  <view class="merchant-header">
+    <view class="merchant-title">收益</view>
+    <view class="merchant-subtitle">查看内部模拟收益口径</view>
+  </view>
+
+  <view class="merchant-section-card merchant-income-notice">
+    <view class="merchant-section-title">内部模拟流水</view>
+    <view class="merchant-section-note">
+      商家收益当前复用服务方收益展示口径，不支持真实提现、分账或自动结算。
+    </view>
+  </view>
+
+  <view class="merchant-kpi-grid">
+    <view
+      wx:for="{{summaryItems}}"
+      wx:key="label"
+      class="merchant-kpi-card"
+    >
+      <view class="merchant-kpi-label">{{ item.label }}</view>
+      <view class="merchant-kpi-value">{{ item.value }}</view>
+      <view class="merchant-kpi-desc">{{ item.desc }}</view>
+    </view>
+  </view>
+
+  <view class="merchant-section-card">
+    <view class="merchant-section-title">财务边界</view>
+    <view class="merchant-section-note">
+      当前没有真实清算、真实分账、真实提现或真实资金流水；如需进入真实资金阶段，必须另起高风险阶段。
+    </view>
+  </view>
+
+  <merchant-tab-bar active="income"></merchant-tab-bar>
 </view>

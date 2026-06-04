@@ -79,9 +79,13 @@
       <text class="admin-pill">支付：mock</text>
       <text class="admin-pill">退款：mock</text>
       <text class="admin-pill">财务：内部模拟</text>
+      <text class="admin-pill">资质：人工审核</text>
+      <text class="admin-pill">保证金：mock</text>
+      <text class="admin-pill">风控：内部模拟</text>
+      <text class="admin-pill">保险：资料留档</text>
     </view>
     <view class="boundary-desc">
-      以上模块为模拟数据，仅用于演示与测试，不涉及真实交易与资金。
+      以上模块为演示、人工审核或内部模拟能力，仅用于测试经营流程，不涉及真实交易、真实资金清算、真实认证、真实保险核验或真实合规风控。
     </view>
   </view>
 

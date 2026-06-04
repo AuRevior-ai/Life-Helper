@@ -1,8 +1,33 @@
-.page {
-  padding: 32rpx;
-  color: #1f2d2a;
+@import "../../../styles/merchant-theme.wxss";
+
+.merchant-status-hero {
+  padding: 34rpx;
+  background: linear-gradient(135deg, #ffffff 0%, #e8f1ff 100%);
 }
-text {
-  display: block;
-  margin-bottom: 16rpx;
+
+.merchant-status-label {
+  color: #1f7a68;
+  font-size: 25rpx;
+  font-weight: 800;
+  line-height: 34rpx;
+}
+
+.merchant-status-title {
+  margin-top: 12rpx;
+  color: #17231f;
+  font-size: 46rpx;
+  font-weight: 800;
+  line-height: 58rpx;
+}
+
+.merchant-status-desc {
+  margin-top: 14rpx;
+  color: #63716b;
+  font-size: 26rpx;
+  line-height: 38rpx;
+}
+
+.merchant-status-action {
+  width: 100%;
+  margin-top: 24rpx;
 }

@@ -31,15 +31,15 @@ test("phase 22C-2 development record exists and captures acceptance conclusion",
   assert.match(record, /用户端 UI 重构阶段可以收束/);
 });
 
-test("README and dev-record index are synchronized to phase 22C-2", () => {
+test("README and dev-record index keep phase 22C-2 while current phase advances", () => {
   const readme = read("README.md");
   const index = read("docs/dev-records/index.md");
 
   assert.match(readme, /阶段 22C-2：用户端 UI 收口维护/);
-  assert.match(readme, /用户端 UI 重构阶段可以收束/);
+  assert.match(readme, /阶段 23B：商家端一级页面 UI 统一/);
   assert.match(index, /22c2-user-ui-final-polish\.md/);
   assert.match(index, /阶段 22C-2：用户端 UI 收口维护/);
-  assert.match(index, /师傅端 \/ 商家端 \/ 管理端 UI 统一/);
+  assert.match(index, /23b-merchant-primary-ui\.md/);
 });
 
 test("phase 22C-2 polish pages import ui kit and use shared UI classes", () => {
