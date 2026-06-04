@@ -105,6 +105,13 @@ node --test tests/phase23b_merchant_primary_ui.test.js
 
 本轮未涉及交付包、发布清单、敏感文件或 clean candidate，未运行 `npm run check:release-risk -- <candidate-dir>`。
 
+## 提交记录
+
+- `3115f85`：feat: unify merchant primary ui。
+- `364b240`：fix: use absolute merchant theme imports。
+
+阶段 23B 已完成验收、提交并推送到 GitHub。`364b240` 用于修复微信开发者工具真机调试时商家端二级页面找不到 `../../../styles/merchant-theme.wxss` 的 WXSS 编译问题，改为从小程序根目录绝对引入 `/styles/merchant-theme.wxss`。
+
 ## 已知遗留事项
 
 - 商家端二级列表、详情、服务编辑、资质、保证金和风控页面仍保留旧页面风格，后续可单独做二级页 UI 收口。
