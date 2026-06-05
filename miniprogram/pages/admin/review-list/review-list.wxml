@@ -1,33 +1,85 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
+<view class="admin-page admin-secondary-page admin-review-list-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看平台评价并进入人工治理详情；不接入自动风控或自动处罚。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-status-card">
+    <view class="admin-section-title">状态信息</view>
+    <view class="admin-section-note">
+      评价隐藏、恢复和申诉处理均通过 review service 提交，平台审核结果以后端记录为准。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-filter-card">
+    <view class="admin-filter-title">筛选区</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill {{ index === 0 ? 'admin-filter-pill--active' : '' }}"
+      >
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
   <loading-view wx:if="{{ loading }}" text="正在加载评价"></loading-view>
-  <view wx:elif="{{ groupedReviews.length }}">
+
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
+
+  <block wx:elif="{{ groupedReviews.length }}">
     <view
       wx:for="{{ groupedReviews }}"
       wx:key="workerId"
       wx:for-item="group"
-      class="worker-group"
+      class="admin-section-card admin-group-card"
     >
-      <view class="worker-group__title">师傅：{{ group.workerName }}</view>
+      <view class="admin-section-title">用户或服务方信息</view>
+      <view class="admin-section-note">师傅：{{ group.workerName }}</view>
       <view
         wx:for="{{ group.reviews }}"
         wx:key="_id"
         wx:for-item="item"
-        class="panel list-card"
+        class="admin-list-card review-card"
         data-id="{{ item._id }}"
         bindtap="goDetail"
       >
-        <view
-          >{{ item.service_name }} · {{ item.rating }} 分 · {{ item.status
-          }}</view
-        >
-        <view class="muted">{{ item.content }}</view>
+        <view class="admin-list-card-head">
+          <view>
+            <view class="admin-card-title">{{ item.service_name || '未命名服务' }}</view>
+            <view class="admin-card-subtitle">评分：{{ item.rating }} 分</view>
+          </view>
+          <view class="admin-status-pill admin-status-pill--default">
+            {{ item.status || '已记录' }}
+          </view>
+        </view>
+        <view class="admin-detail-row admin-detail-row--stack">
+          <text class="admin-detail-label">基础信息</text>
+          <text class="admin-detail-value">{{ item.content || '暂无评价内容' }}</text>
+        </view>
+        <view class="admin-detail-row">
+          <text class="admin-detail-label">操作记录</text>
+          <text class="admin-detail-value">点击查看治理详情</text>
+        </view>
       </view>
     </view>
-  </view>
+  </block>
+
   <empty-state
     wx:else
     title="暂无评价"
     description="暂无可管理评价"
   ></empty-state>
+
+  <view class="admin-section-card admin-action-card admin-boundary-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-section-note">
+      高风险评价治理需进入详情页人工填写原因；本页不直接隐藏或恢复评价。
+    </view>
+  </view>
 </view>

@@ -1,30 +1,85 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
+<view class="admin-page admin-secondary-page admin-review-appeal-list-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      处理师傅提交的差评申诉；当前为平台人工审核，不做自动风控裁决。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-status-card">
+    <view class="admin-section-title">状态信息</view>
+    <view class="admin-section-note">
+      申诉审核结果通过 review service 提交，评价治理和状态记录以后端为准。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-filter-card">
+    <view class="admin-filter-title">筛选区</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill {{ index === 0 ? 'admin-filter-pill--active' : '' }}"
+      >
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
   <loading-view wx:if="{{ loading }}" text="正在加载申诉"></loading-view>
-  <view wx:elif="{{ groupedAppeals.length }}">
+
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
+
+  <block wx:elif="{{ groupedAppeals.length }}">
     <view
       wx:for="{{ groupedAppeals }}"
       wx:key="workerId"
       wx:for-item="group"
-      class="worker-group"
+      class="admin-section-card admin-group-card"
     >
-      <view class="worker-group__title">师傅：{{ group.workerName }}</view>
+      <view class="admin-section-title">用户或服务方信息</view>
+      <view class="admin-section-note">师傅：{{ group.workerName }}</view>
       <view
         wx:for="{{ group.appeals }}"
         wx:key="_id"
         wx:for-item="item"
-        class="panel list-card"
+        class="admin-list-card appeal-card"
         data-id="{{ item._id }}"
         bindtap="goDetail"
       >
-        <view>{{ item.reason }} · {{ item.status }}</view>
-        <view class="muted">{{ item.order_no }}</view>
+        <view class="admin-list-card-head">
+          <view>
+            <view class="admin-card-title">{{ item.reason || '申诉理由未填写' }}</view>
+            <view class="admin-card-subtitle">订单：{{ item.order_no || item.order_id || '未记录' }}</view>
+          </view>
+          <view class="admin-status-pill admin-status-pill--warning">
+            {{ item.status || '待处理' }}
+          </view>
+        </view>
+        <view class="admin-detail-row">
+          <text class="admin-detail-label">基础信息</text>
+          <text class="admin-detail-value">差评申诉</text>
+        </view>
+        <view class="admin-detail-row">
+          <text class="admin-detail-label">操作记录</text>
+          <text class="admin-detail-value">点击查看审核详情</text>
+        </view>
       </view>
     </view>
-  </view>
+  </block>
+
   <empty-state
     wx:else
     title="暂无申诉"
     description="师傅提交差评申诉后会展示在这里"
   ></empty-state>
+
+  <view class="admin-section-card admin-action-card admin-boundary-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-section-note">
+      申诉需进入详情页人工处理，本页不直接改写评价状态或处罚服务方。
+    </view>
+  </view>
 </view>

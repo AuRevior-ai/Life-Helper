@@ -125,6 +125,74 @@ UI 阶段不得新增：
 
 UI 阶段不得修改订单状态枚举、流转条件、支付状态、售后状态、退款状态和财务状态。页面只展示状态，不决定状态。
 
-## 10. 阶段结论
+## 10. 阶段 24A 全端 UI 统一性补充
+
+阶段 24A 用于全端 UI 统一性体检与设计规范收口。本阶段不开发新业务，不接入真实支付、退款、提现、分账、真实认证、OCR、保证金支付或真实风控。
+
+全端 UI 收口时必须遵守：
+
+- 用户端继续优先使用 `ui-kit.wxss`、`loading-view`、`empty-state` 和 `status-tag`。
+- 师傅端次级页面继续优先使用 `worker-subpage.wxss`。
+- 商家端页面继续优先使用 `/styles/merchant-theme.wxss`。
+- 管理员端一级页面继续优先使用 `admin-theme.wxss` 和 `admin-tab-bar`。
+- 状态标签优先使用共享 `status-tag`；本地 `.status-tag` 只允许作为待迁移遗留项记录，不应在新 UI 收口中继续扩散。
+- 主按钮和次按钮应使用胶囊形态，按钮文字必须完整显示。
+
+## 11. 管理员端二级页面 UI 收口保护清单
+
+下一阶段适合进入管理员端二级页面 UI 收口。建议优先范围：
+
+- `pages/admin/order-detail/order-detail`
+- `pages/admin/worker-audit/worker-audit`
+- `pages/admin/after-sale-list/after-sale-list`
+- `pages/admin/after-sale-detail/after-sale-detail`
+- `pages/admin/finance-log-list/finance-log-list`
+- `pages/admin/worker-earning-list/worker-earning-list`
+- `pages/admin/order-finance-detail/order-finance-detail`
+- `pages/admin/qualification-review/qualification-review`
+- `pages/admin/deposit-review/deposit-review`
+- `pages/admin/risk-control/risk-control`
+- `pages/admin/review-list/review-list`
+- `pages/admin/review-detail/review-detail`
+- `pages/admin/review-appeal-list/review-appeal-list`
+- `pages/admin/review-appeal-detail/review-appeal-detail`
+- `pages/admin/merchant-list/merchant-list`
+- `pages/admin/merchant-detail/merchant-detail`
+- `pages/admin/user-list/user-list`
+
+阶段 24B-1 已先收口以下页面：
+
+- `pages/admin/order-detail/order-detail`
+- `pages/admin/worker-audit/worker-audit`
+- `pages/admin/after-sale-list/after-sale-list`
+- `pages/admin/after-sale-detail/after-sale-detail`
+- `pages/admin/review-list/review-list`
+- `pages/admin/review-detail/review-detail`
+- `pages/admin/review-appeal-list/review-appeal-list`
+- `pages/admin/review-appeal-detail/review-appeal-detail`
+
+阶段 24B-2 建议继续处理服务 / 分类 / 区域 / 派单页面，例如 `category-list`、`category-edit`、`service-list`、`service-edit`、`area-list`、`area-edit`、`assign-worker` 和 `dispatch-logs`。
+
+管理员端二级页 UI 收口允许：
+
+- 引入 `admin-theme.wxss` 或抽取管理员二级页展示样式。
+- 将旧 `page-shell`、`panel`、本地状态标签迁移为管理员页壳、白色卡片、共享状态标签和统一操作按钮。
+- 补充 loading、empty、error 和边界说明。
+- 调整 WXML/WXSS 与少量展示字段组装 JS。
+
+管理员端二级页 UI 收口禁止：
+
+- 不得修改云函数。
+- 不得修改 `miniprogram/services/*`。
+- 不得修改 schema。
+- 不得修改订单状态机。
+- 不得修改支付、退款、财务、保证金、认证、风控核心逻辑。
+- 不得修改数据库字段语义。
+- 不得修改云函数 action 名称和返回结构。
+- 不得接入真实支付、真实退款、提现、分账、真实认证、OCR、保证金支付或真实风控。
+- 不得让前端直接决定订单完成、支付成功、退款成功或收益结算。
+- 不得把 mock、内部模拟或人工审核能力包装成真实上线能力。
+
+## 12. 阶段结论
 
 阶段 22 可以开展 UI 视觉重构，但必须在上述边界内逐页推进。任何超出展示层的改动，都应拆成独立业务阶段处理。

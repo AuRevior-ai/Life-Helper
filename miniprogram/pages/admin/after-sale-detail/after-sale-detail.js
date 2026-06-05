@@ -1,5 +1,6 @@
 const refundService = require("../../../services/refund.service");
 const {
+  AFTER_SALE_STATUS,
   AFTER_SALE_STATUS_TEXT,
   REFUND_STATUS_TEXT,
 } = require("../../../config/status");
@@ -18,6 +19,7 @@ Page({
     amountText: "¥0.00",
     adminRemark: "",
     loading: true,
+    errorText: "",
     submitting: false,
   },
 
@@ -29,7 +31,7 @@ Page({
   },
 
   async loadDetail() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await refundService.getAfterSaleDetail({
         afterSaleId: this.data.afterSaleId,
@@ -46,9 +48,12 @@ Page({
           REFUND_STATUS_TEXT[order.refund_status || "none"] || "未退款",
         amountText: formatPrice(afterSale.amount),
         adminRemark: afterSale.admin_remark || "",
+        canReview: afterSale.status === AFTER_SALE_STATUS.PENDING,
       });
     } catch (error) {
-      showError(error.message || "售后详情加载失败");
+      const errorText = error.message || "售后详情加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }
@@ -69,7 +74,9 @@ Page({
         reviewStatus,
         adminRemark: this.data.adminRemark,
       });
-      showSuccess(reviewStatus === "approved" ? "已通过并退款" : "已拒绝");
+      showSuccess(
+        reviewStatus === "approved" ? "已提交模拟退款处理" : "已拒绝",
+      );
       this.loadDetail();
     } catch (error) {
       showError(error.message || "审核失败");

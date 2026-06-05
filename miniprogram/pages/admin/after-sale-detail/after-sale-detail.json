@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "售后审核"
+  "navigationBarTitleText": "售后审核",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

@@ -29,14 +29,21 @@ function groupReviewsByWorker(reviews = []) {
 }
 
 Page({
-  data: { title: "评价管理", reviews: [], groupedReviews: [], loading: true },
+  data: {
+    title: "评价管理",
+    reviews: [],
+    groupedReviews: [],
+    filterPills: ["全部评价", "按师傅分组", "人工治理"],
+    loading: true,
+    errorText: "",
+  },
 
   onShow() {
     this.loadReviews();
   },
 
   async loadReviews() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await reviewService.adminGetReviewList();
       const reviews = data.reviews || [];
@@ -45,7 +52,9 @@ Page({
         groupedReviews: groupReviewsByWorker(reviews),
       });
     } catch (error) {
-      showError(error.message || "评价加载失败");
+      const errorText = error.message || "评价加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

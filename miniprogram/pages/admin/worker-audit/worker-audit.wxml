@@ -1,52 +1,87 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >审核待入驻师傅，通过后用户角色会更新为师傅</view
-    >
+<view class="admin-page admin-secondary-page admin-worker-audit-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      处理师傅入驻申请；当前为人工审核流程，不接入真实身份认证或自动风控。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-status-card">
+    <view class="admin-section-title">状态信息</view>
+    <view class="admin-section-note">
+      审核结果通过原有 worker service 提交，角色更新和权限变化以后端为准。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-filter-card">
+    <view class="admin-filter-title">筛选区</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill {{ index === 0 ? 'admin-filter-pill--active' : '' }}"
+      >
+        {{ item }}
+      </view>
+    </view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载申请"></loading-view>
 
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
+
   <block wx:elif="{{ workers.length }}">
-    <view wx:for="{{ workers }}" wx:key="_id" class="worker-card panel">
-      <view class="worker-card__top">
+    <view
+      wx:for="{{ workers }}"
+      wx:key="_id"
+      class="admin-section-card admin-list-card worker-card"
+    >
+      <view class="admin-list-card-head">
         <view>
-          <view class="worker-name">{{ item.name }}</view>
-          <view class="worker-phone">{{ item.phone }}</view>
+          <view class="admin-card-title">{{ item.name }}</view>
+          <view class="admin-card-subtitle">{{ item.phone }}</view>
         </view>
-        <view class="audit-tag">待审核</view>
+        <view class="admin-status-pill admin-status-pill--warning">待审核</view>
       </view>
-      <view class="worker-line">服务分类：{{ item.service_category }}</view>
-      <view class="worker-line">服务区域：{{ item.service_area }}</view>
-      <view wx:if="{{ item.intro }}" class="worker-intro"
-        >{{ item.intro }}</view
-      >
-      <view class="worker-actions">
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">基础信息</text>
+        <text class="admin-detail-value">{{ item.service_category || '未填写服务分类' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">用户或服务方信息</text>
+        <text class="admin-detail-value">{{ item.service_area || '未填写服务区域' }}</text>
+      </view>
+      <view class="admin-detail-row admin-detail-row--stack">
+        <text class="admin-detail-label">操作记录</text>
+        <text class="admin-detail-value">{{ item.intro || '暂无申请说明' }}</text>
+      </view>
+      <view class="admin-action-card worker-actions">
         <button
-          class="text-button"
+          class="admin-outline-button"
           data-id="{{ item._id }}"
           bindtap="goWorkerDetail"
         >
           查看详情
         </button>
         <button
-          class="text-button"
+          class="admin-action-button"
           data-id="{{ item._id }}"
           loading="{{ submittingId === item._id }}"
           disabled="{{ submittingId === item._id }}"
           bindtap="approveWorker"
         >
-          通过
+          人工通过
         </button>
         <button
-          class="text-button danger"
+          class="admin-danger-button"
           data-id="{{ item._id }}"
           loading="{{ submittingId === item._id }}"
           disabled="{{ submittingId === item._id }}"
           bindtap="rejectWorker"
         >
-          拒绝
+          人工拒绝
         </button>
       </view>
     </view>
@@ -57,4 +92,11 @@
     title="暂无待审核师傅"
     description="新的入驻申请会显示在这里"
   ></empty-state>
+
+  <view class="admin-section-card admin-action-card admin-boundary-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-section-note">
+      本页只提供人工审核入口，不代表真实身份认证、OCR 或自动风控已经接入。
+    </view>
+  </view>
 </view>

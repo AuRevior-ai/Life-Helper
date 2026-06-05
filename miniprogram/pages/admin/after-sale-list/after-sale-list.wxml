@@ -1,26 +1,68 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">审核用户售后申请并处理模拟退款</view>
+<view class="admin-page admin-secondary-page admin-after-sale-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      审核用户售后申请并触发模拟退款流程；不产生真实微信退款。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-status-card">
+    <view class="admin-section-title">状态信息</view>
+    <view class="admin-section-note">
+      售后审核、退款状态和订单回冲均以后端处理结果为准，页面只展示和提交审核意见。
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-filter-card">
+    <view class="admin-filter-title">筛选区</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ statusFilters }}"
+        wx:key="value"
+        class="admin-filter-pill {{ status === item.value ? 'admin-filter-pill--active' : '' }}"
+        data-status="{{ item.value }}"
+        bindtap="onStatusFilterTap"
+      >
+        {{ item.label }}
+      </view>
+    </view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载售后"></loading-view>
+
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
 
   <block wx:elif="{{ afterSales.length }}">
     <view
       wx:for="{{ afterSales }}"
       wx:key="_id"
-      class="after-sale-card panel"
+      class="admin-section-card admin-list-card after-sale-card"
       data-id="{{ item._id }}"
       bindtap="goDetail"
     >
-      <view class="card-top">
-        <view class="card-title">{{ item.after_sale_no }}</view>
-        <view class="card-status">{{ item.statusText }}</view>
+      <view class="admin-list-card-head">
+        <view>
+          <view class="admin-card-title">{{ item.after_sale_no }}</view>
+          <view class="admin-card-subtitle">订单：{{ item.order_no }}</view>
+        </view>
+        <view class="admin-status-pill admin-status-pill--warning">
+          {{ item.statusText }}
+        </view>
       </view>
-      <view class="card-line">订单：{{ item.order_no }}</view>
-      <view class="card-line">金额：{{ item.amountText }}</view>
-      <view class="card-line">原因：{{ item.reason }}</view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">基础信息</text>
+        <text class="admin-detail-value">{{ item.reason || '未填写原因' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">状态信息</text>
+        <text class="admin-detail-value">{{ item.amountText }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">操作记录</text>
+        <text class="admin-detail-value">点击查看审核详情</text>
+      </view>
     </view>
   </block>
 
@@ -29,4 +71,11 @@
     title="暂无售后申请"
     description="用户提交后会显示在这里"
   ></empty-state>
+
+  <view class="admin-section-card admin-action-card admin-boundary-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-section-note">
+      高风险售后处理需进入详情页人工确认；本页不直接判定退款成功。
+    </view>
+  </view>
 </view>

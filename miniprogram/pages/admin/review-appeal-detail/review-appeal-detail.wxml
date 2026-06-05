@@ -1,34 +1,98 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
-  <view wx:if="{{ appeal }}" class="panel">
-    <view class="info-row"
-      ><text>申诉理由</text><text>{{ appeal.reason }}</text></view
-    >
-    <view class="info-row"
-      ><text>状态</text><text>{{ appeal.status }}</text></view
-    >
-    <textarea
-      class="form-textarea"
-      placeholder="审核备注"
-      bindinput="onRemarkInput"
-    ></textarea>
-    <button
-      class="primary-button"
-      data-result="approved"
-      bindtap="reviewAppeal"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-    >
-      通过申诉
-    </button>
-    <button
-      class="ghost-button"
-      data-result="rejected"
-      bindtap="reviewAppeal"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-    >
-      拒绝申诉
-    </button>
+<view class="admin-page admin-secondary-page admin-review-appeal-detail-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      平台人工复核差评申诉；处理结果以后端记录为准，不做自动风控裁决。
+    </view>
   </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载申诉"></loading-view>
+
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
+
+  <block wx:elif="{{ appeal }}">
+    <view class="admin-section-card admin-status-card">
+      <view class="admin-section-head">
+        <view>
+          <view class="admin-section-title">状态信息</view>
+          <view class="admin-section-note">申诉 ID：{{ appeal._id }}</view>
+        </view>
+        <view class="admin-status-pill admin-status-pill--warning">
+          {{ appeal.status || '待处理' }}
+        </view>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-info-card">
+      <view class="admin-section-title">基础信息</view>
+      <view class="admin-detail-row admin-detail-row--stack">
+        <text class="admin-detail-label">申诉理由</text>
+        <text class="admin-detail-value">{{ appeal.reason || '暂无申诉理由' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">订单号</text>
+        <text class="admin-detail-value">{{ appeal.order_no || appeal.order_id || '未记录' }}</text>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-info-card">
+      <view class="admin-section-title">用户或服务方信息</view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">师傅</text>
+        <text class="admin-detail-value">{{ appeal.worker_name || appeal.worker_id || '未记录' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">评价</text>
+        <text class="admin-detail-value">{{ appeal.review_id || '未记录' }}</text>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-log-card">
+      <view class="admin-section-title">操作记录</view>
+      <view class="admin-section-note">
+        申诉处理日志由后端记录，本页仅提交人工审核结论和备注。
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-action-card">
+      <view class="admin-section-title">管理操作</view>
+      <view class="admin-section-note">
+        请填写平台审核备注。通过或拒绝均调用既有 review service，不由前端直接裁决风控。
+      </view>
+      <textarea
+        class="admin-form-textarea"
+        placeholder="审核备注"
+        value="{{ adminRemark }}"
+        bindinput="onRemarkInput"
+      ></textarea>
+      <view class="admin-action-row">
+        <button
+          class="admin-action-button"
+          data-result="approved"
+          bindtap="reviewAppeal"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+        >
+          人工通过申诉
+        </button>
+        <button
+          class="admin-danger-button"
+          data-result="rejected"
+          bindtap="reviewAppeal"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+        >
+          人工拒绝申诉
+        </button>
+      </view>
+    </view>
+  </block>
+
+  <empty-state
+    wx:else
+    title="申诉不存在"
+    description="请返回申诉列表重新查看"
+  ></empty-state>
 </view>

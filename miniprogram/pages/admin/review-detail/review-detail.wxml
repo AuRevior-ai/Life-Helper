@@ -1,35 +1,100 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
-  <view wx:if="{{ review }}" class="panel">
-    <view class="info-row"
-      ><text>评分</text><text>{{ review.rating }} 分</text></view
-    >
-    <view class="info-row"
-      ><text>状态</text><text>{{ review.status }}</text></view
-    >
-    <view class="info-row"
-      ><text>内容</text><text>{{ review.content }}</text></view
-    >
-    <textarea
-      class="form-textarea"
-      placeholder="管理原因"
-      bindinput="onReasonInput"
-    ></textarea>
-    <button
-      class="primary-button"
-      bindtap="hideReview"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-    >
-      隐藏评价
-    </button>
-    <button
-      class="ghost-button"
-      bindtap="restoreReview"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-    >
-      恢复评价
-    </button>
+<view class="admin-page admin-secondary-page admin-review-detail-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看评价详情并执行人工治理；隐藏或恢复结果由 review service 和后端日志确认。
+    </view>
   </view>
+
+  <loading-view wx:if="{{ loading }}" text="正在加载评价"></loading-view>
+
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
+
+  <block wx:elif="{{ review }}">
+    <view class="admin-section-card admin-status-card">
+      <view class="admin-section-head">
+        <view>
+          <view class="admin-section-title">状态信息</view>
+          <view class="admin-section-note">评价 ID：{{ review._id }}</view>
+        </view>
+        <view class="admin-status-pill admin-status-pill--default">
+          {{ review.status || '已记录' }}
+        </view>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-info-card">
+      <view class="admin-section-title">基础信息</view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">评分</text>
+        <text class="admin-detail-value">{{ review.rating }} 分</text>
+      </view>
+      <view class="admin-detail-row admin-detail-row--stack">
+        <text class="admin-detail-label">内容</text>
+        <text class="admin-detail-value">{{ review.content || '暂无评价内容' }}</text>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-info-card">
+      <view class="admin-section-title">用户或服务方信息</view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">订单号</text>
+        <text class="admin-detail-value">{{ review.order_no || review.order_id || '未记录' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">服务</text>
+        <text class="admin-detail-value">{{ review.service_name || '未记录' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">师傅</text>
+        <text class="admin-detail-value">{{ review.worker_name || review.worker_id || '未记录' }}</text>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-log-card">
+      <view class="admin-section-title">操作记录</view>
+      <view class="admin-section-note">
+        评价治理日志由后端记录，页面仅展示当前评价快照和提交人工原因。
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-action-card">
+      <view class="admin-section-title">管理操作</view>
+      <view class="admin-section-note">
+        请填写人工治理原因。隐藏或恢复不等于自动处罚，也不代表真实风控已上线。
+      </view>
+      <textarea
+        class="admin-form-textarea"
+        placeholder="管理原因"
+        value="{{ reason }}"
+        bindinput="onReasonInput"
+      ></textarea>
+      <view class="admin-action-row">
+        <button
+          class="admin-danger-button"
+          bindtap="hideReview"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+        >
+          人工隐藏评价
+        </button>
+        <button
+          class="admin-outline-button"
+          bindtap="restoreReview"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+        >
+          恢复评价展示
+        </button>
+      </view>
+    </view>
+  </block>
+
+  <empty-state
+    wx:else
+    title="评价不存在"
+    description="请返回评价列表重新查看"
+  ></empty-state>
 </view>

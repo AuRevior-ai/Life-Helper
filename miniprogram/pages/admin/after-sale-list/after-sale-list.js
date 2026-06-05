@@ -1,7 +1,17 @@
 const refundService = require("../../../services/refund.service");
-const { AFTER_SALE_STATUS_TEXT } = require("../../../config/status");
+const {
+  AFTER_SALE_STATUS,
+  AFTER_SALE_STATUS_TEXT,
+} = require("../../../config/status");
 const { formatPrice } = require("../../../utils/format");
 const { showError } = require("../../../utils/toast");
+
+const STATUS_FILTERS = [
+  { label: "全部", value: "" },
+  { label: "待审核", value: AFTER_SALE_STATUS.PENDING },
+  { label: "已通过", value: AFTER_SALE_STATUS.APPROVED },
+  { label: "已拒绝", value: AFTER_SALE_STATUS.REJECTED },
+];
 
 function mapAfterSale(afterSale) {
   return {
@@ -16,7 +26,9 @@ Page({
     title: "售后管理",
     afterSales: [],
     status: "",
+    statusFilters: STATUS_FILTERS,
     loading: true,
+    errorText: "",
   },
 
   onShow() {
@@ -24,7 +36,7 @@ Page({
   },
 
   async loadAfterSales() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await refundService.adminGetAfterSaleList({
         status: this.data.status,
@@ -33,10 +45,19 @@ Page({
         afterSales: (data.afterSales || []).map(mapAfterSale),
       });
     } catch (error) {
-      showError(error.message || "售后列表加载失败");
+      const errorText = error.message || "售后列表加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }
+  },
+
+  onStatusFilterTap(event) {
+    const status = event.currentTarget.dataset.status || "";
+    if (status === this.data.status) return;
+    this.setData({ status });
+    this.loadAfterSales();
   },
 
   goDetail(event) {

@@ -1,65 +1,120 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >审核通过后将立即执行模拟退款，不产生真实退款。</view
-    >
+<view class="admin-page admin-secondary-page admin-after-sale-detail-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      人工审核售后申请；审核通过后触发模拟退款，不产生真实退款，也不代表真实微信退款已完成。
+    </view>
   </view>
 
   <loading-view wx:if="{{ loading }}" text="正在加载售后"></loading-view>
 
+  <view wx:elif="{{ errorText }}" class="admin-section-card admin-error-card">
+    {{ errorText }}
+  </view>
+
   <block wx:elif="{{ afterSale }}">
-    <view class="panel detail-panel">
-      <view class="detail-row"
-        ><text>售后单号</text><text>{{ afterSale.after_sale_no }}</text></view
-      >
-      <view class="detail-row"
-        ><text>订单号</text><text>{{ afterSale.order_no }}</text></view
-      >
-      <view class="detail-row"
-        ><text>状态</text><text>{{ statusText }}</text></view
-      >
-      <view class="detail-row"
-        ><text>退款状态</text><text>{{ refundStatusText }}</text></view
-      >
-      <view class="detail-row"
-        ><text>退款金额</text><text>{{ amountText }}</text></view
-      >
-      <view class="detail-row"
-        ><text>原因</text><text>{{ afterSale.reason }}</text></view
-      >
+    <view class="admin-section-card admin-status-card">
+      <view class="admin-section-head">
+        <view>
+          <view class="admin-section-title">状态信息</view>
+          <view class="admin-section-note">{{ afterSale.after_sale_no }}</view>
+        </view>
+        <view class="admin-status-pill admin-status-pill--warning">{{ statusText }}</view>
+      </view>
+      <view class="admin-status-grid">
+        <view class="admin-status-item">
+          <view class="admin-status-label">退款状态</view>
+          <view class="admin-status-value">{{ refundStatusText }}</view>
+        </view>
+        <view class="admin-status-item">
+          <view class="admin-status-label">申请金额</view>
+          <view class="admin-status-value admin-amount">{{ amountText }}</view>
+        </view>
+      </view>
     </view>
 
-    <view class="panel remark-panel">
-      <view class="form-label">审核备注</view>
+    <view class="admin-section-card admin-info-card">
+      <view class="admin-section-title">基础信息</view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">售后单号</text>
+        <text class="admin-detail-value">{{ afterSale.after_sale_no }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">订单号</text>
+        <text class="admin-detail-value">{{ afterSale.order_no }}</text>
+      </view>
+      <view class="admin-detail-row admin-detail-row--stack">
+        <text class="admin-detail-label">原因</text>
+        <text class="admin-detail-value">{{ afterSale.reason }}</text>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-info-card">
+      <view class="admin-section-title">用户或服务方信息</view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">订单服务</text>
+        <text class="admin-detail-value">{{ order.service_name || '未记录' }}</text>
+      </view>
+      <view class="admin-detail-row">
+        <text class="admin-detail-label">联系人</text>
+        <text class="admin-detail-value">{{ order.contact_name || '未记录' }}</text>
+      </view>
+      <view class="admin-detail-row admin-detail-row--stack">
+        <text class="admin-detail-label">服务地址</text>
+        <text class="admin-detail-value">{{ order.full_address || '未记录' }}</text>
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-log-card">
+      <view class="admin-section-title">操作记录</view>
+      <view class="admin-section-note">
+        退款日志来自后端返回，当前只展示最近记录，不在前端生成真实退款状态。
+      </view>
+      <view wx:if="{{ refundLogs.length }}">
+        <view
+          wx:for="{{ refundLogs }}"
+          wx:key="_id"
+          class="admin-log-row"
+        >
+          <text>{{ item.status || item.refund_status || '记录' }}</text>
+          <text>{{ item.created_at || item.create_time || '' }}</text>
+        </view>
+      </view>
+      <view wx:else class="admin-section-note">暂无退款日志</view>
+    </view>
+
+    <view class="admin-section-card admin-action-card">
+      <view class="admin-section-title">管理操作</view>
+      <view class="admin-section-note">
+        请填写人工审核意见。通过后仅触发既有模拟退款流程，真实资金仍未接入。
+      </view>
       <textarea
+        class="admin-form-textarea"
         value="{{ adminRemark }}"
         bindinput="handleRemarkInput"
         placeholder="填写审核意见"
       ></textarea>
+      <view wx:if="{{ canReview }}" class="admin-action-row">
+        <button
+          class="admin-action-button"
+          data-status="approved"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+          bindtap="reviewAfterSale"
+        >
+          通过并触发模拟退款
+        </button>
+        <button
+          class="admin-danger-button"
+          data-status="rejected"
+          loading="{{ submitting }}"
+          disabled="{{ submitting }}"
+          bindtap="reviewAfterSale"
+        >
+          拒绝申请
+        </button>
+      </view>
     </view>
-
-    <button
-      wx:if="{{ afterSale.status === 'pending' }}"
-      class="primary-button"
-      data-status="approved"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-      bindtap="reviewAfterSale"
-    >
-      通过并模拟退款
-    </button>
-
-    <button
-      wx:if="{{ afterSale.status === 'pending' }}"
-      class="ghost-button"
-      data-status="rejected"
-      loading="{{ submitting }}"
-      disabled="{{ submitting }}"
-      bindtap="reviewAfterSale"
-    >
-      拒绝申请
-    </button>
   </block>
 
   <empty-state

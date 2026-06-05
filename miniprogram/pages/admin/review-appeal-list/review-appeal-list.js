@@ -29,14 +29,21 @@ function groupAppealsByWorker(appeals = []) {
 }
 
 Page({
-  data: { title: "差评申诉", appeals: [], groupedAppeals: [], loading: true },
+  data: {
+    title: "差评申诉",
+    appeals: [],
+    groupedAppeals: [],
+    filterPills: ["全部申诉", "按师傅分组", "平台审核"],
+    loading: true,
+    errorText: "",
+  },
 
   onShow() {
     this.loadAppeals();
   },
 
   async loadAppeals() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await reviewService.adminGetReviewAppealList();
       const appeals = data.appeals || [];
@@ -45,7 +52,9 @@ Page({
         groupedAppeals: groupAppealsByWorker(appeals),
       });
     } catch (error) {
-      showError(error.message || "申诉加载失败");
+      const errorText = error.message || "申诉加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

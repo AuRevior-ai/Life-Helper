@@ -1,27 +1,124 @@
-.after-sale-card {
-  margin-bottom: 20rpx;
+@import "../../../styles/admin-theme.wxss";
+
+.admin-secondary-page,
+.admin-secondary-page view,
+.admin-secondary-page text,
+.admin-secondary-page button,
+.admin-secondary-page loading-view,
+.admin-secondary-page empty-state {
+  box-sizing: border-box;
 }
 
-.card-top {
+.admin-secondary-page {
+  overflow-x: hidden;
+  padding: calc(112rpx + env(safe-area-inset-top)) 40rpx
+    calc(120rpx + env(safe-area-inset-bottom));
+}
+
+.admin-section-note {
+  margin-top: 10rpx;
+  color: #667085;
+  font-size: 25rpx;
+  line-height: 36rpx;
+}
+
+.admin-status-card {
+  border: 1rpx solid #dceee7;
+  background: #f8fffb;
+}
+
+.admin-filter-title {
+  color: #111827;
+  font-size: 28rpx;
+  font-weight: 800;
+  line-height: 38rpx;
+}
+
+.admin-filter-row {
   display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 18rpx;
+}
+
+.admin-filter-pill,
+.admin-status-pill {
+  display: inline-flex;
+  height: 48rpx;
+  padding: 0 18rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999rpx;
+  font-size: 24rpx;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.admin-filter-pill {
+  background: #f2f4f7;
+  color: #667085;
+}
+
+.admin-filter-pill--active {
+  background: #eaf8e8;
+  color: #16a34a;
+}
+
+.admin-status-pill--warning {
+  background: #fff2df;
+  color: #f08a12;
+}
+
+.admin-list-card-head {
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 20rpx;
 }
 
-.card-title {
-  color: #1f2d2a;
-  font-size: 30rpx;
+.admin-card-title {
+  color: #111827;
+  font-size: 32rpx;
   font-weight: 800;
+  line-height: 42rpx;
 }
 
-.card-status {
-  color: #1f7a68;
+.admin-card-subtitle,
+.admin-detail-label {
+  color: #667085;
   font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.admin-card-subtitle {
+  margin-top: 8rpx;
+}
+
+.admin-detail-row {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 24rpx;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid #edf0f2;
+}
+
+.admin-detail-row:last-child {
+  border-bottom: 0;
+}
+
+.admin-detail-value {
+  flex: 1;
+  min-width: 0;
+  color: #111827;
+  font-size: 27rpx;
   font-weight: 700;
+  line-height: 38rpx;
+  text-align: right;
 }
 
-.card-line {
-  margin-top: 12rpx;
-  color: #64716d;
-  font-size: 24rpx;
+.admin-error-card {
+  color: #b42318;
+  font-size: 27rpx;
+  line-height: 40rpx;
 }

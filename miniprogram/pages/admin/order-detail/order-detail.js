@@ -2,6 +2,7 @@ const adminService = require("../../../services/admin.service");
 const dispatchService = require("../../../services/dispatch.service");
 const { ORDER_STATUS, ORDER_STATUS_TEXT } = require("../../../config/status");
 const { formatOrderStatus, formatPrice } = require("../../../utils/format");
+const { getStatusView } = require("../../../utils/status-view");
 const { showError, showSuccess } = require("../../../utils/toast");
 
 const STATUS_OPTIONS = Object.values(ORDER_STATUS).map((status) => ({
@@ -10,10 +11,23 @@ const STATUS_OPTIONS = Object.values(ORDER_STATUS).map((status) => ({
 }));
 
 function mapOrder(order = {}) {
+  const statusView = getStatusView("order", order.status);
   return {
     ...order,
     statusText: formatOrderStatus(order.status),
+    statusTone: `admin-status-pill--${statusView.tone}`,
+    payStatusText: order.pay_status || "未记录",
+    refundStatusText: order.refund_status || "未记录",
     priceText: formatPrice(order.price),
+    orderNo: order.order_no || order._id || "未生成",
+    serviceName: order.service_name || "未命名服务",
+    contactText: [order.contact_name, order.contact_phone].filter(Boolean).join(" ") || "未填写",
+    addressText: order.full_address || "未填写",
+    appointmentText: order.appointment_time || "未填写",
+    workerText: order.worker_id || "暂未指派",
+    finishRemarkText: order.finish_remark || "暂无完工说明",
+    canAssign: order.status === ORDER_STATUS.PENDING_ACCEPT,
+    canUnassign: order.status === ORDER_STATUS.ACCEPTED,
   };
 }
 
@@ -27,6 +41,7 @@ Page({
     selectedStatusIndex: 0,
     selectedStatusText: STATUS_OPTIONS[0].label,
     loading: true,
+    errorText: "",
     submitting: false,
   },
 
@@ -37,11 +52,12 @@ Page({
 
   async loadOrder() {
     if (!this.data.orderId) {
+      this.setData({ loading: false, errorText: "缺少订单 ID" });
       showError("缺少订单 ID");
       return;
     }
 
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await adminService.getOrderDetail({
         orderId: this.data.orderId,
@@ -57,7 +73,9 @@ Page({
         selectedStatusText: STATUS_OPTIONS[selectedStatusIndex].label,
       });
     } catch (error) {
-      showError(error.message || "订单详情加载失败");
+      const errorText = error.message || "订单详情加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

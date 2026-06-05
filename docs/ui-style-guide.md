@@ -1,4 +1,4 @@
-# 用户端 UI 风格规范
+# 全端 UI 风格规范
 
 本文档用于阶段 22C-0：UI 风格提取与设计规范沉淀。视觉基准只来自三个已完成 UI 重构的用户端主页面：
 
@@ -7,6 +7,8 @@
 - 我的：`miniprogram/pages/profile/profile`
 
 阶段 22C-1 及后续用户端页面 UI 重构，应先遵守本文档和 `docs/ui-refactor-guardrails.md`，再按页面实际内容做局部调整。
+
+阶段 24A 将本文档扩展为全端 UI 统一性体检与设计规范收口文档。后续用户端、师傅端、商家端、管理员端页面都应优先遵守本规范，再结合角色主题做局部差异化。
 
 ## 1. 设计方向
 
@@ -233,3 +235,101 @@ UI 阶段不得新增或修改以下业务能力：
 - 合伙人系统
 
 不得修改 cloudfunctions、services、订单状态机、支付、退款、财务、派单、资质、保证金和 LBS 核心逻辑。
+
+## 12. 阶段 24A 全端 UI 统一性体检
+
+阶段 24A 的目标是记录已经完成 UI 重构的页面、沉淀全端共用规则，并为后续管理员端二级页面收口建立保护清单。本阶段不开发新业务，不接入真实支付、退款、提现、分账、真实认证、OCR、保证金支付或真实风控。
+
+设计系统方向采用“可访问、克制、可重复操作”的运营型小程序界面：高对比文字、稳定触控尺寸、清晰层级、浅灰背景、白色卡片、胶囊按钮和明确状态反馈。角色端可以保留不同主题色和导航结构，但页面结构、状态表达和操作反馈应一致。
+
+### 12.1 用户端已完成 UI 重构页面
+
+| 页面组 | 页面 |
+| ---- | ---- |
+| 一级与基准页 | `pages/index/index`、`pages/order-list/order-list`、`pages/profile/profile` |
+| 服务与交易 | `pages/service-list/service-list`、`pages/service-detail/service-detail`、`pages/order-submit/order-submit`、`pages/order-detail/order-detail`、`pages/pay-result/pay-result` |
+| 账户与消息 | `pages/address-list/address-list`、`pages/address-edit/address-edit`、`pages/message-list/message-list`、`pages/profile-edit/profile-edit` |
+| 营销与会员 | `pages/coupon/list/list`、`pages/coupon/receive/receive`、`pages/member/center/center` |
+| 售后与评价 | `pages/after-sale/apply/apply`、`pages/after-sale/detail/detail`、`pages/review/review`、`pages/review/detail/detail`、`pages/review/followup/followup` |
+| 补充用户可访问页 | `pages/worker-detail/worker-detail`、`pages/tip/create/create`、`pages/map/pick-location/pick-location`、`pages/merchant/store-list/store-list`、`pages/merchant/store-detail/store-detail` |
+
+用户端页面优先使用 `miniprogram/styles/ui-kit.wxss`，加载态和空状态优先使用 `loading-view` 与 `empty-state`，复杂状态优先使用 `status-tag`。
+
+### 12.2 师傅端已完成 UI 重构页面
+
+| 页面组 | 页面 |
+| ---- | ---- |
+| 一级页 | `pages/worker/order-hall/order-hall`、`pages/worker/order-list/order-list`、`pages/worker/profile/profile` |
+| 次级页 | `pages/worker/order-detail/order-detail`、`pages/worker/income/income`、`pages/worker/review-list/review-list`、`pages/worker/review-detail/review-detail`、`pages/worker/apply/apply`、`pages/worker/audit-status/audit-status`、`pages/worker/tip-list/tip-list` |
+| 服务范围 | `pages/provider/service-range/service-range` |
+
+师傅端一级页使用 `worker-tab-bar`，次级页优先使用 `miniprogram/styles/worker-subpage.wxss`。收益、评价、服务范围等页面必须继续说明内部模拟、人工审核、基础 LBS 边界。
+
+### 12.3 商家端已完成 UI 重构页面
+
+| 页面组 | 页面 |
+| ---- | ---- |
+| 一级页 | `pages/merchant/profile/profile`、`pages/merchant/order-list/order-list`、`pages/merchant/service-list/service-list`、`pages/merchant/income/income`、`pages/merchant/audit-status/audit-status` |
+| 二级页 | `pages/merchant/apply/apply`、`pages/merchant/service-edit/service-edit`、`pages/merchant/order-detail/order-detail`、`pages/merchant/qualification/qualification`、`pages/merchant/deposit/deposit`、`pages/merchant/risk-status/risk-status` |
+
+商家端页面优先使用 `/styles/merchant-theme.wxss` 绝对路径，并保留 mock 保证金、资料留档、人工审核和内部模拟风控边界。`store-list` 与 `store-detail` 是用户访问商家店铺浏览页，仍归入用户端补充页面样式。
+
+### 12.4 管理员端已完成 UI 重构页面
+
+| 页面组 | 页面 |
+| ---- | ---- |
+| 一级聚合页 | `pages/admin/dashboard/dashboard`、`pages/admin/order-list/order-list`、`pages/admin/review-center/review-center`、`pages/admin/operation-center/operation-center`、`pages/admin/profile/profile` |
+| 24B-1 二级页 | `pages/admin/order-detail/order-detail`、`pages/admin/worker-audit/worker-audit`、`pages/admin/after-sale-list/after-sale-list`、`pages/admin/after-sale-detail/after-sale-detail`、`pages/admin/review-list/review-list`、`pages/admin/review-detail/review-detail`、`pages/admin/review-appeal-list/review-appeal-list`、`pages/admin/review-appeal-detail/review-appeal-detail` |
+
+管理员端一级页使用 `admin-tab-bar` 和 `miniprogram/styles/admin-theme.wxss`。阶段 24B-1 起，管理员二级页按小批次迁移到 `admin-page`、`admin-header`、`admin-section-card`、`admin-status-card`、`admin-filter-card`、`admin-list-card` 和 `admin-action-card` 结构；页面必须保留人工审核、mock 退款、内部模拟和后端为准的能力边界说明。
+
+### 12.5 全端统一规则
+
+| 检查项 | 规则 |
+| ---- | ---- |
+| 页面壳 | 页面必须有明确角色壳：用户端 `ui-page`，师傅次级页 `worker-subpage`，商家端 `merchant-page`，管理员一级页 `admin-page`。 |
+| 背景色 | 使用浅灰或轻微角色色相浅底，不使用大面积深色背景，不使用单一高饱和色铺满页面。 |
+| 卡片 | 信息分组优先使用白色圆角卡片，圆角通常为 `24rpx` - `32rpx`，阴影柔和，不做嵌套卡片堆叠。 |
+| 标题 | 页面标题与副标题形成稳定头部；二级页应说明页面任务和真实能力边界。 |
+| 按钮 | 主按钮、次按钮、底部操作按钮使用胶囊形态 `border-radius: 999rpx`，固定高度，文字不换行不溢出。 |
+| 状态标签 | 状态优先使用 `getStatusView(type, status)` 和 `status-tag`；角色本地 pill 仅用于非状态的分类/说明。 |
+| 空状态 | 列表为空优先使用 `empty-state` 或角色主题空态，文案给出下一步。 |
+| 加载态 | 优先使用 `loading-view`，商家端可使用 `merchant-loading`，避免加载时误显示空数据。 |
+| 错误态 | 错误态应使用轻量卡片或角色主题错误态，避免只弹 toast 后页面空白。 |
+| 底部操作栏 | 交易或审核类页面可使用固定底部操作栏；按钮数量控制在 1-2 个主操作，危险操作必须降级为次级或警示样式。 |
+
+### 12.6 本轮 UI 问题清单
+
+| 优先级 | 问题 | 处理 |
+| ---- | ---- | ---- |
+| P1 | 管理员端二级页面仍多为旧 `page-shell` / `panel` 风格，与管理员一级页不一致。 | 记录为下一阶段主要范围。 |
+| P1 | 管理员端部分二级页仍使用本地 `.status-tag`，尚未统一到共享 `status-tag`。 | 下一阶段迁移，避免本轮大范围重写。 |
+| P2 | 商家端和管理员端主题主按钮圆角曾为 `16rpx`，与全端胶囊按钮规则不一致。 | 阶段 24A 已修复为 `999rpx`。 |
+| P2 | 商家端错误态使用角色内置 `merchant-error`，用户/师傅/管理员多为页面内提示，错误态还未完全组件化。 | 暂不修复，后续按角色逐页收敛。 |
+| P2 | 本轮未做真机截图验收，宽屏或极窄屏细节仍需人工抽查。 | 保留为后续视觉 QA 项。 |
+
+### 12.7 管理员端二级页面下一阶段建议
+
+阶段 24B-1 已进入管理员端二级页面 UI 收口，第一批处理：
+
+1. `pages/admin/order-detail/order-detail`
+2. `pages/admin/worker-audit/worker-audit`
+3. `pages/admin/after-sale-list/after-sale-list`
+4. `pages/admin/after-sale-detail/after-sale-detail`
+5. `pages/admin/review-list/review-list`
+6. `pages/admin/review-detail/review-detail`
+7. `pages/admin/review-appeal-list/review-appeal-list`
+8. `pages/admin/review-appeal-detail/review-appeal-detail`
+
+下一批 24B-2 建议处理：
+
+1. `pages/admin/category-list/category-list`
+2. `pages/admin/category-edit/category-edit`
+3. `pages/admin/service-list/service-list`
+4. `pages/admin/service-edit/service-edit`
+5. `pages/admin/area-list/area-list`
+6. `pages/admin/area-edit/area-edit`
+7. `pages/admin/assign-worker/assign-worker`
+8. `pages/admin/dispatch-logs/dispatch-logs`
+
+管理员二级页收口必须继续禁止修改云函数、services、schema、订单状态机、支付、退款、财务、保证金、认证、风控核心逻辑和数据库字段语义。

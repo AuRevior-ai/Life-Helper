@@ -12,6 +12,8 @@ Page({
     reviewId: "",
     review: null,
     reason: "",
+    loading: true,
+    errorText: "",
     submitting: false,
   },
   onLoad(options = {}) {
@@ -20,13 +22,18 @@ Page({
   },
 
   async loadReview() {
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await reviewService.adminGetReviewDetail({
         reviewId: this.data.reviewId,
       });
       this.setData({ review: data.review });
     } catch (error) {
-      showError(error.message || "评价加载失败");
+      const errorText = error.message || "评价加载失败";
+      this.setData({ errorText });
+      showError(errorText);
+    } finally {
+      this.setData({ loading: false });
     }
   },
 

@@ -12,6 +12,8 @@ Page({
     appealId: "",
     appeal: null,
     adminRemark: "",
+    loading: true,
+    errorText: "",
     submitting: false,
   },
   onLoad(options = {}) {
@@ -20,13 +22,18 @@ Page({
   },
 
   async loadAppeal() {
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await reviewService.adminGetReviewAppealDetail({
         appealId: this.data.appealId,
       });
       this.setData({ appeal: data.appeal });
     } catch (error) {
-      showError(error.message || "申诉加载失败");
+      const errorText = error.message || "申诉加载失败";
+      this.setData({ errorText });
+      showError(errorText);
+    } finally {
+      this.setData({ loading: false });
     }
   },
 
