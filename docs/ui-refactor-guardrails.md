@@ -182,7 +182,20 @@ UI 阶段不得修改订单状态枚举、流转条件、支付状态、售后�
 - `pages/admin/assign-worker/assign-worker`
 - `pages/admin/dispatch-logs/dispatch-logs`
 
-阶段 24B-3 建议继续处理财务 / 商家 / 资质 / 保证金 / 风控 / 用户治理页面，例如 `finance-log-list`、`worker-earning-list`、`order-finance-detail`、`merchant-list`、`merchant-detail`、`qualification-review`、`deposit-review`、`risk-control` 和 `user-list`。
+阶段 24B-3 已继续收口以下页面：
+
+- `pages/admin/finance-log-list/finance-log-list`
+- `pages/admin/worker-earning-list/worker-earning-list`
+- `pages/admin/order-finance-detail/order-finance-detail`
+- `pages/admin/tip-log-list/tip-log-list`
+- `pages/admin/merchant-list/merchant-list`
+- `pages/admin/merchant-detail/merchant-detail`
+- `pages/admin/qualification-review/qualification-review`
+- `pages/admin/deposit-review/deposit-review`
+- `pages/admin/risk-control/risk-control`
+- `pages/admin/user-list/user-list`
+
+阶段 24B-4 可考虑继续处理会员 / 优惠券 / 营销配置页面，或进入管理员端二级页面真机视觉抽查与全量验收。
 
 管理员端二级页 UI 收口允许：
 

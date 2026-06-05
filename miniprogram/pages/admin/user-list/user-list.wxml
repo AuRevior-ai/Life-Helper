@@ -1,33 +1,56 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看平台注册用户，并对异常账号进行禁用</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看平台注册用户、角色和账号状态，禁用操作仍由后端权限校验。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载用户"></loading-view>
+  <view class="admin-status-card">
+    <view class="admin-card-title">用户列表</view>
+    <view class="admin-card-desc">
+      本页只展示账号状态并发起禁用请求，不新增角色模型、权限模型或菜单权限体系。
+    </view>
+  </view>
 
-  <view wx:elif="{{ users.length }}" class="user-list">
-    <view wx:for="{{ users }}" wx:key="_id" class="user-card panel">
-      <view class="card-top">
-        <view>
-          <view class="user-name">{{ item.displayName }}</view>
-          <view class="openid">{{ item.openid }}</view>
-        </view>
-        <view
-          class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}"
-          >{{ item.statusText }}</view
-        >
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
       </view>
-      <view class="user-meta">角色：{{ item.roleText }}</view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">禁用按钮只发起 service 请求，不得只靠前端隐藏按钮作为权限控制。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载用户"></loading-view>
+  </view>
+
+  <view wx:elif="{{ users.length }}" class="admin-list-stack">
+    <view wx:for="{{ users }}" wx:key="_id" class="admin-section-card admin-list-card">
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.displayName }}</view>
+          <view class="admin-list-meta">{{ item.openid }}</view>
+        </view>
+        <view class="admin-status-pill {{ item.statusClass }}">{{ item.statusText }}</view>
+      </view>
+      <view class="admin-list-desc">角色：{{ item.roleText }}</view>
       <button
         wx:if="{{ item.status !== 'disabled' }}"
-        class="text-button danger"
+        class="admin-outline-button danger admin-card-button"
         data-id="{{ item._id }}"
         loading="{{ submittingId === item._id }}"
         disabled="{{ submittingId === item._id }}"
         bindtap="disableUser"
       >
-        禁用
+        禁用用户
       </button>
     </view>
   </view>

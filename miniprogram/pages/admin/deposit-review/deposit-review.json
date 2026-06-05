@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "保证金审核"
+  "navigationBarTitleText": "保证金审核",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

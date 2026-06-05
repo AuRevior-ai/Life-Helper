@@ -1,31 +1,91 @@
-<view class="page">
-  <loading-view wx:if="{{ loading }}" text="正在加载保证金审核"></loading-view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看商家 mock 保证金状态，冻结和退还审核均以后端为准。
+    </view>
+  </view>
+
+  <view class="admin-status-card">
+    <view class="admin-card-title">保证金记录</view>
+    <view class="admin-card-desc">展示模拟缴纳、模拟退还、冻结状态和人工处理说明。</view>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为 mock 保证金，不产生真实扣款、真实退款、真实冻结或真实保证金支付。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">冻结和退还审核只提交后端处理，不在前端直接写死保证金状态。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载保证金审核"></loading-view>
+  </view>
+
   <empty-state
     wx:elif="{{ collectionMissing }}"
     title="保证金集合未创建"
     description="请先在云开发数据库创建 merchant_deposits 集合，再进行保证金审核"
   ></empty-state>
-  <block wx:elif="{{ deposits.length }}">
-    <view wx:for="{{deposits}}" wx:key="_id" class="item">
-      <text>{{item.merchant_id}}</text>
-      <text>{{item.deposit_status}} / {{item.required_amount}} 分</text>
-      <button data-id="{{item._id}}" bindtap="freeze">冻结</button>
-      <button
-        data-id="{{item._id}}"
-        data-result="APPROVED"
-        bindtap="reviewRefund"
-      >
-        同意退还
-      </button>
-      <button
-        data-id="{{item._id}}"
-        data-result="REJECTED"
-        bindtap="reviewRefund"
-      >
-        驳回退还
-      </button>
+
+  <view wx:elif="{{ deposits.length }}" class="admin-list-stack">
+    <view wx:for="{{ deposits }}" wx:key="_id" class="admin-section-card admin-list-card">
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.merchantText }}</view>
+          <view class="admin-list-meta">状态：{{ item.statusText }} · 退还：{{ item.refundText }}</view>
+        </view>
+        <view class="admin-money">{{ item.amountText }}</view>
+      </view>
+      <view class="admin-action-row">
+        <button
+          class="admin-outline-button danger"
+          data-id="{{ item._id }}"
+          loading="{{ submitting === item._id + ':freeze' }}"
+          disabled="{{ submitting }}"
+          bindtap="freeze"
+        >
+          冻结
+        </button>
+        <button
+          class="admin-action-button"
+          data-id="{{ item._id }}"
+          data-result="APPROVED"
+          loading="{{ submitting === item._id + ':APPROVED' }}"
+          disabled="{{ submitting }}"
+          bindtap="reviewRefund"
+        >
+          同意退还
+        </button>
+        <button
+          class="admin-outline-button"
+          data-id="{{ item._id }}"
+          data-result="REJECTED"
+          loading="{{ submitting === item._id + ':REJECTED' }}"
+          disabled="{{ submitting }}"
+          bindtap="reviewRefund"
+        >
+          驳回退还
+        </button>
+      </view>
     </view>
-  </block>
+  </view>
+
   <empty-state
     wx:else
     title="暂无保证金记录"

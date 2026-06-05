@@ -1,35 +1,68 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">查看师傅订单收益，当前不支持真实提现</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看服务方收益记录，历史字段仍兼容师傅命名，收益状态以后端为准。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载收益"></loading-view>
+  <view class="admin-status-card">
+    <view class="admin-card-title">收益列表</view>
+    <view class="admin-card-desc">
+      展示收益金额、平台服务费、收益状态、订单关联和服务方归属。
+    </view>
+  </view>
 
-  <block wx:elif="{{ earnings.length }}">
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前仅为内部模拟流水关联收益，无真实清算、无真实分账、无真实提现。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">点击收益记录可进入订单财务详情。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载收益"></loading-view>
+  </view>
+
+  <view wx:elif="{{ earnings.length }}" class="admin-list-stack">
     <view
       wx:for="{{ earnings }}"
       wx:key="_id"
-      class="earning-card panel"
+      class="admin-section-card admin-list-card"
       data-order-id="{{ item.order_id }}"
       bindtap="goOrderFinance"
     >
-      <view class="card-top">
-        <view class="card-title">{{ item.service_name || item.order_no }}</view>
-        <view class="card-amount">{{ item.earningText }}</view>
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.serviceText }}</view>
+          <view class="admin-list-meta">状态：{{ item.statusText }}</view>
+        </view>
+        <view class="admin-money">{{ item.earningText }}</view>
       </view>
-      <view class="card-line"
-        >状态：{{ item.statusText }}　平台服务费：{{ item.commissionText
-        }}</view
-      >
-      <view class="card-line">订单：{{ item.order_no || item.order_id }}</view>
-      <view class="card-line">师傅：{{ item.worker_id }}</view>
+      <view class="admin-list-desc">平台服务费：{{ item.commissionText }}</view>
+      <view class="admin-list-desc">订单：{{ item.orderText }}</view>
+      <view class="admin-list-desc">服务方：{{ item.workerText }}</view>
     </view>
-  </block>
+  </view>
 
   <empty-state
     wx:else
-    title="暂无师傅收益"
+    title="暂无服务方收益"
     description="订单完成并生成财务后会显示在这里"
   ></empty-state>
 </view>

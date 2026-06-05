@@ -1,16 +1,92 @@
-<view class="page">
-  <view class="panel">
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看内部模拟风控记录，并由管理员人工设置商家风险等级。
+    </view>
+  </view>
+
+  <view class="admin-status-card">
+    <view class="admin-card-title">风险等级</view>
+    <view class="admin-card-desc">风险标签和限制说明均为内部模拟，操作结果以后端为准。</view>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为内部模拟风控和人工审核，不代表真实合规审核、非自动风控、AI 裁决或自动处罚上线。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
     <input
+      class="admin-input"
       placeholder="输入商家 ID"
-      value="{{merchantId}}"
+      value="{{ merchantId }}"
       bindinput="onInput"
     />
-    <button data-level="LOW" bindtap="setRisk">低风险</button>
-    <button data-level="HIGH" bindtap="setRisk">高风险复核</button>
-    <button data-level="BLOCKED" bindtap="setRisk">限制入驻</button>
+    <view class="admin-action-row">
+      <button
+        class="admin-action-button"
+        data-level="LOW"
+        loading="{{ submitting === 'LOW' }}"
+        disabled="{{ submitting }}"
+        bindtap="setRisk"
+      >
+        低风险
+      </button>
+      <button
+        class="admin-outline-button"
+        data-level="HIGH"
+        loading="{{ submitting === 'HIGH' }}"
+        disabled="{{ submitting }}"
+        bindtap="setRisk"
+      >
+        高风险复核
+      </button>
+      <button
+        class="admin-outline-button danger"
+        data-level="BLOCKED"
+        loading="{{ submitting === 'BLOCKED' }}"
+        disabled="{{ submitting }}"
+        bindtap="setRisk"
+      >
+        限制入驻
+      </button>
+    </view>
   </view>
-  <view wx:for="{{riskRecords}}" wx:key="_id" class="item">
-    <text>{{item.merchant_id}} / {{item.risk_level}}</text>
-    <text>{{item.risk_reason}}</text>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载风控记录"></loading-view>
   </view>
+
+  <view wx:elif="{{ riskRecords.length }}" class="admin-list-stack">
+    <view wx:for="{{ riskRecords }}" wx:key="_id" class="admin-section-card admin-list-card">
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.merchantText }}</view>
+          <view class="admin-list-meta">风险等级：{{ item.riskText }}</view>
+        </view>
+        <view class="admin-status-pill">{{ item.riskText }}</view>
+      </view>
+      <view class="admin-list-desc">原因：{{ item.reasonText }}</view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无风控记录"
+    description="管理员设置商家风险等级后会显示在这里"
+  ></empty-state>
 </view>

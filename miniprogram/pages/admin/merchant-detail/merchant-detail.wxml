@@ -1,9 +1,83 @@
-<view class="page">
-  <text class="title">{{merchant.store_name}}</text>
-  <text>审核：{{merchant.audit_status}}</text>
-  <text>状态：{{merchant.status}}</text>
-  <button bindtap="approve">审核通过</button>
-  <button bindtap="reject">审核拒绝</button>
-  <button bindtap="enable">启用</button>
-  <button bindtap="disable">禁用</button>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看商家资料并执行人工审核、启用或停用，操作结果以后端为准。
+    </view>
+  </view>
+
+  <view class="admin-status-card">
+    <view class="admin-card-title">{{ merchant.storeName || '商家详情' }}</view>
+    <view class="admin-card-desc">审核：{{ merchant.auditText }} · 经营：{{ merchant.statusText }}</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载商家详情"></loading-view>
+  </view>
+
+  <block wx:else>
+    <view class="admin-section-card">
+      <view class="admin-section-title">基础信息</view>
+      <view class="admin-info-row">商家 ID：{{ merchant.merchantText }}</view>
+      <view class="admin-info-row">联系方式：{{ merchant.contactText }}</view>
+      <view class="admin-info-row">经营地址：{{ merchant.addressText }}</view>
+    </view>
+
+    <view class="admin-section-card">
+      <view class="admin-section-title">状态信息</view>
+      <view class="admin-info-row">审核状态：{{ merchant.auditText }}</view>
+      <view class="admin-info-row">经营状态：{{ merchant.statusText }}</view>
+    </view>
+
+    <view class="admin-section-card">
+      <view class="admin-section-title">操作记录</view>
+      <view class="admin-card-desc">商家操作日志由后端记录，本页保留详情入口，不在前端伪造日志。</view>
+    </view>
+
+    <view class="admin-boundary-card">
+      <view class="admin-section-title">边界说明</view>
+      <view class="admin-card-desc">
+        商家审核、启停和经营状态以后端为准；本页不新增多门店、员工排班、商家分账或真实经营资质校验能力。
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-action-card">
+      <view class="admin-section-title">管理操作</view>
+      <view class="admin-action-row">
+        <button
+          class="admin-action-button"
+          loading="{{ submitting === 'approve' }}"
+          disabled="{{ submitting }}"
+          bindtap="approve"
+        >
+          审核通过
+        </button>
+        <button
+          class="admin-outline-button"
+          loading="{{ submitting === 'reject' }}"
+          disabled="{{ submitting }}"
+          bindtap="reject"
+        >
+          审核拒绝
+        </button>
+        <button
+          class="admin-outline-button"
+          loading="{{ submitting === 'enable' }}"
+          disabled="{{ submitting }}"
+          bindtap="enable"
+        >
+          启用
+        </button>
+        <button
+          class="admin-outline-button danger"
+          loading="{{ submitting === 'disable' }}"
+          disabled="{{ submitting }}"
+          bindtap="disable"
+        >
+          禁用
+        </button>
+      </view>
+    </view>
+  </block>
 </view>

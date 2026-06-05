@@ -12,6 +12,10 @@ function mapLog(log = {}) {
     typeText: FINANCE_LOG_TYPE_TEXT[log.type] || log.type,
     directionText: FINANCE_LOG_DIRECTION_TEXT[log.direction] || log.direction,
     amountText: formatPrice(log.amount),
+    orderText: log.order_no || log.order_id || "未关联订单",
+    workerText: log.worker_id || log.provider_id || "未关联服务方",
+    statusText: log.status || "已记录",
+    timeText: log.created_at || log.create_time || "未记录时间",
   };
 }
 
@@ -20,6 +24,8 @@ Page({
     title: "财务流水",
     logs: [],
     loading: true,
+    errorText: "",
+    filterPills: ["全部流水", "内部模拟流水", "无真实清算"],
   },
 
   onShow() {
@@ -27,12 +33,14 @@ Page({
   },
 
   async loadLogs() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await financeService.adminGetFinanceLogs();
       this.setData({ logs: (data.logs || []).map(mapLog) });
     } catch (error) {
-      showError(error.message || "财务流水加载失败");
+      const errorText = error.message || "财务流水加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

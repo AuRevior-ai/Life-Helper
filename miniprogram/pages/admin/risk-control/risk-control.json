@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "入驻风控"
+  "navigationBarTitleText": "入驻风控",
+  "usingComponents": {
+    "empty-state": "/components/empty-state/empty-state",
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

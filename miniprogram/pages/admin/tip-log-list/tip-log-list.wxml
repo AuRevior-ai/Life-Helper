@@ -1,15 +1,60 @@
-<view class="page-shell">
-  <view class="page-header"><view class="page-title">{{ title }}</view></view>
-  <loading-view wx:if="{{ loading }}" text="正在加载打赏"></loading-view>
-  <view wx:elif="{{ tips.length }}">
-    <view wx:for="{{ tips }}" wx:key="_id" class="panel list-card">
-      <view>{{ item.amountText }} · {{ item.status }}</view>
-      <view class="muted">师傅收益 {{ item.incomeText }}</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看用户模拟打赏记录、平台服务费和服务方打赏收益。
     </view>
   </view>
+
+  <view class="admin-status-card">
+    <view class="admin-card-title">模拟打赏记录</view>
+    <view class="admin-card-desc">展示打赏金额、服务方收益、平台服务费和订单关联。</view>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为 mock 打赏和内部模拟流水，无真实清算、无真实分账、无真实提现，也不代表真实打赏支付。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">本页为只读记录，不触发真实支付、分账或提现。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载打赏"></loading-view>
+  </view>
+
+  <view wx:elif="{{ tips.length }}" class="admin-list-stack">
+    <view wx:for="{{ tips }}" wx:key="_id" class="admin-section-card admin-list-card">
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.orderText }}</view>
+          <view class="admin-list-meta">状态：{{ item.statusText }}</view>
+        </view>
+        <view class="admin-money">{{ item.amountText }}</view>
+      </view>
+      <view class="admin-list-desc">服务方收益：{{ item.incomeText }}</view>
+      <view class="admin-list-desc">平台服务费：{{ item.feeText }}</view>
+      <view class="admin-list-desc">服务方：{{ item.workerText }}</view>
+    </view>
+  </view>
+
   <empty-state
     wx:else
     title="暂无打赏"
-    description="用户打赏后会展示在这里"
+    description="用户完成模拟打赏后会展示在这里"
   ></empty-state>
 </view>

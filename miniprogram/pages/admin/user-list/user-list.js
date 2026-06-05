@@ -7,6 +7,7 @@ function mapUser(user) {
     displayName: user.nick_name || user.nickname || user.openid || "未命名用户",
     roleText: user.role || "user",
     statusText: user.status === "disabled" ? "已禁用" : "正常",
+    statusClass: user.status === "disabled" ? "is-muted" : "is-active",
   };
 }
 
@@ -15,7 +16,9 @@ Page({
     title: "用户管理",
     users: [],
     loading: true,
+    errorText: "",
     submittingId: "",
+    filterPills: ["全部用户", "角色", "账号状态", "后端权限校验"],
   },
 
   onShow() {
@@ -29,14 +32,16 @@ Page({
   },
 
   async loadUsers() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await adminService.getAllUsers();
       this.setData({
         users: (data.users || []).map(mapUser),
       });
     } catch (error) {
-      showError(error.message || "用户加载失败");
+      const errorText = error.message || "用户加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

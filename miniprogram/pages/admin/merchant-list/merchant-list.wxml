@@ -1,12 +1,59 @@
-<view class="page">
-  <view
-    wx:for="{{merchants}}"
-    wx:key="_id"
-    class="item"
-    bindtap="goDetail"
-    data-id="{{item._id}}"
-  >
-    <text>{{item.store_name}}</text>
-    <text>{{item.audit_status}} / {{item.status}}</text>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看商家审核状态和经营状态，启停与审核处理仍以后端为准。
+    </view>
   </view>
+
+  <view class="admin-status-card">
+    <view class="admin-card-title">商家列表</view>
+    <view class="admin-card-desc">
+      列表用于进入商家详情，不新增多门店、员工排班、商家分账或连锁商家能力。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">点击商家卡片进入详情页进行人工审核和经营状态操作。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载商家"></loading-view>
+  </view>
+
+  <view wx:elif="{{ merchants.length }}" class="admin-list-stack">
+    <view
+      wx:for="{{ merchants }}"
+      wx:key="_id"
+      class="admin-section-card admin-list-card"
+      bindtap="goDetail"
+      data-id="{{ item._id }}"
+    >
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.storeName }}</view>
+          <view class="admin-list-meta">审核：{{ item.auditText }} · 经营：{{ item.statusText }}</view>
+        </view>
+        <view class="admin-arrow">›</view>
+      </view>
+      <view class="admin-list-desc">联系方式：{{ item.contactText }}</view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无商家"
+    description="商家提交入驻申请后会展示在这里"
+  ></empty-state>
 </view>

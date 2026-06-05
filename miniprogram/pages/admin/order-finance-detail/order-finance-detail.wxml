@@ -1,50 +1,74 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">订单财务快照、流水与师傅收益明细</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看订单财务快照、平台服务费、服务方收益和退款回冲记录。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载财务详情"></loading-view>
+  <view class="admin-status-card">
+    <view class="admin-card-title">订单财务快照</view>
+    <view class="admin-card-desc">
+      金额展示沿用后端分单位转换结果，财务生成和回冲以后端为准。
+    </view>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为内部模拟流水，无真实清算、无真实分账、无真实提现；退款回冲不代表真实退款或真实对账完成。
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载财务详情"></loading-view>
+  </view>
 
   <block wx:else>
-    <view class="panel detail-panel">
-      <view class="detail-line">订单：{{ order.order_no || order._id }}</view>
-      <view class="detail-line">服务：{{ order.service_name }}</view>
-      <view class="detail-line"
-        >财务状态：{{ order.finance_generated ? '已生成' : '未生成' }}</view
-      >
-      <view class="detail-line"
-        >平台服务费：{{ order.platform_commission_amount }}</view
-      >
-      <view class="detail-line"
-        >师傅收益：{{ order.worker_earning_amount }}</view
-      >
-      <view wx:if="{{ order.finance_reverse_status }}" class="detail-line"
-        >回冲状态：{{ order.finance_reverse_status }}</view
-      >
+    <view class="admin-section-card">
+      <view class="admin-section-title">基础信息</view>
+      <view class="admin-info-row">订单：{{ order.orderText }}</view>
+      <view class="admin-info-row">服务：{{ order.serviceText }}</view>
     </view>
 
-    <view class="section-head">收益明细</view>
-    <view wx:for="{{ earnings }}" wx:key="_id" class="panel finance-row">
-      <view class="row-main">{{ item.earningText }}</view>
-      <view class="row-sub"
-        >状态：{{ item.statusText }}　平台服务费：{{ item.commissionText
-        }}</view
-      >
+    <view class="admin-section-card">
+      <view class="admin-section-title">状态信息</view>
+      <view class="admin-info-row">财务状态：{{ order.financeStatusText }}</view>
+      <view class="admin-info-row">平台服务费：{{ order.commissionText }}</view>
+      <view class="admin-info-row">服务方收益：{{ order.earningText }}</view>
+      <view class="admin-info-row">回冲状态：{{ order.reverseText }}</view>
     </view>
 
-    <view class="section-head">财务流水</view>
-    <view wx:for="{{ logs }}" wx:key="_id" class="panel finance-row">
-      <view class="row-main">{{ item.typeText }} {{ item.amountText }}</view>
-      <view class="row-sub"
-        >状态：{{ item.status }}　来源：{{ item.source }}</view
-      >
+    <view class="admin-section-card">
+      <view class="admin-section-title">关联服务方信息</view>
+      <view wx:for="{{ earnings }}" wx:key="_id" class="admin-record-row">
+        <view class="admin-record-title">{{ item.workerText }} · {{ item.earningText }}</view>
+        <view class="admin-record-desc">状态：{{ item.statusText }} · 平台服务费：{{ item.commissionText }}</view>
+      </view>
+      <empty-state
+        wx:if="{{ !earnings.length }}"
+        title="暂无收益明细"
+        description="订单财务生成后会出现收益记录"
+      ></empty-state>
     </view>
 
-    <empty-state
-      wx:if="{{ !logs.length && !earnings.length }}"
-      title="暂无财务记录"
-      description="订单完成并生成财务后会显示在这里"
-    ></empty-state>
+    <view class="admin-section-card">
+      <view class="admin-section-title">操作记录</view>
+      <view wx:for="{{ logs }}" wx:key="_id" class="admin-record-row">
+        <view class="admin-record-title">{{ item.typeText }} · {{ item.amountText }}</view>
+        <view class="admin-record-desc">状态：{{ item.statusText }} · 来源：{{ item.sourceText }}</view>
+      </view>
+      <empty-state
+        wx:if="{{ !logs.length }}"
+        title="暂无财务流水"
+        description="订单完成并生成财务后会显示在这里"
+      ></empty-state>
+    </view>
+
+    <view class="admin-section-card admin-action-card">
+      <view class="admin-section-title">管理操作</view>
+      <view class="admin-card-desc">本页只读展示订单财务详情，不在前端直接生成或回冲财务记录。</view>
+    </view>
   </block>
 </view>

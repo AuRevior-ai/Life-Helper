@@ -1,32 +1,64 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >查看系统内部模拟财务流水，不代表微信支付真实清算</view
-    >
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看平台内部模拟流水，流水生成、方向和金额均以后端为准。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载流水"></loading-view>
+  <view class="admin-status-card">
+    <view class="admin-card-title">财务流水列表</view>
+    <view class="admin-card-desc">
+      展示流水类型、方向、金额、订单关联和服务方归属，用于运营核对。
+    </view>
+  </view>
 
-  <block wx:elif="{{ logs.length }}">
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为内部模拟流水，无真实清算、无真实分账、无真实提现，也不代表真实对账能力。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">点击有关联订单的流水，可查看订单财务快照。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载流水"></loading-view>
+  </view>
+
+  <view wx:elif="{{ logs.length }}" class="admin-list-stack">
     <view
       wx:for="{{ logs }}"
       wx:key="_id"
-      class="finance-card panel"
+      class="admin-section-card admin-list-card"
       data-order-id="{{ item.order_id }}"
       bindtap="goOrderFinance"
     >
-      <view class="card-top">
-        <view class="card-title">{{ item.typeText }}</view>
-        <view class="card-amount">{{ item.amountText }}</view>
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.typeText }}</view>
+          <view class="admin-list-meta">{{ item.directionText }} · {{ item.statusText }}</view>
+        </view>
+        <view class="admin-money">{{ item.amountText }}</view>
       </view>
-      <view class="card-line"
-        >方向：{{ item.directionText }}　状态：{{ item.status }}</view
-      >
-      <view class="card-line">订单：{{ item.order_no || item.order_id }}</view>
-      <view class="card-line">师傅：{{ item.worker_id }}</view>
+      <view class="admin-list-desc">订单：{{ item.orderText }}</view>
+      <view class="admin-list-desc">服务方：{{ item.workerText }}</view>
+      <view class="admin-list-desc">时间：{{ item.timeText }}</view>
     </view>
-  </block>
+  </view>
 
   <empty-state
     wx:else

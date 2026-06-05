@@ -1,31 +1,93 @@
-<view class="page">
-  <loading-view wx:if="{{ loading }}" text="正在加载资质审核"></loading-view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看商家资料留档并进行人工审核，审核结果以后端为准。
+    </view>
+  </view>
+
+  <view class="admin-status-card">
+    <view class="admin-card-title">资质资料</view>
+    <view class="admin-card-desc">支持通过、驳回和补充材料三类人工审核动作。</view>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为资料留档和人工审核，不接入真实身份证认证、营业执照认证、OCR 或保险核验。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">审核按钮仅发起后端审核请求，不在前端直接写死资质状态。</view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载资质审核"></loading-view>
+  </view>
+
   <empty-state
     wx:elif="{{ collectionMissing }}"
     title="资质集合未创建"
     description="请先在云开发数据库创建 merchant_qualifications 集合，再进行资质审核"
   ></empty-state>
-  <block wx:elif="{{ qualifications.length }}">
-    <view wx:for="{{qualifications}}" wx:key="_id" class="item">
-      <text
-        >{{item.business_name || item.real_name_mock || item.merchant_id}}</text
-      >
-      <text>{{item.qualification_status}}</text>
-      <button data-id="{{item._id}}" data-result="APPROVED" bindtap="review">
-        通过
-      </button>
-      <button data-id="{{item._id}}" data-result="REJECTED" bindtap="review">
-        驳回
-      </button>
-      <button
-        data-id="{{item._id}}"
-        data-result="NEED_SUPPLEMENT"
-        bindtap="review"
-      >
-        补充材料
-      </button>
+
+  <view wx:elif="{{ qualifications.length }}" class="admin-list-stack">
+    <view wx:for="{{ qualifications }}" wx:key="_id" class="admin-section-card admin-list-card">
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.titleText }}</view>
+          <view class="admin-list-meta">商家：{{ item.merchantText }}</view>
+        </view>
+        <view class="admin-status-pill">{{ item.statusText }}</view>
+      </view>
+      <view class="admin-list-desc">说明：{{ item.rejectText }}</view>
+      <view class="admin-action-row">
+        <button
+          class="admin-action-button"
+          data-id="{{ item._id }}"
+          data-result="APPROVED"
+          loading="{{ submitting === item._id + ':APPROVED' }}"
+          disabled="{{ submitting }}"
+          bindtap="review"
+        >
+          通过
+        </button>
+        <button
+          class="admin-outline-button danger"
+          data-id="{{ item._id }}"
+          data-result="REJECTED"
+          loading="{{ submitting === item._id + ':REJECTED' }}"
+          disabled="{{ submitting }}"
+          bindtap="review"
+        >
+          驳回
+        </button>
+        <button
+          class="admin-outline-button"
+          data-id="{{ item._id }}"
+          data-result="NEED_SUPPLEMENT"
+          loading="{{ submitting === item._id + ':NEED_SUPPLEMENT' }}"
+          disabled="{{ submitting }}"
+          bindtap="review"
+        >
+          补充材料
+        </button>
+      </view>
     </view>
-  </block>
+  </view>
+
   <empty-state
     wx:else
     title="暂无资质申请"

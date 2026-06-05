@@ -1,45 +1,33 @@
-.user-list {
-  display: grid;
-  gap: 18rpx;
-}
+@import "../../../styles/admin-theme.wxss";
 
-.card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 18rpx;
-}
-
-.user-name {
-  color: #183832;
-  font-size: 30rpx;
-  font-weight: 800;
-}
-
-.openid,
-.user-meta {
-  margin-top: 10rpx;
-  color: #64716d;
-  font-size: 24rpx;
-  line-height: 1.45;
-  word-break: break-all;
-}
-
-.status-tag {
-  flex: 0 0 auto;
-  padding: 8rpx 14rpx;
-  border-radius: 8rpx;
-  background: #e8f2ee;
-  color: #1f7a68;
-  font-size: 22rpx;
-  font-weight: 700;
-}
-
-.status-tag.disabled {
-  background: #f7e9e3;
-  color: #b65230;
-}
-
-.text-button {
-  margin-top: 18rpx;
-}
+.admin-secondary-page { padding-bottom: calc(72rpx + env(safe-area-inset-bottom)); }
+.admin-status-card,
+.admin-filter-card,
+.admin-boundary-card,
+.admin-error-card { box-sizing: border-box; margin-top: 24rpx; padding: 28rpx; border-radius: 28rpx; background: #ffffff; box-shadow: 0 14rpx 38rpx rgba(17, 24, 39, 0.05); }
+.admin-status-card { border-left: 8rpx solid #16a34a; }
+.admin-boundary-card { border-left: 8rpx solid #f08a12; }
+.admin-card-title,
+.admin-filter-title { color: #111827; font-size: 30rpx; font-weight: 800; line-height: 40rpx; }
+.admin-card-desc,
+.admin-list-desc,
+.admin-info-row,
+.admin-record-desc { margin-top: 12rpx; color: #667085; font-size: 25rpx; line-height: 36rpx; }
+.admin-filter-row,
+.admin-action-row { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 18rpx; }
+.admin-filter-pill,
+.admin-status-pill { min-height: 44rpx; padding: 0 18rpx; border-radius: 999rpx; background: #f2f4f7; color: #475467; font-size: 23rpx; font-weight: 700; line-height: 44rpx; }
+.admin-status-pill.is-active { background: #eaf8e8; color: #16a34a; }
+.admin-status-pill.is-muted { background: #f2f4f7; color: #667085; }
+.admin-list-stack { display: grid; gap: 20rpx; }
+.admin-list-card { margin-top: 0; }
+.admin-list-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20rpx; }
+.admin-list-main { min-width: 0; flex: 1; }
+.admin-list-title,
+.admin-record-title { color: #111827; font-size: 31rpx; font-weight: 800; line-height: 40rpx; }
+.admin-list-meta { margin-top: 10rpx; color: #667085; font-size: 24rpx; line-height: 34rpx; word-break: break-all; }
+.admin-money { flex-shrink: 0; color: #b65230; font-size: 30rpx; font-weight: 800; line-height: 40rpx; }
+.admin-input { width: 100%; height: 80rpx; box-sizing: border-box; margin-top: 20rpx; padding: 0 22rpx; border-radius: 18rpx; background: #f7f9fa; color: #111827; font-size: 27rpx; line-height: 80rpx; }
+.admin-card-button { margin-top: 22rpx; }
+.danger { border-color: #f3b8a5; color: #b65230; }
+.admin-error-card { background: #fff4ed; color: #b54708; font-size: 25rpx; line-height: 36rpx; }
