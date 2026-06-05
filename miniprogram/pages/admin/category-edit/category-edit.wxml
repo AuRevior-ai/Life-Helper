@@ -1,12 +1,20 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >维护服务分类名称、状态和排序，用于首页与服务列表展示</view
-    >
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      维护服务分类名称、状态和排序，保存后由 service 服务层写入分类目录。
+    </view>
   </view>
 
-  <view class="panel form-panel">
+  <view class="admin-status-card">
+    <view class="admin-card-title">分类配置</view>
+    <view class="admin-card-desc">
+      当前页面只编辑分类展示字段，不修改订单状态机、派单规则或资金相关逻辑。
+    </view>
+  </view>
+
+  <view class="admin-section-card">
+    <view class="admin-section-title">基础信息</view>
     <view class="form-item">
       <text class="form-label">分类名称</text>
       <input
@@ -37,6 +45,10 @@
         bindinput="onInput"
       ></textarea>
     </view>
+  </view>
+
+  <view class="admin-section-card">
+    <view class="admin-section-title">配置说明</view>
     <view class="form-item">
       <text class="form-label">状态</text>
       <picker
@@ -61,12 +73,24 @@
     </view>
   </view>
 
-  <button
-    class="primary-button"
-    loading="{{ submitting }}"
-    disabled="{{ submitting }}"
-    bindtap="saveCategory"
-  >
-    保存分类
-  </button>
+  <view class="admin-section-card admin-status-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      分类启停只影响服务目录展示和后端筛选结果；核心状态仍以后端为准。
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <button
+      class="admin-action-button admin-full-button"
+      loading="{{ submitting }}"
+      disabled="{{ submitting }}"
+      bindtap="saveCategory"
+    >
+      保存分类
+    </button>
+  </view>
 </view>

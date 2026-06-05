@@ -1,19 +1,62 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看接单、指派和回流记录，日志内容以 dispatch 服务层返回为准。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载日志"></loading-view>
-  <block wx:elif="{{ logs.length }}">
-    <view wx:for="{{ logs }}" wx:key="_id" class="panel">
-      <view class="section-title">{{ item.action }}</view>
-      <view class="muted-text">订单：{{ item.order_no || item.order_id }}</view>
-      <view class="muted-text"
-        >从 {{ item.from_status }} 到 {{ item.to_status }}</view
-      >
-      <view class="muted-text">原因：{{ item.reason }}</view>
+  <view class="admin-status-card">
+    <view class="admin-card-title">派单记录</view>
+    <view class="admin-card-desc">
+      本页只展示人工派单与接单记录，非实时轨迹、非 ETA，也不新增自动派单能力。
     </view>
-  </block>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">记录范围</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill"
+      >
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">
+      当前页面为只读查看，不直接改写订单状态、不触发财务结算。
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-loading-wrap" wx:if="{{ loading }}">
+    <loading-view text="正在加载日志"></loading-view>
+  </view>
+
+  <view wx:elif="{{ logs.length }}" class="admin-list-stack">
+    <view
+      wx:for="{{ logs }}"
+      wx:key="_id"
+      class="admin-section-card admin-list-card"
+    >
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.actionText }}</view>
+          <view class="admin-list-meta">订单：{{ item.orderText }}</view>
+        </view>
+        <view class="admin-status-pill is-muted">日志</view>
+      </view>
+      <view class="admin-list-desc">状态：{{ item.statusText }}</view>
+      <view class="admin-list-desc">原因：{{ item.reasonText }}</view>
+    </view>
+  </view>
+
   <empty-state
     wx:else
     title="{{ collectionMissing ? '派单日志集合未创建' : '暂无派单日志' }}"

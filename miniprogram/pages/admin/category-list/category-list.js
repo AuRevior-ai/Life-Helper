@@ -5,6 +5,9 @@ function mapCategory(category) {
   return {
     ...category,
     statusText: category.status === "disabled" ? "已停用" : "启用中",
+    statusClass: category.status === "disabled" ? "is-muted" : "is-active",
+    sortText: `排序 ${Number(category.sort || 0)}`,
+    descText: category.description || "暂未填写分类说明",
   };
 }
 
@@ -13,7 +16,9 @@ Page({
     title: "分类管理",
     categories: [],
     loading: true,
+    errorText: "",
     seeding: false,
+    filterPills: ["全部分类", "含停用", "服务层为准"],
   },
 
   onShow() {
@@ -27,7 +32,7 @@ Page({
   },
 
   async loadCategories() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await serviceService.getCategoryList({
         includeDisabled: true,
@@ -36,7 +41,9 @@ Page({
         categories: (data.categories || []).map(mapCategory),
       });
     } catch (error) {
-      showError(error.message || "分类加载失败");
+      const errorText = error.message || "分类加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

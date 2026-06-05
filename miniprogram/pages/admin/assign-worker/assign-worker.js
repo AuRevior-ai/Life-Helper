@@ -1,6 +1,15 @@
 const dispatchService = require("../../../services/dispatch.service");
 const { showError, showSuccess } = require("../../../utils/toast");
 
+function mapWorker(worker) {
+  return {
+    ...worker,
+    serviceText: worker.service_category || "未填写服务分类",
+    areaText: worker.service_area || "未填写服务区域",
+    statusText: worker.status || worker.work_status || "候选",
+  };
+}
+
 Page({
   data: {
     title: "指派师傅",
@@ -8,7 +17,9 @@ Page({
     workers: [],
     reason: "",
     loading: true,
+    errorText: "",
     submittingId: "",
+    filterPills: ["可指派候选", "既有 LBS 基础能力", "非自动派单"],
   },
 
   onLoad(options = {}) {
@@ -17,14 +28,16 @@ Page({
   },
 
   async loadWorkers() {
-    this.setData({ loading: true });
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await dispatchService.getAssignableWorkers({
         orderId: this.data.orderId,
       });
-      this.setData({ workers: data.workers || [] });
+      this.setData({ workers: (data.workers || []).map(mapWorker) });
     } catch (error) {
-      showError(error.message || "可指派师傅加载失败");
+      const errorText = error.message || "可指派师傅加载失败";
+      this.setData({ errorText });
+      showError(errorText);
     } finally {
       this.setData({ loading: false });
     }

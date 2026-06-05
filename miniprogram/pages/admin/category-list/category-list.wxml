@@ -1,44 +1,72 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >查看服务分类，初版分类数据可从种子目录同步</view
-    >
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      维护服务分类展示与排序，分类启停仍以 service 服务层和云函数处理结果为准。
+    </view>
   </view>
 
-  <view class="toolbar">
-    <button
-      class="ghost-button compact"
-      loading="{{ seeding }}"
-      disabled="{{ seeding }}"
-      bindtap="seedServiceData"
-    >
-      同步种子服务
-    </button>
-    <button class="primary-button compact" bindtap="goCreateCategory">
-      新增分类
-    </button>
+  <view class="admin-status-card">
+    <view class="admin-card-title">分类目录</view>
+    <view class="admin-card-desc">
+      同步种子服务仅用于生成初版目录，不改变订单、支付、退款或派单状态。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载分类"></loading-view>
-
-  <view wx:elif="{{ categories.length }}" class="category-list">
-    <view wx:for="{{ categories }}" wx:key="_id" class="category-card panel">
-      <view class="card-top">
-        <view>
-          <view class="category-name">{{ item.name }}</view>
-          <view class="category-meta">排序：{{ item.sort }}</view>
-        </view>
-        <view
-          class="status-tag {{ item.status === 'disabled' ? 'disabled' : '' }}"
-          >{{ item.statusText }}</view
-        >
-      </view>
-      <view wx:if="{{ item.description }}" class="category-desc"
-        >{{ item.description }}</view
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill"
       >
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-action-row">
       <button
-        class="text-button"
+        class="admin-outline-button"
+        loading="{{ seeding }}"
+        disabled="{{ seeding }}"
+        bindtap="seedServiceData"
+      >
+        同步种子服务
+      </button>
+      <button class="admin-action-button" bindtap="goCreateCategory">
+        新增分类
+      </button>
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-loading-wrap" wx:if="{{ loading }}">
+    <loading-view text="正在加载分类"></loading-view>
+  </view>
+
+  <view wx:elif="{{ categories.length }}" class="admin-list-stack">
+    <view
+      wx:for="{{ categories }}"
+      wx:key="_id"
+      class="admin-section-card admin-list-card"
+    >
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.name }}</view>
+          <view class="admin-list-meta">{{ item.sortText }}</view>
+        </view>
+        <view class="admin-status-pill {{ item.statusClass }}">
+          {{ item.statusText }}
+        </view>
+      </view>
+      <view class="admin-list-desc">{{ item.descText }}</view>
+      <button
+        class="admin-outline-button admin-card-button"
         data-id="{{ item._id }}"
         data-name="{{ item.name }}"
         data-icon="{{ item.icon }}"

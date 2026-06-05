@@ -1,105 +1,138 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-  </view>
-
-  <view class="panel">
-    <view class="form-item">
-      <text class="form-label">城市</text>
-      <input
-        class="form-input"
-        value="{{ form.city }}"
-        data-field="city"
-        bindinput="handleInput"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">区县</text>
-      <input
-        class="form-input"
-        value="{{ form.district }}"
-        data-field="district"
-        bindinput="handleInput"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">街道</text>
-      <input
-        class="form-input"
-        value="{{ form.street }}"
-        data-field="street"
-        bindinput="handleInput"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">小区</text>
-      <input
-        class="form-input"
-        value="{{ form.community }}"
-        data-field="community"
-        bindinput="handleInput"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">中心点纬度</text>
-      <input
-        class="form-input"
-        type="digit"
-        value="{{ form.latitude }}"
-        data-field="latitude"
-        bindinput="handleInput"
-        placeholder="例如 30.2741"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">中心点经度</text>
-      <input
-        class="form-input"
-        type="digit"
-        value="{{ form.longitude }}"
-        data-field="longitude"
-        bindinput="handleInput"
-        placeholder="例如 120.1551"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">行政区编码</text>
-      <input
-        class="form-input"
-        value="{{ form.adcode }}"
-        data-field="adcode"
-        bindinput="handleInput"
-        placeholder="例如 330106"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">地图地址</text>
-      <input
-        class="form-input"
-        value="{{ form.map_address }}"
-        data-field="map_address"
-        bindinput="handleInput"
-        placeholder="地图选点后的标准地址"
-      />
-    </view>
-    <view class="form-item">
-      <text class="form-label">地图 POI</text>
-      <input
-        class="form-input"
-        value="{{ form.map_poi_name }}"
-        data-field="map_poi_name"
-        bindinput="handleInput"
-        placeholder="例如 小区东门"
-      />
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      手动维护城市、区县、小区和中心点，保存后由区域 service 写入原有服务区域集合。
     </view>
   </view>
 
-  <button
-    class="primary-button"
-    loading="{{ saving }}"
-    disabled="{{ saving }}"
-    bindtap="handleSave"
-  >
-    保存服务区域
-  </button>
+  <view class="admin-status-card">
+    <view class="admin-card-title">区域配置</view>
+    <view class="admin-card-desc">
+      页面仅维护手动配置字段；不新增自动定位、路径规划、实时轨迹或 ETA，当前能力边界为非实时轨迹、非 ETA。
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-loading-wrap" wx:if="{{ loading }}">
+    <loading-view text="正在加载区域"></loading-view>
+  </view>
+
+  <block wx:else>
+    <view class="admin-section-card">
+      <view class="admin-section-title">基础信息</view>
+      <view class="form-item">
+        <text class="form-label">城市</text>
+        <input
+          class="form-input"
+          value="{{ form.city }}"
+          data-field="city"
+          bindinput="handleInput"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">区县</text>
+        <input
+          class="form-input"
+          value="{{ form.district }}"
+          data-field="district"
+          bindinput="handleInput"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">街道</text>
+        <input
+          class="form-input"
+          value="{{ form.street }}"
+          data-field="street"
+          bindinput="handleInput"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">小区</text>
+        <input
+          class="form-input"
+          value="{{ form.community }}"
+          data-field="community"
+          bindinput="handleInput"
+        />
+      </view>
+    </view>
+
+    <view class="admin-section-card">
+      <view class="admin-section-title">配置说明</view>
+      <view class="form-item">
+        <text class="form-label">中心点纬度</text>
+        <input
+          class="form-input"
+          type="digit"
+          value="{{ form.latitude }}"
+          data-field="latitude"
+          bindinput="handleInput"
+          placeholder="例如 30.2741"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">中心点经度</text>
+        <input
+          class="form-input"
+          type="digit"
+          value="{{ form.longitude }}"
+          data-field="longitude"
+          bindinput="handleInput"
+          placeholder="例如 120.1551"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">行政区编码</text>
+        <input
+          class="form-input"
+          value="{{ form.adcode }}"
+          data-field="adcode"
+          bindinput="handleInput"
+          placeholder="例如 330106"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">地图地址</text>
+        <input
+          class="form-input"
+          value="{{ form.map_address }}"
+          data-field="map_address"
+          bindinput="handleInput"
+          placeholder="地图选点后的标准地址"
+        />
+      </view>
+      <view class="form-item">
+        <text class="form-label">地图 POI</text>
+        <input
+          class="form-input"
+          value="{{ form.map_poi_name }}"
+          data-field="map_poi_name"
+          bindinput="handleInput"
+          placeholder="例如 小区东门"
+        />
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-status-card">
+      <view class="admin-section-title">边界说明</view>
+      <view class="admin-card-desc">
+        区域命中、可服务范围和候选筛选以后端为准；本页不计算实时距离、不生成轨迹、不承诺 ETA。
+      </view>
+    </view>
+
+    <view class="admin-section-card admin-action-card">
+      <view class="admin-section-title">管理操作</view>
+      <button
+        class="admin-action-button admin-full-button"
+        loading="{{ saving }}"
+        disabled="{{ saving }}"
+        bindtap="handleSave"
+      >
+        保存服务区域
+      </button>
+    </view>
+  </block>
 </view>

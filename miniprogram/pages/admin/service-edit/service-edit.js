@@ -28,6 +28,8 @@ Page({
     statusOptions: ["上架", "下架"],
     statusValues: ["on", "off"],
     statusIndex: 0,
+    loading: true,
+    errorText: "",
     submitting: false,
   },
 
@@ -39,6 +41,7 @@ Page({
   },
 
   async loadFormData() {
+    this.setData({ loading: true, errorText: "" });
     try {
       const categoryData = await serviceService.getCategoryList({
         includeDisabled: true,
@@ -60,7 +63,11 @@ Page({
         this.applyService(serviceData.service || {});
       }
     } catch (error) {
-      showError(error.message || "服务信息加载失败");
+      const errorText = error.message || "服务信息加载失败";
+      this.setData({ errorText });
+      showError(errorText);
+    } finally {
+      this.setData({ loading: false });
     }
   },
 

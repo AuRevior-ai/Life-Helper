@@ -1,58 +1,93 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">同步种子服务到云数据库，并管理服务上下架</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      管理服务目录、价格展示和上下架状态，服务状态变更仍由后端服务层确认。
+    </view>
   </view>
 
-  <view class="toolbar">
-    <button
-      class="primary-button compact"
-      loading="{{ seeding }}"
-      disabled="{{ seeding }}"
-      bindtap="seedServiceData"
-    >
-      同步种子服务
-    </button>
-    <button class="ghost-button compact" bindtap="goCreateService">
-      新增服务
-    </button>
+  <view class="admin-status-card">
+    <view class="admin-card-title">服务目录</view>
+    <view class="admin-card-desc">
+      这里展示服务配置，不接入真实支付、真实退款、自动派单或订单完成判定。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载服务"></loading-view>
-
-  <view wx:elif="{{ services.length }}" class="service-list">
-    <view wx:for="{{ services }}" wx:key="_id" class="service-card panel">
-      <view class="card-top">
-        <view>
-          <view class="service-name">{{ item.name }}</view>
-          <view class="service-meta"
-            >{{ item.category_name }} · {{ item.priceText }}</view
-          >
-        </view>
-        <view class="status-tag {{ item.status === 'off' ? 'off' : '' }}"
-          >{{ item.statusText }}</view
-        >
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill"
+      >
+        {{ item }}
       </view>
-      <view wx:if="{{ item.description }}" class="service-desc"
-        >{{ item.description }}</view
-      >
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-action-row">
       <button
-        class="text-button"
-        data-id="{{ item._id }}"
-        data-status="{{ item.nextStatus }}"
-        loading="{{ submittingId === item._id }}"
-        disabled="{{ submittingId === item._id }}"
-        bindtap="updateServiceStatus"
+        class="admin-outline-button"
+        loading="{{ seeding }}"
+        disabled="{{ seeding }}"
+        bindtap="seedServiceData"
       >
-        {{ item.nextStatusText }}
+        同步种子服务
       </button>
-      <button
-        class="text-button"
-        data-id="{{ item._id }}"
-        bindtap="goEditService"
-      >
-        编辑服务
+      <button class="admin-action-button" bindtap="goCreateService">
+        新增服务
       </button>
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-loading-wrap" wx:if="{{ loading }}">
+    <loading-view text="正在加载服务"></loading-view>
+  </view>
+
+  <view wx:elif="{{ services.length }}" class="admin-list-stack">
+    <view
+      wx:for="{{ services }}"
+      wx:key="_id"
+      class="admin-section-card admin-list-card"
+    >
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.name }}</view>
+          <view class="admin-list-meta">
+            {{ item.categoryText }} · {{ item.durationText }} · {{ item.priceText }}
+          </view>
+        </view>
+        <view class="admin-status-pill {{ item.statusClass }}">
+          {{ item.statusText }}
+        </view>
+      </view>
+      <view wx:if="{{ item.description }}" class="admin-list-desc">
+        {{ item.description }}
+      </view>
+      <view class="admin-action-row">
+        <button
+          class="admin-outline-button"
+          data-id="{{ item._id }}"
+          data-status="{{ item.nextStatus }}"
+          loading="{{ submittingId === item._id }}"
+          disabled="{{ submittingId === item._id }}"
+          bindtap="updateServiceStatus"
+        >
+          {{ item.nextStatusText }}
+        </button>
+        <button
+          class="admin-outline-button"
+          data-id="{{ item._id }}"
+          bindtap="goEditService"
+        >
+          编辑服务
+        </button>
+      </view>
     </view>
   </view>
 

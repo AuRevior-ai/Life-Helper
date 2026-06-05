@@ -171,7 +171,18 @@ UI 阶段不得修改订单状态枚举、流转条件、支付状态、售后�
 - `pages/admin/review-appeal-list/review-appeal-list`
 - `pages/admin/review-appeal-detail/review-appeal-detail`
 
-阶段 24B-2 建议继续处理服务 / 分类 / 区域 / 派单页面，例如 `category-list`、`category-edit`、`service-list`、`service-edit`、`area-list`、`area-edit`、`assign-worker` 和 `dispatch-logs`。
+阶段 24B-2 已继续收口以下页面：
+
+- `pages/admin/category-list/category-list`
+- `pages/admin/category-edit/category-edit`
+- `pages/admin/service-list/service-list`
+- `pages/admin/service-edit/service-edit`
+- `pages/admin/area-list/area-list`
+- `pages/admin/area-edit/area-edit`
+- `pages/admin/assign-worker/assign-worker`
+- `pages/admin/dispatch-logs/dispatch-logs`
+
+阶段 24B-3 建议继续处理财务 / 商家 / 资质 / 保证金 / 风控 / 用户治理页面，例如 `finance-log-list`、`worker-earning-list`、`order-finance-detail`、`merchant-list`、`merchant-detail`、`qualification-review`、`deposit-review`、`risk-control` 和 `user-list`。
 
 管理员端二级页 UI 收口允许：
 
@@ -192,6 +203,7 @@ UI 阶段不得修改订单状态枚举、流转条件、支付状态、售后�
 - 不得接入真实支付、真实退款、提现、分账、真实认证、OCR、保证金支付或真实风控。
 - 不得让前端直接决定订单完成、支付成功、退款成功或收益结算。
 - 不得把 mock、内部模拟或人工审核能力包装成真实上线能力。
+- 不得在 UI 收口中新增自动派单、AI 派单、路径规划、实时轨迹、ETA、多边形围栏或距离自动加价。
 
 ## 12. 阶段结论
 

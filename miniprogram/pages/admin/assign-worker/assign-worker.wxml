@@ -1,36 +1,77 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">只展示分类、区域和接单状态符合条件的师傅</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      从后端返回的可指派候选中人工选择师傅，指派结果以 dispatch 服务层为准。
+    </view>
   </view>
 
-  <view class="panel">
+  <view class="admin-status-card">
+    <view class="admin-card-title">人工派单</view>
+    <view class="admin-card-desc">
+      候选范围来自既有分类、区域、接单状态和 LBS 基础能力；当前为非自动派单、非 AI 派单。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">候选条件</view>
+    <view class="admin-filter-row">
+      <view
+        wx:for="{{ filterPills }}"
+        wx:key="*this"
+        class="admin-filter-pill"
+      >
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
     <textarea
       class="form-textarea"
       value="{{ reason }}"
-      placeholder="指派备注"
+      placeholder="指派备注，默认记录为管理员人工派单"
       bindinput="handleReasonInput"
     ></textarea>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载师傅"></loading-view>
-  <block wx:elif="{{ workers.length }}">
-    <view wx:for="{{ workers }}" wx:key="_id" class="panel">
-      <view class="section-title">{{ item.name }}</view>
-      <view class="muted-text"
-        >{{ item.service_category }} · {{ item.service_area }}</view
-      >
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-loading-wrap" wx:if="{{ loading }}">
+    <loading-view text="正在加载师傅"></loading-view>
+  </view>
+
+  <view wx:elif="{{ workers.length }}" class="admin-list-stack">
+    <view
+      wx:for="{{ workers }}"
+      wx:key="_id"
+      class="admin-section-card admin-list-card"
+    >
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.name }}</view>
+          <view class="admin-list-meta">
+            {{ item.serviceText }} · {{ item.areaText }}
+          </view>
+        </view>
+        <view class="admin-status-pill is-active">{{ item.statusText }}</view>
+      </view>
+      <view class="admin-list-desc">
+        页面只发起人工指派请求，不直接完成订单、不生成财务流水。
+      </view>
       <button
-        class="primary-button"
+        class="admin-action-button admin-card-button"
         data-id="{{ item._id }}"
         loading="{{ submittingId === item._id }}"
         disabled="{{ submittingId === item._id }}"
         bindtap="assignWorker"
       >
-        指派
+        指派该师傅
       </button>
     </view>
-  </block>
+  </view>
+
   <empty-state
     wx:else
     title="暂无可指派师傅"

@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "编辑区域"
+  "navigationBarTitleText": "编辑区域",
+  "usingComponents": {
+    "loading-view": "/components/loading-view/loading-view"
+  }
 }

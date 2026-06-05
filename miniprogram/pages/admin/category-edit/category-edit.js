@@ -13,6 +13,7 @@ Page({
     statusOptions: ["启用", "停用"],
     statusValues: ["enabled", "disabled"],
     statusIndex: 0,
+    errorText: "",
     submitting: false,
   },
 

@@ -19,6 +19,8 @@ Page({
     title: "新增区域",
     areaId: "",
     form: { ...EMPTY_FORM },
+    loading: false,
+    errorText: "",
     saving: false,
   },
 
@@ -32,12 +34,14 @@ Page({
   },
 
   async loadArea(areaId) {
+    this.setData({ loading: true, errorText: "" });
     try {
       const data = await areaService.getServiceAreaList({
         includeDisabled: true,
       });
       const area = (data.areas || []).find((item) => item._id === areaId);
       if (!area) {
+        this.setData({ errorText: "区域不存在" });
         showError("区域不存在");
         return;
       }
@@ -56,7 +60,11 @@ Page({
         },
       });
     } catch (error) {
-      showError(error.message || "区域加载失败");
+      const errorText = error.message || "区域加载失败";
+      this.setData({ errorText });
+      showError(errorText);
+    } finally {
+      this.setData({ loading: false });
     }
   },
 
