@@ -62,6 +62,23 @@ function createMemoryOrders(initialOrders = []) {
     async findAll() {
       return records.map((order) => ({ ...order }));
     },
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
+      const start = (page - 1) * pageSize;
+      const list = records.filter((order) => {
+        if (filters.status && order.status !== filters.status) return false;
+        if (filters.category_id && order.category_id !== filters.category_id)
+          return false;
+        return true;
+      });
+      return {
+        list: list.slice(start, start + pageSize).map((order) => ({ ...order })),
+        total: list.length,
+        page,
+        pageSize,
+      };
+    },
     async findById(id) {
       const order = records.find((item) => item._id === id);
       return order ? { ...order } : null;

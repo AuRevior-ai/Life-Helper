@@ -61,3 +61,52 @@ test("administrator can set risk level and tags while merchant sees simplified r
     false,
   );
 });
+
+test("administrator lists risk records through paged repository query", async () => {
+  const {
+    handleQualification,
+  } = require("../cloudfunctions/qualification/handler");
+  const calls = [];
+  const env = createQualificationEnv({ openid: "openid_admin" });
+  env.riskRecords = {
+    async findAll() {
+      throw new Error("riskRecords.findAll should not be used for pagination");
+    },
+    async queryPage(filters, pageInfo) {
+      calls.push({ filters, pageInfo });
+      return {
+        list: [
+          {
+            _id: "risk_1",
+            merchant_id: filters.merchant_id,
+            risk_level: filters.risk_level,
+          },
+        ],
+        total: 1,
+        page: pageInfo.page,
+        pageSize: pageInfo.pageSize,
+      };
+    },
+  };
+
+  const result = await handleQualification(
+    {
+      action: "adminListRiskRecords",
+      merchantId: "merchant_1",
+      riskLevel: "HIGH",
+      page: 2,
+      pageSize: 100,
+    },
+    env,
+  );
+
+  assert.equal(result.success, true);
+  assert.equal(result.data.riskRecords.length, 1);
+  assert.equal(result.data.pageSize, 50);
+  assert.deepEqual(calls, [
+    {
+      filters: { merchant_id: "merchant_1", risk_level: "HIGH" },
+      pageInfo: { page: 2, pageSize: 50 },
+    },
+  ]);
+});

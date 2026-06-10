@@ -2,6 +2,46 @@
 
 本文件记录当前正在执行或刚完成的工程阶段。它只描述当前阶段事实，不替代长期协作规则；长期规则见 `AGENT.MD`。
 
+## 当前维护阶段（2026-06-10）
+
+阶段 24C：低风险工程收口、权限保护与高增长列表分页治理。
+
+本轮由用户指令开启，优先于下方阶段 24B-3 UI checkpoint 的“本阶段不改云函数”限制。本轮只允许低风险维护：管理员禁用用户后端保护、管理员/财务/风控高增长列表数据库侧过滤分页、商家收益/评价/打赏兼容权限测试和契约文档同步。
+
+本轮已明确禁止接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控、自动审核或 AI 裁决；不修改订单状态机、支付状态、退款状态、售后状态、财务状态、保证金状态、资质状态或风控状态；不修改页面 UI。
+
+本轮改动保持 action 名称和既有返回别名语义：列表仍返回 `users`、`orders`、`logs`、`earnings`、`riskRecords`，同时补齐 `list/total/page/pageSize/hasMore` 分页字段。
+
+本轮验收命令：
+
+```bash
+node --test tests/phase7.admin.test.js
+node --test tests/phase16.finance-worker-earning.test.js
+node --test tests/phase18.review-tip-appeal.test.js
+node --test tests/phase20.risk.test.js
+npm test
+npm run check:shared-sync
+npm run check:cloudfunction-deps
+git diff --check
+```
+
+本轮不生成公开交付候选目录；如后续需要交付，必须重新生成 clean candidate 并运行：
+
+```bash
+npm run check:release-risk -- <candidate-dir>
+```
+
+本轮最终验收结果：
+
+- `node --test tests/phase7.admin.test.js`：9/9 通过。
+- `node --test tests/phase16.finance-worker-earning.test.js`：10/10 通过。
+- `node --test tests/phase18.review-tip-appeal.test.js`：9/9 通过。
+- `node --test tests/phase20.risk.test.js`：2/2 通过。
+- `npm test`：330/330 通过。
+- `npm run check:shared-sync`：通过。
+- `npm run check:cloudfunction-deps`：通过。
+- `git diff --check`：通过；仅提示既有 `AGENT.MD` 工作区换行转换 warning。
+
 ## 阶段名称
 
 阶段 24B-3：管理员端财务 / 商家 / 资质 / 保证金 / 风控 / 用户管理页面 UI 收口
@@ -19,6 +59,8 @@
 阶段 24B-2 checkpoint：阶段 24B-2：管理员端服务 / 分类 / 区域 / 派单页面 UI 收口已完成。
 
 本轮进入阶段 24B-3，只收口管理员端财务、商家、资质、保证金、风控和用户管理相关二级页。不一次性重构全部管理员二级页面。
+
+当前产品策略明确为继续使用 mock 支付，不考虑接入真实支付现金流。真实微信支付、真实退款、提现、分账和真实现金流不是本阶段目标，也不应在当前工程评价中被列为 P0 阻塞项。
 
 ## 本阶段目标
 
@@ -85,6 +127,8 @@
 ## mock/真实能力边界
 
 本节延续既有 mock/真实能力边界 表述，避免旧阶段结构保护测试和后续 Agent 对当前边界产生误读。
+
+工程评价口径：在当前 mock 支付策略下，真实支付、真实退款、提现、分账未接入属于范围外能力，不属于当前 P0。只有 mock 被包装成真实能力、支付/退款/财务状态可被前端伪造，或阶段目标明确进入真实资金接入时，才按 P0 或高风险问题处理。
 
 | 能力 | 当前状态 |
 | ---- | -------- |

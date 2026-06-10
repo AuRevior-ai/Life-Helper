@@ -174,6 +174,7 @@ function createReviewEnv(openid = "openid_user") {
     users: createMemoryUsers([
       { openid: "openid_user", role: "user", status: "normal" },
       { openid: "openid_worker", role: "worker", status: "normal" },
+      { openid: "openid_merchant", role: "user", status: "normal" },
       { openid: "openid_admin", role: "admin", status: "normal" },
     ]),
     orders: createMemoryOrders([
@@ -440,6 +441,73 @@ test("worker can reply own visible review but not another worker review", async 
   );
   assert.equal(denied.success, false);
   assert.equal(denied.errorCode, "PERMISSION_DENIED");
+});
+
+test("merchant-compatible reviews and tips are not exposed through worker-only actions", async () => {
+  const { handleReview } = require("../cloudfunctions/review/handler");
+  const { handleTip } = require("../cloudfunctions/tip/handler");
+  const reviewEnv = createReviewEnv("openid_merchant");
+  reviewEnv.reviews.records.push({
+    _id: "review_merchant",
+    order_id: "order_merchant",
+    order_no: "ODM001",
+    user_id: "openid_user",
+    worker_id: "",
+    provider_type: "merchant",
+    provider_id: "merchant_1",
+    merchant_id: "merchant_1",
+    rating: 2,
+    rating_level: "bad",
+    content: "商家订单评价",
+    status: "visible",
+    appeal_status: "none",
+  });
+
+  const reply = await handleReview(
+    {
+      action: "workerReplyReview",
+      reviewId: "review_merchant",
+      content: "商家暂不能走师傅回复入口",
+    },
+    reviewEnv,
+  );
+  assert.equal(reply.success, false);
+  assert.equal(reply.errorCode, "PERMISSION_DENIED");
+
+  const appeal = await handleReview(
+    {
+      action: "workerCreateReviewAppeal",
+      reviewId: "review_merchant",
+      reason: "商家暂不能走师傅申诉入口",
+    },
+    reviewEnv,
+  );
+  assert.equal(appeal.success, false);
+  assert.equal(appeal.errorCode, "PERMISSION_DENIED");
+
+  const tipEnv = createTipEnv("openid_merchant");
+  tipEnv.tipLogs.records.push({
+    _id: "tip_merchant",
+    order_id: "order_merchant",
+    user_id: "openid_user",
+    worker_id: "",
+    provider_type: "merchant",
+    provider_id: "merchant_1",
+    merchant_id: "merchant_1",
+    amount: 1000,
+    status: "mock_success",
+  });
+
+  const tips = await handleTip({ action: "getWorkerTipList" }, tipEnv);
+  assert.equal(tips.success, true);
+  assert.deepEqual(tips.data.tips, []);
+
+  const detail = await handleTip(
+    { action: "getTipDetail", tipId: "tip_merchant" },
+    tipEnv,
+  );
+  assert.equal(detail.success, false);
+  assert.equal(detail.errorCode, "PERMISSION_DENIED");
 });
 
 test("worker appeals bad review and admin approves or rejects appeal with logs", async () => {

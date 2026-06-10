@@ -1,7 +1,7 @@
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 const USER_STATUS = Object.freeze({
   NORMAL: "normal",
@@ -44,6 +44,21 @@ async function requireAdmin(env) {
   }
 
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 function isValidOrderStatus(status) {
@@ -90,55 +105,74 @@ async function getDashboard(event, env) {
 
 async function getAllUsers(event, env) {
   await requireAdmin(env);
-  const users = await env.users.findAll();
-  return success({ users });
+  if (!env.users.queryPage) {
+    throw serviceError("USER_REPOSITORY_MISSING", "缺少用户分页查询能力");
+  }
+  const payload = getPayload(event);
+  const filters = {};
+  if (payload.role) filters.role = payload.role;
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.users.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "users");
 }
 
 async function disableUser(event, env) {
-  await requireAdmin(env);
+  const admin = await requireAdmin(env);
   const payload = getPayload(event);
   if (!payload.userId) {
     throw serviceError("USER_ID_MISSING", "缺少用户 ID");
+  }
+
+  const targetUser = await env.users.findById(payload.userId);
+  if (!targetUser) {
+    throw serviceError("USER_NOT_FOUND", "用户不存在");
+  }
+  if (
+    (targetUser._id && admin._id && targetUser._id === admin._id) ||
+    (targetUser.openid && admin.openid && targetUser.openid === admin.openid)
+  ) {
+    throw serviceError("ADMIN_DISABLE_SELF", "管理员不能禁用自己");
+  }
+  if (
+    targetUser.role === USER_ROLE.ADMIN &&
+    targetUser.status !== USER_STATUS.DISABLED
+  ) {
+    if (!env.users.countNormalAdmins) {
+      throw serviceError("USER_REPOSITORY_MISSING", "缺少管理员计数能力");
+    }
+    const normalAdminCount = await env.users.countNormalAdmins();
+    if (normalAdminCount <= 1) {
+      throw serviceError("ADMIN_LAST_ADMIN", "不能禁用最后一个正常管理员");
+    }
   }
 
   const user = await env.users.updateById(payload.userId, {
     status: USER_STATUS.DISABLED,
     updated_at: getNow(env),
   });
-  if (!user) {
-    throw serviceError("USER_NOT_FOUND", "用户不存在");
-  }
 
   return success({ user });
 }
 
 async function getAllOrders(event, env) {
   await requireAdmin(env);
+  if (!env.orders.queryPage) {
+    throw serviceError("ORDER_REPOSITORY_MISSING", "缺少订单分页查询能力");
+  }
   const payload = getPayload(event);
-  let orders = await env.orders.findAll();
   const keyword = trimText(payload.keyword);
+  const filters = {};
 
-  if (payload.status) {
-    orders = orders.filter((order) => order.status === payload.status);
-  }
+  if (payload.status) filters.status = payload.status;
   if (payload.category_id || payload.categoryId) {
-    const categoryId = payload.category_id || payload.categoryId;
-    orders = orders.filter((order) => order.category_id === categoryId);
+    filters.category_id = payload.category_id || payload.categoryId;
   }
-  if (keyword) {
-    orders = orders.filter((order) =>
-      [
-        order.order_no,
-        order.service_name,
-        order.contact_name,
-        order.contact_phone,
-      ]
-        .map((item) => trimText(item))
-        .some((item) => item.includes(keyword)),
-    );
-  }
+  if (keyword) filters.keyword = keyword;
 
-  return success(paginateList(orders, payload, { listKey: "orders" }));
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.orders.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "orders");
 }
 
 async function getOrderDetail(event, env) {

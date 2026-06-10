@@ -9,6 +9,33 @@ function createMemoryCollection(initialRecords = []) {
     async findAll() {
       return records.map((record) => ({ ...record }));
     },
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
+      const start = (page - 1) * pageSize;
+      const list = records.filter((record) => {
+        if (filters.merchant_id && record.merchant_id !== filters.merchant_id)
+          return false;
+        if (filters.provider_id && record.provider_id !== filters.provider_id)
+          return false;
+        if (
+          filters.provider_type &&
+          record.provider_type !== filters.provider_type
+        )
+          return false;
+        if (filters.risk_level && record.risk_level !== filters.risk_level)
+          return false;
+        return true;
+      });
+      return {
+        list: list
+          .slice(start, start + pageSize)
+          .map((record) => ({ ...record })),
+        total: list.length,
+        page,
+        pageSize,
+      };
+    },
     async findById(id) {
       const record = records.find((item) => item._id === id);
       return record ? { ...record } : null;

@@ -56,6 +56,26 @@ function createMemoryFinanceLogs(initial = []) {
     async findAll() {
       return records.map((item) => ({ ...item }));
     },
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
+      const start = (page - 1) * pageSize;
+      const list = records.filter((item) => {
+        if (filters.order_id && item.order_id !== filters.order_id)
+          return false;
+        if (filters.worker_id && item.worker_id !== filters.worker_id)
+          return false;
+        if (filters.type && item.type !== filters.type) return false;
+        if (filters.status && item.status !== filters.status) return false;
+        return true;
+      });
+      return {
+        list: list.slice(start, start + pageSize).map((item) => ({ ...item })),
+        total: list.length,
+        page,
+        pageSize,
+      };
+    },
     async findByOrderId(orderId) {
       return records
         .filter((item) => item.order_id === orderId)
@@ -88,6 +108,30 @@ function createMemoryWorkerEarnings(initial = []) {
       return records
         .filter((item) => item.worker_id === workerId)
         .map((item) => ({ ...item }));
+    },
+    async queryPageByWorkerId(workerId, filters = {}, pageInfo = {}) {
+      return this.queryPage({ ...filters, worker_id: workerId }, pageInfo);
+    },
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
+      const start = (page - 1) * pageSize;
+      const list = records.filter((item) => {
+        if (filters.worker_id && item.worker_id !== filters.worker_id)
+          return false;
+        if (filters.status && item.status !== filters.status) return false;
+        if (filters.provider_type && item.provider_type !== filters.provider_type)
+          return false;
+        if (filters.merchant_id && item.merchant_id !== filters.merchant_id)
+          return false;
+        return true;
+      });
+      return {
+        list: list.slice(start, start + pageSize).map((item) => ({ ...item })),
+        total: list.length,
+        page,
+        pageSize,
+      };
     },
     async findAll() {
       return records.map((item) => ({ ...item }));
@@ -321,6 +365,173 @@ test("worker income summary and list are limited to current worker", async () =>
     listResult.data.earnings.map((item) => item.worker_id),
     ["openid_worker"],
   );
+});
+
+test("worker earning list does not expose merchant-compatible earnings through worker endpoint", async () => {
+  const { handleFinance } = require("../cloudfunctions/finance/handler");
+  const env = createBaseEnv("openid_merchant");
+  env.users = createMemoryUsers([
+    {
+      _id: "merchant_user",
+      openid: "openid_merchant",
+      role: "user",
+      status: "normal",
+    },
+  ]);
+  env.workerEarnings = createMemoryWorkerEarnings([
+    {
+      _id: "earning_merchant",
+      order_id: "order_merchant",
+      order_no: "ODM001",
+      worker_id: "",
+      provider_type: "merchant",
+      provider_id: "merchant_1",
+      merchant_id: "merchant_1",
+      status: "frozen",
+      worker_earning_amount: 8000,
+      platform_commission_amount: 1200,
+    },
+    {
+      _id: "earning_worker",
+      order_id: "order_worker",
+      order_no: "ODW001",
+      worker_id: "openid_worker",
+      provider_type: "worker",
+      provider_id: "openid_worker",
+      status: "frozen",
+      worker_earning_amount: 6000,
+      platform_commission_amount: 900,
+    },
+  ]);
+
+  const result = await handleFinance(
+    { action: "getWorkerEarningList" },
+    env,
+  );
+
+  assert.equal(result.success, true);
+  assert.deepEqual(result.data.earnings, []);
+});
+
+test("finance high-growth list actions use paged repository queries", async () => {
+  const { handleFinance } = require("../cloudfunctions/finance/handler");
+  const calls = [];
+  const env = createBaseEnv("openid_admin");
+  env.financeLogs = {
+    async create() {},
+    async findAll() {
+      throw new Error("financeLogs.findAll should not be used for pagination");
+    },
+    async queryPage(filters, pageInfo) {
+      calls.push({ type: "financeLogs", filters, pageInfo });
+      return {
+        list: [{ _id: "log_1", type: filters.type, status: filters.status }],
+        total: 1,
+        page: pageInfo.page,
+        pageSize: pageInfo.pageSize,
+      };
+    },
+  };
+  env.workerEarnings = {
+    async create() {},
+    async findByWorkerId() {
+      throw new Error(
+        "workerEarnings.findByWorkerId should not be used for list pagination",
+      );
+    },
+    async findAll() {
+      throw new Error(
+        "workerEarnings.findAll should not be used for list pagination",
+      );
+    },
+    async queryPageByWorkerId(workerId, filters, pageInfo) {
+      calls.push({
+        type: "workerEarningsByWorker",
+        workerId,
+        filters,
+        pageInfo,
+      });
+      return {
+        list: [{ _id: "earning_1", worker_id: workerId }],
+        total: 1,
+        page: pageInfo.page,
+        pageSize: pageInfo.pageSize,
+      };
+    },
+    async queryPage(filters, pageInfo) {
+      calls.push({ type: "workerEarnings", filters, pageInfo });
+      return {
+        list: [{ _id: "earning_admin", worker_id: filters.worker_id }],
+        total: 1,
+        page: pageInfo.page,
+        pageSize: pageInfo.pageSize,
+      };
+    },
+  };
+
+  const workerList = await handleFinance(
+    {
+      action: "getWorkerEarningList",
+      status: "frozen",
+      page: 3,
+      pageSize: 100,
+    },
+    { ...env, openid: "openid_worker" },
+  );
+  assert.equal(workerList.success, true);
+  assert.equal(workerList.data.pageSize, 50);
+
+  const logs = await handleFinance(
+    {
+      action: "adminGetFinanceLogs",
+      orderId: "order_1",
+      workerId: "openid_worker",
+      type: "worker_earning",
+      status: "success",
+      page: 2,
+      pageSize: 10,
+    },
+    env,
+  );
+  assert.equal(logs.success, true);
+  assert.equal(logs.data.logs.length, 1);
+
+  const earnings = await handleFinance(
+    {
+      action: "adminGetWorkerEarnings",
+      workerId: "openid_worker",
+      status: "frozen",
+      page: 1,
+      pageSize: 5,
+    },
+    env,
+  );
+  assert.equal(earnings.success, true);
+  assert.equal(earnings.data.earnings.length, 1);
+
+  assert.deepEqual(calls, [
+    {
+      type: "workerEarningsByWorker",
+      workerId: "openid_worker",
+      filters: { status: "frozen" },
+      pageInfo: { page: 3, pageSize: 50 },
+    },
+    {
+      type: "financeLogs",
+      filters: {
+        order_id: "order_1",
+        worker_id: "openid_worker",
+        type: "worker_earning",
+        status: "success",
+      },
+      pageInfo: { page: 2, pageSize: 10 },
+    },
+    {
+      type: "workerEarnings",
+      filters: { worker_id: "openid_worker", status: "frozen" },
+      pageInfo: { page: 1, pageSize: 5 },
+    },
+  ]);
 });
 
 test("admin can read finance logs, worker earnings, and order finance detail", async () => {

@@ -1,7 +1,7 @@
 const { success, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 const { PROVIDER_TYPE, RISK_LEVEL } = require("./qualification.constants");
 const {
   trimText,
@@ -30,6 +30,21 @@ async function createRiskRecord(context, env, data) {
     created_at: now,
     updated_at: now,
   });
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 async function getMyRiskStatus(event, env) {
@@ -113,12 +128,21 @@ async function adminAddRiskTag(event, env) {
 async function adminListRiskRecords(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let list = await env.riskRecords.findAll();
-  if (payload.merchantId || payload.merchant_id) {
-    const merchantId = payload.merchantId || payload.merchant_id;
-    list = list.filter((item) => item.merchant_id === merchantId);
+  if (!env.riskRecords.queryPage) {
+    throw serviceError("RISK_RECORD_REPOSITORY_MISSING", "缺少风控记录分页查询能力");
   }
-  return success(paginateList(list, payload, { listKey: "riskRecords" }));
+  const filters = {};
+  if (payload.merchantId || payload.merchant_id) {
+    filters.merchant_id = payload.merchantId || payload.merchant_id;
+  }
+  if (payload.riskLevel || payload.risk_level) {
+    filters.risk_level = payload.riskLevel || payload.risk_level;
+  }
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.riskRecords.queryPage(filters, pageInfo, {
+    orderByField: "created_at",
+  });
+  return buildPagedSuccess(pageData, pageInfo, "riskRecords");
 }
 
 async function adminGetOnboardingDetail(event, env) {

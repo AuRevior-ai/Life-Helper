@@ -1,9 +1,36 @@
+async function queryCollectionPage(collection, filters, pageInfo, options = {}) {
+  const page = Number(pageInfo.page || 1);
+  const pageSize = Number(pageInfo.pageSize || 20);
+  const orderByField = options.orderByField || "updated_at";
+  const where = Object.keys(filters || {}).reduce((result, key) => {
+    if (filters[key]) result[key] = filters[key];
+    return result;
+  }, {});
+  const query =
+    Object.keys(where).length > 0 ? collection.where(where) : collection;
+  const countResult = await query.count();
+  const result = await query
+    .orderBy(orderByField, "desc")
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .get();
+  return {
+    list: result.data || [],
+    total: countResult.total || 0,
+    page,
+    pageSize,
+  };
+}
+
 function createCollectionRepository(db, collectionName) {
   const collection = db.collection(collectionName);
   return {
     async findAll() {
       const result = await collection.orderBy("updated_at", "desc").get();
       return result.data || [];
+    },
+    async queryPage(filters = {}, pageInfo = {}, options = {}) {
+      return queryCollectionPage(collection, filters, pageInfo, options);
     },
     async findById(id) {
       try {

@@ -5,7 +5,7 @@ const {
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 const USER_STATUS = Object.freeze({
   NORMAL: "normal",
@@ -135,6 +135,21 @@ async function requireFinanceRepositories(env = {}) {
   if (!env.workerEarnings || !env.workerEarnings.create) {
     throw serviceError("WORKER_EARNING_REPOSITORY_MISSING", "缺少师傅收益集合");
   }
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 async function createFinanceLog(env, data) {
@@ -503,50 +518,48 @@ async function getWorkerIncomeSummary(event = {}, env = {}) {
 async function getWorkerEarningList(event = {}, env = {}) {
   const workerId = requireOpenid(env);
   const payload = getPayload(event);
-  let earnings = await env.workerEarnings.findByWorkerId(workerId);
-  if (payload.status) {
-    earnings = earnings.filter((earning) => earning.status === payload.status);
+  if (!env.workerEarnings.queryPageByWorkerId) {
+    throw serviceError("WORKER_EARNING_REPOSITORY_MISSING", "缺少收益分页查询能力");
   }
-  const pageData = paginateList(earnings, payload);
-  return success({
-    ...pageData,
-    earnings: pageData.list,
-  });
+  const filters = {};
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.workerEarnings.queryPageByWorkerId(
+    workerId,
+    filters,
+    pageInfo,
+  );
+  return buildPagedSuccess(pageData, pageInfo, "earnings");
 }
 
 async function adminGetFinanceLogs(event = {}, env = {}) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let logs = await env.financeLogs.findAll();
-  if (payload.orderId)
-    logs = logs.filter((log) => log.order_id === payload.orderId);
-  if (payload.workerId)
-    logs = logs.filter((log) => log.worker_id === payload.workerId);
-  if (payload.type) logs = logs.filter((log) => log.type === payload.type);
-  if (payload.status)
-    logs = logs.filter((log) => log.status === payload.status);
-  const pageData = paginateList(logs, payload);
-  return success({
-    ...pageData,
-    logs: pageData.list,
-  });
+  if (!env.financeLogs.queryPage) {
+    throw serviceError("FINANCE_LOG_REPOSITORY_MISSING", "缺少财务流水分页查询能力");
+  }
+  const filters = {};
+  if (payload.orderId) filters.order_id = payload.orderId;
+  if (payload.workerId) filters.worker_id = payload.workerId;
+  if (payload.type) filters.type = payload.type;
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.financeLogs.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "logs");
 }
 
 async function adminGetWorkerEarnings(event = {}, env = {}) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let earnings = await env.workerEarnings.findAll();
-  if (payload.workerId)
-    earnings = earnings.filter(
-      (earning) => earning.worker_id === payload.workerId,
-    );
-  if (payload.status)
-    earnings = earnings.filter((earning) => earning.status === payload.status);
-  const pageData = paginateList(earnings, payload);
-  return success({
-    ...pageData,
-    earnings: pageData.list,
-  });
+  if (!env.workerEarnings.queryPage) {
+    throw serviceError("WORKER_EARNING_REPOSITORY_MISSING", "缺少收益分页查询能力");
+  }
+  const filters = {};
+  if (payload.workerId) filters.worker_id = payload.workerId;
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.workerEarnings.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "earnings");
 }
 
 async function adminGetOrderFinanceDetail(event = {}, env = {}) {

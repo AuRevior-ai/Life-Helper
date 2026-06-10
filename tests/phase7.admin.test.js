@@ -29,6 +29,29 @@ function createMemoryUsers(initialUsers = []) {
       return records.map((user) => ({ ...user }));
     },
 
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
+      const start = (page - 1) * pageSize;
+      const list = records.filter((user) => {
+        if (filters.role && user.role !== filters.role) return false;
+        if (filters.status && user.status !== filters.status) return false;
+        return true;
+      });
+      return {
+        list: list.slice(start, start + pageSize).map((user) => ({ ...user })),
+        total: list.length,
+        page,
+        pageSize,
+      };
+    },
+
+    async countNormalAdmins() {
+      return records.filter(
+        (user) => user.role === "admin" && user.status === "normal",
+      ).length;
+    },
+
     async updateById(id, data) {
       const record = records.find((user) => user._id === id);
       if (!record) return null;
@@ -46,6 +69,35 @@ function createMemoryOrders(initialOrders = []) {
 
     async findAll() {
       return records.map((order) => ({ ...order }));
+    },
+
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
+      const start = (page - 1) * pageSize;
+      const keyword = `${filters.keyword || ""}`.trim();
+      const list = records.filter((order) => {
+        if (filters.status && order.status !== filters.status) return false;
+        if (filters.category_id && order.category_id !== filters.category_id)
+          return false;
+        if (keyword) {
+          return [
+            order.order_no,
+            order.service_name,
+            order.contact_name,
+            order.contact_phone,
+          ]
+            .map((item) => `${item || ""}`.trim())
+            .some((item) => item.includes(keyword));
+        }
+        return true;
+      });
+      return {
+        list: list.slice(start, start + pageSize).map((order) => ({ ...order })),
+        total: list.length,
+        page,
+        pageSize,
+      };
     },
 
     async findById(id) {
@@ -243,6 +295,131 @@ test("admin can list and disable users", async () => {
     env.users.records.find((user) => user._id === "user_1").status,
     "disabled",
   );
+});
+
+test("admin disableUser protects self and the last normal administrator", async () => {
+  const { handleAdmin } = require("../cloudfunctions/admin/handler");
+  const selfEnv = createAdminEnv();
+
+  const selfResult = await handleAdmin(
+    {
+      action: "disableUser",
+      userId: "admin_1",
+    },
+    selfEnv,
+  );
+  assert.equal(selfResult.success, false);
+  assert.equal(selfResult.errorCode, "ADMIN_DISABLE_SELF");
+  assert.equal(
+    selfEnv.users.records.find((user) => user._id === "admin_1").status,
+    "normal",
+  );
+
+  const lastAdminEnv = createAdminEnv();
+  lastAdminEnv.users.records.push({
+    _id: "admin_2",
+    openid: "openid_admin_2",
+    role: "admin",
+    status: "normal",
+  });
+  lastAdminEnv.users.countNormalAdmins = async () => 1;
+
+  const lastAdminResult = await handleAdmin(
+    {
+      action: "disableUser",
+      userId: "admin_2",
+    },
+    lastAdminEnv,
+  );
+  assert.equal(lastAdminResult.success, false);
+  assert.equal(lastAdminResult.errorCode, "ADMIN_LAST_ADMIN");
+  assert.equal(
+    lastAdminEnv.users.records.find((user) => user._id === "admin_2").status,
+    "normal",
+  );
+});
+
+test("admin high-growth user and order lists use paged repository queries", async () => {
+  const { handleAdmin } = require("../cloudfunctions/admin/handler");
+  const calls = [];
+  const env = createAdminEnv();
+
+  env.users = {
+    async findByOpenid(openid) {
+      return { _id: "admin_1", openid, role: "admin", status: "normal" };
+    },
+    async findAll() {
+      throw new Error("users.findAll should not be used for list pagination");
+    },
+    async queryPage(filters, pageInfo) {
+      calls.push({ type: "users", filters, pageInfo });
+      return {
+        list: [{ _id: "user_1", role: "user", status: "normal" }],
+        total: 1,
+        page: pageInfo.page,
+        pageSize: pageInfo.pageSize,
+      };
+    },
+  };
+  env.orders = {
+    async findAll() {
+      throw new Error("orders.findAll should not be used for list pagination");
+    },
+    async queryPage(filters, pageInfo) {
+      calls.push({ type: "orders", filters, pageInfo });
+      return {
+        list: [{ _id: "order_1", status: filters.status }],
+        total: 1,
+        page: pageInfo.page,
+        pageSize: pageInfo.pageSize,
+      };
+    },
+  };
+
+  const usersResult = await handleAdmin(
+    {
+      action: "getAllUsers",
+      role: "user",
+      status: "normal",
+      page: 2,
+      pageSize: 100,
+    },
+    env,
+  );
+  assert.equal(usersResult.success, true);
+  assert.equal(usersResult.data.users.length, 1);
+  assert.equal(usersResult.data.pageSize, 50);
+
+  const ordersResult = await handleAdmin(
+    {
+      action: "getAllOrders",
+      status: "pending_accept",
+      categoryId: "cat_clean",
+      keyword: "保洁",
+      page: 1,
+      pageSize: 10,
+    },
+    env,
+  );
+  assert.equal(ordersResult.success, true);
+  assert.equal(ordersResult.data.orders.length, 1);
+
+  assert.deepEqual(calls, [
+    {
+      type: "users",
+      filters: { role: "user", status: "normal" },
+      pageInfo: { page: 2, pageSize: 50 },
+    },
+    {
+      type: "orders",
+      filters: {
+        status: "pending_accept",
+        category_id: "cat_clean",
+        keyword: "保洁",
+      },
+      pageInfo: { page: 1, pageSize: 10 },
+    },
+  ]);
 });
 
 test("admin can list orders and manually update order status", async () => {
