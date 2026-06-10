@@ -4,117 +4,91 @@
 
 ## 当前维护阶段（2026-06-10）
 
-阶段 24D：剩余高增长列表分页治理续收口。
+阶段 24E：剩余订单 / 资质 / 保证金列表分页治理。
 
-本轮由用户指令开启，优先于下方阶段 24B-3 UI checkpoint 的“本阶段不改云函数”限制。阶段 24C 已完成第一批工程收口；本轮只允许继续低风险维护剩余高增长列表：派单日志、消息、售后、商家订单/操作日志、评价列表和打赏列表从全量读取后内存分页改为仓库侧分页查询。
+本轮由用户指令开启，延续阶段 24C / 24D 的低风险分页治理方式。阶段 24C 已完成管理员、财务、风控分页治理；阶段 24D 已完成派单、消息、售后、商家、评价、打赏列表分页治理；阶段 24E 只处理以下四个接口：
 
-本轮已明确禁止接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控、自动审核或 AI 裁决；不修改订单状态机、支付状态、退款状态、售后状态、财务状态、保证金状态、资质状态或风控状态；不修改页面 UI。
+- `order.getUserOrderList`
+- `order.getWorkerOrderList`
+- `qualification.adminListQualifications`
+- `qualification.adminListDeposits`
 
-本轮改动保持 action 名称和既有返回别名语义：列表仍返回 `logs`、`messages`、`afterSales`、`orders`、`reviews`、`tips`，同时补齐或保持 `list/total/page/pageSize/hasMore` 分页字段。
+本轮已明确禁止接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控、自动审核或 AI 裁决；不修改订单状态机、支付状态、退款状态、售后状态、财务状态、收益状态、保证金状态、资质状态或风控状态；不修改页面 UI、`miniprogram/pages/**`、`miniprogram/services/**` 或 `schema/**`。
+
+本轮改动保持 action 名称和既有返回别名语义：订单列表继续返回 `orders`，资质列表继续返回 `qualifications`，保证金列表继续返回 `deposits`，同时补齐或保持 `list/total/page/pageSize/hasMore` 分页字段。
 
 本轮验收命令：
 
 ```bash
-node --test tests/phase24d.high-growth-pagination.test.js
+node --test tests/phase24e.order-qualification-pagination.test.js
 npm test
 npm run check:shared-sync
 npm run check:cloudfunction-deps
 git diff --check
 ```
 
-本轮不生成公开交付候选目录；如后续需要交付，必须重新生成 clean candidate 并运行：
+本轮不生成公开交付候选目录；如后续意外涉及交付包、发布清单、敏感文件或 clean candidate，必须额外运行：
 
 ```bash
 npm run check:release-risk -- <candidate-dir>
 ```
 
-本轮最终验收结果：
-
-- `node --test tests/phase24d.high-growth-pagination.test.js`：6/6 通过。
-- `npm test`：336/336 通过。
-- `npm run check:shared-sync`：通过。
-- `npm run check:cloudfunction-deps`：通过。
-- `git diff --check`：通过。
+本轮最终验收状态：已完成并验收通过。
 
 ## 阶段名称
 
-阶段 24D：剩余高增长列表分页治理续收口
+阶段 24E：剩余订单 / 资质 / 保证金列表分页治理
 
 ## 阶段状态
+
+阶段 24E 已完成并验收。当前已按 TDD 写入 `tests/phase24e.order-qualification-pagination.test.js`，并将四个目标列表接口改为仓库侧 `queryPage`。
 
 阶段 24A：全端 UI 统一性体检与设计规范收口已完成，已沉淀 `docs/ui-style-guide.md`、`docs/ui-refactor-guardrails.md` 和 `tests/phase24a_ui_consistency_audit.test.js`。24A 不开发新业务，不接入真实支付、退款、提现、分账、真实认证、OCR、保证金支付或真实风控，并明确下一阶段适合进入管理员端二级页面 UI 收口。
 
 阶段 23A checkpoint：阶段 23A：管理员端一级导航与五个一级页面 UI 复刻已完成，未修改云函数、services、schema、订单状态机或真实资金/认证/风控能力。
 
-阶段 23B checkpoint：阶段 23B：商家端一级页面 UI 统一已完成、已验收、已提交并推送。
+阶段 23B checkpoint：阶段 23B：商家端一级页面 UI 统一已完成、已验收、已提交并推送；该阶段不修改云函数、不修改 services。
 
 阶段 24B-1 checkpoint：阶段 24B-1：管理员端订单 / 审核 / 售后 / 评价治理二级页面 UI 收口已完成。
 
 阶段 24B-2 checkpoint：阶段 24B-2：管理员端服务 / 分类 / 区域 / 派单页面 UI 收口已完成。
 
-阶段 24B-3 已完成管理员端财务、商家、资质、保证金、风控和用户管理相关二级页 UI 收口。阶段 24C 已完成管理员禁用保护、管理员/财务/风控分页治理和兼容权限测试。本轮阶段 24D 已完成剩余重点高增长列表分页治理，不修改页面 UI。
+阶段 24B-3 checkpoint：阶段 24B-3 已完成管理员端财务、商家、资质、保证金、风控和用户管理相关二级页 UI 收口。阶段 24C 已完成管理员禁用保护、管理员/财务/风控分页治理和兼容权限测试。阶段 24D 已完成剩余重点高增长列表分页治理，不修改页面 UI。
 
 当前产品策略明确为继续使用 mock 支付，不考虑接入真实支付现金流。真实微信支付、真实退款、提现、分账和真实现金流不是本阶段目标，也不应在当前工程评价中被列为 P0 阻塞项。
 
 ## 本阶段目标
 
-1. 将 `dispatch.getDispatchLogs` 改为仓库侧分页，并保留缺集合兼容返回。
-2. 将 `message.getMessageList` 改为仓库侧分页，并保留 `messages` 别名和 `unread_count`。
-3. 将用户/管理员售后列表、商家订单/操作日志、评价列表、打赏列表改为仓库侧分页。
-4. 为每个改造 action 增加 `queryPage` 路径测试，旧 `findAll/findBy*` 在测试中抛错。
-5. 保持 pageSize 最大 50，不改变 action 名称和既有返回别名。
-6. 不修改 UI、services、状态机、真实资金/认证/风控能力。
+1. 将 `order.getUserOrderList` 改为 `orders.queryPage(filters, pageInfo)`。
+2. 将 `order.getWorkerOrderList` 改为 `orders.queryPage(filters, pageInfo)`。
+3. 将 `qualification.adminListQualifications` 改为 `qualifications.queryPage(filters, pageInfo)`。
+4. 将 `qualification.adminListDeposits` 改为 `deposits.queryPage(filters, pageInfo)`。
+5. 保持 page 最小为 1，pageSize 最大为 50，缺省 pageSize 使用既有 20。
+6. 保留旧返回别名，并补齐 `list/total/page/pageSize/hasMore`。
+7. 保持用户订单、师傅订单、管理员资质列表、管理员保证金列表的既有权限与归属边界。
+8. 不修改 UI、services、schema、状态机、真实资金/认证/风控能力。
 
-## 历史阶段 24B-3 页面清单
+## 本阶段允许
 
-- `miniprogram/pages/admin/finance-log-list/finance-log-list`
-- `miniprogram/pages/admin/worker-earning-list/worker-earning-list`
-- `miniprogram/pages/admin/order-finance-detail/order-finance-detail`
-- `miniprogram/pages/admin/tip-log-list/tip-log-list`
-- `miniprogram/pages/admin/merchant-list/merchant-list`
-- `miniprogram/pages/admin/merchant-detail/merchant-detail`
-- `miniprogram/pages/admin/qualification-review/qualification-review`
-- `miniprogram/pages/admin/deposit-review/deposit-review`
-- `miniprogram/pages/admin/risk-control/risk-control`
-- `miniprogram/pages/admin/user-list/user-list`
-
-## 历史阶段 24B-3 允许
-
-- 修改本阶段 10 个页面的 `.js`、`.wxml`、`.wxss`、必要组件声明。
-- 新增 `tests/phase24b3_admin_finance_merchant_risk_ui.test.js`。
-- 新增 `docs/dev-records/24b3-admin-finance-merchant-risk-ui.md`。
+- 修改 `cloudfunctions/order/**`。
+- 修改 `cloudfunctions/qualification/**`。
+- 必要时修改 `cloudfunctions/_shared/**`。
+- 新增或修改 `tests/**` 中与本阶段相关的测试和测试 helper。
+- 新增 `docs/dev-records/24e-order-qualification-pagination.md`。
 - 更新 `docs/PHASE_CURRENT.md`、`docs/PROJECT_STATUS.md`、`docs/dev-records/index.md`。
-- 必要时仅补充 `docs/ui-refactor-guardrails.md` 中与管理员端财务、商家、资质、保证金、风控、用户管理页面相关的 UI 规则。
 
 ## 本阶段禁止
 
-- 不修改云函数。
-- 不修改 `cloudfunctions/**`。
-- 不修改 services。
+- 不修改页面 UI。
+- 不修改 `miniprogram/pages/**`。
 - 不修改 `miniprogram/services/**`。
-- 不修改 schema。
 - 不修改 `schema/**`。
-- 不修改 `miniprogram/config/status.js`。
-- 不修改 `miniprogram/config/constants.js`。
-- 不修改 `miniprogram/utils/request.js`。
 - 不修改订单状态机。
-- 不修改支付状态、退款状态、售后状态、财务状态、收益状态、保证金状态、资质状态、风控状态。
-- 不修改管理员权限模型。
-- 不修改数据库字段语义。
-- 不修改云函数 action 名称或返回结构。
-- 不删除已有页面、已有测试或做全仓无关格式化。
-- 不新增真实支付、真实退款、提现、分账、真实对账、真实认证、OCR、真实保证金支付或真实风控。
-- 不新增多门店、连锁商家、商家员工排班、真实商家分账或合伙人结算。
-- 不新增自动风控、AI 裁决、自动处罚或自动审核。
-- 不把 mock、内部模拟、手动配置、人工审核、资料留档或已有财务流水展示包装成真实上线能力。
-
-## 阶段 24B-3 已完成内容
-
-- 10 个页面已迁移到 `admin-page`、`admin-header`、`admin-section-card`、`admin-status-card` 和 `admin-action-card` 结构。
-- 财务、保证金、资质、风控页面已补充 `admin-boundary-card` 能力边界说明。
-- 列表页已补齐筛选区、加载态、错误态、空状态和列表卡片。
-- 详情页已按“基础信息 / 状态信息 / 操作记录 / 管理操作 / 边界说明”分组。
-- 页面保留原 service 调用，未出现页面内 `wx.cloud.callFunction`。
+- 不修改支付状态、退款状态、售后状态、财务状态、收益状态、保证金状态、资质状态或风控状态语义。
+- 不修改云函数 action 名称。
+- 不删除旧返回别名。
+- 不接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控或 AI。
+- 不做全仓格式化或无关重构。
 
 ## mock/真实能力边界
 
@@ -137,7 +111,7 @@ npm run check:release-risk -- <candidate-dir>
 ## 验收命令
 
 ```bash
-node --test tests/phase24d.high-growth-pagination.test.js
+node --test tests/phase24e.order-qualification-pagination.test.js
 npm test
 npm run check:shared-sync
 npm run check:cloudfunction-deps
@@ -152,10 +126,10 @@ npm run check:release-risk -- <candidate-dir>
 
 ## 最近一次验收结果
 
-阶段 24D 最终验收结果：
+阶段 24E 最终验收结果：
 
-- `node --test tests/phase24d.high-growth-pagination.test.js`：6/6 通过。
-- `npm test`：336/336 通过。
+- `node --test tests/phase24e.order-qualification-pagination.test.js`：4/4 通过。
+- `npm test`：340/340 通过。
 - `npm run check:shared-sync`：通过。
 - `npm run check:cloudfunction-deps`：通过。
 - `git diff --check`：通过。
@@ -168,6 +142,6 @@ npm run check:release-risk -- <candidate-dir>
 
 ## 下一阶段建议
 
-下一阶段可继续治理 `order.getUserOrderList`、`order.getWorkerOrderList`、`qualification.adminListQualifications`、`qualification.adminListDeposits` 的数据库侧分页，或进入管理员端会员 / 优惠券 / 营销配置页面 UI 收口。
+下一阶段建议进入阶段 26 试运营前真机与云端部署验证，或阶段 24F 管理员端会员 / 优惠券 / 营销配置页面 UI 收口。
 
-若进入真实支付、退款、提现、分账、认证、保证金或风控阶段，必须另起独立高风险阶段，不得在 UI 收口任务中顺手接入。
+若进入真实支付、退款、提现、分账、认证、保证金或风控阶段，必须另起独立高风险阶段，不得在普通维护或 UI 收口任务中顺手接入。

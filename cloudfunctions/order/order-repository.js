@@ -2,6 +2,29 @@ function createOrderRepository(db) {
   const orders = db.collection("orders");
 
   return {
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Number(pageInfo.pageSize || 20);
+      const where = Object.keys(filters).reduce((result, key) => {
+        if (filters[key]) result[key] = filters[key];
+        return result;
+      }, {});
+      const query =
+        Object.keys(where).length > 0 ? orders.where(where) : orders;
+      const countResult = await query.count();
+      const result = await query
+        .orderBy("created_at", "desc")
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .get();
+      return {
+        list: result.data || [],
+        total: countResult.total || 0,
+        page,
+        pageSize,
+      };
+    },
+
     async findByUserId(userId) {
       const result = await orders
         .where({ user_id: userId })

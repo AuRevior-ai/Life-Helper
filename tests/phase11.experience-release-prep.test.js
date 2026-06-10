@@ -84,6 +84,9 @@ function createMemoryOrders(initialOrders = []) {
       const pageSize = Math.min(Number(pageInfo.pageSize || 20), 50);
       const start = (page - 1) * pageSize;
       const list = records.filter((order) => {
+        if (filters.user_id && order.user_id !== filters.user_id) return false;
+        if (filters.worker_id && order.worker_id !== filters.worker_id)
+          return false;
         if (filters.status && order.status !== filters.status) return false;
         if (filters.category_id && order.category_id !== filters.category_id)
           return false;

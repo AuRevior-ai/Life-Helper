@@ -2,7 +2,7 @@ const { findServiceSnapshotById } = require("./service-data");
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 const ORDER_STATUS = Object.freeze({
   PENDING_PAY: "pending_pay",
@@ -634,25 +634,49 @@ async function mockPayOrder(event, env) {
 async function getUserOrderList(event, env) {
   const userId = requireOpenid(env);
   const payload = getPayload(event);
-  let orders = await env.orders.findByUserId(userId);
-
-  if (payload.status) {
-    orders = orders.filter((order) => order.status === payload.status);
+  if (!env.orders.queryPage) {
+    throw serviceError("ORDER_REPOSITORY_MISSING", "缺少订单分页查询能力");
   }
-
-  return success(paginateList(orders, payload, { listKey: "orders" }));
+  const filters = { user_id: userId };
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.orders.queryPage(filters, pageInfo);
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey: "orders" },
+    ),
+  );
 }
 
 async function getWorkerOrderList(event, env) {
   await requireApprovedWorker(env);
   const payload = getPayload(event);
-  let orders = await env.orders.findByWorkerId(requireOpenid(env));
-
-  if (payload.status) {
-    orders = orders.filter((order) => order.status === payload.status);
+  if (!env.orders.queryPage) {
+    throw serviceError("ORDER_REPOSITORY_MISSING", "缺少订单分页查询能力");
   }
-
-  return success(paginateList(orders, payload, { listKey: "orders" }));
+  const filters = { worker_id: requireOpenid(env) };
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.orders.queryPage(filters, pageInfo);
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey: "orders" },
+    ),
+  );
 }
 
 async function acceptOrder(event, env) {

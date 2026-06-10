@@ -1,7 +1,7 @@
 const { success, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 const {
   DEPOSIT_STATUS,
   DEFAULT_DEPOSIT_AMOUNT,
@@ -17,6 +17,21 @@ const {
   getOnboardingSnapshot,
   createOnboardingLog,
 } = require("./onboarding.service");
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
+}
 
 async function ensureDeposit(context, env) {
   const existing = await findOwnedDeposit(context, env);
@@ -93,10 +108,14 @@ async function applyDepositRefund(event, env) {
 async function adminListDeposits(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let list = await env.deposits.findAll();
-  if (payload.status)
-    list = list.filter((item) => item.deposit_status === payload.status);
-  return success(paginateList(list, payload, { listKey: "deposits" }));
+  if (!env.deposits.queryPage) {
+    throw serviceError("DEPOSIT_REPOSITORY_MISSING", "缺少保证金分页查询能力");
+  }
+  const filters = {};
+  if (payload.status) filters.deposit_status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.deposits.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "deposits");
 }
 
 async function adminFreezeDeposit(event, env) {

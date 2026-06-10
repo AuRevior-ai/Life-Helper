@@ -1,7 +1,7 @@
 const { success, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 const {
   PROVIDER_TYPE,
   QUALIFICATION_STATUS,
@@ -36,6 +36,21 @@ async function requireAdmin(env = {}) {
   if (user.role !== "admin")
     throw serviceError("PERMISSION_DENIED", "当前操作需要管理员权限");
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 async function resolveMyProviderContext(env = {}) {
@@ -162,10 +177,14 @@ async function resubmitQualification(event, env) {
 async function adminListQualifications(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let list = await env.qualifications.findAll();
-  if (payload.status)
-    list = list.filter((item) => item.qualification_status === payload.status);
-  return success(paginateList(list, payload, { listKey: "qualifications" }));
+  if (!env.qualifications.queryPage) {
+    throw serviceError("QUALIFICATION_REPOSITORY_MISSING", "缺少资质分页查询能力");
+  }
+  const filters = {};
+  if (payload.status) filters.qualification_status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.qualifications.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "qualifications");
 }
 
 async function adminGetQualificationDetail(event, env) {

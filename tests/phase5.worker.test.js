@@ -80,6 +80,25 @@ function createMemoryOrders(initialOrders = []) {
   return {
     records,
 
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Number(pageInfo.pageSize || 20);
+      const list = records.filter((order) => {
+        if (filters.user_id && order.user_id !== filters.user_id) return false;
+        if (filters.worker_id && order.worker_id !== filters.worker_id)
+          return false;
+        if (filters.status && order.status !== filters.status) return false;
+        return true;
+      });
+      const start = (page - 1) * pageSize;
+      return {
+        list: list.slice(start, start + pageSize).map((order) => ({ ...order })),
+        total: list.length,
+        page,
+        pageSize,
+      };
+    },
+
     async findByUserId(userId) {
       return records
         .filter((order) => order.user_id === userId)
