@@ -4,21 +4,18 @@
 
 ## 当前维护阶段（2026-06-10）
 
-阶段 24C：低风险工程收口、权限保护与高增长列表分页治理。
+阶段 24D：剩余高增长列表分页治理续收口。
 
-本轮由用户指令开启，优先于下方阶段 24B-3 UI checkpoint 的“本阶段不改云函数”限制。本轮只允许低风险维护：管理员禁用用户后端保护、管理员/财务/风控高增长列表数据库侧过滤分页、商家收益/评价/打赏兼容权限测试和契约文档同步。
+本轮由用户指令开启，优先于下方阶段 24B-3 UI checkpoint 的“本阶段不改云函数”限制。阶段 24C 已完成第一批工程收口；本轮只允许继续低风险维护剩余高增长列表：派单日志、消息、售后、商家订单/操作日志、评价列表和打赏列表从全量读取后内存分页改为仓库侧分页查询。
 
 本轮已明确禁止接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控、自动审核或 AI 裁决；不修改订单状态机、支付状态、退款状态、售后状态、财务状态、保证金状态、资质状态或风控状态；不修改页面 UI。
 
-本轮改动保持 action 名称和既有返回别名语义：列表仍返回 `users`、`orders`、`logs`、`earnings`、`riskRecords`，同时补齐 `list/total/page/pageSize/hasMore` 分页字段。
+本轮改动保持 action 名称和既有返回别名语义：列表仍返回 `logs`、`messages`、`afterSales`、`orders`、`reviews`、`tips`，同时补齐或保持 `list/total/page/pageSize/hasMore` 分页字段。
 
 本轮验收命令：
 
 ```bash
-node --test tests/phase7.admin.test.js
-node --test tests/phase16.finance-worker-earning.test.js
-node --test tests/phase18.review-tip-appeal.test.js
-node --test tests/phase20.risk.test.js
+node --test tests/phase24d.high-growth-pagination.test.js
 npm test
 npm run check:shared-sync
 npm run check:cloudfunction-deps
@@ -33,18 +30,15 @@ npm run check:release-risk -- <candidate-dir>
 
 本轮最终验收结果：
 
-- `node --test tests/phase7.admin.test.js`：9/9 通过。
-- `node --test tests/phase16.finance-worker-earning.test.js`：10/10 通过。
-- `node --test tests/phase18.review-tip-appeal.test.js`：9/9 通过。
-- `node --test tests/phase20.risk.test.js`：2/2 通过。
-- `npm test`：330/330 通过。
+- `node --test tests/phase24d.high-growth-pagination.test.js`：6/6 通过。
+- `npm test`：336/336 通过。
 - `npm run check:shared-sync`：通过。
 - `npm run check:cloudfunction-deps`：通过。
-- `git diff --check`：通过；仅提示既有 `AGENT.MD` 工作区换行转换 warning。
+- `git diff --check`：通过。
 
 ## 阶段名称
 
-阶段 24B-3：管理员端财务 / 商家 / 资质 / 保证金 / 风控 / 用户管理页面 UI 收口
+阶段 24D：剩余高增长列表分页治理续收口
 
 ## 阶段状态
 
@@ -58,22 +52,20 @@ npm run check:release-risk -- <candidate-dir>
 
 阶段 24B-2 checkpoint：阶段 24B-2：管理员端服务 / 分类 / 区域 / 派单页面 UI 收口已完成。
 
-本轮进入阶段 24B-3，只收口管理员端财务、商家、资质、保证金、风控和用户管理相关二级页。不一次性重构全部管理员二级页面。
+阶段 24B-3 已完成管理员端财务、商家、资质、保证金、风控和用户管理相关二级页 UI 收口。阶段 24C 已完成管理员禁用保护、管理员/财务/风控分页治理和兼容权限测试。本轮阶段 24D 已完成剩余重点高增长列表分页治理，不修改页面 UI。
 
 当前产品策略明确为继续使用 mock 支付，不考虑接入真实支付现金流。真实微信支付、真实退款、提现、分账和真实现金流不是本阶段目标，也不应在当前工程评价中被列为 P0 阻塞项。
 
 ## 本阶段目标
 
-1. 使用既有 `miniprogram/styles/admin-theme.wxss` 作为管理员端视觉基线。
-2. 收口 10 个管理员端二级页面：财务流水、服务方收益、订单财务详情、打赏记录、商家列表、商家详情、资质审核、保证金审核、入驻风控、用户管理。
-3. 统一页面壳、顶部标题区、浅灰背景、白色圆角卡片、状态标签、筛选条、列表卡片、详情信息分组、财务说明卡、商家信息卡、审核操作卡、风控边界说明和用户管理操作区。
-4. 补齐 loading、empty、error、submitting 状态。
-5. 保留现有服务调用、按钮行为、状态流转、权限判断、页面跳转和接口参数语义。
-6. 强化页面文案中的 mock、内部模拟、人工审核和资料留档边界，避免误导为真实资金、真实认证或真实风控能力。
-7. 新增阶段结构保护测试，防止后续 Agent 破坏管理员端高风险边界页面的 UI 与文案。
-8. 新增阶段文档并同步当前状态文档。
+1. 将 `dispatch.getDispatchLogs` 改为仓库侧分页，并保留缺集合兼容返回。
+2. 将 `message.getMessageList` 改为仓库侧分页，并保留 `messages` 别名和 `unread_count`。
+3. 将用户/管理员售后列表、商家订单/操作日志、评价列表、打赏列表改为仓库侧分页。
+4. 为每个改造 action 增加 `queryPage` 路径测试，旧 `findAll/findBy*` 在测试中抛错。
+5. 保持 pageSize 最大 50，不改变 action 名称和既有返回别名。
+6. 不修改 UI、services、状态机、真实资金/认证/风控能力。
 
-## 本阶段页面清单
+## 历史阶段 24B-3 页面清单
 
 - `miniprogram/pages/admin/finance-log-list/finance-log-list`
 - `miniprogram/pages/admin/worker-earning-list/worker-earning-list`
@@ -86,7 +78,7 @@ npm run check:release-risk -- <candidate-dir>
 - `miniprogram/pages/admin/risk-control/risk-control`
 - `miniprogram/pages/admin/user-list/user-list`
 
-## 本阶段允许
+## 历史阶段 24B-3 允许
 
 - 修改本阶段 10 个页面的 `.js`、`.wxml`、`.wxss`、必要组件声明。
 - 新增 `tests/phase24b3_admin_finance_merchant_risk_ui.test.js`。
@@ -116,7 +108,7 @@ npm run check:release-risk -- <candidate-dir>
 - 不新增自动风控、AI 裁决、自动处罚或自动审核。
 - 不把 mock、内部模拟、手动配置、人工审核、资料留档或已有财务流水展示包装成真实上线能力。
 
-## 已完成内容
+## 阶段 24B-3 已完成内容
 
 - 10 个页面已迁移到 `admin-page`、`admin-header`、`admin-section-card`、`admin-status-card` 和 `admin-action-card` 结构。
 - 财务、保证金、资质、风控页面已补充 `admin-boundary-card` 能力边界说明。
@@ -145,10 +137,7 @@ npm run check:release-risk -- <candidate-dir>
 ## 验收命令
 
 ```bash
-node --test tests/phase24b3_admin_finance_merchant_risk_ui.test.js
-node --test tests/phase24b2_admin_service_area_dispatch_ui.test.js
-node --test tests/phase24b_admin_secondary_ui.test.js
-node --test tests/phase23a_admin_primary_ui.test.js
+node --test tests/phase24d.high-growth-pagination.test.js
 npm test
 npm run check:shared-sync
 npm run check:cloudfunction-deps
@@ -163,25 +152,22 @@ npm run check:release-risk -- <candidate-dir>
 
 ## 最近一次验收结果
 
-阶段 24B-3 最终验收结果：
+阶段 24D 最终验收结果：
 
-- `node --test tests/phase24b3_admin_finance_merchant_risk_ui.test.js`：10/10 通过。
-- `node --test tests/phase24b2_admin_service_area_dispatch_ui.test.js`：9/9 通过。
-- `node --test tests/phase24b_admin_secondary_ui.test.js`：7/7 通过。
-- `node --test tests/phase23a_admin_primary_ui.test.js`：13/13 通过。
-- `npm test`：324/324 通过。
+- `node --test tests/phase24d.high-growth-pagination.test.js`：6/6 通过。
+- `npm test`：336/336 通过。
 - `npm run check:shared-sync`：通过。
 - `npm run check:cloudfunction-deps`：通过。
 - `git diff --check`：通过。
 
 ## 回滚与降级策略
 
-- 本阶段不改云函数、services、schema、状态枚举或数据库结构，因此无需数据迁移回滚。
-- 如某个管理员二级页出现视觉或交互异常，可优先回滚对应页面的 WXML/WXSS/展示字段改动。
+- 本阶段不改状态枚举、schema 或真实资金/认证/风控能力，因此无需数据迁移回滚。
+- 如某个列表接口出现分页兼容异常，可优先回滚对应 handler 的 `queryPage` 调用和仓库 `queryPage` 方法，恢复上一提交后再做专项修复。
 - 如页面文案被误解为真实支付、真实退款、真实提现、真实分账、真实认证、自动风控、自动审核或 AI 裁决，应立即回退为 mock、内部模拟、人工处理、资料留档或只读展示表述。
 
 ## 下一阶段建议
 
-阶段 24B-4 可考虑管理员端会员 / 优惠券 / 营销配置页面 UI 收口，或者进入管理员端二级页面真机视觉抽查与全量验收阶段。
+下一阶段可继续治理 `order.getUserOrderList`、`order.getWorkerOrderList`、`qualification.adminListQualifications`、`qualification.adminListDeposits` 的数据库侧分页，或进入管理员端会员 / 优惠券 / 营销配置页面 UI 收口。
 
 若进入真实支付、退款、提现、分账、认证、保证金或风控阶段，必须另起独立高风险阶段，不得在 UI 收口任务中顺手接入。

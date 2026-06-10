@@ -32,6 +32,9 @@ function createMissingCollectionRepository() {
     async findByOrderId() {
       throw error;
     },
+    async queryPage() {
+      throw error;
+    },
   };
 }
 

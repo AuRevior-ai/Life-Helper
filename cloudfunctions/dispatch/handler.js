@@ -1,6 +1,7 @@
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 const { matchProviderServiceRange } = require("./_shared/lbs-utils");
 
 const USER_ROLE = Object.freeze({ ADMIN: "admin" });
@@ -122,6 +123,21 @@ async function requireAdmin(env) {
     throw serviceError("PERMISSION_DENIED", "当前操作需要管理员权限");
   }
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 async function requireOrder(orderId, env) {
@@ -378,11 +394,14 @@ async function getDispatchLogs(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
   try {
-    const logs =
-      payload.orderId && env.dispatchLogs.findByOrderId
-        ? await env.dispatchLogs.findByOrderId(payload.orderId)
-        : await env.dispatchLogs.findAll();
-    return success({ logs });
+    if (!env.dispatchLogs.queryPage) {
+      throw serviceError("DISPATCH_LOG_REPOSITORY_MISSING", "缺少派单日志分页查询能力");
+    }
+    const filters = {};
+    if (payload.orderId) filters.order_id = payload.orderId;
+    const pageInfo = normalizePage(payload);
+    const pageData = await env.dispatchLogs.queryPage(filters, pageInfo);
+    return buildPagedSuccess(pageData, pageInfo, "logs");
   } catch (error) {
     if (isMissingCollectionError(error)) {
       return success({

@@ -20,18 +20,18 @@
 | `finance`       | `adminGetFinanceLogs` / `listFinanceLogs`     | 支持          | 否       | 否       | `type + created_at`、`status + created_at`、`order_id + type`            |            50 | 已改为 `financeLogs.queryPage`              | 已处理     |
 | `finance`       | `getWorkerEarningList` / `listWorkerEarnings` | 支持          | 否       | 否       | `worker_id + status`、`provider_id + provider_type + status`             |            50 | 已改为 `workerEarnings.queryPageByWorkerId` | 已处理     |
 | `finance`       | `adminGetWorkerEarnings`                      | 支持          | 否       | 否       | `status + freeze_until`、`provider_type + created_at`                    |            50 | 已改为 `workerEarnings.queryPage`           | 已处理     |
-| `review`        | `adminGetReviewList` / `listReviews`          | 基础过滤      | 是       | 是       | `status + created_at`、`worker_id + created_at`、`order_id`              |            50 | 试运营可用，增长后需改造                    | P1         |
-| `review`        | `getWorkerReviewList` / `getWorkerReviews`    | 基础过滤      | 是       | 是       | `worker_id + status + created_at`                                        |            50 | 试运营可用，增长后需改造                    | P1         |
-| `refund`        | `getUserAfterSaleList` / `listAfterSales`     | 基础列表      | 是       | 是       | `user_id + created_at`、`status + created_at`                            |            50 | 售后量增长后需改造                          | P1         |
-| `refund`        | `adminGetAfterSaleList`                       | 基础列表      | 是       | 是       | `status + created_at`、`order_id`                                        |            50 | 运营前需数据库分页                          | P1         |
-| `dispatch`      | `getDispatchLogs` / `listDispatchLogs`        | 基础列表      | 是       | 是       | `order_id + created_at`、`worker_id + created_at`、`action + created_at` |            50 | 日志增长快，真实运营前需改造                | P0         |
-| `message`       | `getMessageList` / `listMessages`             | 支持          | 是       | 是       | `user_id + role + is_read + created_at`                                  |            50 | 需要数据库分页和只读未读索引                | P1         |
-| `merchant`      | `getMerchantOrderList`                        | 基础列表      | 是       | 是       | `provider_id + provider_type + created_at`、`merchant_id + created_at`   |            50 | 商家订单增长后需改造                        | P1         |
-| `merchant`      | `adminGetMerchantOrders`                      | 基础列表      | 是       | 是       | `merchant_id + status + created_at`                                      |            50 | 运营前需数据库分页                          | P1         |
-| `merchant`      | `adminGetMerchantActionLogs`                  | 基础列表      | 是       | 是       | `merchant_id + created_at`、`action + created_at`                        |            50 | 日志增长快，真实运营前需改造                | P0         |
-| `tip`           | `getUserTipList`                              | 支持          | 是       | 是       | `user_id + created_at`、`order_id`                                       |            50 | mock 打赏阶段可用                           | P2         |
-| `tip`           | `getWorkerTipList`                            | 支持          | 是       | 是       | `worker_id + created_at`、`provider_id + provider_type + created_at`     |            50 | mock 打赏阶段可用                           | P2         |
-| `tip`           | `adminGetTipLogs`                             | 支持          | 是       | 是       | `status + created_at`、`channel + created_at`                            |            50 | 真实打赏前需改造                            | P1         |
+| `review`        | `adminGetReviewList` / `listReviews`          | 支持          | 否       | 否       | `status + created_at`、`rating_level + created_at`、`worker_id + created_at` |            50 | 已改为 `reviews.queryPage`                  | 已处理     |
+| `review`        | `getWorkerReviewList` / `getWorkerReviews`    | 支持          | 否       | 否       | `worker_id + created_at`、`worker_id + status + created_at`              |            50 | 已改为 `reviews.queryPage`                  | 已处理     |
+| `refund`        | `getUserAfterSaleList` / `listAfterSales`     | 支持          | 否       | 否       | `user_id + created_at`、`user_id + status + created_at`                  |            50 | 已改为 `afterSales.queryPage`               | 已处理     |
+| `refund`        | `adminGetAfterSaleList`                       | 支持          | 否       | 否       | `status + created_at`、`order_id + created_at`                           |            50 | 已改为 `afterSales.queryPage`               | 已处理     |
+| `dispatch`      | `getDispatchLogs` / `listDispatchLogs`        | 支持          | 否       | 否       | `order_id + created_at`、`action + created_at`                           |            50 | 已改为 `dispatchLogs.queryPage`             | 已处理     |
+| `message`       | `getMessageList` / `listMessages`             | 支持          | 否       | 否       | `user_id + role + is_read + created_at`                                  |            50 | 已改为 `messages.queryPage/countUnread`     | 已处理     |
+| `merchant`      | `getMerchantOrderList`                        | 支持          | 否       | 否       | `merchant_id + provider_type + created_at`、`merchant_id + status + created_at` |            50 | 已改为 `orders.queryPage`                   | 已处理     |
+| `merchant`      | `adminGetMerchantOrders`                      | 支持          | 否       | 否       | `merchant_id + status + created_at`、`provider_type + created_at`        |            50 | 已改为 `orders.queryPage`                   | 已处理     |
+| `merchant`      | `adminGetMerchantActionLogs`                  | 支持          | 否       | 否       | `merchant_id + created_at`、`action + created_at`                        |            50 | 已改为 `merchantLogs.queryPage`             | 已处理     |
+| `tip`           | `getUserTipList`                              | 支持          | 否       | 否       | `user_id + created_at`、`user_id + status + created_at`                  |            50 | 已改为 `tipLogs.queryPage`                  | 已处理     |
+| `tip`           | `getWorkerTipList`                            | 支持          | 否       | 否       | `worker_id + created_at`、`worker_id + status + created_at`              |            50 | 已改为 `tipLogs.queryPage`                  | 已处理     |
+| `tip`           | `adminGetTipLogs`                             | 支持          | 否       | 否       | `status + created_at`、`channel + created_at`                            |            50 | 已改为 `tipLogs.queryPage`                  | 已处理     |
 | `qualification` | `adminListQualifications`                     | 支持          | 是       | 是       | `qualification_status + updated_at`、`merchant_id + provider_type`       |            50 | mock 资质审核基础版可用，运营前需数据库分页 | P1         |
 | `qualification` | `adminListDeposits`                           | 支持          | 是       | 是       | `deposit_status + updated_at`、`merchant_id + provider_type`             |            50 | mock 保证金基础版可用，运营前需数据库分页   | P1         |
 | `qualification` | `adminListRiskRecords`                        | 支持          | 否       | 否       | `merchant_id + created_at`、`risk_level + created_at`                    |            50 | 已改为 `riskRecords.queryPage`              | 已处理     |
@@ -48,10 +48,26 @@
 - `qualification.adminListRiskRecords` 已从全量 `findAll` 改为 `riskRecords.queryPage`，并兼容 `merchantId/merchant_id` 与 `riskLevel/risk_level` 过滤。
 - 本轮未改订单、支付、退款、售后、收益、保证金、资质或风控状态枚举；真实资金、真实认证、OCR、保证金真实支付和真实风控仍属于后续独立阶段。
 
+## 2026-06-10 剩余高增长列表分页续收口记录
+
+- `dispatch.getDispatchLogs` 改为 `dispatchLogs.queryPage`，保留 `logs` 别名和缺集合友好返回。
+- `message.getMessageList` 改为 `messages.queryPage`，未读数改由 `messages.countUnread` 统计，保留 `messages` 别名。
+- `refund.getUserAfterSaleList`、`refund.adminGetAfterSaleList` 改为 `afterSales.queryPage`，用户列表固定下推 `user_id`。
+- `merchant.getMerchantOrderList`、`merchant.adminGetMerchantOrders` 改为 `orders.queryPage`；商家端固定下推当前商家 `merchant_id`，管理员端缺 `merchantId` 时仍保持空列表兼容。
+- `merchant.adminGetMerchantActionLogs` 改为 `merchantLogs.queryPage`，保留 `logs` 别名。
+- `review.adminGetReviewList`、`review.getWorkerReviewList`、`review.getWorkerReviews` 改为 `reviews.queryPage`，保留 `reviews` 别名。
+- `tip.getUserTipList`、`tip.getWorkerTipList`、`tip.adminGetTipLogs` 改为 `tipLogs.queryPage`，保留 `tips` 别名。
+- 为上述 action 新增 `tests/phase24d.high-growth-pagination.test.js`，测试中旧 `findAll/findBy*` 路径会抛错，确保 handler 走仓库分页查询。
+
+兼容说明：
+
+- 消息列表历史上允许少量无 `role` 或 `worker_review_reply` 旧消息通过内存兼容筛选。本轮不迁移历史数据，数据库侧分页优先使用 `user_id/role/is_read` 精确过滤；如真实库存在大量缺失 `role` 的旧消息，后续应补一次低风险数据修复或增加专门兼容索引方案。
+- 评价 `badOnly` 历史上兼容 `rating <= 2`；本轮仓库侧查询优先下推 `rating_level = bad`。如真实库存在缺失 `rating_level` 的旧评价，后续应补齐字段或另做差评索引方案。
+
 ## 后续改造建议
 
-1. 财务流水、收益、派单日志优先改造成数据库侧分页。
-2. 管理员用户列表和订单列表应避免一次性读取全集合。
+1. 继续治理 `order.getUserOrderList`、`order.getWorkerOrderList`，避免订单侧全量读取。
+2. 继续治理 `qualification.adminListQualifications`、`qualification.adminListDeposits`，避免资质和保证金后台列表增长后全量读取。
 3. 所有日志类集合应按 `created_at` 建倒序索引。
 4. 多角色服务方查询应统一索引 `provider_id + provider_type + created_at`。
 5. 新增 list action 时，必须同步 `docs/contracts/api-actions.manifest.json` 和本文档。

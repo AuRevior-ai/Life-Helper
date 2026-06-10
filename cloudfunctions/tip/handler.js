@@ -10,7 +10,7 @@ const PAY_STATUS = Object.freeze({ PAID: "paid" });
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 const TIP_STATUS = Object.freeze({
   MOCK_SUCCESS: "mock_success",
@@ -38,6 +38,21 @@ async function requireAdmin(env = {}) {
     throw serviceError("PERMISSION_DENIED", "当前操作需要管理员权限");
   }
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 function createTipNo(env = {}) {
@@ -260,13 +275,27 @@ async function createMockTip(event = {}, env = {}) {
 }
 
 async function getUserTipList(event = {}, env = {}) {
-  const tips = await env.tipLogs.findByUserId(requireOpenid(env));
-  return success(paginateList(tips, getPayload(event), { listKey: "tips" }));
+  if (!env.tipLogs.queryPage) {
+    throw serviceError("TIP_LOG_REPOSITORY_MISSING", "缺少打赏分页查询能力");
+  }
+  const payload = getPayload(event);
+  const filters = { user_id: requireOpenid(env) };
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.tipLogs.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "tips");
 }
 
 async function getWorkerTipList(event = {}, env = {}) {
-  const tips = await env.tipLogs.findByWorkerId(requireOpenid(env));
-  return success(paginateList(tips, getPayload(event), { listKey: "tips" }));
+  if (!env.tipLogs.queryPage) {
+    throw serviceError("TIP_LOG_REPOSITORY_MISSING", "缺少打赏分页查询能力");
+  }
+  const payload = getPayload(event);
+  const filters = { worker_id: requireOpenid(env) };
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.tipLogs.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "tips");
 }
 
 async function getTipDetail(event = {}, env = {}) {
@@ -283,14 +312,17 @@ async function getTipDetail(event = {}, env = {}) {
 async function adminGetTipLogs(event = {}, env = {}) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let tips = await env.tipLogs.findAll();
-  if (payload.workerId)
-    tips = tips.filter((tip) => tip.worker_id === payload.workerId);
-  if (payload.userId)
-    tips = tips.filter((tip) => tip.user_id === payload.userId);
-  if (payload.status)
-    tips = tips.filter((tip) => tip.status === payload.status);
-  return success(paginateList(tips, payload, { listKey: "tips" }));
+  if (!env.tipLogs.queryPage) {
+    throw serviceError("TIP_LOG_REPOSITORY_MISSING", "缺少打赏分页查询能力");
+  }
+  const filters = {};
+  if (payload.workerId) filters.worker_id = payload.workerId;
+  if (payload.userId) filters.user_id = payload.userId;
+  if (payload.status) filters.status = payload.status;
+  if (payload.channel) filters.channel = payload.channel;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.tipLogs.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "tips");
 }
 
 const actions = Object.freeze({

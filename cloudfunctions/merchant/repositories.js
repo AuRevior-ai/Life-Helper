@@ -1,3 +1,23 @@
+async function queryCollectionPage(collection, where, pageInfo, options = {}) {
+  const page = Number(pageInfo.page || 1);
+  const pageSize = Number(pageInfo.pageSize || 20);
+  const orderField = options.orderField || "created_at";
+  const query =
+    where && Object.keys(where).length > 0 ? collection.where(where) : collection;
+  const countResult = await query.count();
+  const result = await query
+    .orderBy(orderField, "desc")
+    .skip((page - 1) * pageSize)
+    .limit(pageSize)
+    .get();
+  return {
+    list: result.data || [],
+    total: countResult.total || 0,
+    page,
+    pageSize,
+  };
+}
+
 function createCollectionRepository(db, collectionName) {
   const collection = db.collection(collectionName);
 
@@ -93,7 +113,18 @@ function createServiceProviderRepository(db) {
 }
 
 function createMerchantLogRepository(db) {
-  return createCollectionRepository(db, "merchant_action_logs");
+  const base = createCollectionRepository(db, "merchant_action_logs");
+  const merchantLogs = db.collection("merchant_action_logs");
+  return {
+    ...base,
+    async queryPage(filters = {}, pageInfo = {}) {
+      const where = {};
+      if (filters.merchant_id) where.merchant_id = filters.merchant_id;
+      if (filters.action) where.action = filters.action;
+      if (filters.operator_role) where.operator_role = filters.operator_role;
+      return queryCollectionPage(merchantLogs, where, pageInfo);
+    },
+  };
 }
 
 function createUserRepository(db) {
@@ -131,6 +162,13 @@ function createOrderRepository(db) {
         .orderBy("created_at", "desc")
         .get();
       return result.data || [];
+    },
+    async queryPage(filters = {}, pageInfo = {}) {
+      const where = {};
+      if (filters.merchant_id) where.merchant_id = filters.merchant_id;
+      if (filters.provider_type) where.provider_type = filters.provider_type;
+      if (filters.status) where.status = filters.status;
+      return queryCollectionPage(orders, where, pageInfo);
     },
   };
 }

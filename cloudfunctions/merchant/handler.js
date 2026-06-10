@@ -38,6 +38,7 @@ const USER_STATUS = Object.freeze({
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 const {
   canMerchantOperate,
   assertCanMerchantOperate,
@@ -88,6 +89,21 @@ async function requireAdmin(env = {}) {
   if (user.role !== USER_ROLE.ADMIN)
     throw serviceError("PERMISSION_DENIED", "当前操作需要管理员权限");
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 async function requireMerchantById(merchantId, env = {}) {
@@ -586,15 +602,18 @@ async function requireOwnedMerchantOrder(orderId, merchant, env) {
 
 async function getMerchantOrderList(event, env) {
   const merchant = await requireOwnedApprovedMerchant(env);
-  let orders = env.orders.findByMerchantId
-    ? await env.orders.findByMerchantId(merchant._id)
-    : (await env.orders.findAll()).filter(
-        (order) => order.merchant_id === merchant._id,
-      );
   const payload = getPayload(event);
-  if (payload.status)
-    orders = orders.filter((order) => order.status === payload.status);
-  return success({ list: orders, orders });
+  if (!env.orders.queryPage) {
+    throw serviceError("ORDER_REPOSITORY_MISSING", "缺少商家订单分页查询能力");
+  }
+  const filters = {
+    merchant_id: merchant._id,
+    provider_type: SERVICE_PROVIDER_TYPE.MERCHANT,
+  };
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.orders.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "orders");
 }
 
 async function getMerchantOrderDetail(event, env) {
@@ -748,16 +767,31 @@ async function adminGetMerchantDetail(event, env) {
 async function adminGetMerchantOrders(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  const orders = env.orders.findByMerchantId
-    ? await env.orders.findByMerchantId(payload.merchantId)
-    : [];
-  return success({ list: orders, orders });
+  const pageInfo = normalizePage(payload);
+  if (!payload.merchantId) {
+    return buildPagedSuccess({ list: [], total: 0 }, pageInfo, "orders");
+  }
+  if (!env.orders.queryPage) {
+    throw serviceError("ORDER_REPOSITORY_MISSING", "缺少商家订单分页查询能力");
+  }
+  const filters = { provider_type: SERVICE_PROVIDER_TYPE.MERCHANT };
+  filters.merchant_id = payload.merchantId;
+  if (payload.status) filters.status = payload.status;
+  const pageData = await env.orders.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "orders");
 }
 
 async function adminGetMerchantActionLogs(event, env) {
   await requireAdmin(env);
-  const logs = await env.merchantLogs.findAll();
-  return success({ list: logs, logs });
+  const payload = getPayload(event);
+  if (!env.merchantLogs.queryPage) {
+    throw serviceError("MERCHANT_LOG_REPOSITORY_MISSING", "缺少商家日志分页查询能力");
+  }
+  const filters = {};
+  if (payload.merchantId) filters.merchant_id = payload.merchantId;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.merchantLogs.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "logs");
 }
 
 const actions = Object.freeze({

@@ -1,6 +1,7 @@
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 function trimText(value) {
   return `${value || ""}`.trim();
@@ -120,6 +121,21 @@ async function requireAdmin(env) {
     throw serviceError("PERMISSION_DENIED", "当前操作需要管理员权限");
   }
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 function normalizeRating(value) {
@@ -594,34 +610,40 @@ async function getReviewDetail(event, env) {
 async function getWorkerReviews(event, env) {
   const payload = getPayload(event);
   const workerId = trimText(payload.workerId || requireOpenid(env));
-  const reviews = await env.reviews.findByWorkerId(workerId);
-  return success({ reviews });
+  if (!env.reviews.queryPage) {
+    throw serviceError("REVIEW_REPOSITORY_MISSING", "缺少评价分页查询能力");
+  }
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.reviews.queryPage({ worker_id: workerId }, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "reviews");
 }
 
 async function getWorkerReviewList(event, env) {
-  const reviews = await env.reviews.findByWorkerId(requireOpenid(env));
-  return success({ reviews });
+  const payload = getPayload(event);
+  if (!env.reviews.queryPage) {
+    throw serviceError("REVIEW_REPOSITORY_MISSING", "缺少评价分页查询能力");
+  }
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.reviews.queryPage(
+    { worker_id: requireOpenid(env) },
+    pageInfo,
+  );
+  return buildPagedSuccess(pageData, pageInfo, "reviews");
 }
 
 async function adminGetReviewList(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let reviews = await env.reviews.findAll();
-  if (payload.status)
-    reviews = reviews.filter(
-      (review) => (review.status || REVIEW_STATUS.VISIBLE) === payload.status,
-    );
-  if (payload.ratingLevel)
-    reviews = reviews.filter(
-      (review) => review.rating_level === payload.ratingLevel,
-    );
-  if (payload.badOnly)
-    reviews = reviews.filter(
-      (review) =>
-        review.rating_level === REVIEW_RATING_LEVEL.BAD ||
-        Number(review.rating || 0) <= 2,
-    );
-  return success({ reviews });
+  if (!env.reviews.queryPage) {
+    throw serviceError("REVIEW_REPOSITORY_MISSING", "缺少评价分页查询能力");
+  }
+  const filters = {};
+  if (payload.status) filters.status = payload.status;
+  if (payload.ratingLevel) filters.rating_level = payload.ratingLevel;
+  if (payload.badOnly) filters.bad_only = true;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.reviews.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "reviews");
 }
 
 async function adminGetReviewDetail(event, env) {

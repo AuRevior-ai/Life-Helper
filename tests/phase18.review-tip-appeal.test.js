@@ -17,6 +17,20 @@ function exists(relativePath) {
   return fs.existsSync(path.join(rootDir, relativePath));
 }
 
+function queryMemoryPage(records, filters = {}, pageInfo = {}, matcher) {
+  const page = Number(pageInfo.page || 1);
+  const pageSize = Number(pageInfo.pageSize || 20);
+  const list = records.filter((item) => matcher(item, filters));
+  return {
+    list: list
+      .slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)
+      .map((item) => ({ ...item })),
+    total: list.length,
+    page,
+    pageSize,
+  };
+}
+
 function createMemoryUsers(initial = []) {
   const records = initial.map((item) => ({ ...item }));
   return {
@@ -80,6 +94,23 @@ function createMemoryReviews(initial = []) {
     },
     async findAll() {
       return records.map((item) => ({ ...item }));
+    },
+    async queryPage(filters = {}, pageInfo = {}) {
+      return queryMemoryPage(records, filters, pageInfo, (item, query) => {
+        if (query.worker_id && item.worker_id !== query.worker_id) return false;
+        if (query.status && (item.status || "visible") !== query.status)
+          return false;
+        if (query.rating_level && item.rating_level !== query.rating_level)
+          return false;
+        if (
+          query.bad_only &&
+          item.rating_level !== "bad" &&
+          Number(item.rating || 0) > 2
+        ) {
+          return false;
+        }
+        return true;
+      });
     },
     async updateById(id, data) {
       const review = records.find((item) => item._id === id);
@@ -163,6 +194,15 @@ function createMemoryTipLogs(initial = []) {
       return base.records
         .filter((item) => item.worker_id === workerId)
         .map((item) => ({ ...item }));
+    },
+    async queryPage(filters = {}, pageInfo = {}) {
+      return queryMemoryPage(base.records, filters, pageInfo, (item, query) => {
+        if (query.user_id && item.user_id !== query.user_id) return false;
+        if (query.worker_id && item.worker_id !== query.worker_id) return false;
+        if (query.status && item.status !== query.status) return false;
+        if (query.channel && item.channel !== query.channel) return false;
+        return true;
+      });
     },
   };
 }

@@ -13,6 +13,20 @@ function read(relativePath) {
   return fs.readFileSync(path.join(rootDir, relativePath), "utf8");
 }
 
+function queryMemoryPage(records, filters = {}, pageInfo = {}, matcher) {
+  const page = Number(pageInfo.page || 1);
+  const pageSize = Number(pageInfo.pageSize || 20);
+  const list = records.filter((item) => matcher(item, filters));
+  return {
+    list: list
+      .slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)
+      .map((item) => ({ ...item })),
+    total: list.length,
+    page,
+    pageSize,
+  };
+}
+
 function createMemoryCollection(initialRecords = []) {
   const records = initialRecords.map((record) => ({ ...record }));
   return {
@@ -117,7 +131,20 @@ function createMemoryServiceProviders(initialProviders = []) {
 }
 
 function createMemoryMerchantLogs(initialLogs = []) {
-  return createMemoryCollection(initialLogs);
+  const collection = createMemoryCollection(initialLogs);
+  return {
+    ...collection,
+    async queryPage(filters = {}, pageInfo = {}) {
+      return queryMemoryPage(collection.records, filters, pageInfo, (log, query) => {
+        if (query.merchant_id && log.merchant_id !== query.merchant_id)
+          return false;
+        if (query.action && log.action !== query.action) return false;
+        if (query.operator_role && log.operator_role !== query.operator_role)
+          return false;
+        return true;
+      });
+    },
+  };
 }
 
 function createMemoryMessages(initialMessages = []) {
@@ -147,6 +174,16 @@ function createMemoryOrders(initialOrders = []) {
       return collection.records
         .filter((order) => order.status === status)
         .map((order) => ({ ...order }));
+    },
+    async queryPage(filters = {}, pageInfo = {}) {
+      return queryMemoryPage(collection.records, filters, pageInfo, (order, query) => {
+        if (query.merchant_id && order.merchant_id !== query.merchant_id)
+          return false;
+        if (query.provider_type && order.provider_type !== query.provider_type)
+          return false;
+        if (query.status && order.status !== query.status) return false;
+        return true;
+      });
     },
     async acceptPendingOrder(id, workerId, data) {
       const record = collection.records.find((order) => order._id === id);

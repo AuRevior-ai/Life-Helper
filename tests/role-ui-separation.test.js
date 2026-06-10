@@ -9,12 +9,49 @@ function read(relativePath) {
   return fs.readFileSync(path.join(rootDir, relativePath), "utf8");
 }
 
+function getEffectiveMessageRole(message = {}) {
+  if (message.type === "worker_review_reply") return "user";
+  return message.role || "";
+}
+
+function messageMatchesFilters(message = {}, filters = {}) {
+  if (filters.user_id && message.user_id !== filters.user_id) return false;
+  if (filters.role) {
+    const role = getEffectiveMessageRole(message);
+    if (role && role !== filters.role) return false;
+  }
+  if (filters.is_read !== undefined && message.is_read !== filters.is_read) {
+    return false;
+  }
+  return true;
+}
+
 function createMessages(records = []) {
   return {
     async findByUserId(userId) {
       return records
         .filter((message) => message.user_id === userId)
         .map((message) => ({ ...message }));
+    },
+    async queryPage(filters = {}, pageInfo = {}) {
+      const page = Number(pageInfo.page || 1);
+      const pageSize = Number(pageInfo.pageSize || 20);
+      const list = records.filter((message) =>
+        messageMatchesFilters(message, filters),
+      );
+      return {
+        list: list
+          .slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize)
+          .map((message) => ({ ...message })),
+        total: list.length,
+        page,
+        pageSize,
+      };
+    },
+    async countUnread(filters = {}) {
+      return records.filter((message) =>
+        messageMatchesFilters(message, { ...filters, is_read: false }),
+      ).length;
     },
   };
 }

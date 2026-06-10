@@ -2,6 +2,7 @@ const { mockRefund: runMockRefund, wechatRefund } = require("./refund-adapter");
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 const USER_STATUS = Object.freeze({
   NORMAL: "normal",
@@ -79,6 +80,21 @@ async function requireAdmin(env = {}) {
   }
 
   return user;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 function normalizeImages(value) {
@@ -254,8 +270,15 @@ async function createAfterSale(event = {}, env = {}) {
 
 async function getUserAfterSaleList(event = {}, env = {}) {
   const userId = requireOpenid(env);
-  const afterSales = await env.afterSales.findByUserId(userId);
-  return success({ afterSales });
+  if (!env.afterSales.queryPage) {
+    throw serviceError("AFTER_SALE_REPOSITORY_MISSING", "缺少售后分页查询能力");
+  }
+  const payload = getPayload(event);
+  const filters = { user_id: userId };
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.afterSales.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "afterSales");
 }
 
 async function getAfterSaleDetail(event = {}, env = {}) {
@@ -293,13 +316,14 @@ async function getAfterSaleDetail(event = {}, env = {}) {
 async function adminGetAfterSaleList(event = {}, env = {}) {
   await requireAdmin(env);
   const payload = getPayload(event);
-  let afterSales = await env.afterSales.findAll();
-  if (payload.status) {
-    afterSales = afterSales.filter(
-      (afterSale) => afterSale.status === payload.status,
-    );
+  if (!env.afterSales.queryPage) {
+    throw serviceError("AFTER_SALE_REPOSITORY_MISSING", "缺少售后分页查询能力");
   }
-  return success({ afterSales });
+  const filters = {};
+  if (payload.status) filters.status = payload.status;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.afterSales.queryPage(filters, pageInfo);
+  return buildPagedSuccess(pageData, pageInfo, "afterSales");
 }
 
 async function performMockRefund(afterSale, env = {}) {

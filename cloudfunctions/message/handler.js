@@ -1,13 +1,28 @@
 const { success, fail, serviceError } = require("./_shared/response");
 const { getPayload } = require("./_shared/payload");
 const { getNow } = require("./_shared/time");
-const { paginateList } = require("./_shared/pagination");
+const { normalizePage, buildPageResult } = require("./_shared/pagination");
 
 function requireOpenid(env) {
   if (!env.openid) {
     throw serviceError("OPENID_MISSING", "无法获取用户 openid");
   }
   return env.openid;
+}
+
+function buildPagedSuccess(pageData, pageInfo, listKey) {
+  const list = pageData.list || [];
+  return success(
+    buildPageResult(
+      list,
+      {
+        page: pageData.page || pageInfo.page,
+        pageSize: pageData.pageSize || pageInfo.pageSize,
+        total: pageData.total || 0,
+      },
+      { listKey },
+    ),
+  );
 }
 
 const USER_ROLE_MESSAGE_TYPES = Object.freeze({
@@ -32,23 +47,38 @@ function messageMatchesRole(message = {}, role) {
 async function getMessageList(event, env) {
   const payload = getPayload(event);
   const userId = requireOpenid(env);
-  let messages = await env.messages.findByUserId(userId);
+  if (!env.messages.queryPage) {
+    throw serviceError("MESSAGE_REPOSITORY_MISSING", "缺少消息分页查询能力");
+  }
+  const filters = { user_id: userId };
   if (payload.role) {
-    messages = messages.filter((message) =>
-      messageMatchesRole(message, payload.role),
-    );
+    filters.role = payload.role;
   }
-  messages = messages.map(normalizeMessageRole);
-
+  let isRead;
   if (payload.is_read !== undefined || payload.isRead !== undefined) {
-    const isRead =
-      payload.is_read !== undefined ? payload.is_read : payload.isRead;
-    messages = messages.filter((message) => message.is_read === isRead);
+    isRead = payload.is_read !== undefined ? payload.is_read : payload.isRead;
+    filters.is_read = isRead;
   }
 
-  const unreadCount = messages.filter((message) => !message.is_read).length;
+  const pageInfo = normalizePage(payload);
+  const pageData = await env.messages.queryPage(filters, pageInfo);
+  const result = buildPagedSuccess(
+    {
+      ...pageData,
+      list: (pageData.list || [])
+        .filter((message) => messageMatchesRole(message, payload.role))
+        .map(normalizeMessageRole),
+    },
+    pageInfo,
+    "messages",
+  );
+  const unreadFilters =
+    isRead === true ? null : { ...filters, is_read: false };
+  const unreadCount = unreadFilters
+    ? await env.messages.countUnread(unreadFilters)
+    : 0;
   return success({
-    ...paginateList(messages, payload, { listKey: "messages" }),
+    ...result.data,
     unread_count: unreadCount,
   });
 }
