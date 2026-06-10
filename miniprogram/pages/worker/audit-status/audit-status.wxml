@@ -1,5 +1,6 @@
 <view class="audit-page worker-subpage">
   <view class="audit-header worker-subpage-header">
+    <button class="worker-subpage-back-button" bindtap="goBack">返回</button>
     <view class="audit-title worker-subpage-title">审核状态</view>
     <view class="audit-subtitle worker-subpage-subtitle">选择个人师傅端后先确认人工审核状态</view>
   </view>

@@ -1,5 +1,6 @@
 <view class="worker-detail-page worker-subpage">
   <view class="detail-header worker-subpage-header">
+    <button class="worker-subpage-back-button" bindtap="goBack">返回</button>
     <view class="detail-title worker-subpage-title">师傅订单详情</view>
     <view class="detail-subtitle worker-subpage-subtitle">服务进度由订单状态决定，页面仅展示和触发已有操作</view>
   </view>

@@ -28,4 +28,15 @@ Page({
       this.setData({ loading: false });
     }
   },
+
+  goBack() {
+    const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+    if (pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
+    wx.redirectTo({
+      url: "/pages/worker/profile/profile",
+    });
+  },
 });

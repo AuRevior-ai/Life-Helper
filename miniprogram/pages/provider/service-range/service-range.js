@@ -48,4 +48,15 @@ Page({
       showError(error.message || "保存失败");
     }
   },
+
+  goBack() {
+    const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+    if (pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
+    wx.redirectTo({
+      url: "/pages/worker/profile/profile",
+    });
+  },
 });

@@ -1,5 +1,6 @@
 <view class="review-detail-page worker-subpage">
   <view class="review-detail-header worker-subpage-header">
+    <button class="worker-subpage-back-button" bindtap="goBack">返回</button>
     <view class="review-detail-title worker-subpage-title">评价详情</view>
     <view class="review-detail-subtitle worker-subpage-subtitle">查看用户评价，按需回复或提交差评申诉</view>
   </view>

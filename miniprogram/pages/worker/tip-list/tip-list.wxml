@@ -1,5 +1,6 @@
 <view class="tip-list-page worker-subpage">
   <view class="tip-header worker-subpage-header">
+    <button class="worker-subpage-back-button" bindtap="goBack">返回</button>
     <view class="tip-title worker-subpage-title">{{ title }}</view>
     <view class="tip-subtitle worker-subpage-subtitle">
       查看用户打赏和师傅收益，当前仅展示内部模拟记录

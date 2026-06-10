@@ -62,4 +62,15 @@ Page({
       url: `/pages/worker/review-detail/review-detail?reviewId=${event.currentTarget.dataset.id}`,
     });
   },
+
+  goBack() {
+    const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+    if (pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
+    wx.redirectTo({
+      url: "/pages/worker/profile/profile",
+    });
+  },
 });

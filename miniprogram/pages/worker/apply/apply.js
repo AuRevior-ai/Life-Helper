@@ -114,4 +114,15 @@ Page({
       url: "/pages/worker/audit-status/audit-status",
     });
   },
+
+  goBack() {
+    const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+    if (pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
+    wx.redirectTo({
+      url: "/pages/worker/audit-status/audit-status",
+    });
+  },
 });

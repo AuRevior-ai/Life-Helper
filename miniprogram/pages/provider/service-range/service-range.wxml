@@ -1,5 +1,6 @@
 <view class="service-range-page worker-subpage">
   <view class="range-header worker-subpage-header">
+    <button class="worker-subpage-back-button" bindtap="goBack">返回</button>
     <view class="range-title worker-subpage-title">服务范围</view>
     <view class="range-subtitle worker-subpage-subtitle">配置个人师傅接单范围，便于接单大厅和订单匹配展示</view>
   </view>

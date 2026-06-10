@@ -31,10 +31,13 @@ test("worker secondary pages use custom navigation and the shared subpage shell"
     const json = JSON.parse(read(`${page}.json`));
     const wxml = read(`${page}.wxml`);
     const wxss = read(`${page}.wxss`);
+    const js = read(`${page}.js`);
 
     assert.equal(json.navigationStyle, "custom", `${page} should hide the default nav`);
     assert.match(wxml, /worker-subpage/, `${page} should use the shared subpage shell`);
     assert.match(wxml, /worker-subpage-header/, `${page} should use a custom content header`);
+    assert.match(wxml, /bindtap="goBack"/, `${page} should expose a visible custom back action`);
+    assert.match(js, /goBack\(\)[\s\S]*wx\.navigateBack/, `${page} should implement goBack with wx.navigateBack`);
     assert.match(wxss, /worker-subpage\.wxss/, `${page} should import shared worker subpage styles`);
     assert.match(wxss, /overflow-x:\s*hidden/, `${page} should block horizontal overflow`);
   }

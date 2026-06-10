@@ -132,4 +132,15 @@ Page({
       url: `/pages/worker/order-detail/order-detail?orderId=${orderId}`,
     });
   },
+
+  goBack() {
+    const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+    if (pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
+    wx.redirectTo({
+      url: "/pages/worker/review-list/review-list",
+    });
+  },
 });

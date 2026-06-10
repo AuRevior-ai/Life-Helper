@@ -80,4 +80,15 @@ Page({
       url: "/pages/worker/apply/apply",
     });
   },
+
+  goBack() {
+    const pages = typeof getCurrentPages === "function" ? getCurrentPages() : [];
+    if (pages.length > 1) {
+      wx.navigateBack();
+      return;
+    }
+    wx.redirectTo({
+      url: "/pages/role-select/role-select",
+    });
+  },
 });

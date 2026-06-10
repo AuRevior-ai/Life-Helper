@@ -231,6 +231,7 @@ RED 记录：第一批 6 个测试中 3 个通过、3 个按预期失败；第�
 - 阶段 24B-2 记录：`docs/dev-records/24b2-admin-service-area-dispatch-ui.md`
 - 阶段 24B-3 记录：`docs/dev-records/24b3-admin-finance-merchant-risk-ui.md`
 - 阶段 24C 记录：`docs/dev-records/24c-engineering-closure.md`
+- mock 支付范围决策：`docs/DECISIONS/2026-06-10-mock-payment-scope.md`
 - 发布检查：`docs/release-checklist.md`、`docs/release-package-checklist.md`
 - UI 重构保护：`docs/ui-refactor-guardrails.md`
 - 支付边界：`docs/wechat-pay-setup.md`
