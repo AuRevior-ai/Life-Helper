@@ -1,36 +1,97 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">创建和查看基础优惠券模板</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看、创建和启停优惠券模板，领券与核销仍以后端 mock 营销逻辑为准。
+    </view>
   </view>
 
-  <button class="primary-button" bindtap="goCreate">新增优惠券</button>
+  <view class="admin-status-card">
+    <view class="admin-card-title">优惠券模板列表</view>
+    <view class="admin-card-desc">
+      模板用于用户领券中心展示和订单抵扣计算，不新增活动结算、补贴清算或真实营销付款能力。
+    </view>
+  </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载优惠券"></loading-view>
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为 mock 优惠券和 mock 支付边界，无真实营销结算、无真实支付、无真实退款或分账。
+    </view>
+  </view>
 
-  <block wx:elif="{{ templates.length }}">
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">
+      新增进入模板编辑页；启用和停用只调用既有管理员 action。
+    </view>
+    <button class="admin-action-button admin-card-button" bindtap="goCreate">
+      新增优惠券
+    </button>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载优惠券模板"></loading-view>
+  </view>
+
+  <view wx:elif="{{ templates.length }}" class="admin-list-stack">
     <view
       wx:for="{{ templates }}"
       wx:key="_id"
-      class="panel coupon-card"
+      class="admin-section-card admin-list-card"
       data-id="{{ item._id }}"
       bindtap="goEdit"
     >
-      <view class="card-top">
-        <view class="card-title">{{ item.name }}</view>
-        <view class="card-amount">{{ item.amountText }}</view>
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.name }}</view>
+          <view class="admin-list-meta">{{ item.typeText }} · 门槛 {{ item.thresholdText }}</view>
+        </view>
+        <view class="admin-money">{{ item.amountText }}</view>
       </view>
-      <view class="card-line">{{ item.typeText }} · {{ item.statusText }}</view>
-      <view class="card-line"
-        >已领 {{ item.received_quantity || 0 }} / 已用 {{ item.used_quantity ||
-        0 }}</view
-      >
+      <view class="admin-list-desc">状态：{{ item.statusText }}</view>
+      <view class="admin-list-desc">领取：{{ item.quantityText }} · 已用：{{ item.usedText }}</view>
+      <view class="admin-action-row">
+        <view class="admin-status-pill {{ item.statusClass }}">{{ item.statusText }}</view>
+        <button
+          wx:if="{{ item.canEnable }}"
+          class="admin-outline-button admin-inline-button"
+          data-id="{{ item._id }}"
+          data-action="enable"
+          loading="{{ submittingId === item._id }}"
+          disabled="{{ submittingId === item._id }}"
+          catchtap="toggleTemplateStatus"
+        >
+          启用
+        </button>
+        <button
+          wx:if="{{ item.canDisable }}"
+          class="admin-outline-button danger admin-inline-button"
+          data-id="{{ item._id }}"
+          data-action="disable"
+          loading="{{ submittingId === item._id }}"
+          disabled="{{ submittingId === item._id }}"
+          catchtap="toggleTemplateStatus"
+        >
+          停用
+        </button>
+      </view>
     </view>
-  </block>
+  </view>
 
   <empty-state
     wx:else
     title="暂无优惠券模板"
-    description="新增后用户可在领券中心领取"
+    description="新增后用户可在领券中心领取 mock 优惠券"
   ></empty-state>
 </view>

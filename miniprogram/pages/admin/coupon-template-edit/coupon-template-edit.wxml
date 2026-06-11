@@ -1,63 +1,144 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle">第一版支持立减券与满减券，金额单位为分</view>
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      配置优惠券模板字段，保存后仅进入 mock 优惠券和 mock 支付抵扣流程。
+    </view>
   </view>
 
-  <view class="panel form-panel">
-    <view class="form-item">
-      <text class="form-label">名称</text>
+  <view class="admin-status-card">
+    <view class="admin-card-title">模板表单</view>
+    <view class="admin-card-desc">
+      当前支持满减券与立减券，金额单位为分，订单抵扣金额以后端营销计算结果为准。
+    </view>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为 mock 优惠券和 mock 支付配置，无真实营销结算、无真实会员扣款、无真实退款或分账。
+    </view>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+
+  <view class="admin-section-card admin-form-card">
+    <view class="admin-form-item">
+      <text class="admin-form-label">名称</text>
       <input
+        class="admin-input"
         value="{{ form.name }}"
         data-field="name"
         bindinput="handleInput"
         placeholder="例如满100减10"
       />
     </view>
-    <view class="form-item">
-      <text class="form-label">优惠金额</text>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">券类型</text>
+      <picker
+        mode="selector"
+        range="{{ typeOptions }}"
+        range-key="text"
+        value="{{ typeIndex }}"
+        data-field="type"
+        bindchange="handlePickerChange"
+      >
+        <view class="admin-picker">{{ typeOptions[typeIndex].text }}</view>
+      </picker>
+    </view>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">优惠金额</text>
       <input
+        class="admin-input"
         type="number"
         value="{{ form.amount }}"
         data-field="amount"
         bindinput="handleInput"
       />
     </view>
-    <view class="form-item">
-      <text class="form-label">满减门槛</text>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">满减门槛</text>
       <input
+        class="admin-input"
         type="number"
         value="{{ form.threshold_amount }}"
         data-field="threshold_amount"
         bindinput="handleInput"
       />
     </view>
-    <view class="form-item">
-      <text class="form-label">总量</text>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">总量</text>
       <input
+        class="admin-input"
         type="number"
         value="{{ form.total_quantity }}"
         data-field="total_quantity"
         bindinput="handleInput"
       />
     </view>
-    <view class="form-item">
-      <text class="form-label">单人限制</text>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">单人限制</text>
       <input
+        class="admin-input"
         type="number"
         value="{{ form.per_user_limit }}"
         data-field="per_user_limit"
         bindinput="handleInput"
       />
     </view>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">有效天数</text>
+      <input
+        class="admin-input"
+        type="number"
+        value="{{ form.valid_days_after_receive }}"
+        data-field="valid_days_after_receive"
+        bindinput="handleInput"
+      />
+    </view>
+
+    <view class="admin-form-item">
+      <text class="admin-form-label">模板状态</text>
+      <picker
+        mode="selector"
+        range="{{ statusOptions }}"
+        range-key="text"
+        value="{{ statusIndex }}"
+        data-field="status"
+        bindchange="handlePickerChange"
+      >
+        <view class="admin-picker">{{ statusOptions[statusIndex].text }}</view>
+      </picker>
+    </view>
   </view>
 
-  <button
-    class="primary-button"
-    loading="{{ submitting }}"
-    disabled="{{ submitting }}"
-    bindtap="submitForm"
-  >
-    保存
-  </button>
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">
+      保存只调用既有管理员模板创建 / 更新 action，不新增活动结算能力。
+    </view>
+    <view class="admin-action-row">
+      <button
+        class="admin-action-button"
+        loading="{{ submitting }}"
+        disabled="{{ submitting }}"
+        bindtap="submitForm"
+      >
+        保存
+      </button>
+      <button
+        class="admin-outline-button"
+        disabled="{{ submitting }}"
+        bindtap="goBack"
+      >
+        返回
+      </button>
+    </view>
+  </view>
 </view>

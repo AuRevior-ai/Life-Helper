@@ -1,21 +1,66 @@
-<view class="page-shell">
-  <view class="page-header">
-    <view class="page-title">{{ title }}</view>
-    <view class="page-subtitle"
-      >当前会员方案为基础配置，开通仍使用 mock 模式</view
-    >
+<view class="admin-page admin-secondary-page">
+  <view class="admin-header">
+    <view class="admin-title">{{ title }}</view>
+    <view class="admin-subtitle">
+      查看当前会员方案配置，用户开通仍走 mock 会员流程。
+    </view>
   </view>
 
-  <loading-view wx:if="{{ loading }}" text="正在加载会员方案"></loading-view>
-
-  <block wx:else>
-    <view wx:for="{{ plans }}" wx:key="level" class="panel plan-card">
-      <view class="card-title">{{ item.levelText }}</view>
-      <view class="card-line"
-        >{{ item.priceText }} · {{ item.duration_days }} 天 · {{
-        item.discount_rate }} 折扣率</view
-      >
-      <view class="card-line">状态：{{ item.status }}</view>
+  <view class="admin-status-card">
+    <view class="admin-card-title">会员方案管理</view>
+    <view class="admin-card-desc">
+      展示月卡、季卡、年卡的价格、权益、有效期和折扣配置，实际可购方案以后端返回为准。
     </view>
-  </block>
+  </view>
+
+  <view class="admin-boundary-card">
+    <view class="admin-section-title">边界说明</view>
+    <view class="admin-card-desc">
+      当前为 mock 会员和 mock 支付边界，无真实会员扣款、无真实支付、无真实营销结算。
+    </view>
+  </view>
+
+  <view class="admin-filter-card">
+    <view class="admin-filter-title">筛选范围</view>
+    <view class="admin-filter-row">
+      <view wx:for="{{ filterPills }}" wx:key="*this" class="admin-filter-pill">
+        {{ item }}
+      </view>
+    </view>
+  </view>
+
+  <view class="admin-section-card admin-action-card">
+    <view class="admin-section-title">管理操作</view>
+    <view class="admin-card-desc">
+      本页只刷新和展示方案，不在前端新增价格配置、扣款或结算能力。
+    </view>
+    <button class="admin-outline-button admin-card-button" bindtap="loadPlans">
+      刷新方案
+    </button>
+  </view>
+
+  <view wx:if="{{ errorText }}" class="admin-error-card">{{ errorText }}</view>
+  <view wx:if="{{ loading }}" class="admin-loading-wrap">
+    <loading-view text="正在加载会员方案"></loading-view>
+  </view>
+
+  <view wx:elif="{{ plans.length }}" class="admin-list-stack">
+    <view wx:for="{{ plans }}" wx:key="_id" class="admin-section-card admin-list-card">
+      <view class="admin-list-head">
+        <view class="admin-list-main">
+          <view class="admin-list-title">{{ item.levelText }}</view>
+          <view class="admin-list-meta">{{ item.priceText }} · {{ item.durationText }} · {{ item.discountText }}</view>
+        </view>
+        <view class="admin-status-pill {{ item.statusClass }}">{{ item.statusText }}</view>
+      </view>
+      <view class="admin-list-desc">权益：{{ item.benefitText }}</view>
+      <view class="admin-list-desc">方案 ID：{{ item._id || item.level }}</view>
+    </view>
+  </view>
+
+  <empty-state
+    wx:else
+    title="暂无会员方案"
+    description="后端返回会员方案后会显示在这里"
+  ></empty-state>
 </view>

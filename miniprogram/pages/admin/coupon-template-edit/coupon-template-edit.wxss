@@ -1,23 +1,83 @@
-.form-panel {
-  margin-bottom: 24rpx;
+@import "../../../styles/admin-theme.wxss";
+
+.admin-secondary-page {
+  padding-bottom: calc(72rpx + env(safe-area-inset-bottom));
 }
 
-.form-item {
-  margin-bottom: 22rpx;
+.admin-status-card,
+.admin-boundary-card,
+.admin-error-card {
+  box-sizing: border-box;
+  margin-top: 24rpx;
+  padding: 28rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 14rpx 38rpx rgba(17, 24, 39, 0.05);
 }
 
-.form-label {
+.admin-status-card {
+  border-left: 8rpx solid #2f7be7;
+}
+
+.admin-boundary-card {
+  border-left: 8rpx solid #f08a12;
+}
+
+.admin-card-title {
+  color: #111827;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 40rpx;
+}
+
+.admin-card-desc {
+  margin-top: 12rpx;
+  color: #667085;
+  font-size: 25rpx;
+  line-height: 36rpx;
+}
+
+.admin-form-card {
+  display: grid;
+  gap: 22rpx;
+}
+
+.admin-form-item {
+  min-width: 0;
+}
+
+.admin-form-label {
   display: block;
   margin-bottom: 10rpx;
-  color: #64716d;
-  font-size: 24rpx;
+  color: #475467;
+  font-size: 25rpx;
+  font-weight: 700;
+  line-height: 34rpx;
 }
 
-input {
-  min-height: 72rpx;
-  padding: 0 20rpx;
-  border-radius: 8rpx;
-  background: #f6f8f5;
-  color: #1f2d2a;
-  font-size: 28rpx;
+.admin-input,
+.admin-picker {
+  width: 100%;
+  min-height: 80rpx;
+  box-sizing: border-box;
+  padding: 0 22rpx;
+  border-radius: 18rpx;
+  background: #f7f9fa;
+  color: #111827;
+  font-size: 27rpx;
+  line-height: 80rpx;
+}
+
+.admin-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 22rpx;
+}
+
+.admin-error-card {
+  background: #fff4ed;
+  color: #b54708;
+  font-size: 25rpx;
+  line-height: 36rpx;
 }
