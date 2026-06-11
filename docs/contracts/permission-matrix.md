@@ -36,12 +36,12 @@
 | `qualification.getMyRiskStatus/getOnboardingStatus`                                                 | 否   | 本人简要状态    | 本人简要状态待扩展           | 仅本人简要状态                     | 允许查看详情           | 否           | 商家端不展示内部风控标签和管理员备注           |
 | `qualification.adminListQualifications/adminGetQualificationDetail/adminReviewQualification`        | 否   | 否              | 否                           | 否                                 | 允许                   | 否           | 管理员审核资质并写操作日志                     |
 | `qualification.adminListDeposits/adminFreezeDeposit/adminReviewDepositRefund`                       | 否   | 否              | 否                           | 否                                 | 允许                   | 否           | 管理员处理 mock 保证金，不接真实退款           |
-| `qualification.adminSetRiskLevel/adminAddRiskTag/adminListRiskRecords/adminGetOnboardingDetail`     | 否   | 否              | 否                           | 否                                 | 允许                   | 否           | 管理员手动 mock 风控，不接真实风控模型         |
+| `qualification.adminSetRiskLevel/adminAddRiskTag/adminListRiskRecords/adminGetOnboardingDetail/adminSetOnboardingLimit` | 否   | 否              | 否                           | 否                                 | 允许                   | 否           | 管理员手动 mock 风控和人工经营限制，不接真实风控模型 |
 | `review.createReview/addReviewFollowup/getOrderReview`                                              | 否   | 仅本人订单      | 相关订单只读/回复            | 相关商家订单待补强                 | 管理查看               | 订单完成触发 | 用户只能评价自己的订单                         |
 | `review.workerReplyReview/workerCreateReviewAppeal`                                                 | 否   | 否              | 仅相关师傅评价               | 不允许走师傅专用入口               | 管理审核               | 否           | 商家评价回复/申诉需后续独立设计                |
 | `review.admin*`                                                                                     | 否   | 否              | 否                           | 否                                 | 允许                   | 否           | 隐藏/恢复/申诉审核需日志                       |
 | `message.*`                                                                                         | 否   | 仅本人消息      | 仅本人消息                   | 仅本人消息                         | 仅本人或管理消息待核实 | 系统写入     | 用户只能访问自己的消息                         |
-| `payment.createPayment/queryPaymentStatus`                                                          | 否   | 仅本人订单      | 作为用户仅本人订单           | 作为用户仅本人订单                 | 不建议代付             | 否           | 重复支付必须拦截，当前 mock 无真实资金         |
+| `payment.createPayment/queryPaymentStatus`                                                          | 否   | 仅本人订单      | 作为用户仅本人订单           | 作为用户仅本人订单                 | 不建议代付             | 否           | `createPayment` 为真实预支付入口且默认未启用；当前 mock 支付无真实资金 |
 | `payment.handlePayNotify`                                                                           | 否   | 否              | 否                           | 否                                 | 否                     | 支付回调     | 真实模式必须验签，当前未接真实支付             |
 | `refund.createAfterSale/getUserAfterSaleList/getAfterSaleDetail/getRefundLogs`                      | 否   | 仅本人订单/售后 | 相关订单待核实               | 相关商家订单待核实                 | 允许查看               | 否           | 用户不能申请他人订单退款                       |
 | `refund.adminGetAfterSaleList/adminReviewAfterSale/mockRefund`                                      | 否   | 否              | 否                           | 否                                 | 允许                   | 财务回冲     | 重复退款必须拦截，当前为模拟退款               |
@@ -68,6 +68,7 @@
 - 支付、退款、财务接口必须有归属校验、状态校验和幂等拦截。
 - mock 支付、mock 退款、mock 打赏、mock 解冻不能被误认为真实资金流。
 - mock 保证金、mock 资质认证、mock 保险信息和 mock 入驻风控不能被误认为真实支付、真实退款、真实身份认证、真实营业执照认证、真实 OCR 或真实保险核验。
+- `qualification.adminSetOnboardingLimit` 仅保留为管理员人工设置 mock 入驻经营限制的后端 action，不代表自动风控、真实合规风控或处罚系统。
 - 重复支付、重复退款、重复财务生成、重复核销必须被拦截。
 - 当前工程明确只使用 mock 支付，不考虑接入真实支付现金流；真实支付、真实退款、提现、分账未接入不得作为当前工程 P0 阻塞项。只有真实资金阶段启动、mock 被误包装成真实能力、状态可被伪造或敏感配置泄露时，才按 P0 / 高风险问题处理。
 

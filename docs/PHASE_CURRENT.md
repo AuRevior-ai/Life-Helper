@@ -2,24 +2,26 @@
 
 本文件记录当前正在执行或刚完成的工程阶段。它只描述当前阶段事实，不替代长期协作规则；长期规则见 `AGENT.MD`。
 
-## 当前维护阶段（2026-06-10）
+## 当前维护阶段（2026-06-11）
 
-阶段 24E：剩余订单 / 资质 / 保证金列表分页治理。
+阶段 24E 后交付契约收口：修复公开仓库测试边界、schema 与真实写入字段、API action 契约、分页治理文档和支付 mock/真实语义。
 
-本轮由用户指令开启，延续阶段 24C / 24D 的低风险分页治理方式。阶段 24C 已完成管理员、财务、风控分页治理；阶段 24D 已完成派单、消息、售后、商家、评价、打赏列表分页治理；阶段 24E 只处理以下四个接口：
+上一轮阶段 24E 已完成阶段 24C / 24D 后剩余四个列表接口的分页治理：
 
 - `order.getUserOrderList`
 - `order.getWorkerOrderList`
 - `qualification.adminListQualifications`
 - `qualification.adminListDeposits`
 
-本轮已明确禁止接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控、自动审核或 AI 裁决；不修改订单状态机、支付状态、退款状态、售后状态、财务状态、收益状态、保证金状态、资质状态或风控状态；不修改页面 UI、`miniprogram/pages/**`、`miniprogram/services/**` 或 `schema/**`。
+本轮已明确禁止接入真实支付、真实退款、提现、分账、真实认证、OCR、真实保证金支付、真实风控、自动审核或 AI 裁决；不修改订单状态机、支付状态、退款状态、售后状态、财务状态、收益状态、保证金状态、资质状态或风控状态；不修改页面 UI 或 `miniprogram/pages/**`。允许小范围修改 tests、docs/contracts、schema，以及补齐 `adminSetOnboardingLimit` 必需的 `miniprogram/services/qualification.service.js` action 出口。
 
 本轮改动保持 action 名称和既有返回别名语义：订单列表继续返回 `orders`，资质列表继续返回 `qualifications`，保证金列表继续返回 `deposits`，同时补齐或保持 `list/total/page/pageSize/hasMore` 分页字段。
 
 本轮验收命令：
 
 ```bash
+node --test tests/phase20.risk.test.js
+node --test tests/phase20.contracts.test.js
 node --test tests/phase24e.order-qualification-pagination.test.js
 npm test
 npm run check:shared-sync
@@ -66,7 +68,7 @@ npm run check:release-risk -- <candidate-dir>
 5. 保持 page 最小为 1，pageSize 最大为 50，缺省 pageSize 使用既有 20。
 6. 保留旧返回别名，并补齐 `list/total/page/pageSize/hasMore`。
 7. 保持用户订单、师傅订单、管理员资质列表、管理员保证金列表的既有权限与归属边界。
-8. 不修改 UI、services、schema、状态机、真实资金/认证/风控能力。
+8. 分页治理阶段不修改 UI、services、schema、状态机、真实资金/认证/风控能力；2026-06-11 契约收口仅允许同步 tests、docs/contracts、schema 和 qualification service action 出口，不改变业务状态机。
 
 ## 本阶段允许
 
@@ -74,6 +76,7 @@ npm run check:release-risk -- <candidate-dir>
 - 修改 `cloudfunctions/qualification/**`。
 - 必要时修改 `cloudfunctions/_shared/**`。
 - 新增或修改 `tests/**` 中与本阶段相关的测试和测试 helper。
+- 2026-06-11 契约收口可修改 `schema/**`、`docs/contracts/**`、`README.md`、`docs/PROJECT_STATUS.md`，并补齐 `miniprogram/services/qualification.service.js` 中已有后端 action 的前端 service 出口。
 - 新增 `docs/dev-records/24e-order-qualification-pagination.md`。
 - 更新 `docs/PHASE_CURRENT.md`、`docs/PROJECT_STATUS.md`、`docs/dev-records/index.md`。
 
@@ -81,8 +84,8 @@ npm run check:release-risk -- <candidate-dir>
 
 - 不修改页面 UI。
 - 不修改 `miniprogram/pages/**`。
-- 不修改 `miniprogram/services/**`。
-- 不修改 `schema/**`。
+- 不在 `miniprogram/services/**` 中新增不存在的后端能力；仅允许补齐已存在 action 的 service 出口。
+- 不改变 schema 字段语义；仅允许让 schema 与当前真实持久化字段对齐。
 - 不修改订单状态机。
 - 不修改支付状态、退款状态、售后状态、财务状态、收益状态、保证金状态、资质状态或风控状态语义。
 - 不修改云函数 action 名称。
@@ -134,9 +137,20 @@ npm run check:release-risk -- <candidate-dir>
 - `npm run check:cloudfunction-deps`：通过。
 - `git diff --check`：通过。
 
+2026-06-11 交付契约收口验收结果：
+
+- `node --test tests/phase19_5.engineering-governance.test.js`：8/8 通过。
+- `node --test tests/phase20.contracts.test.js`：1/1 通过。
+- `node --test tests/phase20.risk.test.js`：3/3 通过。
+- `node --test tests/phase24e.order-qualification-pagination.test.js`：4/4 通过。
+- `npm test`：341/341 通过。
+- `npm run check:shared-sync`：通过。
+- `npm run check:cloudfunction-deps`：通过。
+- `git diff --check`：通过。
+
 ## 回滚与降级策略
 
-- 本阶段不改状态枚举、schema 或真实资金/认证/风控能力，因此无需数据迁移回滚。
+- 本阶段不改状态枚举或真实资金/认证/风控能力；schema 仅做契约描述对齐，不做数据迁移，因此无需数据迁移回滚。
 - 如某个列表接口出现分页兼容异常，可优先回滚对应 handler 的 `queryPage` 调用和仓库 `queryPage` 方法，恢复上一提交后再做专项修复。
 - 如页面文案被误解为真实支付、真实退款、真实提现、真实分账、真实认证、自动风控、自动审核或 AI 裁决，应立即回退为 mock、内部模拟、人工处理、资料留档或只读展示表述。
 

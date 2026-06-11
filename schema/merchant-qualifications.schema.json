@@ -6,39 +6,87 @@
     "merchant_id",
     "provider_type",
     "qualification_status",
-    "onboarding_status",
     "created_at",
     "updated_at"
   ],
-  "serverOnlyFields": [
-    "qualification_status",
-    "onboarding_status",
-    "reviewer_openid",
-    "reviewed_at",
-    "reject_reason",
-    "submit_count"
-  ],
-  "clientWritableFields": [
+  "optionalFields": [
+    "provider_id",
+    "owner_openid",
     "subject_type",
     "real_name_mock",
+    "id_card_masked",
+    "id_card_last4",
     "phone",
     "service_categories",
     "experience_years",
     "skill_description",
     "certificate_files",
+    "emergency_contact_mock",
+    "business_name",
+    "business_license_no_masked",
+    "business_license_no_last4",
+    "legal_person_name_mock",
+    "legal_person_id_masked",
+    "legal_person_id_last4",
+    "license_files",
+    "storefront_files",
+    "business_address",
+    "insurance_info",
+    "agreement_checked",
+    "reviewer_openid",
+    "reviewed_at",
+    "reject_reason",
+    "supplement_required_fields",
+    "review_remark",
+    "submit_count",
+    "manual_limited",
+    "manual_limit_reason"
+  ],
+  "serverOnlyFields": [
+    "qualification_status",
+    "reviewer_openid",
+    "reviewed_at",
+    "reject_reason",
+    "supplement_required_fields",
+    "review_remark",
+    "submit_count",
+    "manual_limited",
+    "manual_limit_reason"
+  ],
+  "clientWritableFields": [
+    "subject_type",
+    "real_name_mock",
+    "id_card_masked",
+    "id_card_last4",
+    "phone",
+    "service_categories",
+    "experience_years",
+    "skill_description",
+    "certificate_files",
+    "emergency_contact_mock",
+    "business_name",
+    "business_license_no_masked",
+    "business_license_no_last4",
+    "legal_person_name_mock",
+    "legal_person_id_masked",
+    "legal_person_id_last4",
+    "license_files",
+    "storefront_files",
+    "business_address",
     "insurance_info",
     "agreement_checked"
   ],
   "statusFields": [
     "qualification_status",
-    "onboarding_status",
     "insurance_info.review_status"
   ],
   "relationFields": ["merchant_id", "provider_id", "provider_type"],
   "indexHints": [
     "merchant_id + provider_type",
-    "qualification_status + updated_at",
-    "onboarding_status + updated_at"
+    "qualification_status + updated_at"
   ],
-  "compatibilityNotes": "不保存真实完整身份证号、营业执照号或法人证件号；仅保存 masked/last4/mock 字段。"
+  "compatibilityNotes": [
+    "不保存真实完整身份证号、营业执照号或法人证件号；normalizeQualificationPayload 仅持久化 masked/last4/mock 字段。",
+    "onboarding_status 由 qualification/deposit/risk/manual_limited 动态计算并作为接口返回字段，不作为 merchant_qualifications 持久化必填字段。"
+  ]
 }

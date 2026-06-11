@@ -37,18 +37,20 @@
 | `_id`                                   | string        | 是   | 数据库              | 否       | 否         | 各日志              | 主键                             |
 | `order_no`                              | string        | 是   | `order`             | 否       | 否         | 财务/支付           | 后端生成                         |
 | `user_id`                               | string        | 是   | `env.openid`        | 否       | 否         | `users`             | 归属校验                         |
-| `service_id`/`service_snapshot`         | string/object | 是   | 前端选择 + 后端快照 | 是       | 否         | `services`          | 价格以后端快照为准               |
+| `service_id`/`service_name`             | string        | 是   | 前端选择 + 后端快照 | 是       | 否         | `services`          | `createOrder` 持久化服务基础字段 |
+| `provider_snapshot`                     | object        | 否   | 后端快照            | 否       | 否         | `service_providers` | 商家/个人服务方展示快照          |
+| `merchant_service_snapshot`             | object        | 否   | 后端快照            | 否       | 否         | `merchant_services` | 指定商家服务时写入               |
 | `address_snapshot`                      | object        | 是   | 地址集合快照        | 间接     | 否         | `addresses`         | 下单时固化                       |
 | `status`                                | string        | 是   | 后端状态机          | 否       | 否         | 状态契约            | `ORDER_STATUS`                   |
 | `pay_status`                            | string        | 是   | `order`/`payment`   | 否       | 否         | 支付                | `PAY_STATUS`                     |
-| `amount`/`pay_amount`/`discount_amount` | number        | 是   | 后端计算            | 否       | 否         | 财务/营销           | 字段名以当前代码为准，待继续核实 |
+| `price`/`pay_amount`/`payable_amount`   | number        | 是   | 后端计算            | 否       | 否         | 财务/营销           | 金额以后端优惠计算结果为准       |
 | `worker_id`                             | string        | 否   | 师傅接单/指派       | 否       | 否         | `workers`           | 个人师傅订单                     |
 | `provider_type`                         | string        | 否   | 下单/服务方选择     | 是       | 否         | `service_providers` | `worker`/`merchant`              |
 | `merchant_id`                           | string        | 否   | 指定商家下单        | 是       | 否         | `merchants`         | 商家订单归属                     |
 | `after_sale_status`/`refund_status`     | string        | 否   | `refund`            | 否       | 否         | 售后/退款           | mock 退款边界                    |
 | `finish_images`/`finish_remark`         | array/string  | 否   | 师傅/商家完工       | 是       | 否         | 评价                | 云存储权限待真机核实             |
 
-索引建议：`user_id + created_at`、`worker_id + status`、`merchant_id + status`、`status + pay_status`、`provider_type + merchant_id`。mock 差异：`mockPayOrder` 和 `payment` mock 模式会直接推进支付状态，无真实扣款。
+索引建议：`user_id + created_at`、`worker_id + status`、`merchant_id + status`、`status + pay_status`、`provider_type + merchant_id`。兼容说明：`schema/orders.schema.json` 记录 `createOrder` 当前写入的去规格化服务、地址、营销和支付占位字段；历史 `service_snapshot` 仅作为旧数据兼容字段保留。mock 差异：`order.mockPayOrder` 会推进支付状态，无真实扣款；`payment.createPayment` 是真实微信预支付入口，默认未启用真实支付。
 
 ### `workers`
 
@@ -72,7 +74,7 @@
 
 用途：阶段 20 商家/服务方资质认证 mock 信息。机器契约：`schema/merchant-qualifications.schema.json`。
 
-核心字段：`_id`、`merchant_id`、`provider_id`、`provider_type`、`subject_type`、`qualification_status`、`onboarding_status`、`real_name_mock`、`id_card_masked`、`id_card_last4`、`business_name`、`business_license_no_masked`、`legal_person_name_mock`、`legal_person_id_masked`、`service_categories`、`experience_years`、`certificate_files`、`license_files`、`storefront_files`、`insurance_info`、`agreement_checked`、`submit_count`、`reviewer_openid`、`reviewed_at`、`reject_reason`、`supplement_required_fields`、`created_at`、`updated_at`。不保存真实完整身份证号、营业执照号、法人证件号。
+核心字段：`_id`、`merchant_id`、`provider_id`、`provider_type`、`owner_openid`、`subject_type`、`qualification_status`、`real_name_mock`、`id_card_masked`、`id_card_last4`、`phone`、`business_name`、`business_license_no_masked`、`business_license_no_last4`、`legal_person_name_mock`、`legal_person_id_masked`、`legal_person_id_last4`、`service_categories`、`experience_years`、`skill_description`、`certificate_files`、`emergency_contact_mock`、`license_files`、`storefront_files`、`business_address`、`insurance_info`、`agreement_checked`、`submit_count`、`reviewer_openid`、`reviewed_at`、`reject_reason`、`supplement_required_fields`、`review_remark`、`manual_limited`、`manual_limit_reason`、`created_at`、`updated_at`。不保存真实完整身份证号、营业执照号、法人证件号；`onboarding_status` 由资质、保证金、风控和人工限制动态计算返回，不作为本集合持久化必填字段。
 
 ### `merchant_deposits`
 

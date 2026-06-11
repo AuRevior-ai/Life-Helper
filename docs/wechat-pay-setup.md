@@ -15,7 +15,7 @@
 | 商户 API 证书序列号  | 用于请求签名                                     | 否           |
 | 支付回调 notify_url  | 微信支付异步通知地址                             | 否           |
 | 云环境 ID            | 部署 `payment` 云函数的云环境                    | 否           |
-| 是否启用真实支付     | 当前不启用；`PAY_MODE=wechat` 仅为占位，真实支付尚未实现 | 否           |
+| 是否启用真实支付     | 当前不启用；`PAY_MODE=wechat` 仅为预支付入口，仓库内置客户端仍 fail-fast | 否           |
 
 ## 云数据库集合
 
@@ -43,7 +43,7 @@ handlePayNotify
 queryPaymentStatus
 ```
 
-默认 `PAY_MODE=mock`。当前只能使用 mock 支付。`PAY_MODE=wechat` 但真实 JSAPI 下单、签名、证书、APIv3 密钥和回调验签未完整实现时，`payment.createPayment` 必须返回 `WECHAT_PAY_NOT_IMPLEMENTED` 或等价错误：`真实微信支付尚未实现，请使用 mock 支付或完成正式支付接入`。
+默认 `PAY_MODE=mock`。当前只能使用 mock 支付，但 mock 支付推进入口是 `order.mockPayOrder`；`payment.createPayment` 不是 mock 支付结果生成器。当前 `payment.createPayment` 的代码语义是：`PAY_MODE=mock` 时返回 `REAL_PAY_DISABLED`，不生成 `prepay_id` 或 `payParams`；`PAY_MODE=wechat` 且缺少支付客户端时返回 `WECHAT_PAY_CLIENT_MISSING`；使用仓库内置 `wechat-pay-client` 且真实 JSAPI 下单、签名、证书、APIv3 密钥和回调验签未完整实现时，必须返回 `WECHAT_PAY_NOT_IMPLEMENTED` 或等价错误：`真实微信支付尚未实现，请使用 mock 支付或完成正式支付接入`。
 
 ## 支付模式
 
@@ -59,7 +59,7 @@ miniprogram/config/payment.js
 CURRENT_PAY_MODE = PAY_MODE.MOCK;
 ```
 
-真实支付测试前，不能只切换为 `PAY_MODE.WECHAT`。必须完成 JSAPI 下单、请求签名、前端支付参数签名、支付回调验签、退款、退款回调和对账流程后，才能进入真实交易联调。该真实交易联调不属于当前 mock 支付阶段，也不作为当前工程 P0 验收条件。
+真实支付测试前，不能只切换为 `PAY_MODE.WECHAT`。必须完成 JSAPI 下单、请求签名、前端支付参数签名、支付回调验签、退款、退款回调和对账流程后，才能进入真实交易联调。该真实交易联调不属于当前 mock 支付阶段，也不作为当前工程 P0 验收条件。当前小程序默认支付闭环仍通过 `order.mockPayOrder` 模拟完成，无真实扣款。
 
 ## 回调说明
 

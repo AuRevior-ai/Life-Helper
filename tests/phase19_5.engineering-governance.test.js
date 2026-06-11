@@ -283,16 +283,19 @@ test("release risk scanner fails when a candidate package contains real project 
   fs.rmSync(tempDir, { recursive: true, force: true });
 });
 
-test("README and project config describe real AppID and mock payment boundary consistently", () => {
-  const projectConfig = JSON.parse(read("project.config.json"));
+test("README and project config template describe AppID and mock payment boundary consistently", () => {
+  const hasLocalProjectConfig = exists("project.config.json");
   const projectConfigExample = JSON.parse(read("project.config.example.json"));
   const readme = read("README.md");
 
-  assert.ok(
-    projectConfig.appid,
-    "project.config.json should declare the current AppID strategy",
-  );
-  assert.notEqual(projectConfig.appid, "touristappid");
+  if (hasLocalProjectConfig) {
+    const projectConfig = JSON.parse(read("project.config.json"));
+    assert.ok(
+      projectConfig.appid,
+      "project.config.json should declare the current AppID strategy",
+    );
+    assert.notEqual(projectConfig.appid, "touristappid");
+  }
   assert.equal(projectConfigExample.appid, "touristappid");
   assert.match(readme, /真实小程序 AppID/);
   assert.match(readme, /project\.config\.example\.json/);

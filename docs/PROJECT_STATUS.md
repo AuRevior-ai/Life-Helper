@@ -1,6 +1,6 @@
 # PROJECT_STATUS.md
 
-最后更新：2026-06-10
+最后更新：2026-06-11
 
 本文件记录当前工程的真实状态。长期 Agent 行为规则见 `AGENT.MD`；当前阶段执行边界见 `docs/PHASE_CURRENT.md`。
 
@@ -18,7 +18,7 @@
 
 阶段 24B-2：管理员端服务 / 分类 / 区域 / 派单页面 UI 收口已完成，作为 checkpoint 保留。
 
-阶段 24E 不修改页面 UI、services、schema、订单状态机、支付、退款、财务、收益、保证金、资质、风控状态语义或云函数 action 名称；列表接口保持既有返回别名，并补充分页字段。当前产品策略明确为继续使用 mock 支付，不考虑接入真实支付现金流。
+阶段 24E 分页治理本身不修改页面 UI、订单状态机、支付、退款、财务、收益、保证金、资质、风控状态语义或云函数 action 名称；列表接口保持既有返回别名，并补充分页字段。2026-06-11 交付契约收口允许小范围同步 tests、docs/contracts、schema 和 qualification service action 出口，用于修复公开仓库测试边界、schema 与真实持久化字段、`adminSetOnboardingLimit` 契约和支付 mock/真实语义，不接入真实支付或真实风控。当前产品策略明确为继续使用 mock 支付，不考虑接入真实支付现金流。
 
 最近提交：
 
@@ -216,6 +216,21 @@ RED 记录：第一批 6 个测试中 3 个通过、3 个按预期失败；第�
 | `git diff --check` | 通过 |
 
 本轮不生成公开交付候选目录；如后续需要交付，必须重新生成 clean candidate 并运行发布风险扫描。
+
+2026-06-11 交付契约收口验收结果：
+
+| 命令 | 结果 |
+| ---- | ---- |
+| `node --test tests/phase19_5.engineering-governance.test.js` | 通过，8/8 |
+| `node --test tests/phase20.contracts.test.js` | 通过，1/1 |
+| `node --test tests/phase20.risk.test.js` | 通过，3/3 |
+| `node --test tests/phase24e.order-qualification-pagination.test.js` | 通过，4/4 |
+| `npm test` | 通过，341/341 |
+| `npm run check:shared-sync` | 通过 |
+| `npm run check:cloudfunction-deps` | 通过 |
+| `git diff --check` | 通过 |
+
+本轮不生成公开交付候选目录，未运行 `npm run check:release-risk -- <candidate-dir>`。
 
 最近 clean candidate：
 

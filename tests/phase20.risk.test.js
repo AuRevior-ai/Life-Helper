@@ -110,3 +110,45 @@ test("administrator lists risk records through paged repository query", async ()
     },
   ]);
 });
+
+test("administrator onboarding limit uses targeted qualification lookup", async () => {
+  const {
+    handleQualification,
+  } = require("../cloudfunctions/qualification/handler");
+  const env = createQualificationEnv({ openid: "openid_admin" });
+
+  await handleQualification(
+    { action: "saveQualificationDraft", agreementChecked: true },
+    { ...env, openid: "openid_merchant" },
+  );
+
+  const targetedLookupCalls = [];
+  const originalFindByOwner = env.qualifications.findByOwner;
+  env.qualifications = {
+    ...env.qualifications,
+    async findAll() {
+      throw new Error("qualifications.findAll should not be used");
+    },
+    async findByOwner(query) {
+      targetedLookupCalls.push(query);
+      return originalFindByOwner.call(this, query);
+    },
+  };
+
+  const result = await handleQualification(
+    {
+      action: "adminSetOnboardingLimit",
+      merchantId: "merchant_1",
+      limited: true,
+      reason: "人工限制经营",
+    },
+    env,
+  );
+
+  assert.equal(result.success, true);
+  assert.equal(result.data.onboarding_status, "LIMITED");
+  assert.deepEqual(targetedLookupCalls[0], {
+    merchant_id: "merchant_1",
+    provider_type: "merchant",
+  });
+});

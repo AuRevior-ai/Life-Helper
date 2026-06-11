@@ -21,6 +21,7 @@ module.exports = createActionService(CLOUD_FUNCTIONS.QUALIFICATION, [
   "adminAddRiskTag",
   "adminListRiskRecords",
   "adminGetOnboardingDetail",
+  "adminSetOnboardingLimit",
   "getQualificationRequirements",
   "getDepositRules",
 ]);

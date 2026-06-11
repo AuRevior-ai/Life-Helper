@@ -24,6 +24,9 @@ test("phase 20 actions, pages, schemas, and documentation are synchronized", () 
   const dbDoc = read("docs/contracts/database-schema.md");
   const permissionDoc = read("docs/contracts/permission-matrix.md");
   const paginationDoc = read("docs/contracts/pagination-and-indexes.md");
+  const qualificationService = read(
+    "miniprogram/services/qualification.service.js",
+  );
   const readme = read("README.md");
   const appJson = read("miniprogram/app.json");
   const record = read(
@@ -50,6 +53,7 @@ test("phase 20 actions, pages, schemas, and documentation are synchronized", () 
     "adminAddRiskTag",
     "adminListRiskRecords",
     "adminGetOnboardingDetail",
+    "adminSetOnboardingLimit",
     "getQualificationRequirements",
     "getDepositRules",
   ];
@@ -60,6 +64,7 @@ test("phase 20 actions, pages, schemas, and documentation are synchronized", () 
       `${action} missing from manifest`,
     );
     assert.match(apiDoc, new RegExp(action));
+    assert.match(qualificationService, new RegExp(action));
   }
 
   for (const schemaFile of [

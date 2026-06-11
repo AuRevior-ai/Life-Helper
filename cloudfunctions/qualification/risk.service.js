@@ -161,12 +161,10 @@ async function adminSetOnboardingLimit(event, env) {
   await requireAdmin(env);
   const payload = getPayload(event);
   const merchantId = payload.merchantId || payload.merchant_id;
-  const list = await env.qualifications.findAll();
-  const existing = list.find(
-    (item) =>
-      item.merchant_id === merchantId &&
-      item.provider_type === PROVIDER_TYPE.MERCHANT,
-  );
+  const existing = await env.qualifications.findByOwner({
+    merchant_id: merchantId,
+    provider_type: PROVIDER_TYPE.MERCHANT,
+  });
   if (!existing)
     throw serviceError("QUALIFICATION_NOT_FOUND", "资质记录不存在");
   const qualification = await env.qualifications.updateById(existing._id, {
