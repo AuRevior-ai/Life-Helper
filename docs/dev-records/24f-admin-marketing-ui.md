@@ -5,7 +5,7 @@
 - 阶段：阶段 24F
 - 日期：2026-06-11
 - 范围：管理员端会员方案、优惠券模板列表、优惠券模板编辑页面 UI 收口
-- 状态：已完成基础收口，待完整测试验收记录同步
+- 状态：已完成基础收口并验收
 
 ## 本阶段目标
 
@@ -79,12 +79,11 @@
 node --test tests/phase24f_admin_marketing_ui.test.js
 ```
 
-完整验收需继续运行：
+验收结果：
 
-```bash
-npm test
-git diff --check
-```
+- `node --test tests/phase24f_admin_marketing_ui.test.js`：8/8 通过
+- `npm test`：349/349 通过
+- `git diff --check`：通过
 
 ## 已知问题与下一步
 
